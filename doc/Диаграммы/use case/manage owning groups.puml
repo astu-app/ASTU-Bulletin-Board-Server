@@ -1,0 +1,17 @@
+﻿@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction 
+
+:Администратор группы: as groupAdmin
+
+rectangle "Доска объявлений" {
+    (<font color="gray">G-1.</font> Управление своими группами) as manage_owning_groups
+
+    groupAdmin --> manage_owning_groups
+    manage_owning_groups <|-- (<font color="gray">G-1.3.</font> Редактировать права сотрудника в своей группе)
+    manage_owning_groups <|-- (<font color="gray">G-1.2.</font> Удалить сотрудника из своей группы)
+    manage_owning_groups <|-- (<font color="gray">G-1.1.</font> Добавить сотрудника в свою группу)
+}
+
+@enduml

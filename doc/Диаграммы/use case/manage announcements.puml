@@ -5,17 +5,32 @@ left to right direction
 
 :Сотрудник: as employee
 
-employee --> (Управление объявлениями)
-
-(Управление объявлениями) <|-- (Создать объявление) 
-(Управление объявлениями) <|-- (Редактировать объявление) 
-(Управление объявлениями) <|-- (Скрыть объявление) 
-(Управление объявлениями) <|-- (Собрать статистику просмотра объявлений)
-(Управление объявлениями) <|-- (Управление скрытыми объявлениями) 
-(Управление объявлениями) <|-- (Удалить объявление) 
-(Управление объявлениями) <|-- (Сразу опубликовать скрытое объявление) 
-
-(Управление скрытыми объявлениями) <|-- (Просмотреть список скрытых объявлений)
-(Управление скрытыми объявлениями) <|-- (Восстановить скрытое объявление)
+rectangle "Доска объявлений" {
+    (<font color="gray">E-1.</font> Управление объявлениями) as manage_announcements
+    (<font color="gray">E-1.6.</font> Управление скрытыми объявлениями) as manage_hidden_announcements
+    (<font color="gray">E-1.7.</font> Управление отложенными объявлениями) as manage_delayed_announcements
+    
+    (<font color="gray">E-1.2.</font> Редактировать объявление) as edit_announcement
+    (<font color="gray">E-1.7.3.</font> Редактировать отложенное объявление) as edit_delayed_announcements
+    
+    employee --> manage_announcements
+    
+    manage_announcements <|-- edit_announcement
+    manage_announcements <|-- (<font color="gray">E-1.5.</font> Скрыть объявление) 
+    manage_announcements <|-- manage_hidden_announcements 
+    manage_announcements <|-- (<font color="gray">E-1.4.</font> Удалить объявление) 
+    manage_announcements <|-- (<font color="gray">E-1.3.</font> Собрать статистику просмотра объявлений)
+    manage_announcements <|-- (<font color="gray">E-1.1.</font> Создать объявление) 
+    
+    manage_announcements <|-- manage_delayed_announcements
+    manage_delayed_announcements <|-- edit_delayed_announcements
+    manage_delayed_announcements <|-- (<font color="gray">E-1.7.2.</font> Сразу опубликовать отложенное объявление)
+    manage_delayed_announcements <|-- (<font color="gray">E-1.7.1.</font> Просмотреть список отложенных объявлений)
+    
+    edit_delayed_announcements -up-> edit_announcement : include
+    
+    manage_hidden_announcements <|-- (<font color="gray">E-1.6.2.</font> Восстановить скрытое объявление)
+    manage_hidden_announcements <|-- (<font color="gray">E-1.6.1.</font> Просмотреть список скрытых объявлений)
+}
 
 @enduml

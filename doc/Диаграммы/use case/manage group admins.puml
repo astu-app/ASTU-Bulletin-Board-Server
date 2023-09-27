@@ -5,8 +5,12 @@ left to right direction
 
 :Администратор: as admin
 
-admin -- (Управление администраторами групп)
-(Управление администраторами групп) <|-- (Назначить администратора группы) 
-(Управление администраторами групп) <|-- (Удалить администратора группы)
+rectangle "Доска объявлений" {
+    (<font color="gray">A-2.</font> Управление администраторами групп) as manage_group_admins
+
+    admin -- manage_group_admins
+   manage_group_admins <|-- (<font color="gray">A-2.2.</font> Удалить администратора группы)
+   manage_group_admins <|-- (<font color="gray">A-2.1.</font> Назначить администратора группы) 
+}
 
 @enduml

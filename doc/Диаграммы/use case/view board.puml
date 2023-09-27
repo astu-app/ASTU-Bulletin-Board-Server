@@ -1,0 +1,19 @@
+﻿@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+:Студент: as student
+
+rectangle "Доска объявлений" {
+    (<font color="gray">S-1.</font> Просмотреть доску объявлений) as view_board
+    (<font color="gray">S-1.1.</font> Пройти опрос) as take_survey
+
+    student --> view_board 
+    view_board <|-- (<font color="gray">S-1.2.</font> Скачать файлы)
+    view_board <|-- take_survey
+    
+    take_survey <.. (<font color="gray">S-1.1.1.</font> Отменить голос) : extend
+}
+    
+@enduml

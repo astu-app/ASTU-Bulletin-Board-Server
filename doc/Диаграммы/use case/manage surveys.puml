@@ -5,10 +5,15 @@ left to right direction
 
 :Сотрудник: as employee
 
-employee --> (Управление опросами)    
-(Управление опросами) <|-- (Закрыть опрос) 
-(Управление опросами) <|-- (Собрать статистику опроса) 
+rectangle "Доска объявлений" {
+    (<font color="gray">E-2.</font> Управление опросами) as manage_surveys
+    (<font color="gray">E-2.1.</font> Собрать результаты опроса) as collect_survey_results
 
-(Собрать статистику опроса) <.. (Выгрузить результаты опроса) : extend
+    employee --> manage_surveys    
+    manage_surveys <|-- (<font color="gray">E-2.2.</font> Закрыть опрос) 
+    manage_surveys <|-- collect_survey_results
+    
+    collect_survey_results <.. (<font color="gray">E-2.1.1.</font> Выгрузить результаты опроса) : extend
+}
 
 @enduml
