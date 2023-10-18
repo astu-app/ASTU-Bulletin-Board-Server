@@ -1,0 +1,15 @@
+﻿@startuml
+'https://plantuml.com/sequence-diagram
+
+actor "Пользователь" as user
+control "Сервис аутентификации" as authService
+database "База данных" as db
+
+activate db
+
+user --> authService ++ : Логин, пароль
+authService --> db : Логин, hash(пароль)
+authService <-- db : Success
+user <-- authService -- : Токен авторизации
+
+@enduml
