@@ -1,0 +1,261 @@
+{
+  "main": {
+    "id": "8308e382e893257a",
+    "type": "split",
+    "children": [
+      {
+        "id": "79b9bbae2c67ec13",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7d4698ed30b1b115",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Описание системы/Описание диаграмм/Entity-relation/Права пользователя в группе.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "8564bb56ec633ef7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Описание системы/Описание диаграмм/Entity-relation/Entity-relation.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "1097650bab76d4f7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Описание системы/Описание диаграмм/Entity-relation/Пользователь.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "afd6bb4344c1ea37",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Описание системы/Описание диаграмм/Entity-relation/Опрос.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "c55661f7f738d705",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Описание системы/Описание диаграмм/Entity-relation/Опрос.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "d1103b866e87c705",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Описание системы/Описание диаграмм/Entity-relation/Вариант ответа.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "9aac141c5f8785ec",
+    "type": "split",
+    "children": [
+      {
+        "id": "9666f2a6425066c6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "37fe28d104fe21fb",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "e715dd09bd533f1c",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "опи",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "ec480b6053e0a139",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "right": {
+    "id": "41fe22ce5f63ea82",
+    "type": "split",
+    "children": [
+      {
+        "id": "00dfa8383381890d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f1ffc74fd1376722",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Описание системы/Описание диаграмм/Entity-relation/Entity-relation.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "9ecc92cc5026d077",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Описание системы/Описание диаграмм/Entity-relation/Entity-relation.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "3488d0882761b77f",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "1094b2e9311d07cd",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Описание системы/Описание диаграмм/Entity-relation/Entity-relation.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Меню быстрого перехода": false,
+      "graph:Граф": false,
+      "canvas:Создать новый холст": false,
+      "daily-notes:Сегодняшняя заметка": false,
+      "templates:Вставить шаблон": false,
+      "command-palette:Открыть палитру команд": false
+    }
+  },
+  "active": "8564bb56ec633ef7",
+  "lastOpenFiles": [
+    "Описание системы/Описание диаграмм/Entity-relation/Права пользователя в группе.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Entity-relation.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Вариант ответа.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Опрос.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Пользователь.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Группа пользователей.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Вопрос.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Объявление.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Файл.md",
+    "текст.md",
+    "Описание системы/Описание диаграмм/Entity-relation",
+    "Описание системы/diagrams/er.png",
+    "Аналоги/Omni.md",
+    "Описание системы/Описание диаграмм",
+    "Описание системы/Без названия.md",
+    "Аналоги/Битрикс.md",
+    "Описание системы/Логгирование.md",
+    "Описание системы/Объявления/Содержимое объявления.md",
+    "Аналоги",
+    "Описание системы/Объявления/Операции над объявлениями.md",
+    "Описание системы/Объявления",
+    "Описание системы/Лента объявлений.md",
+    "Описание системы/Восстановление доступа к аккаунту.md",
+    "Todo.md",
+    "Требуемые API.md",
+    "Описание системы/Аккаунт.md",
+    "Описание системы/Регистрация.md",
+    "Описание системы/Аутентификация.md",
+    "Описание системы/Импорт пользователей.md",
+    "Описание системы/Объявления/Типы объявлений.md",
+    "Описание системы/diagrams/sequence/registration_sequence_diagram.png",
+    "Описание системы/diagrams/sequence/authentication_sequence_diagram.png",
+    "Описание системы/diagrams/sequence/registration.png",
+    "Описание системы/diagrams/Иерархия.png",
+    "Описание системы/diagrams/registration_sequence_diagram.png",
+    "Описание системы/diagrams/sequence",
+    "Описание системы/diagrams/Новая папка",
+    "Описание системы/diagrams",
+    "Описание системы/вшфпкфьы",
+    "Описание системы/Новая папка",
+    "Описание системы/Иерархия.png",
+    "Описание системы/registration_sequence_diagram.png",
+    "Описание системы/registration_sequence.png",
+    "Описание системы/image_2023-10-18_20-16-43.png",
+    "ИЕ1.md",
+    "Описание системы",
+    "Без названия.canvas"
+  ]
+}
