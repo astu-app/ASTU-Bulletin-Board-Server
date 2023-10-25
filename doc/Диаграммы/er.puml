@@ -11,28 +11,32 @@ entity "Пользователь" as user {
 
 entity "Объявление" as notification { 
     Текст
+    Флаг скрытой публикации - <font color="green">объявление скрыто или открыто</font>
     Флаг автоматического сокрытия
     Срок автоматического сокрытия
     Флаг отложенной публикации
     Срок отложенной публикации
+    Момент публикации
 }
 notification }o--|| user : Автор
 
-entity "Вложение" as attachment { 
+entity "Файл" as attachedFile { 
     Название
     Содержимое
+    Хэш
     Количество ссылок
 }
-notification }|--o{ attachment
+notification }|--o{ attachedFile
 
 entity "Опрос" as survey {
-    Размер аудитории
+    Флаг открытости
     Флаг анонимности
-    Флаг возможности выбора нескольких вариантов ответов
+    Флаг множественного выбора
     Флаг ограничения времени голосования
     Срок окончания времени голосования
 }
 notification ||--o| survey
+user }o--o{ survey : Проголосовал в
 
 entity "Вопрос" as question {
     Текст вопроса
@@ -40,19 +44,26 @@ entity "Вопрос" as question {
 }
 survey ||--|{ question
 
-entity "Вариант ответа" as answer  {
-    Текст
+entity "Вариант ответа" as answer {
+    Текст вариант ответа
     Количество проголосовавших
 }
-question ||--{ answer
+question ||--{ "2..*" answer
 user }o--o{ answer : Выбрал
 
 entity "Группа пользователей" as userGroup { 
     Название
 }
 notification }o--|{ userGroup
-user }|--|{ userGroup : Участники
-user }o--|{ userGroup : Администратор
+user }o--|{ userGroup : Участник
+user |o-right-o{ userGroup : Администратор
+userGroup |o--o{ userGroup : Подчинена максимум одной \n Является родителем любого количества
+
+entity "Права пользователя в группе" as userRightsInGroup {}
+hide userRightsInGroup members
+user ||--|{ userRightsInGroup
+userGroup ||--o{ userRightsInGroup
+
 
 
 @enduml
