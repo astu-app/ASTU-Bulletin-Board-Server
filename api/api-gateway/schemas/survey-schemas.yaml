@@ -1,0 +1,104 @@
+﻿openapi: 3.0.3
+info:
+  title: Схемы опросов для API Шлюза
+  description: Схемы опросов для API Шлюза
+  version: 0.0.1
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  
+components: 
+  schemas:
+    surveyDetailsDto:
+      type: object
+      nullable: false
+      properties:
+        id:
+          description: Идентификатор опроса
+          type: string
+          format: uuid
+          nullable: false
+        isOpen:
+          description: Открыт ли опрос
+          type: boolean
+          nullable: false
+          default: true
+        isAnonymous:
+          description: Анонимен ли опрос
+          type: boolean
+          nullable: false
+          default: false
+        isMultipleChoiceAllowed:
+          description: Разрешен ли множественный выбор
+          type: boolean
+          nullable: false
+          default: false
+        voteFinishedAt:
+          description: Время окончания голосования (если задано)
+          type: string
+          format: date-time
+          nullable: true
+        questions:
+          description: Вопросы опроса
+          type: array
+          items:
+            $ref: '#/components/schemas/questionDetailsDto'
+          minItems: 1
+          nullable: false
+      additionalProperties: false
+
+    questionDetailsDto:
+      type: object
+      nullable: false
+      properties:
+        id:
+          description: Идентификатор опроса
+          type: string
+          format: uuid
+          nullable: false
+        content:
+          description: Текстовое содержимое вопроса
+          type: string
+          nullable: false
+        votersAmount:
+          description: Количество проголосовавших
+          items:
+            type: string
+            nullable: false
+          minItems: 0
+          nullable: false
+        answers:
+          description: Варианты ответов опроса
+          type: array
+          items:
+            $ref: '#/components/schemas/questionAnswerDetailsDto'
+          minItems: 2
+      additionalProperties: false
+      
+    questionAnswerDetailsDto:
+      type: object
+      nullable: false
+      properties:
+        id:
+          description: Идентификатор варианта ответа
+          type: string
+          format: uuid
+          nullable: false
+        content:
+          description: Текстовое содержимое варианта ответа
+          type: string
+          nullable: false
+        votersAmount:
+          description: Количество пользователей, проголосовавших за вариант ответа
+          type: integer
+          minimum: 0
+          nullable: false
+        voters:
+          description: Имена пользователей, проголосовавших за вариант ответа
+          type: array
+          items:
+            type: string
+            nullable: false
+          minItems: 0
+          nullable: false
+      additionalProperties: false

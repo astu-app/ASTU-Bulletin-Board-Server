@@ -1,0 +1,30 @@
+﻿openapi: 3.0.3
+info:
+  title: Схемы файлов для API Шлюза
+  description: Схемы файлов для API Шлюза
+  version: 0.0.1
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  
+components: 
+  schemas:
+    fileSummaryDto:
+      type: object
+      nullable: false
+      properties:
+        id:
+          description: Идентификатор файла
+          type: string
+          format: uuid
+          nullable: false
+        name:
+          description: Название файла
+          type: string
+          nullable: false
+        type:
+          description: Тип файла
+          type: string
+          enum:
+            - mediafile # Медиафайл отображается в объявлении сразу
+            - file # Обычный файл загружается вручную

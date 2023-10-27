@@ -1,7 +1,7 @@
 ﻿openapi: 3.0.3
 info:
   title: API Шлюз. Опросы
-  description: API шлюза управления опросами
+  description: API шлюза для управления опросами
   version: 0.0.1
 servers:
   - url: 'https://localhost:8080'
@@ -9,7 +9,7 @@ paths:
   /surveys/get-details:
     get:
       operationId: getSurveyDetails
-      summary: Получение деталей опроса
+      summary: Получить детали выбранного опроса
       responses:
         200:
-          description: ok
+          description: Ok

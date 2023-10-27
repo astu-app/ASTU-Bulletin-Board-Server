@@ -1,7 +1,7 @@
 ﻿openapi: 3.0.3
 info:
   title: API Шлюз. Объявления
-  description: API шлюза управления объявлениями
+  description: API шлюза для управления объявлениями
   version: 0.0.1
 servers:
   - url: 'https://localhost:8080'
@@ -11,42 +11,42 @@ paths:
     post:
       tags: [Общие операции]
       operationId: createNotification
-      summary: Создание объявления
+      summary: Создать объявление
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/createNotificationDto'
-      responses: 
+            schema:
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/createNotificationDto'
+      responses:
         201:
           description: Created
-          content: 
+          content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/notificationId'
-        400:
+              schema:
+                $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
+        400: # todo перевести текст в enum
           description: Bad Request
-          content: 
+          content:
             application/json:
               schema: # todo перевести текст в enum
                 type: string
                 nullable: false
                 description: Список групп пользователей null или пустой
                 example: Список групп пользователей null или пустой
-        404:
+        404: # todo перевести текст в enum
           description: Not Found
           content:
             application/json:
               schema: # todo перевести текст в enum
-                oneOf: 
+                oneOf:
                   - type: string
                     nullable: false
                     description: В качестве одного из id файлов прикреплен несуществующий в базе id
                   - type: string
                     nullable: false
                     description: В качестве id опроса прикреплен несуществующий в базе id
-        409:
+        409: # todo перевести текст в enum
           description: Conflict
           content:
             application/json:
@@ -57,299 +57,259 @@ paths:
                     description: Нельзя прикрепить к объявлению и файлы, и опрос
                   - type: string
                     nullable: false
-                    description: Момент автоматического сокрытия наступил до момента создания объявления 
+                    description: Момент автоматического сокрытия наступит до момента создания объявления
                   - type: string
                     nullable: false
-                    description: Момент отложенной публикации наступил до момента создания объявления 
+                    description: Момент отложенной публикации наступит до момента создания объявления
                   - type: string
                     nullable: false
-                    description: Момент отложенной публикации наступит после момента автоматического сокрытия 
-                        
+                    description: Момент отложенной публикации наступит после момента автоматического сокрытия
+  
   /notifications/get-details:
     get:
       tags: [Общие операции]
       operationId: getNotificationDetails
-      summary: Получение подробностей о выбранном объявлении
+      summary: Получить подробности о выбранном объявлении
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
-              $ref: '#/components/schemas/notificationId'
-      responses: 
+            schema:
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
+      responses:
         200:
-          description: ok
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationDetailsDto'
+        400: # todo перевести текст в enum
+          description: Bad Request
           content: 
             application/json:
               schema: 
-                $ref: '#/components/schemas/notificationDetailsDto'
-          
+                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
+        404: # todo перевести текст в enum
+          description: Not Found        
+  
   /notifications/update:
     put:
       tags: [Общие операции]
       operationId: updateNotification
       summary: Редактировать объявление
-      responses: 
-        200: 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/updateNotificationDto'
+      responses:
+        200:
           description: Ok
-          content: 
+          content:
             application/json:
-              schema: 
-                $ref: '#/components/schemas/notificationDetailsDto'
-        404:
+              schema:
+                $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
+        400: # todo перевести текст в enum
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: string
+                    nullable: false
+                    description: Список групп пользователей null или пустой
+                    example: Список групп пользователей null или пустой
+                  - type: string
+                    nullable: false
+                    description: Некорректный формат идентификатора
+                    example: Некорректный формат идентификатора
+        404: # todo перевести текст в enum
           description: Not Found
-          content: 
+          content:
             application/json:
-              schema: 
-                type: string
-                description: Объявление с указанным id не существует в базе данных
-                example: Объявление с указанным id не существует
+              schema:
+                oneOf:
+                  - type: string
+                    nullable: false
+                    description: В качестве одного из id файлов прикреплен несуществующий в базе id
+                  - type: string
+                    nullable: false
+                    description: В качестве id опроса прикреплен несуществующий в базе id
+        409: # todo перевести текст в enum
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: string
+                    nullable: false
+                    description: Нельзя прикрепить к объявлению и файлы, и опрос
+                  - type: string
+                    nullable: false
+                    description: Момент автоматического сокрытия наступит до момента создания объявления
+                  - type: string
+                    nullable: false
+                    description: Момент отложенной публикации наступит до момента создания объявления
+                  - type: string
+                    nullable: false
+                    description: Момент отложенной публикации наступит после момента автоматического сокрытия
   
   /notifications/delete:
     delete:
       tags: [Общие операции]
       operationId: deleteNotification
-      summary: Удаление объявления
-      responses: 
+      summary: Удалить объявление
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
+      responses:
         200:
-          description: ok
-          
+          description: Ok
+        400:
+          description: Bad Request
+          content: 
+            application/json:
+              schema: 
+                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
+        404:
+          description: Not Found
+  
   # опубликованные объявления  
   /notifications/posted/get-list: # todo учесть получение ограниченного набора
     get:
       tags: [Опубликованные объявления]
       operationId: getPostedNotificationList
-      summary: Получение списка объявлений
-      responses: 
+      summary: Получить список опубликованных объявлений
+      responses:
         200:
-          description: ok
+          description: Ok
+          content: 
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                nullable: false
   
-  /notifications/hide:
+  /notifications/posted/hide:
     post:
       tags: [Опубликованные объявления]
       operationId: hideNotification
       summary: Скрыть опубликованное объявление
-      responses: 
+      responses:
         200:
-          description: ok
-          
+          description: Ok
+        400: # todo перевести текст в enum
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
+        404: # todo перевести текст в enum
+          description: Not Found
+        409: # todo перевести текст в enum
+          description: Conflict
+          content: 
+            application/json:
+              schema:
+                oneOf:
+                  - description: Объявление уже скрыто
+                    type: string
+                    nullable: false
+                  - description: Объявление еще не опубликовано
+                    type: string
+                    nullable: false
+  
+  # скрытые объявления
   /notifications/hidden/get-list: # todo учесть получение ограниченного набора 
     get:
       tags: [Скрытые объявления]
       operationId: getHiddenNotificationList
-      summary: Получение списка скрытых объявлений
+      summary: Получить список скрытых объявлений
+      responses:
+        200:
+          description: Ok
+          content: 
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                nullable: false
+  
+  /notifications/hidden/unhide:
+    post: 
+      tags: [Скрытые объявления]
+      operationId: unhideHiddenNotification
+      summary: Восстановить скрытое объявление
+      requestBody: 
+        content: 
+          application/json:
+            schema: 
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
       responses: 
         200:
-          description: ok
-          
+          description: Ok
+        400: # todo перевести текст в enum
+          description: Bad Request
+          content: 
+            application/json:
+              schema: 
+                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
+        404: # todo перевести текст в enum
+          description: Not Found
+        409: # todo перевести текст в enum
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                description: Объявление не является скрытым
+                type: string
+                example: Объявление не является скрытым
+  
   # отложенные объявления
   /notifications/delayed/get-list: # todo учесть получение ограниченного набора
     get:
       tags: [Отложенные объявления]
       operationId: getDelayedNotificationList
-      summary: Получение списка отложенных объявлений
+      summary: Получить список отложенных объявлений
+      responses:
+        200:
+          description: Ok
+  
+  /notifications/delayed/publish-immediately:
+    post:
+      tags: [Отложенные объявления]
+      operationId: publishImmediatelyDelayedNotification
+      summary: Сразу опубликовать отложенное объявление
+      requestBody:
+        content: 
+          application/json:
+            schema: 
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
       responses: 
         200:
-          description: ok
-    
-    
-    
-components: 
-  schemas:
-    createNotificationDto:
-      type: object
-      nullable: false
-      properties: 
-        content:
-          description: Текстовое содержимое объявления
-          type: string
-          nullable: false
-        userGroupIds:
-          description: Идентификаторы групп пользователей, для которых создается объявление
-          type: array
-          items: 
-            type: string
-            format: uuid
-          minItems: 1
-          nullable: false
-        surveyId:
-          description: Идентификатор опроса, прикрепляемого к объявлению
-          type: string
-          format: uuid
-          nullable: true
-          default: null
-        fileIds:
-          description: Идентификаторы файлов, прикрепляемых к объявлению
-          type: array
-          items:
-            type: string
-            format: uuid
-          nullable: true
-        hideAt:
-          description: Срок автоматического сокрытия объявления
-          type: string
-          format: date-time
-          nullable: true
-          default: null
-        publishAt:
-          description: Срок отложенной публикации объявления
-          type: string
-          format: date-time
-          nullable: true
-          default: null
-      additionalProperties: false
-    
-    notificationId:
-      type: object
-      nullable: false
-      properties: 
-        notificationId: 
-          type: string
-          format: uuid
-          nullable: false
-      additionalProperties: false
-    
-    notificationDetailsDto:
-      type: object
-      nullable: false
-      properties:
-        content:
-          description: Текстовое содержимое объявления
-          type: string
-          nullable: false
-        author:
-          description: Автор объявления
-          type: string
-          nullable: false
-        viewers:
-          description: Количество просмотревших объявление пользователей
-          type: integer
-          nullable: false
-          minimum: 0
-        audienceSize:
-          description: Размер аудитории объявления
-          type: integer
-          nullable: false
-          minimum: 0
-        files:
-          description: Массив файлов, прикрепленных к объявлению
-          type: array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/fileSummaryDto'
-        survey:
-          $ref: '#/components/schemas/surveyDetailsDto'
-        isHidden:
-          description: Флаг отражает, скрыто ли объявлению в текущий момент
-          type: boolean
-          nullable: false
-          default: false
-        hideAt:
-          description: Срок автоматического сокрытия объявления
-          type: string
-          format: date-time
-          nullable: true
-          default: null
-        publishAt:
-          description: Срок отложенной публикации объявления
-          type: string
-          format: date-time
-          nullable: true
-          default: null
-    
-    fileSummaryDto:
-      type: object
-      nullable: false
-      properties:
-        name:
-          type: string
-          nullable: false
-        id:
-          type: string
-          format: uuid
-          nullable: false
-        type:
-          type: string
-          enum: 
-            - mediafile # Медиафайл отображается в объявлении сразу
-            - file # Обычный файл загружается вручную
-    
-    surveyDetailsDto:
-      type: object
-      nullable: false
-      properties: 
-        isOpen:
-          description: Открыт ли опрос
-          type: boolean
-          nullable: false
-          default: true
-        isAnonymous:
-          description: Анонимен ли опрос
-          type: boolean
-          nullable: false
-          default: false
-        isMultipleChoiceAllowed:
-          description: Разрешен ли множественный выбор
-          type: boolean
-          nullable: false
-          default: false
-        voteFinishedAt:
-          description: Время окончания голосования (если задано)
-          type: string
-          format: date-time
-          nullable: true
-        questions:
-          description: Вопросы опроса
-          type: array
-          items:
-            $ref: '#/components/schemas/questionDetailsDto'
-          minItems: 1
-          nullable: false
-
-    questionDetailsDto:
-      type: object
-      nullable: false
-      properties: 
-        content:
-          description: Текстовое содержимое вопроса
-          type: string
-          nullable: false
-        votersAmount:
-          description: Количество проголосовавших
-          items:
-            type: string
-            nullable: false
-          minItems: 0
-          nullable: false
-        answers:
-          description: Варианты ответов опроса
-          type: array
-          items:
-            $ref: '#/components/schemas/surveyAnswerDetailsDto'
-          minItems: 2
-          
-    surveyAnswerDetailsDto:
-      type: object
-      nullable: false
-      properties: 
-        content:
-          description: Текстовое содержимое варианта ответа 
-          type: string
-          nullable: false
-        votersAmount:
-          description: Количество пользователей, проголосовавших за вариант ответа
-          type: integer
-          minimum: 0
-          nullable: false
-        voters:
-          description: Имена пользователей, проголосовавших за вариант ответа
-          type: array
-          items:
-            type: string
-            nullable: false
-          minItems: 0
-          nullable: false
-
-          
-          
-          
+          description: Ok
+        400: # todo перевести текст в enum
+          description: Bad Request
+          content: 
+            application/json:
+              schema: 
+                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
+        404: # todo перевести текст в enum
+          description: Not Found
+        409: # todo перевести текст в enum
+          description: Conflict
+          content: 
+            application/json:
+              schema:
+                description: Объявление не является отложенным
+                type: string
+                nullable: false
+                example: Объявление не является отложенным
+      
+      

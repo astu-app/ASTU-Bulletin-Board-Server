@@ -9,11 +9,8 @@ paths:
   
 components:
   schemas:
-    
-
-        
-      
-      
-      
-      
+    incorrectIdentifierFormat:
+      description: Некорректный формат идентификатора
+      type: string
+      nullable: false
       
