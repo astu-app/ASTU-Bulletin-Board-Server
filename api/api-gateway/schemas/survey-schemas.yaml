@@ -6,15 +6,15 @@ info:
 servers:
   - url: 'https://localhost:8080'
 paths:
-  
-components: 
+
+components:
   schemas:
-# public
+    ### public
     # survey
     createSurveyDto: # todo продумать
       type: object
-      properties: 
-        
+      properties:
+    
     
     surveyDetailsDto:
       type: object
@@ -46,12 +46,12 @@ components:
           items:
             $ref: '#/components/schemas/questionDetailsDto'
           minItems: 1
-      
+    
     surveyIdentifierDto:
       description: Идентификатор опроса
       type: string
       format: uuid
-      
+    
     voteInSurveyDto:
       description: DTO для голосования в опросе
       type: object
@@ -95,7 +95,7 @@ components:
           items:
             $ref: '#/components/schemas/questionAnswerDetailsDto'
           minItems: 2
-      
+    
     questionAnswerDetailsDto:
       type: object
       properties:
@@ -121,8 +121,8 @@ components:
       description: Идентификатор варианта ответа
       type: string
       format: uuid
-
-# private
+    
+    ### private
     votersDto:
       type: array
       items:
@@ -142,10 +142,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/answerResultDto'
-      
+    
     answerResultDto:
       type: object
-      properties: 
+      properties:
         questionId:
           description: Идентификатор варианта ответа
           type: string

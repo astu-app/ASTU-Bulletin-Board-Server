@@ -7,78 +7,78 @@ servers:
   - url: 'https://localhost:8080'
 paths:
   # survey
-  /surveys/create: # todo в единственное число
+  /surveys/create:
     post:
       operationId: createSurvey
       summary: Создать опрос
-      tags: [Опрос]
+      tags: [ Опрос ]
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
+            schema:
               $ref: './schemas/survey-schemas.yaml#/components/schemas/createSurveyDto'
       responses:
         200:
           description: Ok
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
         403:
           description: Forbidden
           content:
             application/json:
-              schema: 
+              schema:
                 description: Пользователь не имеет права создавать опросы
         409: # todo продумать
           description: Conflict
   
-#  /surveys/get-summary: 
-#    get:
-#      operationId: getSurveySummary
-#      summary: Получить детали выбранного опроса
-#      tags: [Опрос]
-#      requestBody:
-#        content:
-#          application/json:
-#            schema:
-#              $ref: './schemas/survey-schemas.yaml#/components/schemas/questionIdentifier'
-#      responses:
-#        200:
-#          description: Ok
-#          content: 
-#            application/json:
-#              schema:
-#                $ref: './schemas/survey-schemas.yaml#/components/schemas/surveySummaryDto'
-#        400:
-#          description: Bad Request
-#          content:
-#            application/json:
-#              schema:
-#                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
-#        403:
-#          description: Forbidden
-#          content:
-#            application/json:
-#              schema:
-#                description: Пользователь не имеет права доступа к этому опросу
-#                type: string
-#        404:
-#          description: Not Found
-#        409:
-#          description: Conflict
-#          content:
-#            application/json:
-#              schema:
-#                description: Объявление с опросом еще не опубликовано
-#                type: string
-#                        
-  /surveys/get-details: 
+  #  /surveys/get-summary: 
+  #    get:
+  #      operationId: getSurveySummary
+  #      summary: Получить детали выбранного опроса
+  #      tags: [Опрос]
+  #      requestBody:
+  #        content:
+  #          application/json:
+  #            schema:
+  #              $ref: './schemas/survey-schemas.yaml#/components/schemas/questionIdentifier'
+  #      responses:
+  #        200:
+  #          description: Ok
+  #          content: 
+  #            application/json:
+  #              schema:
+  #                $ref: './schemas/survey-schemas.yaml#/components/schemas/surveySummaryDto'
+  #        400:
+  #          description: Bad Request
+  #          content:
+  #            application/json:
+  #              schema:
+  #                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
+  #        403:
+  #          description: Forbidden
+  #          content:
+  #            application/json:
+  #              schema:
+  #                description: Пользователь не имеет права доступа к этому опросу
+  #                type: string
+  #        404:
+  #          description: Not Found
+  #        409:
+  #          description: Conflict
+  #          content:
+  #            application/json:
+  #              schema:
+  #                description: Объявление с опросом еще не опубликовано
+  #                type: string
+  #                        
+  /survey/get-details:
     get:
       operationId: getSurveyDetails
       summary: Получить детали выбранного опроса
-      tags: [Опрос]
+      tags: [ Опрос ]
       requestBody:
         content:
           application/json:
@@ -87,9 +87,9 @@ paths:
       responses:
         200:
           description: Ok
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyDetailsDto'
         400:
           description: Bad Request
@@ -104,7 +104,7 @@ paths:
               schema:
                 description: Пользователь не имеет права получать детали этого опроса
                 type: string
-                nullable: false          
+                nullable: false
         404:
           description: Not Found
         409:
@@ -114,19 +114,19 @@ paths:
               schema:
                 description: Объявление с опросом еще не опубликовано
                 type: string
-                  
-  /surveys/close-survey:
+  
+  /survey/close-survey:
     post:
       operationId: closeSurvey
       description: Закрыть опрос
-      tags: [Опрос]
+      tags: [ Опрос ]
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
-      responses: 
+      responses:
         200:
           description: Ok
         400:
@@ -137,42 +137,42 @@ paths:
                 $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
         403:
           description: Forbidden
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 description: Пользователь не имеет права закрыть этот опрос
                 type: string
         404:
           description: Not Found
         409:
           description: Conflict
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 oneOf:
                   - description: Опрос уже закрыт
                     type: string
                   - description: Объявление с опросом еще не опубликовано
                     type: string
-                    
   
-  /surveys/get-results:
+  
+  /survey/get-results:
     get:
       operationId: getSurveysResults
       description: Получить результаты опроса
-      tags: [Опрос]
+      tags: [ Опрос ]
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
+            schema:
               $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
-      responses: 
+      responses:
         200:
           description: Ok
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyResultsDto'
         400:
           description: Bad Request
@@ -191,25 +191,25 @@ paths:
           description: Not Found
         409:
           description: Conflict
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 oneOf:
                   - description: Объявление с этим опросом еще не опубликовано
                     type: string
   
-  /surveys/download-results:
+  /survey/download-results:
     get:
       operationId: downloadSurveyResults
       description: Скачать результаты опроса
-      tags: [Опрос]
+      tags: [ Опрос ]
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
-      responses: 
+      responses:
         200:
           description: Ok
           content:
@@ -240,23 +240,23 @@ paths:
                 oneOf:
                   - description: Объявление с этим опросом еще не опубликовано
                     type: string
-                    
+  
   # question
-  /questions/vote:
+  /question/vote:
     post:
       operationId: voteInQuestion
       summary: Проголосовать в вопросе
-      tags: [Вопрос]
+      tags: [ Вопрос ]
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
+            schema:
               $ref: './schemas/survey-schemas.yaml#/components/schemas/voteInSurveyDto'
       responses: # todo перевести текст в enum
         200:
           description: Ok
-        400: 
+        400:
           description: Bad Request
           content:
             application/json:
@@ -266,10 +266,10 @@ paths:
           description: Forbidden
           content:
             application/json:
-              schema: 
+              schema:
                 description: Пользователь не имеет права голосовать в этом опросе
                 type: string
-        404: 
+        404:
           description: Not Found
           content:
             application/json:
@@ -281,9 +281,9 @@ paths:
                     type: string
         409:
           description: Conflict
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 oneOf:
                   - description: Опрос закрыт
                     type: string
@@ -296,15 +296,15 @@ paths:
                   - description: Перечисленные варианты ответов относятся к разным вопросам
                     type: string
   
-  /questions/cancel-vote:
+  /question/cancel-vote:
     post:
       operationId: cancelVoteInQuestion
       description: Отменить голос в вопросе
-      tags: [Вопрос]
-      requestBody: 
-        content: 
+      tags: [ Вопрос ]
+      requestBody:
+        content:
           application/json:
-            schema: 
+            schema:
               $ref: './schemas/survey-schemas.yaml#/components/schemas/questionIdentifierDto'
       responses: # todo перевести текст в enum
         200:
@@ -326,9 +326,9 @@ paths:
           description: Not Found
         409:
           description: Conflict
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 oneOf:
                   - description: Опрос закрыт
                     type: string

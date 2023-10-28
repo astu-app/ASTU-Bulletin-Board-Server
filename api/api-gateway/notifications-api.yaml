@@ -11,7 +11,7 @@ paths:
   # общие операции
   /notifications/create:
     post:
-      tags: [Общие операции]
+      tags: [ Общие операции ]
       operationId: createNotification
       summary: Создать объявление
       requestBody:
@@ -31,7 +31,7 @@ paths:
           description: Bad Request
           content:
             application/json:
-              schema: 
+              schema:
                 type: string
                 description: Список групп пользователей null или пустой
                 example: Список групп пользователей null или пустой
@@ -49,7 +49,7 @@ paths:
           description: Conflict
           content:
             application/json:
-              schema: 
+              schema:
                 oneOf:
                   - type: string
                     description: Нельзя прикрепить к объявлению и файлы, и опрос
@@ -62,7 +62,7 @@ paths:
   
   /notifications/get-details:
     get:
-      tags: [Общие операции]
+      tags: [ Общие операции ]
       operationId: getNotificationDetails
       summary: Получить подробности о выбранном объявлении
       requestBody:
@@ -80,16 +80,16 @@ paths:
                 $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationDetailsDto'
         400:
           description: Bad Request
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
         404:
-          description: Not Found        
+          description: Not Found
   
   /notifications/update:
     put:
-      tags: [Общие операции]
+      tags: [ Общие операции ]
       operationId: updateNotification
       summary: Редактировать объявление
       requestBody:
@@ -144,7 +144,7 @@ paths:
   
   /notifications/delete:
     delete:
-      tags: [Общие операции]
+      tags: [ Общие операции ]
       operationId: deleteNotification
       summary: Удалить объявление
       requestBody:
@@ -158,9 +158,9 @@ paths:
           description: Ok
         400:
           description: Bad Request
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
         404:
           description: Not Found
@@ -168,22 +168,22 @@ paths:
   # опубликованные объявления  
   /notifications/posted/get-list: # todo учесть получение ограниченного набора
     get:
-      tags: [Опубликованные объявления]
+      tags: [ Опубликованные объявления ]
       operationId: getPostedNotificationList
       summary: Получить список опубликованных объявлений
       responses:
         200:
           description: Ok
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 type: array
                 items:
                   $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
   
   /notifications/posted/hide:
     post:
-      tags: [Опубликованные объявления]
+      tags: [ Опубликованные объявления ]
       operationId: hideNotification
       summary: Скрыть опубликованное объявление
       requestBody:
@@ -205,7 +205,7 @@ paths:
           description: Not Found
         409:
           description: Conflict
-          content: 
+          content:
             application/json:
               schema:
                 oneOf:
@@ -217,37 +217,37 @@ paths:
   # скрытые объявления
   /notifications/hidden/get-list: # todo учесть получение ограниченного набора 
     get:
-      tags: [Скрытые объявления]
+      tags: [ Скрытые объявления ]
       operationId: getHiddenNotificationList
       summary: Получить список скрытых объявлений
       responses:
         200:
           description: Ok
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 type: array
                 items:
                   $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
   
   /notifications/hidden/unhide:
-    post: 
-      tags: [Скрытые объявления]
+    post:
+      tags: [ Скрытые объявления ]
       operationId: unhideHiddenNotification
       summary: Восстановить скрытое объявление
-      requestBody: 
-        content: 
+      requestBody:
+        content:
           application/json:
-            schema: 
+            schema:
               $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
       responses: # todo перевести текст в enum
         200:
           description: Ok
         400:
           description: Bad Request
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
         404:
           description: Not Found
@@ -263,7 +263,7 @@ paths:
   # отложенные объявления
   /notifications/delayed/get-list: # todo учесть получение ограниченного набора
     get:
-      tags: [Отложенные объявления]
+      tags: [ Отложенные объявления ]
       operationId: getDelayedNotificationList
       summary: Получить список отложенных объявлений
       responses:
@@ -278,28 +278,28 @@ paths:
   
   /notifications/delayed/publish-immediately:
     post:
-      tags: [Отложенные объявления]
+      tags: [ Отложенные объявления ]
       operationId: publishImmediatelyDelayedNotification
       summary: Сразу опубликовать отложенное объявление
       requestBody:
-        content: 
+        content:
           application/json:
-            schema: 
+            schema:
               $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
       responses: # todo перевести текст в enum
         200:
           description: Ok
-        400: 
+        400:
           description: Bad Request
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
         404:
           description: Not Found
         409:
           description: Conflict
-          content: 
+          content:
             application/json:
               schema:
                 description: Объявление не является отложенным
