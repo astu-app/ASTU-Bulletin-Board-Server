@@ -6,6 +6,8 @@ info:
 servers:
   - url: 'https://localhost:8080'
 paths:
+  # todo продумать 403 api объявлений
+  
   # общие операции
   /notifications/create:
     post:
@@ -29,7 +31,7 @@ paths:
           description: Bad Request
           content:
             application/json:
-              schema: # todo перевести текст в enum
+              schema: 
                 type: string
                 nullable: false
                 description: Список групп пользователей null или пустой
@@ -38,7 +40,7 @@ paths:
           description: Not Found
           content:
             application/json:
-              schema: # todo перевести текст в enum
+              schema:
                 oneOf:
                   - type: string
                     nullable: false
@@ -50,7 +52,7 @@ paths:
           description: Conflict
           content:
             application/json:
-              schema: # todo перевести текст в enum
+              schema: 
                 oneOf:
                   - type: string
                     nullable: false
@@ -200,6 +202,12 @@ paths:
       tags: [Опубликованные объявления]
       operationId: hideNotification
       summary: Скрыть опубликованное объявление
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
       responses:
         200:
           description: Ok
@@ -280,6 +288,13 @@ paths:
       responses:
         200:
           description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                nullable: false
   
   /notifications/delayed/publish-immediately:
     post:

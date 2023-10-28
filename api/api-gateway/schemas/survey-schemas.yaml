@@ -9,6 +9,13 @@ paths:
   
 components: 
   schemas:
+# public
+    # survey
+    createSurveyDto: # todo продумать
+      type: object
+      properties: 
+        
+    
     surveyDetailsDto:
       type: object
       nullable: false
@@ -46,7 +53,42 @@ components:
           minItems: 1
           nullable: false
       additionalProperties: false
+      
+    surveyIdentifier:
+      description: Идентификатор опроса
+      type: string
+      format: uuid
+      nullable: false
+      additionalProperties: false
+      
+    voteInSurveyDto:
+      description: DTO для голосования в опросе
+      type: object
+      nullable: false
+      properties:
+        answerIds:
+          description: Массив идентификаторов вариантов ответов
+          type: array
+          nullable: true
+          minItems: 1
+          items:
+            type: string
+            format: uuid
+            nullable: false
+      additionalProperties: false
 
+    surveyResultsDto:
+      description: Результаты опроса
+      type: object
+      nullable: false
+      properties:
+        voters:
+          $ref: '#/components/schemas/votersDto'
+        answerResults:
+          $ref: '#/components/schemas/answerResultsDto'
+      additionalProperties: false
+
+    # question
     questionDetailsDto:
       type: object
       nullable: false
@@ -93,7 +135,7 @@ components:
           type: integer
           minimum: 0
           nullable: false
-        voters:
+        voters: # todo нужно?
           description: Имена пользователей, проголосовавших за вариант ответа
           type: array
           items:
@@ -102,3 +144,62 @@ components:
           minItems: 0
           nullable: false
       additionalProperties: false
+
+    questionIdentifier:
+      description: Идентификатор вопроса
+      type: string
+      format: uuid
+      nullable: false
+      additionalProperties: false
+    
+    # answer
+    answerIdentifier:
+      description: Идентификатор варианта ответа
+      type: string
+      format: uuid
+      nullable: false
+      additionalProperties: false    
+
+# private
+    votersDto:
+      type: array
+      nullable: false
+      items:
+        $ref: '#/components/schemas/voterDto'
+      additionalProperties: false
+    
+    voterDto:
+      type: object
+      nullable: false
+      properties:
+        id:
+          description: Идентификатор пользователя
+          type: integer
+          nullable: false
+        name:
+          description: Имя пользователя
+          type: string
+          nullable: false
+      additionalProperties: false
+    
+    answerResultsDto:
+      type: array
+      nullable: false
+      items:
+        $ref: '#/components/schemas/answerResultDto'
+      additionalProperties: false # remove
+      
+    answerResultDto:
+      type: object
+      nullable: false # remove
+      properties: 
+        questionId:
+          description: Идентификатор варианта ответа
+          type: string
+          format: uuid
+        voterIds:
+          description: Числовые идентификаторы проголосовавших пользователей
+          type: array
+          items:
+            type: integer
+
