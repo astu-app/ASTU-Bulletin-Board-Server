@@ -8,7 +8,7 @@ servers:
 paths:
   # survey
   /surveys/create: # todo в единственное число
-    post: # todo продумать
+    post:
       operationId: createSurvey
       summary: Создать опрос
       tags: [Опрос]
@@ -24,8 +24,15 @@ paths:
           content: 
             application/json:
               schema: 
-                $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifier'
-        
+                $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema: 
+                description: Пользователь не имеет права создавать опросы
+        409: # todo продумать
+          description: Conflict
   
 #  /surveys/get-summary: 
 #    get:
@@ -57,7 +64,6 @@ paths:
 #              schema:
 #                description: Пользователь не имеет права доступа к этому опросу
 #                type: string
-#                nullable: false
 #        404:
 #          description: Not Found
 #        409:
@@ -67,8 +73,7 @@ paths:
 #              schema:
 #                description: Объявление с опросом еще не опубликовано
 #                type: string
-#                nullable: false
-        
+#                        
   /surveys/get-details: 
     get:
       operationId: getSurveyDetails
@@ -78,7 +83,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/questionIdentifier'
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/questionIdentifierDto'
       responses:
         200:
           description: Ok
@@ -109,8 +114,7 @@ paths:
               schema:
                 description: Объявление с опросом еще не опубликовано
                 type: string
-                nullable: false
-  
+                  
   /surveys/close-survey:
     post:
       operationId: closeSurvey
@@ -121,7 +125,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifier'
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
       responses: 
         200:
           description: Ok
@@ -138,7 +142,6 @@ paths:
               schema: 
                 description: Пользователь не имеет права закрыть этот опрос
                 type: string
-                nullable: false
         404:
           description: Not Found
         409:
@@ -149,10 +152,8 @@ paths:
                 oneOf:
                   - description: Опрос уже закрыт
                     type: string
-                    nullable: false
                   - description: Объявление с опросом еще не опубликовано
                     type: string
-                    nullable: false
                     
   
   /surveys/get-results:
@@ -165,7 +166,7 @@ paths:
         content: 
           application/json:
             schema: 
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifier'
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
       responses: 
         200:
           description: Ok
@@ -186,7 +187,6 @@ paths:
               schema:
                 description: Пользователь не имеет права получить результаты этого опроса
                 type: string
-                nullable: false
         404:
           description: Not Found
         409:
@@ -197,7 +197,6 @@ paths:
                 oneOf:
                   - description: Объявление с этим опросом еще не опубликовано
                     type: string
-                    nullable: false
   
   /surveys/download-results:
     get:
@@ -209,7 +208,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifier' # todo rename to dto
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
       responses: 
         200:
           description: Ok
@@ -231,7 +230,6 @@ paths:
               schema:
                 description: Пользователь не имеет права выгрузить результаты этого опроса
                 type: string
-                nullable: false
         404:
           description: Not Found
         409:
@@ -242,7 +240,6 @@ paths:
                 oneOf:
                   - description: Объявление с этим опросом еще не опубликовано
                     type: string
-                    nullable: false
                     
   # question
   /questions/vote:
@@ -256,7 +253,7 @@ paths:
           application/json:
             schema: 
               $ref: './schemas/survey-schemas.yaml#/components/schemas/voteInSurveyDto'
-      responses:  # todo перевести текст в enum
+      responses: # todo перевести текст в enum
         200:
           description: Ok
         400: 
@@ -272,7 +269,6 @@ paths:
               schema: 
                 description: Пользователь не имеет права голосовать в этом опросе
                 type: string
-                nullable: false
         404: 
           description: Not Found
           content:
@@ -281,10 +277,8 @@ paths:
                 oneOf:
                   - description: Вопроса с указанным идентификатором не существует
                     type: string
-                    nullable: false
                   - description: Варианта ответа с указанным идентификатором не существует
                     type: string
-                    nullable: false
         409:
           description: Conflict
           content: 
@@ -293,19 +287,14 @@ paths:
                 oneOf:
                   - description: Опрос закрыт
                     type: string
-                    nullable: false
                   - description: Объявление с опросом еще не опубликовано
                     type: string
-                    nullable: false
                   - description: Голос за вопрос уже отдан
                     type: string
-                    nullable: false
                   - description: В вопросе с единственным выбором нельзя выбрать несколько вариантов ответов
                     type: string
-                    nullable: false
                   - description: Перечисленные варианты ответов относятся к разным вопросам
                     type: string
-                    nullable: false
   
   /questions/cancel-vote:
     post:
@@ -316,7 +305,7 @@ paths:
         content: 
           application/json:
             schema: 
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/questionIdentifier'
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/questionIdentifierDto'
       responses: # todo перевести текст в enum
         200:
           description: Ok
@@ -333,7 +322,6 @@ paths:
               schema:
                 description: Пользователь не имеет права голосовать в этом опросе
                 type: string
-                nullable: false
         404:
           description: Not Found
         409:
@@ -344,7 +332,5 @@ paths:
                 oneOf:
                   - description: Опрос закрыт
                     type: string
-                    nullable: false
                   - description: Пользователь не проголосовал в вопросе
                     type: string
-                    nullable: false

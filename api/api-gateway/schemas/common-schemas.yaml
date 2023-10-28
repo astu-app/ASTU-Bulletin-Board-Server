@@ -12,5 +12,4 @@ components:
     incorrectIdentifierFormat:
       description: Некорректный формат идентификатора
       type: string
-      nullable: false
       

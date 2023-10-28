@@ -11,12 +11,10 @@ components:
   schemas:
     createNotificationDto:
       type: object
-      nullable: false
       properties:
         content:
           description: Текстовое содержимое объявления
           type: string
-          nullable: false
         userGroupIds:
           description: Идентификаторы групп пользователей, для которых создается объявление
           type: array
@@ -24,7 +22,6 @@ components:
             type: string
             format: uuid
           minItems: 1
-          nullable: false
         surveyId:
           description: Идентификатор опроса, прикрепляемого к объявлению
           type: string
@@ -50,49 +47,38 @@ components:
           format: date-time
           nullable: true
           default: null
-      additionalProperties: false
 
-    notificationIdentifier:
+    notificationIdentifierDto:
       type: object
-      nullable: false
       properties:
         notificationId:
           type: string
           format: uuid
-          nullable: false
-      additionalProperties: false
 
     notificationSummaryDto:
       type: object
-      nullable: false
       properties:
         id:
           description: Идентификатор объявления
           type: string
           format: uuid
-          nullable: false
         author:
           description: Автор объявления
           type: string
-          nullable: false
         content:
           description: Текстовое содержимое объявления
           type: string
-          nullable: false
         publishedAt:
           description: Время публикации объявления
           type: string
           format: date-time
-          nullable: false
         viewers:
           description: Количество просмотревших объявление пользователей
           type: integer
-          nullable: false
           minimum: 0
         audienceSize:
           description: Размер аудитории объявления
           type: integer
-          nullable: false
           minimum: 0
         files:
           description: Массив файлов, прикрепленных к объявлению
@@ -102,29 +88,23 @@ components:
             $ref: './file-schemas.yaml#/components/schemas/fileSummaryDto'
         survey:
           $ref: './survey-schemas.yaml#/components/schemas/surveyDetailsDto'
-      additionalProperties: false
 
     notificationDetailsDto:
       type: object
-      nullable: false
       properties:
         content:
           description: Текстовое содержимое объявления
           type: string
-          nullable: false
         author:
           description: Автор объявления
           type: string
-          nullable: false
         viewers:
           description: Количество просмотревших объявление пользователей
           type: integer
-          nullable: false
           minimum: 0
         audienceSize:
           description: Размер аудитории объявления
           type: integer
-          nullable: false
           minimum: 0
         files:
           description: Массив файлов, прикрепленных к объявлению
@@ -137,7 +117,6 @@ components:
         isHidden:
           description: Флаг отражает, скрыто ли объявлению в текущий момент
           type: boolean
-          nullable: false
           default: false
         hideAt:
           description: Срок автоматического сокрытия объявления
@@ -151,17 +130,13 @@ components:
           format: date-time
           nullable: true
           default: null
-          
-      additionalProperties: false
     
     updateNotificationDto:
       type: object
-      nullable: false
       properties:
         id:
           type: string
           format: uuid
-          nullable: false
         content:
           description: Текстовое содержимое объявления
           type: string
@@ -202,5 +177,4 @@ components:
           format: date-time
           nullable: true
           default: null
-      additionalProperties: false
     

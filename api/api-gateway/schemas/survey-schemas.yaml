@@ -18,27 +18,22 @@ components:
     
     surveyDetailsDto:
       type: object
-      nullable: false
       properties:
         id:
           description: Идентификатор опроса
           type: string
           format: uuid
-          nullable: false
         isOpen:
           description: Открыт ли опрос
           type: boolean
-          nullable: false
           default: true
         isAnonymous:
           description: Анонимен ли опрос
           type: boolean
-          nullable: false
           default: false
         isMultipleChoiceAllowed:
           description: Разрешен ли множественный выбор
           type: boolean
-          nullable: false
           default: false
         voteFinishedAt:
           description: Время окончания голосования (если задано)
@@ -51,20 +46,15 @@ components:
           items:
             $ref: '#/components/schemas/questionDetailsDto'
           minItems: 1
-          nullable: false
-      additionalProperties: false
       
-    surveyIdentifier:
+    surveyIdentifierDto:
       description: Идентификатор опроса
       type: string
       format: uuid
-      nullable: false
-      additionalProperties: false
       
     voteInSurveyDto:
       description: DTO для голосования в опросе
       type: object
-      nullable: false
       properties:
         answerIds:
           description: Массив идентификаторов вариантов ответов
@@ -74,124 +64,87 @@ components:
           items:
             type: string
             format: uuid
-            nullable: false
-      additionalProperties: false
 
     surveyResultsDto:
       description: Результаты опроса
       type: object
-      nullable: false
       properties:
         voters:
           $ref: '#/components/schemas/votersDto'
         answerResults:
           $ref: '#/components/schemas/answerResultsDto'
-      additionalProperties: false
 
     # question
     questionDetailsDto:
       type: object
-      nullable: false
       properties:
         id:
           description: Идентификатор опроса
           type: string
           format: uuid
-          nullable: false
         content:
           description: Текстовое содержимое вопроса
           type: string
-          nullable: false
         votersAmount:
           description: Количество проголосовавших
           items:
             type: string
-            nullable: false
-          minItems: 0
-          nullable: false
         answers:
           description: Варианты ответов опроса
           type: array
           items:
             $ref: '#/components/schemas/questionAnswerDetailsDto'
           minItems: 2
-      additionalProperties: false
       
     questionAnswerDetailsDto:
       type: object
-      nullable: false
       properties:
         id:
           description: Идентификатор варианта ответа
           type: string
           format: uuid
-          nullable: false
         content:
           description: Текстовое содержимое варианта ответа
           type: string
-          nullable: false
         votersAmount:
           description: Количество пользователей, проголосовавших за вариант ответа
           type: integer
           minimum: 0
-          nullable: false
-        voters: # todo нужно?
-          description: Имена пользователей, проголосовавших за вариант ответа
-          type: array
-          items:
-            type: string
-            nullable: false
-          minItems: 0
-          nullable: false
-      additionalProperties: false
 
-    questionIdentifier:
+    questionIdentifierDto:
       description: Идентификатор вопроса
       type: string
       format: uuid
-      nullable: false
-      additionalProperties: false
     
     # answer
-    answerIdentifier:
+    answerIdentifierDto:
       description: Идентификатор варианта ответа
       type: string
       format: uuid
-      nullable: false
-      additionalProperties: false    
 
 # private
     votersDto:
       type: array
-      nullable: false
       items:
         $ref: '#/components/schemas/voterDto'
-      additionalProperties: false
     
     voterDto:
       type: object
-      nullable: false
       properties:
         id:
           description: Идентификатор пользователя
           type: integer
-          nullable: false
         name:
           description: Имя пользователя
           type: string
-          nullable: false
-      additionalProperties: false
     
     answerResultsDto:
       type: array
-      nullable: false
       items:
         $ref: '#/components/schemas/answerResultDto'
-      additionalProperties: false # remove
       
     answerResultDto:
       type: object
-      nullable: false # remove
       properties: 
         questionId:
           description: Идентификатор варианта ответа

@@ -20,51 +20,44 @@ paths:
           application/json:
             schema:
               $ref: './schemas/notification-schemas.yaml#/components/schemas/createNotificationDto'
-      responses:
+      responses: # todo перевести текст в enum
         201:
           description: Created
           content:
             application/json:
               schema:
-                $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
-        400: # todo перевести текст в enum
+                $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+        400:
           description: Bad Request
           content:
             application/json:
               schema: 
                 type: string
-                nullable: false
                 description: Список групп пользователей null или пустой
                 example: Список групп пользователей null или пустой
-        404: # todo перевести текст в enum
+        404:
           description: Not Found
           content:
             application/json:
               schema:
                 oneOf:
                   - type: string
-                    nullable: false
                     description: В качестве одного из id файлов прикреплен несуществующий в базе id
                   - type: string
-                    nullable: false
                     description: В качестве id опроса прикреплен несуществующий в базе id
-        409: # todo перевести текст в enum
+        409:
           description: Conflict
           content:
             application/json:
               schema: 
                 oneOf:
                   - type: string
-                    nullable: false
                     description: Нельзя прикрепить к объявлению и файлы, и опрос
                   - type: string
-                    nullable: false
                     description: Момент автоматического сокрытия наступит до момента создания объявления
                   - type: string
-                    nullable: false
                     description: Момент отложенной публикации наступит до момента создания объявления
                   - type: string
-                    nullable: false
                     description: Момент отложенной публикации наступит после момента автоматического сокрытия
   
   /notifications/get-details:
@@ -77,21 +70,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
-      responses:
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+      responses: # todo перевести текст в enum
         200:
           description: Ok
           content:
             application/json:
               schema:
                 $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationDetailsDto'
-        400: # todo перевести текст в enum
+        400:
           description: Bad Request
           content: 
             application/json:
               schema: 
                 $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
-        404: # todo перевести текст в enum
+        404:
           description: Not Found        
   
   /notifications/update:
@@ -105,56 +98,48 @@ paths:
           application/json:
             schema:
               $ref: './schemas/notification-schemas.yaml#/components/schemas/updateNotificationDto'
-      responses:
+      responses: # todo перевести текст в enum
         200:
           description: Ok
           content:
             application/json:
               schema:
-                $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
-        400: # todo перевести текст в enum
+                $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+        400:
           description: Bad Request
           content:
             application/json:
               schema:
                 oneOf:
                   - type: string
-                    nullable: false
                     description: Список групп пользователей null или пустой
                     example: Список групп пользователей null или пустой
                   - type: string
-                    nullable: false
                     description: Некорректный формат идентификатора
                     example: Некорректный формат идентификатора
-        404: # todo перевести текст в enum
+        404:
           description: Not Found
           content:
             application/json:
               schema:
                 oneOf:
                   - type: string
-                    nullable: false
                     description: В качестве одного из id файлов прикреплен несуществующий в базе id
                   - type: string
-                    nullable: false
                     description: В качестве id опроса прикреплен несуществующий в базе id
-        409: # todo перевести текст в enum
+        409:
           description: Conflict
           content:
             application/json:
               schema:
                 oneOf:
                   - type: string
-                    nullable: false
                     description: Нельзя прикрепить к объявлению и файлы, и опрос
                   - type: string
-                    nullable: false
                     description: Момент автоматического сокрытия наступит до момента создания объявления
                   - type: string
-                    nullable: false
                     description: Момент отложенной публикации наступит до момента создания объявления
                   - type: string
-                    nullable: false
                     description: Момент отложенной публикации наступит после момента автоматического сокрытия
   
   /notifications/delete:
@@ -167,7 +152,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
       responses:
         200:
           description: Ok
@@ -195,7 +180,6 @@ paths:
                 type: array
                 items:
                   $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
-                nullable: false
   
   /notifications/posted/hide:
     post:
@@ -207,19 +191,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
-      responses:
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+      responses: # todo перевести текст в enum
         200:
           description: Ok
-        400: # todo перевести текст в enum
+        400:
           description: Bad Request
           content:
             application/json:
               schema:
                 $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
-        404: # todo перевести текст в enum
+        404:
           description: Not Found
-        409: # todo перевести текст в enum
+        409:
           description: Conflict
           content: 
             application/json:
@@ -227,10 +211,8 @@ paths:
                 oneOf:
                   - description: Объявление уже скрыто
                     type: string
-                    nullable: false
                   - description: Объявление еще не опубликовано
                     type: string
-                    nullable: false
   
   # скрытые объявления
   /notifications/hidden/get-list: # todo учесть получение ограниченного набора 
@@ -247,7 +229,6 @@ paths:
                 type: array
                 items:
                   $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
-                nullable: false
   
   /notifications/hidden/unhide:
     post: 
@@ -258,19 +239,19 @@ paths:
         content: 
           application/json:
             schema: 
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
-      responses: 
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+      responses: # todo перевести текст в enum
         200:
           description: Ok
-        400: # todo перевести текст в enum
+        400:
           description: Bad Request
           content: 
             application/json:
               schema: 
                 $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
-        404: # todo перевести текст в enum
+        404:
           description: Not Found
-        409: # todo перевести текст в enum
+        409:
           description: Conflict
           content:
             application/json:
@@ -294,7 +275,6 @@ paths:
                 type: array
                 items:
                   $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
-                nullable: false
   
   /notifications/delayed/publish-immediately:
     post:
@@ -305,26 +285,25 @@ paths:
         content: 
           application/json:
             schema: 
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifier'
-      responses: 
+              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+      responses: # todo перевести текст в enum
         200:
           description: Ok
-        400: # todo перевести текст в enum
+        400: 
           description: Bad Request
           content: 
             application/json:
               schema: 
                 $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
-        404: # todo перевести текст в enum
+        404:
           description: Not Found
-        409: # todo перевести текст в enum
+        409:
           description: Conflict
           content: 
             application/json:
               schema:
                 description: Объявление не является отложенным
                 type: string
-                nullable: false
                 example: Объявление не является отложенным
       
       

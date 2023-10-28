@@ -11,17 +11,14 @@ components:
   schemas:
     fileSummaryDto:
       type: object
-      nullable: false
       properties:
         id:
           description: Идентификатор файла
           type: string
           format: uuid
-          nullable: false
         name:
           description: Название файла
           type: string
-          nullable: false
         type:
           description: Тип файла
           type: string
