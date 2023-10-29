@@ -1,7 +1,7 @@
 ﻿openapi: 3.0.3
 info:
   title: Схемы опросов для API Шлюза
-  description: Схемы опросов для API Шлюза
+  description: Схемы опросов и непосредственно с ними связанных объектов для API Шлюза
   version: 0.0.1
 servers:
   - url: 'https://localhost:8080'
@@ -11,10 +11,26 @@ components:
   schemas:
     ### public
     # survey
-    createSurveyDto: # todo продумать
+    createSurveyDto:
       type: object
       properties:
-    
+        questions:
+          description: Вопросы опроса
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/createQuestionDto'
+        isMultipleChoiceAllowed:
+          description: Доступен ли выбор нескольких вариантов ответов
+          type: boolean
+        isAnonymous:
+          description: Анонимен ли опрос
+          type: boolean
+        voteUntil:
+          description: Срок окончания голосования. Null, если голосование не ограничено по сроку
+          type: string
+          format: date-time
+          nullable: true
     
     surveyDetailsDto:
       type: object
@@ -75,6 +91,19 @@ components:
           $ref: '#/components/schemas/answerResultsDto'
 
     # question
+    createQuestionDto:
+      type: object
+      properties: 
+        content:
+          description: Содержимое вопроса
+          type: string
+        answers:
+          description: Варианты ответов
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/createAnswerDto'
+
     questionDetailsDto:
       type: object
       properties:
@@ -122,6 +151,13 @@ components:
       type: string
       format: uuid
     
+    createAnswerDto:
+      type: object
+      properties: 
+        content:
+          description: текстовое содержимое варианта ответа
+          type: string
+      
     ### private
     votersDto:
       type: array

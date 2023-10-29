@@ -8,7 +8,7 @@ servers:
 paths:
   # survey
   /surveys/create:
-    post:
+    post: # todo перевести текст в enum
       operationId: createSurvey
       summary: Создать опрос
       tags: [ Опрос ]
@@ -31,51 +31,16 @@ paths:
             application/json:
               schema:
                 description: Пользователь не имеет права создавать опросы
-        409: # todo продумать
+        409: 
           description: Conflict
+          content: 
+            application/json:
+              schema: 
+                description: Срок окончания голосования наступит до момента публикации объявления
+                type: string
   
-  #  /surveys/get-summary: 
-  #    get:
-  #      operationId: getSurveySummary
-  #      summary: Получить детали выбранного опроса
-  #      tags: [Опрос]
-  #      requestBody:
-  #        content:
-  #          application/json:
-  #            schema:
-  #              $ref: './schemas/survey-schemas.yaml#/components/schemas/questionIdentifier'
-  #      responses:
-  #        200:
-  #          description: Ok
-  #          content: 
-  #            application/json:
-  #              schema:
-  #                $ref: './schemas/survey-schemas.yaml#/components/schemas/surveySummaryDto'
-  #        400:
-  #          description: Bad Request
-  #          content:
-  #            application/json:
-  #              schema:
-  #                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
-  #        403:
-  #          description: Forbidden
-  #          content:
-  #            application/json:
-  #              schema:
-  #                description: Пользователь не имеет права доступа к этому опросу
-  #                type: string
-  #        404:
-  #          description: Not Found
-  #        409:
-  #          description: Conflict
-  #          content:
-  #            application/json:
-  #              schema:
-  #                description: Объявление с опросом еще не опубликовано
-  #                type: string
-  #                        
   /survey/get-details:
-    get:
+    get: # todo перевести текст в enum
       operationId: getSurveyDetails
       summary: Получить детали выбранного опроса
       tags: [ Опрос ]
@@ -116,7 +81,7 @@ paths:
                 type: string
   
   /survey/close-survey:
-    post:
+    post: # todo перевести текст в enum
       operationId: closeSurvey
       description: Закрыть опрос
       tags: [ Опрос ]
@@ -157,7 +122,7 @@ paths:
   
   
   /survey/get-results:
-    get:
+    get: # todo перевести текст в enum
       operationId: getSurveysResults
       description: Получить результаты опроса
       tags: [ Опрос ]
@@ -199,7 +164,7 @@ paths:
                     type: string
   
   /survey/download-results:
-    get:
+    get: # todo перевести текст в enum
       operationId: downloadSurveyResults
       description: Скачать результаты опроса
       tags: [ Опрос ]
