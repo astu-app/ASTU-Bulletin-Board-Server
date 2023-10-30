@@ -1,0 +1,239 @@
+﻿openapi: 3.0.3
+info:
+  title: Схемы enum ответов API шлюза объявлений
+  description: Схемы enum ответов API шлюза объявлений
+  version: 0.0.1
+servers:
+  - url: 'https'
+paths:
+  
+components: 
+  schemas:
+    createNotificationResponses:
+      type: string
+      enum:
+        # 201 
+        - created
+        # 400
+        - usergroupListNullOrEmpty
+        # 401
+        - unauthorized
+        # 403
+        - notificationCreationForbidden
+        # 404
+        - fileDoesNotExist
+        - surveyDoesNotExist
+        # 409
+        - cannotAttachFilesAndSurveyTogether
+        - automaticHideBeforePublication
+        - delayedPublicationBeforeCreation
+        - delayedPublicationAfterAutomaticHide
+      description: >
+        Ответы:
+          created - Объявление создано
+          usergroupListNullOrEmpty - Список групп пользователей null или пустой
+          unauthorized - Пользователь не авторизован для выполнения операции
+          notificationCreationForbidden - Пользователь не имеет права создать объявление
+          fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id
+          surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id
+          cannotAttachFilesAndSurvey - Нельзя прикрепить к объявлению и файлы, и опрос
+          automaticHideBeforePublication - Момент автоматического сокрытия наступит до момента публикации объявления
+          delayedPublicationBeforeCreation - Момент отложенной публикации наступит до момента создания объявления
+          delayedPublicationAfterAutomaticHide - Момент отложенной публикации наступит после момента автоматического сокрытия
+
+    getNotificationDetailsResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - detailsAccessForbidden
+        # 404
+        - notificationDoesNotExist
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора 
+          unauthorized - Пользователь не авторизован для выполнения операции
+          detailsAccessForbidden - Пользователь не имеет права просмотреть подробности объявления
+          notificationDoesNotExist - Объявление не существует
+
+    updateNotificationResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - usergroupListNullOrEmpty
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - notificationEditingForbidden
+        # 404
+        - notificationDoesNotExist
+        - fileDoesNotExist
+        - surveyDoesNotExist
+        # 409
+        - cannotAttachFilesAndSurveyTogether
+        - automaticHideBeforePublication
+        - delayedPublicationBeforeCreation
+        - delayedPublicationAfterAutomaticHide
+      description: >
+        Ответы:
+          ok - Ок
+          usergroupListNullOrEmpty - Список групп пользователей null или пустой
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          notificationEditingForbidden - Пользователь не имеет права изменить объявление
+          fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id
+          surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id
+          cannotAttachFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос
+          automaticHideBeforePublication - Момент автоматического сокрытия наступит до момента создания объявления
+          delayedPublicationBeforeCreation - Момент отложенной публикации наступит до момента создания объявления
+          delayedPublicationAfterAutomaticHide - Момент отложенной публикации наступит после момента автоматического сокрытия
+
+    deleteNotificationResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - notificationDeletionForbidden
+        # 409
+        - notificationDoesNotExist
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          notificationDeletionForbidden - Пользователь не имеет права удалить объявление
+          notificationDoesNotExist - Объявление не существует
+    
+    getPostedNotificationListResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - postedNotificationsListAccessForbidden
+      description: >
+        Ответы:
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          postedNotificationsListAccessForbidden - Пользователь не имеет права просматривать списки опубликованных объявлений
+          
+    hidePostedNotificationResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - notificationHidingForbidden
+        # 404
+        - notificationDoesNotExist
+        # 409
+        - notificationAlreadyHidden
+        - notificationNotYetPublished
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора 
+          unauthorized - Пользователь не авторизован для выполнения операции
+          notificationHidingForbidden - Пользователь не имеет права скрыть объявление
+          notificationDoesNotExist - Объявление не существует
+          notificationAlreadyHidden - Объявление уже скрыто
+          notificationNotYetPublished - Объявление еще не опубликовано
+    
+    getHiddenNotificationListResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - hiddenNotificationsListAccessForbidden
+      description: >
+        Ответы:
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          hiddenNotificationsListAccessForbidden - Пользователь не имеет права просматривать списки скрытых объявлений
+        
+    unhideHiddenNotificationResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - unhideForbidden
+        # 404
+        - notificationDoesNotExist
+        # 409
+        - notificationNotHidden
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          unhideForbidden - Пользователь не имеет права скрыть объявление
+          notificationDoesNotExist - Объявление не существует
+          notificationNotHidden - Объявление не является скрытым
+        
+    getDelayedNotificationListResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - delayedNotificationsListAccessForbidden
+      description: >
+        Ответы: 
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          delayedNotificationsListAccessForbidden - Пользователь не имеет права просматривать списки отложенных объявлений
+    
+    publishImmediatelyDelayedNotificationResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - immediatePublishingForbidden
+        # 404
+        - notificationDoesNotExist
+        # 409
+        - notificationNotDelayed
+      description: >
+        Ответы: 
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          immediatePublishingForbidden - Пользователь не имеет права незамедлительно опубликовать отложенное объявление
+          notificationDoesNotExist - Объявление не существует
+          notificationNotDelayed - Объявление не является отложенным
+        

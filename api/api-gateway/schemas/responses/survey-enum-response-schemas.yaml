@@ -1,0 +1,188 @@
+﻿openapi: 3.0.3
+info:
+  title: Схемы enum ответов API шлюза объявлений
+  description: Схемы enum ответов API шлюза объявлений
+  version: 1.0.0
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  
+components:
+  schemas:
+    createSurveyResponses:
+      type: string
+      enum:
+        # 201
+        - created
+        # 401
+        - unauthorized
+        # 403
+        - createSurveyForbidden
+        # 409
+        - votingClosesBeforeNotificationPublication
+      description: >
+        Ответы:
+          created - Опрос создан
+          unauthorized - 
+          createSurveyForbidden - Пользователь не имеет права создать опрос
+          votingClosesBeforeNotificationPublication - Срок окончания голосования наступит до момента публикации объявления
+    
+    getSurveyDetailsResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - detailsAccessForbidden
+        # 404
+        - surveyDoesNotExist
+        # 409
+        - notificationWithSurveyNotYetPublished
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          detailsAccessForbidden - Пользователь не имеет права просмотреть подробности этого опроса
+          surveyDoesNotExist - Опрос не существует
+          notificationWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+
+    closeSurveyResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - surveyClosingForbidden
+        # 404
+        - surveyDoesNotExist
+        # 409
+        - surveyAlreadyClosed
+        - notificationWithSurveyNotYetPublished
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          surveyClosingForbidden - Пользователь не имеет права закрыть этот опрос
+          surveyDoesNotExist - Опрос не существует
+          surveyAlreadyClosed - Опрос уже закрыт
+          notificationWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+    
+    getSurveysResultsResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - surveyResultsAccessForbidden
+        # 404
+        - surveyDoesNotExist
+        # 409
+        - notificationWithSurveyNotYetPublished
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          surveyResultsAccessForbidden - Пользователь не имеет права получить результаты этого опроса
+          surveyDoesNotExist - Опрос не существует
+          notificationWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+
+    downloadSurveyResultsResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - surveyResultsDownloadingForbidden
+        # 404
+        - surveyDoesNotExist
+        # 409
+        - notificationWithSurveyNotYetPublished
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          surveyResultsDownloadingForbidden - Пользователь не имеет права выгрузить результаты этого опроса
+          surveyDoesNotExist - Опрос не существует
+          notificationWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+
+    voteInQuestionResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - votingForbidden
+        # 404
+        - surveyDoesNotExist
+        - questionDoesNotExist
+        # 409
+        - surveyClosed
+        - notificationWithSurveyNotYetPublished
+        - questionAlreadyVoted
+        - cannotSelectMultipleAnswersInSingleChoiceQuestion
+        - selectedAnswersBelongToDifferentQuestions
+      description: >
+        Ответы: 
+          ok - Ок 
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          votingForbidden - Пользователь не имеет права голосовать в опросе
+          surveyDoesNotExist - Опрос не существует
+          questionDoesNotExist - Вопрос не существует
+          surveyClosed - Опрос закрыт
+          notificationWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+          questionAlreadyVoted - Голос за вопрос уже отдан
+          cannotSelectMultipleAnswersInSingleChoiceQuestion - В вопросе с единственным выбором нельзя выбрать несколько вариантов ответов
+          selectedAnswersBelongToDifferentQuestions - Перечисленные варианты ответов относятся к разным вопросам
+
+    cancelVoteInQuestionResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - votingForbidden
+        # 404
+        - questionDoesNotExist
+        # 409
+        - surveyClosed
+        - surveyNotVoted
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          votingForbidden - Пользователь не имеет права голосовать в этом опросе
+          questionDoesNotExist - Вопрос не существует 
+          surveyClosed - Опрос закрыт
+          surveyNotVoted - Пользователь не проголосовал в вопросе
+
+    

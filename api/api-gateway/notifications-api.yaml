@@ -18,52 +18,73 @@ paths:
           application/json:
             schema:
               $ref: './schemas/notification-schemas.yaml#/components/schemas/createNotificationDto'
-      responses: # todo перевести текст в enum
+      responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
-        400:
+                type: object
+                properties:
+                  code:
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
+                  content:
+                    # created
+                    $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+        400: 
           description: Bad Request
           content:
             application/json:
               schema:
-                type: string
-                description: Список групп пользователей null или пустой
-                example: Список групп пользователей null или пустой
+                type: object
+                properties: 
+                  code:
+                    # usergroupListNullOrEmpty
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
         403:
           description: Forbidden
           content: 
             application/json:
-              schema: 
-                type: string
-                description: Пользователь не имеет права создавать объявления
+              schema:
+                type: object
+                properties:
+                  code: 
+                    # notificationCreationForbidden
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: string
-                    description: В качестве одного из id файлов прикреплен несуществующий в базе id
-                  - type: string
-                    description: В качестве id опроса прикреплен несуществующий в базе id
+                type: object
+                properties:
+                  code:
+                    # fileDoesNotExist
+                    # surveyDoesNotExist
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
         409:
           description: Conflict
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: string
-                    description: Нельзя прикрепить к объявлению и файлы, и опрос
-                  - type: string
-                    description: Момент автоматического сокрытия наступит до момента создания объявления
-                  - type: string
-                    description: Момент отложенной публикации наступит до момента создания объявления
-                  - type: string
-                    description: Момент отложенной публикации наступит после момента автоматического сокрытия
+                type: object
+                properties:
+                  code:
+                    # cannotAttachFilesAndSurveyTogether
+                    # automaticHideBeforePublication
+                    # delayedPublicationBeforeCreation
+                    # delayedPublicationAfterAutomaticHide
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
   
   /notifications/get-details:
     get:
@@ -76,31 +97,59 @@ paths:
           application/json:
             schema:
               $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
-      responses: # todo перевести текст в enum
+      responses:
         200:
           description: Ok
           content:
             application/json:
               schema:
-                $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationDetailsDto'
+                type: object
+                properties: 
+                  content:
+                    $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationDetailsDto'
+                  code:
+                    # ok
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getNotificationDetailsResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
+                type: object
+                properties: 
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getNotificationDetailsResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getNotificationDetailsResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: string
-                    description: Пользователь не имеет права просматривать подробности объявлений
-                  - type: string
-                    description: Пользователь не имеет права просматривать подробности этого объявления
+                type: object
+                properties:
+                  code:
+                    # detailsAccessForbidden
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getNotificationDetailsResponses'
         404:
           description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # notificationDoesNotExist
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getNotificationDetailsResponses'
   
   /notifications/update:
     put:
@@ -113,59 +162,75 @@ paths:
           application/json:
             schema:
               $ref: './schemas/notification-schemas.yaml#/components/schemas/updateNotificationDto'
-      responses: # todo перевести текст в enum
+      responses:
         200:
           description: Ok
           content:
             application/json:
               schema:
-                $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+                type: object
+                properties: 
+                  content:
+                    $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+                  code:
+                    # ok
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: string
-                    description: Список групп пользователей null или пустой
-                    example: Список групп пользователей null или пустой
-                  - type: string
-                    description: Некорректный формат идентификатора
-                    example: Некорректный формат идентификатора
+                type: object
+                properties: 
+                  code:
+                    # usergroupListNullOrEmpty
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: string
-                    description: Пользователь не имеет права редактировать объявления
-                  - type: string
-                    description: Пользователь не имеет права редактировать это объявление
+                type: object
+                properties:
+                  code:
+                    # notificationEditingForbidden
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: string
-                    description: В качестве одного из id файлов прикреплен несуществующий в базе id
-                  - type: string
-                    description: В качестве id опроса прикреплен несуществующий в базе id
+                type: object
+                properties:
+                  code:
+                    # notificationDoesNotExist
+                    # fileDoesNotExist
+                    # surveyDoesNotExist
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
         409:
           description: Conflict
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: string
-                    description: Нельзя прикрепить к объявлению и файлы, и опрос
-                  - type: string
-                    description: Момент автоматического сокрытия наступит до момента создания объявления
-                  - type: string
-                    description: Момент отложенной публикации наступит до момента создания объявления
-                  - type: string
-                    description: Момент отложенной публикации наступит после момента автоматического сокрытия
+                type: object
+                properties:
+                  code:
+                    # cannotAttachFilesAndSurveyTogether
+                    # automaticHideBeforePublication
+                    # delayedPublicationBeforeCreation
+                    # delayedPublicationAfterAutomaticHide
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
   
   /notifications/delete:
     delete:
@@ -181,24 +246,54 @@ paths:
       responses:
         200:
           description: Ok
+          content: 
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  code:
+                    # ok
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/deleteNotificationResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
+                type: object
+                properties:
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/deleteNotificationResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/deleteNotificationResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: string
-                    description: Пользователь не имеет права удалять объявления
-                  - type: string
-                    description: Пользователь не имеет права удалять это объявление
+                type: object
+                properties:
+                  code:
+                    # notificationDeletionForbidden
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/deleteNotificationResponses'
         404:
           description: Not Found
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # notificationDoesNotExist
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/deleteNotificationResponses'
   
   # опубликованные объявления  
   /notifications/posted/get-list: # todo учесть получение ограниченного набора
@@ -212,14 +307,40 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                type: object
+                properties: 
+                  content:
+                    type: array
+                    items:
+                      $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                  code:
+                    # ok
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getPostedNotificationListResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getPostedNotificationListResponses'
+        403:
+          description: Forbidden
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # postedNotificationsListAccessForbidden
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getPostedNotificationListResponses'
   
   /notifications/posted/hide:
     post:
       tags: [ Опубликованные объявления ]
-      operationId: hideNotification
+      operationId: hidePostedNotification
       summary: Скрыть опубликованное объявление
       requestBody:
         required: true
@@ -227,37 +348,68 @@ paths:
           application/json:
             schema:
               $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
-      responses: # todo перевести текст в enum
+      responses:
         200:
           description: Ok
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  code:
+                    # ok
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
+                type: object
+                properties:
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: string
-                    description: Пользователь не имеет права скрывать объявления
-                  - type: string
-                    description: Пользователь не имеет права скрывать это объявление
+                type: object
+                properties:
+                  code:
+                    # notificationHidingForbidden
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
         404:
           description: Not Found
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # notificationDoesNotExist
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
         409:
           description: Conflict
           content:
             application/json:
               schema:
-                oneOf:
-                  - description: Объявление уже скрыто
-                    type: string
-                  - description: Объявление еще не опубликовано
-                    type: string
+                type: object
+                properties:
+                  code:
+                    # notificationAlreadyHidden
+                    # notificationNotYetPublished
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
   
   # скрытые объявления
   /notifications/hidden/get-list: # todo учесть получение ограниченного набора 
@@ -271,16 +423,35 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                  code:
+                    # ok
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getHiddenNotificationListResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getHiddenNotificationListResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                type: string
-                description: Пользователь не имеет права просматривать списки скрытых объявлений
+                type: object
+                properties:
+                  code:
+                    # hiddenNotificationsListAccessForbidden
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getHiddenNotificationListResponses'
   
   /notifications/hidden/unhide:
     post:
@@ -292,35 +463,67 @@ paths:
           application/json:
             schema:
               $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
-      responses: # todo перевести текст в enum
+      responses:
         200:
           description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # ok
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
+                type: object
+                properties:
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: string
-                    description: Пользователь не имеет права восстанавливать скрытые объявления
-                  - type: string
-                    description: Пользователь не имеет права восстанавливать это скрытое объявление
+                type: object
+                properties:
+                  code:
+                    # unhideForbidden
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
         404:
           description: Not Found
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # notificationDoesNotExist
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
         409:
           description: Conflict
           content:
             application/json:
               schema:
-                description: Объявление не является скрытым
-                type: string
-                example: Объявление не является скрытым
+                type: object
+                properties:
+                  code:
+                    # notificationNotHidden
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
   
   # отложенные объявления
   /notifications/delayed/get-list: # todo учесть получение ограниченного набора
@@ -334,16 +537,35 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                  code:
+                    # ok
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getDelayedNotificationListResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getDelayedNotificationListResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                type: string
-                description: Пользователь не имеет права просматривать списки отложенных объявлений
+                type: object
+                properties:
+                  code:
+                    # delayedNotificationsListAccessForbidden
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getDelayedNotificationListResponses'
   
   /notifications/delayed/publish-immediately:
     post:
@@ -355,34 +577,66 @@ paths:
           application/json:
             schema:
               $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
-      responses: # todo перевести текст в enum
+      responses:
         200:
           description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # ok
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
-                $ref: './schemas/common-schemas.yaml#/components/schemas/incorrectIdentifierFormat'
+                type: object
+                properties:
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: string
-                    description: Пользователь не имеет права незамедлительно публиковать отложенные объявления
-                  - type: string
-                    description: Пользователь не имеет права незамедлительно опубликовать это отложенное объявления
+                type: object
+                properties:
+                  code:
+                    # immediatePublishingForbidden
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
         404:
           description: Not Found
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # notificationDoesNotExist
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
         409:
           description: Conflict
           content:
             application/json:
               schema:
-                description: Объявление не является отложенным
-                type: string
-                example: Объявление не является отложенным
+                type: object
+                properties:
+                  code:
+                    # notificationNotDelayed
+                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
       
       
