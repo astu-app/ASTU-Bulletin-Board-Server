@@ -9,21 +9,22 @@ left to right direction
 :Администратор: as admin
 
 rectangle "Доска объявлений" {
-    student --> (<font color="gray">S-2.</font> Получить уведомление о новом объявлении)
     student --> (<font color="gray">S-1.</font> Просмотреть доску объявлений)
+    student --> (<font color="gray">S-2.</font> Управление подписками)
+    student --> (<font color="gray">S-3.</font> Получить уведомление \n о новом объявлении)
     
     student <|-r- employee
     employee --> (<font color="gray">E-2.</font> Управление опросами)
     employee --> (<font color="gray">E-1.</font> Управление объявлениями)
     
+    employee <|-r- admin
+    admin --> (<font color="gray">A-3.</font> Управление категориями объявлений)
+    admin --> (<font color="gray">A-1.</font> Управление сотрудниками)
+    admin --> (<font color="gray">A-2.</font> Управление администраторами групп) 
+    
     employee <|-r- groupAdmin
     groupAdmin --> (<font color="gray">G-1.</font> Управление своими группами)
     
-    employee <|-r- admin
-    admin --> (<font color="gray">A-2.</font> Управление администраторами групп) 
-    admin --> (<font color="gray">A-1.</font> Управление сотрудниками)
 }
-
-
 
 @enduml

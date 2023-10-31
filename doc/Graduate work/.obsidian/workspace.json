@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "e4e4ee88e0aa6684",
+        "id": "42ab6cb0ddc295db",
         "type": "tabs",
         "children": [
           {
-            "id": "72a1ddbdde4b82ed",
+            "id": "148d99104ff3f02c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "API/Объявления.md",
+                "file": "Todo.md",
                 "mode": "source",
                 "source": false
               }
@@ -48,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "опи",
+                "query": "типы об",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -65,7 +65,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -85,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "API/Объявления.md",
+                "file": "Todo.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "API/Объявления.md",
+                "file": "Todo.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "API/Объявления.md"
+                "file": "Todo.md"
               }
             }
           }
@@ -146,40 +147,40 @@
       "command-palette:Открыть палитру команд": false
     }
   },
-  "active": "72a1ddbdde4b82ed",
+  "active": "e715dd09bd533f1c",
   "lastOpenFiles": [
-    "API/Опросы.md",
-    "API/Файлы.md",
-    "API/Объявления.md",
-    "Todo.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Файл.md",
+    "Описание системы/Уведомления о публикации.md",
+    "Требуемые API.md",
+    "API/Подписки.md",
     "Описание системы/Объявления/Типы объявлений.md",
-    "Описание системы/Описание диаграмм/Entity-relation/Entity-relation.md",
-    "API",
-    "Описание системы/Описание диаграмм/Entity-relation/Права пользователя в группе.md",
-    "Описание системы/Описание диаграмм/Entity-relation/Вариант ответа.md",
-    "Описание системы/Описание диаграмм/Entity-relation/Опрос.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Объявление.md",
+    "Описание системы/Импорт пользователей.md",
     "Описание системы/Описание диаграмм/Entity-relation/Пользователь.md",
+    "API/Профиль.md",
+    "API/Группы пользователей.md",
+    "API/Пользователи.md",
+    "API/Опросы.md",
+    "API/Объявления.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Категория объявлений.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Entity-relation.md",
+    "Описание системы/Регистрация.md",
+    "Описание системы/Категории объявлений.md",
+    "Описание системы/Лента объявлений.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Опрос.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Права пользователя в группе.md",
     "Описание системы/Описание диаграмм/Entity-relation/Группа пользователей.md",
     "Описание системы/Описание диаграмм/Entity-relation/Вопрос.md",
-    "Описание системы/Описание диаграмм/Entity-relation/Объявление.md",
-    "Описание системы/Описание диаграмм/Entity-relation/Файл.md",
-    "текст.md",
+    "Описание системы/Описание диаграмм/Entity-relation/Вариант ответа.md",
+    "Название.md",
+    "API/Файлы.md",
+    "Todo.md",
+    "API",
     "Описание системы/Описание диаграмм/Entity-relation",
     "Описание системы/diagrams/er.png",
-    "Аналоги/Omni.md",
     "Описание системы/Описание диаграмм",
-    "Описание системы/Без названия.md",
-    "Аналоги/Битрикс.md",
-    "Описание системы/Логгирование.md",
-    "Описание системы/Объявления/Содержимое объявления.md",
     "Аналоги",
-    "Описание системы/Объявления/Операции над объявлениями.md",
     "Описание системы/Объявления",
-    "Описание системы/Лента объявлений.md",
-    "Описание системы/Восстановление доступа к аккаунту.md",
-    "Требуемые API.md",
-    "Описание системы/Аккаунт.md",
-    "Описание системы/Регистрация.md",
     "Описание системы/diagrams/sequence/registration_sequence_diagram.png",
     "Описание системы/diagrams/sequence/authentication_sequence_diagram.png",
     "Описание системы/diagrams/sequence/registration.png",

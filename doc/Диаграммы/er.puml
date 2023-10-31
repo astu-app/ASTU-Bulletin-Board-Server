@@ -20,6 +20,12 @@ entity "Объявление" as notification {
 }
 notification }o--|| user : Автор
 
+entity "Категория" as category {
+    Название
+}
+notification }o--o{ category
+user }o-up-o{ category
+
 entity "Файл" as attachedFile { 
     Название
     Содержимое

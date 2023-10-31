@@ -69,6 +69,7 @@ paths:
                 type: object
                 properties:
                   code:
+                    # notificationCategoryDoesNotExist
                     # fileDoesNotExist
                     # surveyDoesNotExist
                     $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
@@ -215,6 +216,7 @@ paths:
                 properties:
                   code:
                     # notificationDoesNotExist
+                    # notificationCategoryDoesNotExist
                     # fileDoesNotExist
                     # surveyDoesNotExist
                     $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'

@@ -21,6 +21,7 @@ components:
         # 403
         - notificationCreationForbidden
         # 404
+        - notificationCategoryDoesNotExist
         - fileDoesNotExist
         - surveyDoesNotExist
         # 409
@@ -34,6 +35,7 @@ components:
           usergroupListNullOrEmpty - Список групп пользователей null или пустой
           unauthorized - Пользователь не авторизован для выполнения операции
           notificationCreationForbidden - Пользователь не имеет права создать объявление
+          notificationCategoryDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id
           fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id
           surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id
           cannotAttachFilesAndSurvey - Нельзя прикрепить к объявлению и файлы, и опрос
@@ -76,6 +78,7 @@ components:
         - notificationEditingForbidden
         # 404
         - notificationDoesNotExist
+        - notificationCategoryDoesNotExist
         - fileDoesNotExist
         - surveyDoesNotExist
         # 409
@@ -90,6 +93,8 @@ components:
           incorrectIdentifierFormat - Некорректный формат идентификатора
           unauthorized - Пользователь не авторизован для выполнения операции
           notificationEditingForbidden - Пользователь не имеет права изменить объявление
+          notificationDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id
+          notificationCategoryDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id
           fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id
           surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id
           cannotAttachFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос

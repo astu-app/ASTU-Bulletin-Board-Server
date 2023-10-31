@@ -1,0 +1,22 @@
+﻿openapi: 3.0.3
+info:
+  title: Схемы категорий объявлений для API шлюза
+  description: Схемы категорий объявлений для API шлюза
+  version: 0.0.1
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  
+components:
+  schemas:
+    categoryDetailsDto:
+      type: object
+      properties: 
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        color:
+          type: string
+    

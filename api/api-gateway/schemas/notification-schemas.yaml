@@ -22,6 +22,12 @@ components:
             type: string
             format: uuid
           minItems: 1
+        categoryIds:
+          description: Идентификатор категорий объявлений
+          type: array
+          items: 
+            type: string
+            format: uuid
         surveyId:
           description: Идентификатор опроса, прикрепляемого к объявлению
           type: string
@@ -106,6 +112,11 @@ components:
           description: Размер аудитории объявления
           type: integer
           minimum: 0
+        categoryIds:
+          description: Массив идентификаторов категорий объявлений
+          type: array
+          items:
+            $ref: './category-schemas.yaml#/components/schemas/categoryDetailsDto'
         files:
           description: Массив файлов, прикрепленных к объявлению
           type: array
@@ -142,6 +153,12 @@ components:
           type: string
           nullable: true
           default: null
+        categoryIds:
+          description: Массив идентификаторов категорий объявлений
+          type: array
+          items: 
+            type: string
+            format: uuid
         userGroupIds:
           description: Идентификаторы групп пользователей, для которых создается объявление
           type: array
@@ -177,4 +194,5 @@ components:
           format: date-time
           nullable: true
           default: null
+    
     
