@@ -1,0 +1,42 @@
+﻿@startuml
+'https://plantuml.com/deployment-diagram
+
+left to right direction
+
+rectangle "Кластер" as cluster {
+    node "API server" as api_server
+    node "Брокер" as broker
+    api_server -right- broker
+    
+    node "Сервис 1" as service_1
+    broker -- service_1
+    database "БД" as db_1 
+    service_1 -- db_1
+    
+    
+    node "Сервис 2" as service_2
+    broker -- service_2
+    database "БД" as db_2 
+    service_2 -- db_2
+        
+    node "Сервис n" as service_n
+    broker -- service_n
+    database "БД" as db_n 
+    service_n -- db_n
+    
+}
+
+cloud "Интернет" as internet
+api_server -up- internet : https / ftp
+
+node "Мобильный клиент" as mobile_client {
+    component "Мобильное приложение" as mobile_app
+}
+internet -up- mobile_app : https / ftp
+
+node "Десктопный клиент" as desktop_client {
+    component "Браузер" as browser
+}
+internet -up- browser : https / ftp
+
+@enduml
