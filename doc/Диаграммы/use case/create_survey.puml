@@ -7,19 +7,20 @@ left to right direction
 
 rectangle "Доска объявлений" {
     (<font color="gray">E-1.1.7.1.</font> Создать опрос) as create_survey
+    (<font color="gray">E-1.1.7.1.5.</font> Задать ограничение продолжительности голосования) as make_voting_duration_limited
 
     employee --> create_survey 
     
     create_survey <.. (<font color="gray">E-1.1.7.1.7.</font> Отменить создание) : extend
     create_survey <.. (<font color="gray">E-1.1.7.1.6.</font> Подтвердить создание) : extend
     
-    create_survey <.. (<font color="gray">E-1.1.7.1.5.</font> Задать ограничение продолжительности голосования) : extend 
+    create_survey <.. make_voting_duration_limited : extend 
     create_survey <.. (<font color="gray">E-1.1.7.1.4.</font> Задать возможность выбора нескольких вариантов ответов) : extend
     create_survey <.. (<font color="gray">E-1.1.7.1.3.</font> Задать анонимность голосования) : extend
     create_survey --> (<font color="gray">E-1.1.7.1.2.</font> Задать варианты ответов) : include
     create_survey --> (<font color="gray">E-1.1.7.1.1.</font> Указать вопросы) : include
     
-    (<font color="gray">E-1.1.7.1.5.</font> Задать ограничение продолжительности голосования) -right-> (<font color="gray">E-1.1.7.1.5.1.</font> Задать продолжительность голосования) : include
+    make_voting_duration_limited -right-> (<font color="gray">E-1.1.7.1.5.1.</font> Задать срок окончания голосования) : include
 }
 
 @enduml
