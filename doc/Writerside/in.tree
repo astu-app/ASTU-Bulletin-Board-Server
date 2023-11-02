@@ -17,8 +17,7 @@
         <toc-element topic="user-api.md"/>
     </toc-element>
     <toc-element toc-title="Аналоги">
-        <toc-element topic="bitrix24.md"/>
-        <toc-element topic="omni.md"/>
+        <toc-element topic="analogs-analysis.md"/>
     </toc-element>
     <toc-element toc-title="Описание системы">
         <toc-element topic="notification_about-publication.md"/>
