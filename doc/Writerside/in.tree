@@ -19,6 +19,10 @@
     <toc-element toc-title="Аналоги">
         <toc-element topic="analogs-analysis.md"/>
     </toc-element>
+    <toc-element toc-title="Предметная область">
+        <toc-element topic="departments.md"/>
+        <toc-element topic="institutes.md"/>
+    </toc-element>
     <toc-element toc-title="Описание системы">
         <toc-element topic="notification_about-publication.md"/>
         <toc-element topic="registration.md"/>
