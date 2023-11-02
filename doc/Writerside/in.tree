@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="in"
+                  name="instanceName" start-page="todo.md">
+
+    <toc-element topic="required-api.md"/>
+    <toc-element topic="todo.md"/>
+    <toc-element toc-title="API">
+        <toc-element topic="file-api.md"/>
+        <toc-element topic="account-api.md"/>
+        <toc-element topic="usergroup-api.md"/>
+        <toc-element topic="subscription-api.md"/>
+        <toc-element topic="survey-api.md"/>
+        <toc-element topic="notification-api.md"/>
+        <toc-element topic="user-api.md"/>
+    </toc-element>
+    <toc-element toc-title="Аналоги">
+        <toc-element topic="bitrix24.md"/>
+        <toc-element topic="omni.md"/>
+    </toc-element>
+    <toc-element toc-title="Описание системы">
+        <toc-element topic="notification_about-publication.md"/>
+        <toc-element topic="registration.md"/>
+        <toc-element topic="logging.md"/>
+        <toc-element topic="notification-feed.md"/>
+        <toc-element topic="notification-categories.md"/>
+        <toc-element topic="users-import.md"/>
+        <toc-element topic="restoring-account-access.md"/>
+        <toc-element topic="authentication.md"/>
+        <toc-element topic="account.md"/>
+        <toc-element toc-title="Объявления">
+            <toc-element topic="notification-content.md"/>
+            <toc-element topic="operations.md"/>
+        </toc-element>
+        <toc-element toc-title="Описание диаграмм">
+            <toc-element topic="deployment.md"/>
+            <toc-element toc-title="Entity-relation">
+                <toc-element topic="file.md"/>
+                <toc-element topic="rights-in-usergroups.md"/>
+                <toc-element topic="user.md"/>
+                <toc-element topic="survey.md"/>
+                <toc-element topic="notification.md"/>
+                <toc-element topic="notification-category.md"/>
+                <toc-element topic="usergroup.md"/>
+                <toc-element topic="question.md"/>
+                <toc-element topic="answer.md"/>
+                <toc-element topic="entity-relation.md"/>
+            </toc-element>
+        </toc-element>
+    </toc-element>
+</instance-profile>
