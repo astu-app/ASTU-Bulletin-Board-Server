@@ -1,0 +1,241 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+left to right direction
+
+hide methods
+hide members
+
+entity "Университет" as university {}
+
+
+
+
+
+entity "руководство" as management
+university -- management
+management -- "ректор"
+management -- "президент"
+management -- "проректор по учебной работе"
+management -- "проректор по приему в вуз и международной деятельности"
+management -- "проректор по научной работе и инновациям"
+management -- "проректор по воспитательной работе и связям с общественностью"
+management -- "проректор по инфраструктурному развитию и информатизации"
+management -- "проректор по организационноправовым вопросам"
+management -- "проректор по финансовоэкономическим вопросам"
+management -- "ученый совет"
+management -- "первый отдел"
+
+entity "бухгалтерия" as accounting
+university -- accounting
+
+entity "отдел кадров" as hrDepartment
+university -- hrDepartment
+
+entity "юридический отдел" as legalDepartment
+university -- legalDepartment
+
+entity "студенческая канцелярия" as studentAffairsOffice
+university -- studentAffairsOffice
+
+entity "общий отдел" as generalDepartment
+university -- generalDepartment
+    entity "военно-учетный стол" as militaryRegistrationDesk
+    generalDepartment -- militaryRegistrationDesk
+    entity "архив" as archive
+    generalDepartment -- archive
+
+entity "международный отдел" as internationalRelationsOffice
+university -- internationalRelationsOffice
+
+entity "отдел академической мобильности" as academicMobilityOffice
+university -- academicMobilityOffice
+
+entity "управление массовых коммуникаций и медиа-проектов" as massCommunicationsAndMediaProjectsManagement
+university -- massCommunicationsAndMediaProjectsManagement
+    entity "пресс-центр АГТУ" as AGTUPressCenter
+    massCommunicationsAndMediaProjectsManagement -- AGTUPressCenter
+    entity "отдел медиа-проектов" as mediaProjectsDepartment
+    massCommunicationsAndMediaProjectsManagement -- mediaProjectsDepartment
+    entity "рекламно-информационный центр" as advertisingAndInformationCenter
+    massCommunicationsAndMediaProjectsManagement -- advertisingAndInformationCenter
+
+entity "управление по организационно-воспитательной работе" as organizationalAndEducationalWorkManagement
+university -- organizationalAndEducationalWorkManagement
+    entity "отдел по культурно-массовой работе" as culturalAndMassWorkDepartment
+    organizationalAndEducationalWorkManagement -- culturalAndMassWorkDepartment
+
+entity "отдел по воспитательной и социальной работе" as educationalAndSocialWorkDepartment
+university -- educationalAndSocialWorkDepartment
+    entity "музей истории АГТУ" as AGTUHistoryMuseum
+    educationalAndSocialWorkDepartment -- AGTUHistoryMuseum
+    entity "спортивный клуб" as sportsClub
+    educationalAndSocialWorkDepartment -- sportsClub
+    entity "центр социально-психологической помощи «Доверие»" as TrustSocialAndPsychologicalSupportCenter
+    educationalAndSocialWorkDepartment -- TrustSocialAndPsychologicalSupportCenter
+    entity "студенческий совет АГТУ" as AGTUStudentCouncil
+    educationalAndSocialWorkDepartment -- AGTUStudentCouncil
+    entity "профстудком АГТУ" as AGTUStudentTradeUnionCommittee
+    educationalAndSocialWorkDepartment -- AGTUStudentTradeUnionCommittee
+
+entity "физкультурно-спортивное сооружение 'Спорткомплекс'" as sportsFacility
+university -- sportsFacility
+
+entity "управление информационных систем и технологий" as informationSystemsAndTechnologiesManagement
+university -- informationSystemsAndTechnologiesManagement
+    entity "отдел АСУ" as automationSystemsDepartment
+    informationSystemsAndTechnologiesManagement -- automationSystemsDepartment
+    entity "отдел информационной безопасности" as informationSecurityDepartment
+    informationSystemsAndTechnologiesManagement -- informationSecurityDepartment
+    entity "сервисный отдел" as serviceDepartment
+    informationSystemsAndTechnologiesManagement -- serviceDepartment
+    entity "отдел вычислительных сетей и связей" as computerNetworksAndCommunicationsDepartment
+    informationSystemsAndTechnologiesManagement -- computerNetworksAndCommunicationsDepartment
+
+entity "диспетчерский отдел" as dispatchDepartment
+university -- dispatchDepartment
+
+entity "учебный отдел" as academicDepartment
+university -- academicDepartment
+
+entity "центр содействия трудоустройству выпускников АГТУ" as careerDevelopmentCenter
+university -- careerDevelopmentCenter
+
+entity "отдел методического обеспечения учебного процесса" as educationalProcessSupportDepartment
+university -- educationalProcessSupportDepartment
+
+entity "центр образовательной политики" as educationalPolicyCenter
+university -- educationalPolicyCenter
+
+entity "издательство АГТУ" as AGTUPublishingHouse
+university -- AGTUPublishingHouse
+    entity "отдел допечатной подготовки изданий" as prepressDepartment
+    AGTUPublishingHouse -- prepressDepartment
+
+entity "научно-образовательный центр профессиональных компетенций" as professionalCompetenciesCenter
+university -- professionalCompetenciesCenter
+
+entity "центр довузовской подготовки, профориентации и приему в вуз" as preuniversityPreparationAndAdmissionCenter
+university -- preuniversityPreparationAndAdmissionCenter
+
+entity "научная библиотека" as scientificLibrary
+university -- scientificLibrary
+    entity "отдел каталогизации" as catalogingDepartment
+    scientificLibrary -- catalogingDepartment
+    entity "отдел научной литературы" as scientificLiteratureDepartment
+    scientificLibrary -- scientificLiteratureDepartment
+    entity "студенческий читальный зал" as studentReadingRoom
+    scientificLibrary -- studentReadingRoom
+    entity "отдел учебной литературы" as educationalLiteratureDepartment
+    scientificLibrary -- educationalLiteratureDepartment
+    entity "читальный зал экономической и юридической литературы" as economicsAndLawReadingRoom
+    scientificLibrary -- economicsAndLawReadingRoom
+    entity "отдел комплектования" as acquisitionDepartment
+    scientificLibrary -- acquisitionDepartment
+    entity "информационно-библиографический отдел" as informationAndBibliographyDepartment
+    scientificLibrary -- informationAndBibliographyDepartment
+    entity "читальный зал периодических изданий" as periodicalsReadingRoom
+    scientificLibrary -- periodicalsReadingRoom
+
+entity "центр научно-инновационного развития" as scientificAndInnovativeDevelopmentCenter
+university -- scientificAndInnovativeDevelopmentCenter
+    entity "отдел научных проектов" as researchProjectsDepartment
+    scientificAndInnovativeDevelopmentCenter -- researchProjectsDepartment
+
+entity "научно-исследовательская часть" as researchDivision
+university -- researchDivision
+
+entity "отдел подготовки кадров высшей квалификации" as postgraduateTrainingDepartment
+university -- postgraduateTrainingDepartment
+
+entity "редакция журнала «Вестник АГТУ»" as AGTUJournalEditorialOffice
+university -- AGTUJournalEditorialOffice
+
+entity "отдел маркетинга" as marketingDepartment
+university -- marketingDepartment
+
+entity "договорный отдел" as contractDepartment
+university -- contractDepartment
+
+entity "отдел материально-технического снабжения" as materialsAndTechnicalSupplyDepartment
+university -- materialsAndTechnicalSupplyDepartment
+    entity "склад" as warehouse
+    materialsAndTechnicalSupplyDepartment -- warehouse
+
+entity "планово-экономический отдел" as planningAndEconomicDepartment
+university -- planningAndEconomicDepartment
+    entity "сектор бюджетирования, аналитического учёта и контроля" as budgetingAndAnalyticalControlSector
+    planningAndEconomicDepartment -- budgetingAndAnalyticalControlSector
+    entity "сектор труда и заработной платы" as laborAndWageSector
+    planningAndEconomicDepartment -- laborAndWageSector
+
+
+entity "отдел внебюджетной деятельности и социальной защиты" as extrabudgetaryActivitiesAndSocialProtectionDepartment
+university -- extrabudgetaryActivitiesAndSocialProtectionDepartment
+
+entity "административно-хозяйственное управление" as administrativeAndEconomicManagement
+university -- administrativeAndEconomicManagement
+    entity "отдел по комплексному обслуживанию вуза" as comprehensiveUniversityServiceDepartment
+    administrativeAndEconomicManagement -- comprehensiveUniversityServiceDepartment
+    entity "хозяйственный отдел" as economicDepartment
+    administrativeAndEconomicManagement -- economicDepartment
+    entity "транспортный отдел" as transportDepartment
+    administrativeAndEconomicManagement -- transportDepartment
+
+entity "отдел по управлению имуществом и проектами" as propertyAndProjectManagementDepartment
+university -- propertyAndProjectManagementDepartment
+
+entity "отдел охраны труда и техники безопасности" as laborProtectionAndTechnicalSafetyDepartment
+university -- laborProtectionAndTechnicalSafetyDepartment
+
+entity "общежития" as dormitories
+university -- dormitories
+    entity "вахта общежития №4" as dormitoryGuardhouse4
+    dormitories -- dormitoryGuardhouse4
+    entity "вахта общежития №8" as dormitoryGuardhouse8
+    dormitories -- dormitoryGuardhouse8
+    entity "вахта общежития №10" as dormitoryGuardhouse10
+    dormitories -- dormitoryGuardhouse10
+
+entity "вахты учебных корпусов" as academicBuildingsGuardhouses
+university -- academicBuildingsGuardhouses
+    entity "главный учебный корпус" as mainAcademicBuildingGuardhouse
+    academicBuildingsGuardhouses -- mainAcademicBuildingGuardhouse
+    entity "учебный корпус №2" as academicBuilding2Guardhouse
+    academicBuildingsGuardhouses -- academicBuilding2Guardhouse
+    entity "учебный корпус №3" as academicBuilding3Guardhouse
+    academicBuildingsGuardhouses -- academicBuilding3Guardhouse
+    entity "учебный корпус №4" as academicBuilding4Guardhouse
+    academicBuildingsGuardhouses -- academicBuilding4Guardhouse
+    entity "учебный корпус №5" as academicBuilding5Guardhouse
+    academicBuildingsGuardhouses -- academicBuilding5Guardhouse
+    entity "учебный корпус №6" as academicBuilding6Guardhouse
+    academicBuildingsGuardhouses -- academicBuilding6Guardhouse
+    entity "учебный корпус №7" as academicBuilding7Guardhouse
+    academicBuildingsGuardhouses -- academicBuilding7Guardhouse
+    entity "учебный корпус №8" as academicBuilding8Guardhouse
+    academicBuildingsGuardhouses -- academicBuilding8Guardhouse
+    entity "учебный корпус №9" as academicBuilding9Guardhouse
+    academicBuildingsGuardhouses -- academicBuilding9Guardhouse
+    entity "учебный корпус №10-11" as academicBuilding10_11Guardhouse
+    academicBuildingsGuardhouses -- academicBuilding10_11Guardhouse
+
+entity "дополнительные структуры" as additionalStructures
+university -- additionalStructures
+    entity "медицинский пункт" as medicalPoint
+    additionalStructures -- medicalPoint
+    entity "профсоюзный комитет сотрудников ФГБОУ ВО 'АГТУ'" as AGTUStaffTradeUnionCommittee
+    additionalStructures -- AGTUStaffTradeUnionCommittee
+
+entity "контрольно-пропускные пункты" as checkpoints
+university -- checkpoints
+    entity "КПП со стороны ул. Татищева" as checkpointTatischevaStreet
+    checkpoints -- checkpointTatischevaStreet
+    entity "КПП со стороны ул. 28 Армии" as checkpoint28ArmyStreet
+    checkpoints -- checkpoint28ArmyStreet
+
+
+
+
+
+@enduml
