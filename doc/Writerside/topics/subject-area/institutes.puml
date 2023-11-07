@@ -4,7 +4,6 @@
 left to right direction
 
 hide methods
-hide members
 
 entity "Университет" as university {}
 
@@ -12,144 +11,240 @@ entity "Университет" as university {}
 
 
 
-entity "Институт экономики и права" as instituteOfEconomicsAndLaw
+entity "Институт экономики и права" as instituteOfEconomicsAndLaw {
+    + Директор
+}
 university -- instituteOfEconomicsAndLaw
 
-entity "финансы и учет (ФиУ)" as financesAndAccounting
+entity "Финансы и учет (ФиУ)" as financesAndAccounting {
+    + Заведующий кафедрой
+}
 instituteOfEconomicsAndLaw -- financesAndAccounting
-entity "производственный менеджмент (ПМ)" as productionManagement
+entity "Производственный менеджмент (ПМ)" as productionManagement {
+    + Заведующий кафедрой
+}
 instituteOfEconomicsAndLaw -- productionManagement
-entity "экономическая безопасность (ЭКБ)" as economicSecurity
+entity "Экономическая безопасность (ЭКБ)" as economicSecurity {
+    + Заведующий кафедрой
+}
 instituteOfEconomicsAndLaw -- economicSecurity
-entity "правоведение" as jurisprudence
+entity "Правоведение" as jurisprudence {
+    + Заведующий кафедрой
+}
 instituteOfEconomicsAndLaw -- jurisprudence
-entity "экономика и управление предприятием (ЭУП)" as economicsAndEnterpriseManagement
+entity "Экономика и управление предприятием (ЭУП)" as economicsAndEnterpriseManagement {
+    + Заведующий кафедрой
+}
 instituteOfEconomicsAndLaw -- economicsAndEnterpriseManagement
-entity "гуманитарные науки и психология (ГНП)" as humanitiesAndPsychology
+entity "Гуманитарные науки и психология (ГНП)" as humanitiesAndPsychology {
+    + Заведующий кафедрой
+}
 instituteOfEconomicsAndLaw -- humanitiesAndPsychology
 
 
 
 
 
-entity "Институт информационных технологий и коммуникаций" as instituteOfInformationTechnologiesAndCommunications
+entity "Институт информационных технологий и коммуникаций" as instituteOfInformationTechnologiesAndCommunications {
+    + Директор
+}
 university -- instituteOfInformationTechnologiesAndCommunications
 
-entity "Автоматизированные системы обработки информации и управления (АСОИУ)" as automatedInformationProcessingAndControl
+entity "Автоматизированные системы обработки информации и управления (АСОИУ)" as automatedInformationProcessingAndControl {
+    + Заведующий кафедрой
+}
 instituteOfInformationTechnologiesAndCommunications -- automatedInformationProcessingAndControl
-entity "прикладная информатика (ПИ)" as appliedInformatics
+entity "Прикладная информатика (ПИ)" as appliedInformatics {
+    + Заведующий кафедрой
+}
 instituteOfInformationTechnologiesAndCommunications -- appliedInformatics
-entity "связь (СВ)" as communication
+entity "Связь (СВ)" as communication {
+    + Заведующий кафедрой
+}
 instituteOfInformationTechnologiesAndCommunications -- communication
-entity "автоматика и управление (АиУ)" as automationAndControl
+entity "Автоматика и управление (АиУ)" as automationAndControl {
+    + Заведующий кафедрой
+}
 instituteOfInformationTechnologiesAndCommunications -- automationAndControl
-entity "информационная безопасность (ИБ)" as informationSecurity
+entity "Информационная безопасность (ИБ)" as informationSecurity {
+    + Заведующий кафедрой
+}
 instituteOfInformationTechnologiesAndCommunications -- informationSecurity
-entity "высшая и прикладная математика (ВиПМ)" as higherAndAppliedMathematics
+entity "Высшая и прикладная математика (ВиПМ)" as higherAndAppliedMathematics {
+    + Заведующий кафедрой
+}
 instituteOfInformationTechnologiesAndCommunications -- higherAndAppliedMathematics
 
 
 
 
 
-entity "Институт морских технологий, энергетики и транспорта" as instituteOfMarineTechnologiesEnergyAndTransport
+entity "Институт морских технологий, энергетики и транспорта" as instituteOfMarineTechnologiesEnergyAndTransport {
+    + Директор
+}
 university -- instituteOfMarineTechnologiesEnergyAndTransport
 
-entity "Общеинженерные дисциплины и наземный транспорт (ОДиНТ)" as generalEngineeringAndGroundTransport
+entity "Общеинженерные дисциплины и наземный транспорт (ОДиНТ)" as generalEngineeringAndGroundTransport {
+    + Заведующий кафедрой
+}
 instituteOfMarineTechnologiesEnergyAndTransport -- generalEngineeringAndGroundTransport
-entity "Судостроение и энергетические комплексы морской техники (СиЭК)" as shipbuildingAndEnergeticComplexesOfMarineEngineering
+entity "Судостроение и энергетические комплексы морской техники (СиЭК)" as shipbuildingAndEnergeticComplexesOfMarineEngineering {
+    + Заведующий кафедрой
+}
 instituteOfMarineTechnologiesEnergyAndTransport -- shipbuildingAndEnergeticComplexesOfMarineEngineering
-entity "Теплоэнергетика и холодильные машины (ТЭНиХМ)" as thermalPowerEngineeringAndRefrigerationMachines
+entity "Теплоэнергетика и холодильные машины (ТЭНиХМ)" as thermalPowerEngineeringAndRefrigerationMachines{
+    + Заведующий кафедрой
+}
 instituteOfMarineTechnologiesEnergyAndTransport -- thermalPowerEngineeringAndRefrigerationMachines
-entity "Электрооборудование и автоматика судов (ЭАС)" as shipElectricalEquipmentAndAutomation
+entity "Электрооборудование и автоматика судов (ЭАС)" as shipElectricalEquipmentAndAutomation {
+    + Заведующий кафедрой
+}
 instituteOfMarineTechnologiesEnergyAndTransport -- shipElectricalEquipmentAndAutomation
-entity "Эксплуатация водного транспорта и промышленное рыболовство (ЭВТиПР)" as waterTransportOperationAndIndustrialFishing
+entity "Эксплуатация водного транспорта и промышленное рыболовство (ЭВТиПР)" as waterTransportOperationAndIndustrialFishing {
+    + Заведующий кафедрой
+}
 instituteOfMarineTechnologiesEnergyAndTransport -- waterTransportOperationAndIndustrialFishing
 
 
 
 
 
-entity "Институт нефти и газа" as instituteOfOilAndGas
+entity "Институт нефти и газа" as instituteOfOilAndGas {
+    + Директор
+}
 university -- instituteOfOilAndGas
 
-entity "Химия" as chemistry
+entity "Химия" as chemistry {
+    + Заведующий кафедрой
+}
 instituteOfOilAndGas -- chemistry
-entity "Химическая технология переработки нефти и газа (ХТНГ)" as chemicalTechnologyOfOilAndGasProcessing
+entity "Химическая технология переработки нефти и газа (ХТНГ)" as chemicalTechnologyOfOilAndGasProcessing {
+    + Заведующий кафедрой
+}
 instituteOfOilAndGas -- chemicalTechnologyOfOilAndGasProcessing
-entity "Геология нефти и газа (ГНГ)" as petroleumAndGasGeology
+entity "Геология нефти и газа (ГНГ)" as petroleumAndGasGeology {
+    + Заведующий кафедрой
+}
 instituteOfOilAndGas -- petroleumAndGasGeology
-entity "Технологические машины и оборудование (ТМО)" as technologicalMachinesAndEquipment
+entity "Технологические машины и оборудование (ТМО)" as technologicalMachinesAndEquipment {
+    + Заведующий кафедрой
+}
 instituteOfOilAndGas -- technologicalMachinesAndEquipment
 
 
 
 
 
-entity "Институт рыбного хозяйства, биологии и природопользования" as instituteOfFisheryBiologyAndNaturalResourceManagement
+entity "Институт рыбного хозяйства, биологии и природопользования" as instituteOfFisheryBiologyAndNaturalResourceManagement {
+    + Директор
+}
 university -- instituteOfFisheryBiologyAndNaturalResourceManagement
 
-entity "Аквакультура и водные биоресурсы (АВБ)" as aquacultureAndAquaticBioresources
+entity "Аквакультура и водные биоресурсы (АВБ)" as aquacultureAndAquaticBioresources {
+    + Заведующий кафедрой
+}
 instituteOfFisheryBiologyAndNaturalResourceManagement -- aquacultureAndAquaticBioresources
-entity "Гидробиология и общая экология (ГОЭ)" as hydrobiologyAndGeneralEcology
+entity "Гидробиология и общая экология (ГОЭ)" as hydrobiologyAndGeneralEcology {
+    + Заведующий кафедрой
+}
 instituteOfFisheryBiologyAndNaturalResourceManagement -- hydrobiologyAndGeneralEcology
-entity "Экологический туризм (ЭЛТ)" as ecologicalTourism
+entity "Экологический туризм (ЭЛТ)" as ecologicalTourism {
+    + Заведующий кафедрой
+}
 instituteOfFisheryBiologyAndNaturalResourceManagement -- ecologicalTourism
-entity "Иностранные языки и речевые коммуникации (ИЯиРК)" as foreignLanguagesAndSpeechCommunication
+entity "Иностранные языки и речевые коммуникации (ИЯиРК)" as foreignLanguagesAndSpeechCommunication {
+    + Заведующий кафедрой
+}
 instituteOfFisheryBiologyAndNaturalResourceManagement -- foreignLanguagesAndSpeechCommunication
-entity "Центр тестирования иностранных граждан" as foreignCitizensTestingCenter
+entity "Центр тестирования иностранных граждан" as foreignCitizensTestingCenter {
+    + Заведующий кафедрой
+}
 instituteOfFisheryBiologyAndNaturalResourceManagement -- foreignCitizensTestingCenter
-entity "Технология товаров и товароведение (ТТТ)" as goodsTechnologyAndMerchandising
+entity "Технология товаров и товароведение (ТТТ)" as goodsTechnologyAndMerchandising {
+    + Заведующий кафедрой
+}
 instituteOfFisheryBiologyAndNaturalResourceManagement -- goodsTechnologyAndMerchandising
-entity "Прикладная биология и микробиология (ПБМ)" as appliedBiologyAndMicrobiology
+entity "Прикладная биология и микробиология (ПБМ)" as appliedBiologyAndMicrobiology {
+    + Заведующий кафедрой
+}
 instituteOfFisheryBiologyAndNaturalResourceManagement -- appliedBiologyAndMicrobiology
-entity "Безопасность жизнедеятельности и инженерная экология (ИЭБ)" as lifeSafetyAndEngineeringEcology
+entity "Безопасность жизнедеятельности и инженерная экология (ИЭБ)" as lifeSafetyAndEngineeringEcology {
+    + Заведующий кафедрой
+}
 instituteOfFisheryBiologyAndNaturalResourceManagement -- lifeSafetyAndEngineeringEcology
-entity "Физическое воспитание и спорт (ФВС)" as physicalEducationAndSports
+entity "Физическое воспитание и спорт (ФВС)" as physicalEducationAndSports {
+    + Заведующий кафедрой
+}
 instituteOfFisheryBiologyAndNaturalResourceManagement -- physicalEducationAndSports
 
 
 
 
 
-entity "Институт градостроительства" as instituteOfUrbanPlanning
+entity "Институт градостроительства" as instituteOfUrbanPlanning {
+    + Директор
+}
 university -- instituteOfUrbanPlanning
 
-entity "Строительство (СТР)" as construction
+entity "Строительство (СТР)" as construction {
+    + Заведующий кафедрой
+}
 instituteOfUrbanPlanning -- construction
-entity "Архитектура (АРХ)" as architecture
+entity "Архитектура (АРХ)" as architecture {
+    + Заведующий кафедрой
+}
 instituteOfUrbanPlanning -- architecture
 
 
 
 
 
-entity "Факультет среднего профессионального образования" as facultyOfIntermediateVocationalEducation
+entity "Факультет среднего профессионального образования" as facultyOfIntermediateVocationalEducation {
+    + Декан
+}
 university -- facultyOfIntermediateVocationalEducation
 
-entity "Связь и телекоммуникации" as communicationAndTelecommunications
+entity "Связь и телекоммуникации" as communicationAndTelecommunications {
+    + Заведующий отделением
+}
 facultyOfIntermediateVocationalEducation -- communicationAndTelecommunications
-entity "Общеобразовательные дисциплины" as generalEducationDisciplines
+entity "Общеобразовательные дисциплины" as generalEducationDisciplines {
+    + Заведующий отделением
+}
 facultyOfIntermediateVocationalEducation -- generalEducationDisciplines
-entity "Нефтегазовое" as oilAndGas
+entity "Нефтегазовое" as oilAndGas {
+    + Заведующий отделением
+}
 facultyOfIntermediateVocationalEducation -- oilAndGas
-entity "Сервис и право" as serviceAndLaw
+entity "Сервис и право" as serviceAndLaw {
+    + Заведующий отделением
+}
 facultyOfIntermediateVocationalEducation -- serviceAndLaw
-entity "Финансово-экономическое" as financialAndEconomic
+entity "Финансово-экономическое" as financialAndEconomic {
+    + Заведующий отделением
+}
 facultyOfIntermediateVocationalEducation -- financialAndEconomic
-entity "Техническое" as technical
+entity "Техническое" as technical {
+    + Заведующий отделением
+}
 facultyOfIntermediateVocationalEducation -- technical
 
 
 
 
 
-entity "Институт дополнительного профессионального образования" as instituteOfContinuingProfessionalEducation
+entity "Институт дополнительного профессионального образования" as instituteOfContinuingProfessionalEducation {
+    + Директор
+}
 university -- instituteOfContinuingProfessionalEducation
 
-entity "Подготовительный факультет для иностранных граждан" as preparatoryFacultyForForeignCitizens
+entity "Подготовительный факультет для иностранных граждан" as preparatoryFacultyForForeignCitizens {
+    + Заведующий кафедрой
+}
 instituteOfContinuingProfessionalEducation -- preparatoryFacultyForForeignCitizens
-entity "Автотехнический учебный центр повышения квалификации и переподготовки" as automotiveTrainingCenterForProfessionalDevelopment
+entity "Автотехнический учебный центр повышения квалификации и переподготовки" as automotiveTrainingCenterForProfessionalDevelopment {
+    + Заведующий кафедрой
+}
 instituteOfContinuingProfessionalEducation -- automotiveTrainingCenterForProfessionalDevelopment
 
 
