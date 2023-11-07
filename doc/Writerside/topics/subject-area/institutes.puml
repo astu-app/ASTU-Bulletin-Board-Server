@@ -1,0 +1,159 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+left to right direction
+
+hide methods
+hide members
+
+entity "Университет" as university {}
+
+
+
+
+
+entity "Институт экономики и права" as instituteOfEconomicsAndLaw
+university -- instituteOfEconomicsAndLaw
+
+entity "финансы и учет (ФиУ)" as financesAndAccounting
+instituteOfEconomicsAndLaw -- financesAndAccounting
+entity "производственный менеджмент (ПМ)" as productionManagement
+instituteOfEconomicsAndLaw -- productionManagement
+entity "экономическая безопасность (ЭКБ)" as economicSecurity
+instituteOfEconomicsAndLaw -- economicSecurity
+entity "правоведение" as jurisprudence
+instituteOfEconomicsAndLaw -- jurisprudence
+entity "экономика и управление предприятием (ЭУП)" as economicsAndEnterpriseManagement
+instituteOfEconomicsAndLaw -- economicsAndEnterpriseManagement
+entity "гуманитарные науки и психология (ГНП)" as humanitiesAndPsychology
+instituteOfEconomicsAndLaw -- humanitiesAndPsychology
+
+
+
+
+
+entity "Институт информационных технологий и коммуникаций" as instituteOfInformationTechnologiesAndCommunications
+university -- instituteOfInformationTechnologiesAndCommunications
+
+entity "Автоматизированные системы обработки информации и управления (АСОИУ)" as automatedInformationProcessingAndControl
+instituteOfInformationTechnologiesAndCommunications -- automatedInformationProcessingAndControl
+entity "прикладная информатика (ПИ)" as appliedInformatics
+instituteOfInformationTechnologiesAndCommunications -- appliedInformatics
+entity "связь (СВ)" as communication
+instituteOfInformationTechnologiesAndCommunications -- communication
+entity "автоматика и управление (АиУ)" as automationAndControl
+instituteOfInformationTechnologiesAndCommunications -- automationAndControl
+entity "информационная безопасность (ИБ)" as informationSecurity
+instituteOfInformationTechnologiesAndCommunications -- informationSecurity
+entity "высшая и прикладная математика (ВиПМ)" as higherAndAppliedMathematics
+instituteOfInformationTechnologiesAndCommunications -- higherAndAppliedMathematics
+
+
+
+
+
+entity "Институт морских технологий, энергетики и транспорта" as instituteOfMarineTechnologiesEnergyAndTransport
+university -- instituteOfMarineTechnologiesEnergyAndTransport
+
+entity "Общеинженерные дисциплины и наземный транспорт (ОДиНТ)" as generalEngineeringAndGroundTransport
+instituteOfMarineTechnologiesEnergyAndTransport -- generalEngineeringAndGroundTransport
+entity "Судостроение и энергетические комплексы морской техники (СиЭК)" as shipbuildingAndEnergeticComplexesOfMarineEngineering
+instituteOfMarineTechnologiesEnergyAndTransport -- shipbuildingAndEnergeticComplexesOfMarineEngineering
+entity "Теплоэнергетика и холодильные машины (ТЭНиХМ)" as thermalPowerEngineeringAndRefrigerationMachines
+instituteOfMarineTechnologiesEnergyAndTransport -- thermalPowerEngineeringAndRefrigerationMachines
+entity "Электрооборудование и автоматика судов (ЭАС)" as shipElectricalEquipmentAndAutomation
+instituteOfMarineTechnologiesEnergyAndTransport -- shipElectricalEquipmentAndAutomation
+entity "Эксплуатация водного транспорта и промышленное рыболовство (ЭВТиПР)" as waterTransportOperationAndIndustrialFishing
+instituteOfMarineTechnologiesEnergyAndTransport -- waterTransportOperationAndIndustrialFishing
+
+
+
+
+
+entity "Институт нефти и газа" as instituteOfOilAndGas
+university -- instituteOfOilAndGas
+
+entity "Химия" as chemistry
+instituteOfOilAndGas -- chemistry
+entity "Химическая технология переработки нефти и газа (ХТНГ)" as chemicalTechnologyOfOilAndGasProcessing
+instituteOfOilAndGas -- chemicalTechnologyOfOilAndGasProcessing
+entity "Геология нефти и газа (ГНГ)" as petroleumAndGasGeology
+instituteOfOilAndGas -- petroleumAndGasGeology
+entity "Технологические машины и оборудование (ТМО)" as technologicalMachinesAndEquipment
+instituteOfOilAndGas -- technologicalMachinesAndEquipment
+
+
+
+
+
+entity "Институт рыбного хозяйства, биологии и природопользования" as instituteOfFisheryBiologyAndNaturalResourceManagement
+university -- instituteOfFisheryBiologyAndNaturalResourceManagement
+
+entity "Аквакультура и водные биоресурсы (АВБ)" as aquacultureAndAquaticBioresources
+instituteOfFisheryBiologyAndNaturalResourceManagement -- aquacultureAndAquaticBioresources
+entity "Гидробиология и общая экология (ГОЭ)" as hydrobiologyAndGeneralEcology
+instituteOfFisheryBiologyAndNaturalResourceManagement -- hydrobiologyAndGeneralEcology
+entity "Экологический туризм (ЭЛТ)" as ecologicalTourism
+instituteOfFisheryBiologyAndNaturalResourceManagement -- ecologicalTourism
+entity "Иностранные языки и речевые коммуникации (ИЯиРК)" as foreignLanguagesAndSpeechCommunication
+instituteOfFisheryBiologyAndNaturalResourceManagement -- foreignLanguagesAndSpeechCommunication
+entity "Центр тестирования иностранных граждан" as foreignCitizensTestingCenter
+instituteOfFisheryBiologyAndNaturalResourceManagement -- foreignCitizensTestingCenter
+entity "Технология товаров и товароведение (ТТТ)" as goodsTechnologyAndMerchandising
+instituteOfFisheryBiologyAndNaturalResourceManagement -- goodsTechnologyAndMerchandising
+entity "Прикладная биология и микробиология (ПБМ)" as appliedBiologyAndMicrobiology
+instituteOfFisheryBiologyAndNaturalResourceManagement -- appliedBiologyAndMicrobiology
+entity "Безопасность жизнедеятельности и инженерная экология (ИЭБ)" as lifeSafetyAndEngineeringEcology
+instituteOfFisheryBiologyAndNaturalResourceManagement -- lifeSafetyAndEngineeringEcology
+entity "Физическое воспитание и спорт (ФВС)" as physicalEducationAndSports
+instituteOfFisheryBiologyAndNaturalResourceManagement -- physicalEducationAndSports
+
+
+
+
+
+entity "Институт градостроительства" as instituteOfUrbanPlanning
+university -- instituteOfUrbanPlanning
+
+entity "Строительство (СТР)" as construction
+instituteOfUrbanPlanning -- construction
+entity "Архитектура (АРХ)" as architecture
+instituteOfUrbanPlanning -- architecture
+
+
+
+
+
+entity "Факультет среднего профессионального образования" as facultyOfIntermediateVocationalEducation
+university -- facultyOfIntermediateVocationalEducation
+
+entity "Связь и телекоммуникации" as communicationAndTelecommunications
+facultyOfIntermediateVocationalEducation -- communicationAndTelecommunications
+entity "Общеобразовательные дисциплины" as generalEducationDisciplines
+facultyOfIntermediateVocationalEducation -- generalEducationDisciplines
+entity "Нефтегазовое" as oilAndGas
+facultyOfIntermediateVocationalEducation -- oilAndGas
+entity "Сервис и право" as serviceAndLaw
+facultyOfIntermediateVocationalEducation -- serviceAndLaw
+entity "Финансово-экономическое" as financialAndEconomic
+facultyOfIntermediateVocationalEducation -- financialAndEconomic
+entity "Техническое" as technical
+facultyOfIntermediateVocationalEducation -- technical
+
+
+
+
+
+entity "Институт дополнительного профессионального образования" as instituteOfContinuingProfessionalEducation
+university -- instituteOfContinuingProfessionalEducation
+
+entity "Подготовительный факультет для иностранных граждан" as preparatoryFacultyForForeignCitizens
+instituteOfContinuingProfessionalEducation -- preparatoryFacultyForForeignCitizens
+entity "Автотехнический учебный центр повышения квалификации и переподготовки" as automotiveTrainingCenterForProfessionalDevelopment
+instituteOfContinuingProfessionalEducation -- automotiveTrainingCenterForProfessionalDevelopment
+
+
+
+
+
+@enduml
