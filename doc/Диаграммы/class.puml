@@ -1,15 +1,136 @@
 @startuml
 'https://plantuml.com/class-diagram
 
-left to right direction
+'left to right direction
 
-hide members
+'hide members
 hide methods
 
-class AnnouncementsController 
-class SurveysController 
+'class AnnouncementsController 
+'class AnnouncementService
+'AnnouncementsController -- AnnouncementService
+'
+'class SurveysController
+'class SurveyService
+'SurveysController -- SurveyService
 
-class AnnouncementService
-class SurveyService
+class Announcement {
+    Id: Guid
+    Content: string
+    
+    IsHidden: bool    
+    ExpectsAutoHiding: bool
+    AutoHidingAt: DateTime?
+    
+    ExpectsAutoPublishing: bool
+    AutoPublishingAt: DateTime?
+    
+    PublishedAt: DateTime?
+    HiddenAt: DateTime?
+    
+    Author: User
+    
+    Categories: AnnouncementCategory[]
+    
+    Files: File[]?
+    Survey: Survey?
+    
+    UserGroups: UserGroup[]
+}
+
+class AnnouncementCategory {
+    Id: Guid
+    Name: string
+    
+    Subscribers: User[]
+}
+Announcement "*" o-- "*" AnnouncementCategory
+
+class File {
+    Id: Guid
+    Name: string
+    
+    BlobId: Guid 
+    Hash: string
+    LinksCount: int
+}
+Announcement "1..*" o-- "*" File
+note left of File::BlobId
+    Идентификатор файла 
+    в файловом хранилище
+end note
+
+class UserGroup {
+    Id: Guid
+    Name: string
+    
+'    Admin: User?
+    MemberRights: MemberRights[]
+    
+    Children: UserGroup[]?
+    
+    GetAdmin() : User?
+    GetAllMembers() : User[]
+}
+show UserGroup methods
+UserGroup "0..1" -- "*" UserGroup : < Дочерний узел
+Announcement "*" o-- "1..*" UserGroup : > Предназначено
+
+class MemberRights {
+    Id: Guid
+    UserId: Guid
+    ' todo продумать права
+}
+UserGroup "*" *-- "1" MemberRights
+
+class User {
+    Id: Guid
+    Name: string
+    SecondName: string
+    Patronymic: string?
+}
+'UserGroup "*" o-- "0..1" User : < Админ
+MemberRights "1..*" o-- "1" User
+Announcement "*" o-- "1" User : < Автор
+AnnouncementCategory "*" o-- "*" User : < Подписан
+Survey "*" o-- "*" User : < Проголосовал в 
+
+class Survey {
+    Id: Guid
+    
+    IsOpen: bool
+    IsAnonymous: bool
+    IsMultipleChoiceAllowed: bool
+    
+    ExpectsClosing: bool
+    ClosingAt: DateTime?
+    
+    Questions: Question[]
+    
+    Voters: User[]?
+}
+Announcement "1" *-- "1" Survey
+'User "*" -- "*" Survey
+
+class Question {
+    Id: Guid
+    Content: string
+    VotersCount: int
+    
+    Answers: Answer[]
+}
+Survey "1" *-- "1..*" Question
+
+class Answer {
+    Id: Guid
+    Content: string
+    
+    VotersCount: int
+    Voters: User[]?
+}
+Question "1" *-- "2..*" Answer
+User "*" --o "*" Answer : > Проголосовал за
+
+
 
 @enduml
