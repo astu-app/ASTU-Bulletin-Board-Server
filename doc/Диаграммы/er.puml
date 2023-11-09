@@ -19,13 +19,13 @@ entity "Объявление" as announcement {
     Момент публикации
     Момент сокрытия
 }
-announcement }o--|| user : Автор
+announcement }o--|| user : < Автор
 
 entity "Категория" as category {
     Название
 }
 announcement }o--o{ category
-user }o-up-o{ category
+user }o-up-o{ category : > Подписан
 
 entity "Файл" as attachedFile { 
     Название
@@ -43,7 +43,7 @@ entity "Опрос" as survey {
     Срок окончания времени голосования
 }
 announcement ||--o| survey
-user }o--o{ survey : Проголосовал в
+user }o--o{ survey : > Проголосовал в
 
 entity "Вопрос" as question {
     Текст вопроса
@@ -56,20 +56,20 @@ entity "Вариант ответа" as answer {
     Количество проголосовавших
 }
 question ||--{ "2..*" answer
-user }o--o{ answer : Выбрал
+user }o--o{ answer : > Выбрал
 
 entity "Группа пользователей" as userGroup { 
     Название
 }
-announcement }o--|{ userGroup
-user }o--|{ userGroup : Участник
-user |o-right-o{ userGroup : Администратор
+announcement }o--|{ userGroup : > Предназначено
+user }o--|{ userGroup : > Участник
+user |o-right-o{ userGroup : > Администратор
 userGroup |o--o{ userGroup : Подчинена максимум одной \n Является родителем любого количества
 
-entity "Права пользователя в группе" as userRightsInGroup {}
-hide userRightsInGroup members
-user ||--|{ userRightsInGroup
-userGroup ||--o{ userRightsInGroup
+entity "Права участника группы" as memberRights {}
+hide memberRights members
+user ||--|{ memberRights
+userGroup ||--o{ memberRights
 
 
 
