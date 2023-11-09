@@ -2,4 +2,4 @@
 
 [//]: # (todo описать)
 
-![Диаграмма развертывания: ](deployment.png)
+![Диаграмма развертывания: ](./../../../images/diagrams/deployment.png)
