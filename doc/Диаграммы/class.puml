@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+left to right direction
+
+hide members
+hide methods
+
+class AnnouncementsController 
+class SurveysController 
+
+class AnnouncementService
+class SurveyService
+
+@enduml
