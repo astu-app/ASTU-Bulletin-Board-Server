@@ -125,18 +125,20 @@ components:
             $ref: './file-schemas.yaml#/components/schemas/fileSummaryDto'
         survey:
           $ref: './survey-schemas.yaml#/components/schemas/surveyDetailsDto'
-        isHidden:
-          description: Флаг отражает, скрыто ли объявлению в текущий момент
-          type: boolean
-          default: false
+        hiddenAt:
+          description: Момент сокрытия объявления. Объявление не является скрытым, если null
+          type: string
+          format: date-time
+          nullable: true
+          default: null
         hideAt:
-          description: Срок автоматического сокрытия объявления
+          description: Срок автоматического сокрытия объявления. Объявление не будет скрыто автоматически, если null
           type: string
           format: date-time
           nullable: true
           default: null
         publishAt:
-          description: Срок отложенной публикации объявления
+          description: Срок отложенной публикации объявления. Объявление не будет опубликовано автоматически, если null
           type: string
           format: date-time
           nullable: true
