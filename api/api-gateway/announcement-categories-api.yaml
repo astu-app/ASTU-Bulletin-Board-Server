@@ -1,0 +1,9 @@
+﻿openapi: 3.0.3
+info:
+  title: API Шлюз. Категории объявлений
+  description: API Шлюза для управления категориями объявлений
+  version: 0.0.1
+servers:
+  - url: 'https"//localhost:8080'
+paths:
+  
