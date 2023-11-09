@@ -1,0 +1,34 @@
+﻿@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+:Сотрудник: as employee
+
+rectangle "Доска объявлений" {
+    (<font color="gray">E-1.2.</font> Редактировать объявление) as edit_announcement
+    (<font color="gray">E-1.2.12.</font> Отменить изменение) as cancel_editing
+    (<font color="gray">E-1.2.11.</font> Сохранить изменения) as save_changes
+    (<font color="gray">E-1.2.7.</font> Прикрепить новые файлы) as add_new_files
+    (<font color="gray">E-1.2.9.</font> Прикрепить опрос) as add_survey
+    (<font color="gray">E-1.2.10.</font> Изменить категории) as edit_categories
+
+    employee --> edit_announcement
+     
+    edit_announcement <.. save_changes : extend
+    edit_announcement <.. cancel_editing : extend
+    edit_announcement <.. edit_categories : extend
+    edit_announcement <.. (<font color="gray">E-1.2.8.</font> Открепить файлы) : extend
+    edit_announcement <.. add_new_files : extend
+    edit_announcement <.. add_survey : extend
+    edit_announcement <.. (<font color="gray">E-1.2.6.</font> Изменить дату и время отложенной публикации) : extend
+    edit_announcement <.. (<font color="gray">E-1.2.5.</font> Отменить автоматическое сокрытие) : extend
+    edit_announcement <.. (<font color="gray">E-1.2.4.</font> Изменить срок автоматического сокрытия) : extend
+    edit_announcement <.. (<font color="gray">E-1.2.3.</font> Задать срок автоматического сокрытия) : extend
+    edit_announcement <.. (<font color="gray">E-1.2.2.</font> Изменить группы получателей) : extend
+    edit_announcement <.. (<font color="gray">E-1.2.1.</font> Изменить текст объявления) : extend
+    
+    add_new_files --> (<font color="gray">E-1.1.5.1.</font> Загрузить файлы) : include
+    add_survey --> (<font color="gray">E-1.1.7.1.</font> Создать опрос ) : include
+}
+@enduml

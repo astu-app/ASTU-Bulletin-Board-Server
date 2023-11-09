@@ -4,7 +4,7 @@
 - [Пользователь](user.md)
 - [Группа пользователей](usergroup.md)
 - [Права пользователя в группе](rights-in-usergroups.md)
-- [Объявление](notification.md)
+- [Объявление](announcement.md)
 - [Файл](file.md)
 - [Опрос](survey.md)
 - [Вопрос](question.md)

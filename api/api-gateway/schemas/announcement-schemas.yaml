@@ -9,7 +9,7 @@ paths:
 
 components:
   schemas:
-    createNotificationDto:
+    createAnnouncementDto:
       type: object
       properties:
         content:
@@ -54,14 +54,14 @@ components:
           nullable: true
           default: null
 
-    notificationIdentifierDto:
+    announcementIdentifierDto:
       type: object
       properties:
-        notificationId:
+        announcementId:
           type: string
           format: uuid
 
-    notificationSummaryDto:
+    announcementSummaryDto:
       type: object
       properties:
         id:
@@ -95,7 +95,7 @@ components:
         survey:
           $ref: './survey-schemas.yaml#/components/schemas/surveyDetailsDto'
 
-    notificationDetailsDto:
+    announcementDetailsDto:
       type: object
       properties:
         content:
@@ -142,7 +142,7 @@ components:
           nullable: true
           default: null
     
-    updateNotificationDto:
+    updateAnnouncementDto:
       type: object
       properties:
         id:

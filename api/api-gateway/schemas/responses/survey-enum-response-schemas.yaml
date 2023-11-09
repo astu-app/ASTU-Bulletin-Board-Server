@@ -19,13 +19,13 @@ components:
         # 403
         - createSurveyForbidden
         # 409
-        - votingClosesBeforeNotificationPublication
+        - votingClosesBeforeAnnouncementPublication
       description: >
         Ответы:
           created - Опрос создан
           unauthorized - 
           createSurveyForbidden - Пользователь не имеет права создать опрос
-          votingClosesBeforeNotificationPublication - Срок окончания голосования наступит до момента публикации объявления
+          votingClosesBeforeAnnouncementPublication - Срок окончания голосования наступит до момента публикации объявления
     
     getSurveyDetailsResponses:
       type: string
@@ -41,7 +41,7 @@ components:
         # 404
         - surveyDoesNotExist
         # 409
-        - notificationWithSurveyNotYetPublished
+        - announcementWithSurveyNotYetPublished
       description: >
         Ответы:
           ok - Ок
@@ -49,7 +49,7 @@ components:
           unauthorized - 
           detailsAccessForbidden - Пользователь не имеет права просмотреть подробности этого опроса
           surveyDoesNotExist - Опрос не существует
-          notificationWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
 
     closeSurveyResponses:
       type: string
@@ -66,7 +66,7 @@ components:
         - surveyDoesNotExist
         # 409
         - surveyAlreadyClosed
-        - notificationWithSurveyNotYetPublished
+        - announcementWithSurveyNotYetPublished
       description: >
         Ответы:
           ok - Ок
@@ -75,7 +75,7 @@ components:
           surveyClosingForbidden - Пользователь не имеет права закрыть этот опрос
           surveyDoesNotExist - Опрос не существует
           surveyAlreadyClosed - Опрос уже закрыт
-          notificationWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
     
     getSurveysResultsResponses:
       type: string
@@ -91,7 +91,7 @@ components:
         # 404
         - surveyDoesNotExist
         # 409
-        - notificationWithSurveyNotYetPublished
+        - announcementWithSurveyNotYetPublished
       description: >
         Ответы:
           ok - Ок
@@ -99,7 +99,7 @@ components:
           unauthorized - 
           surveyResultsAccessForbidden - Пользователь не имеет права получить результаты этого опроса
           surveyDoesNotExist - Опрос не существует
-          notificationWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
 
     downloadSurveyResultsResponses:
       type: string
@@ -115,7 +115,7 @@ components:
         # 404
         - surveyDoesNotExist
         # 409
-        - notificationWithSurveyNotYetPublished
+        - announcementWithSurveyNotYetPublished
       description: >
         Ответы:
           ok - Ок
@@ -123,7 +123,7 @@ components:
           unauthorized - 
           surveyResultsDownloadingForbidden - Пользователь не имеет права выгрузить результаты этого опроса
           surveyDoesNotExist - Опрос не существует
-          notificationWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
 
     voteInQuestionResponses:
       type: string
@@ -141,7 +141,7 @@ components:
         - questionDoesNotExist
         # 409
         - surveyClosed
-        - notificationWithSurveyNotYetPublished
+        - announcementWithSurveyNotYetPublished
         - questionAlreadyVoted
         - cannotSelectMultipleAnswersInSingleChoiceQuestion
         - selectedAnswersBelongToDifferentQuestions
@@ -154,7 +154,7 @@ components:
           surveyDoesNotExist - Опрос не существует
           questionDoesNotExist - Вопрос не существует
           surveyClosed - Опрос закрыт
-          notificationWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
           questionAlreadyVoted - Голос за вопрос уже отдан
           cannotSelectMultipleAnswersInSingleChoiceQuestion - В вопросе с единственным выбором нельзя выбрать несколько вариантов ответов
           selectedAnswersBelongToDifferentQuestions - Перечисленные варианты ответов относятся к разным вопросам

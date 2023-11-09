@@ -9,7 +9,7 @@ entity "Пользователь" as user {
     Отчество
 }
 
-entity "Объявление" as notification { 
+entity "Объявление" as announcement { 
     Текст
     Флаг скрытой публикации
     Флаг автоматического сокрытия
@@ -18,12 +18,12 @@ entity "Объявление" as notification {
     Срок отложенной публикации
     Момент публикации
 }
-notification }o--|| user : Автор
+announcement }o--|| user : Автор
 
 entity "Категория" as category {
     Название
 }
-notification }o--o{ category
+announcement }o--o{ category
 user }o-up-o{ category
 
 entity "Файл" as attachedFile { 
@@ -32,7 +32,7 @@ entity "Файл" as attachedFile {
     Хэш
     Количество ссылок
 }
-notification }|--o{ attachedFile
+announcement }|--o{ attachedFile
 
 entity "Опрос" as survey {
     Флаг открытости
@@ -41,7 +41,7 @@ entity "Опрос" as survey {
     Флаг ограничения времени голосования
     Срок окончания времени голосования
 }
-notification ||--o| survey
+announcement ||--o| survey
 user }o--o{ survey : Проголосовал в
 
 entity "Вопрос" as question {
@@ -60,7 +60,7 @@ user }o--o{ answer : Выбрал
 entity "Группа пользователей" as userGroup { 
     Название
 }
-notification }o--|{ userGroup
+announcement }o--|{ userGroup
 user }o--|{ userGroup : Участник
 user |o-right-o{ userGroup : Администратор
 userGroup |o--o{ userGroup : Подчинена максимум одной \n Является родителем любого количества

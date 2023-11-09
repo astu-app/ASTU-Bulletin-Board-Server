@@ -7,17 +7,17 @@ servers:
   - url: 'https://localhost:8080'
 paths:  
   # общие операции
-  /notifications/create:
+  /announcements/create:
     post:
       tags: [ Общие операции ]
-      operationId: createNotification
+      operationId: createAnnouncement
       summary: Создать объявление
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/createNotificationDto'
+              $ref: './schemas/announcement-schemas.yaml#/components/schemas/createAnnouncementDto'
       responses:
         201:
           description: Created
@@ -27,20 +27,20 @@ paths:
                 type: object
                 properties:
                   code:
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
                   content:
                     # created
-                    $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
-        400: 
+                    $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
+        400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
-                properties: 
+                properties:
                   code:
                     # usergroupListNullOrEmpty
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
         401:
           description: Unauthorized
           content:
@@ -50,17 +50,17 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
         403:
           description: Forbidden
-          content: 
+          content:
             application/json:
               schema:
                 type: object
                 properties:
-                  code: 
-                    # notificationCreationForbidden
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
+                  code:
+                    # announcementCreationForbidden
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
         404:
           description: Not Found
           content:
@@ -69,10 +69,10 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationCategoryDoesNotExist
+                    # announcementCategoryDoesNotExist
                     # fileDoesNotExist
                     # surveyDoesNotExist
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
         409:
           description: Conflict
           content:
@@ -85,19 +85,19 @@ paths:
                     # automaticHideBeforePublication
                     # delayedPublicationBeforeCreation
                     # delayedPublicationAfterAutomaticHide
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/createNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
   
-  /notifications/get-details:
+  /announcements/get-details:
     get:
       tags: [ Общие операции ]
-      operationId: getNotificationDetails
+      operationId: getAnnouncementDetails
       summary: Получить подробности о выбранном объявлении
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+              $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
       responses:
         200:
           description: Ok
@@ -105,22 +105,22 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: 
+                properties:
                   content:
-                    $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationDetailsDto'
+                    $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementDetailsDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getNotificationDetailsResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getAnnouncementDetailsResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
-                properties: 
+                properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getNotificationDetailsResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getAnnouncementDetailsResponses'
         401:
           description: Unauthorized
           content:
@@ -130,7 +130,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getNotificationDetailsResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getAnnouncementDetailsResponses'
         403:
           description: Forbidden
           content:
@@ -140,7 +140,7 @@ paths:
                 properties:
                   code:
                     # detailsAccessForbidden
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getNotificationDetailsResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getAnnouncementDetailsResponses'
         404:
           description: Not Found
           content:
@@ -149,20 +149,20 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationDoesNotExist
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getNotificationDetailsResponses'
+                    # announcementDoesNotExist
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getAnnouncementDetailsResponses'
   
-  /notifications/update:
+  /announcements/update:
     put:
       tags: [ Общие операции ]
-      operationId: updateNotification
+      operationId: updateAnnouncement
       summary: Редактировать объявление
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/updateNotificationDto'
+              $ref: './schemas/announcement-schemas.yaml#/components/schemas/updateAnnouncementDto'
       responses:
         200:
           description: Ok
@@ -170,23 +170,23 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: 
+                properties:
                   content:
-                    $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+                    $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
-                properties: 
+                properties:
                   code:
                     # usergroupListNullOrEmpty
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
         401:
           description: Unauthorized
           content:
@@ -196,7 +196,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
         403:
           description: Forbidden
           content:
@@ -205,8 +205,8 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationEditingForbidden
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
+                    # announcementEditingForbidden
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
         404:
           description: Not Found
           content:
@@ -215,11 +215,11 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationDoesNotExist
-                    # notificationCategoryDoesNotExist
+                    # announcementDoesNotExist
+                    # announcementCategoryDoesNotExist
                     # fileDoesNotExist
                     # surveyDoesNotExist
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
         409:
           description: Conflict
           content:
@@ -232,30 +232,30 @@ paths:
                     # automaticHideBeforePublication
                     # delayedPublicationBeforeCreation
                     # delayedPublicationAfterAutomaticHide
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/updateNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
   
-  /notifications/delete:
+  /announcements/delete:
     delete:
       tags: [ Общие операции ]
-      operationId: deleteNotification
+      operationId: deleteAnnouncement
       summary: Удалить объявление
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+              $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
       responses:
         200:
           description: Ok
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/deleteNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementResponses'
         400:
           description: Bad Request
           content:
@@ -265,7 +265,7 @@ paths:
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/deleteNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementResponses'
         401:
           description: Unauthorized
           content:
@@ -275,7 +275,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/deleteNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementResponses'
         403:
           description: Forbidden
           content:
@@ -284,24 +284,24 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationDeletionForbidden
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/deleteNotificationResponses'
+                    # announcementDeletionForbidden
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementResponses'
         404:
           description: Not Found
-          content: 
+          content:
             application/json:
               schema:
                 type: object
                 properties:
                   code:
-                    # notificationDoesNotExist
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/deleteNotificationResponses'
+                    # announcementDoesNotExist
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementResponses'
   
   # опубликованные объявления  
-  /notifications/posted/get-list: # todo учесть получение ограниченного набора
+  /announcements/posted/get-list:
     get:
       tags: [ Опубликованные объявления ]
-      operationId: getPostedNotificationList
+      operationId: getPostedAnnouncementList
       summary: Получить список опубликованных объявлений
       responses:
         200:
@@ -310,14 +310,14 @@ paths:
             application/json:
               schema:
                 type: object
-                properties: 
+                properties:
                   content:
                     type: array
                     items:
-                      $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                      $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementSummaryDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getPostedNotificationListResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getPostedAnnouncementListResponses'
         401:
           description: Unauthorized
           content:
@@ -327,40 +327,40 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getPostedNotificationListResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getPostedAnnouncementListResponses'
         403:
           description: Forbidden
-          content: 
+          content:
             application/json:
               schema:
                 type: object
                 properties:
                   code:
-                    # postedNotificationsListAccessForbidden
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getPostedNotificationListResponses'
+                    # postedAnnouncementsListAccessForbidden
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getPostedAnnouncementListResponses'
   
-  /notifications/posted/hide:
+  /announcements/posted/hide:
     post:
       tags: [ Опубликованные объявления ]
-      operationId: hidePostedNotification
+      operationId: hidePostedAnnouncement
       summary: Скрыть опубликованное объявление
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+              $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
       responses:
         200:
           description: Ok
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
         400:
           description: Bad Request
           content:
@@ -370,7 +370,7 @@ paths:
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
         401:
           description: Unauthorized
           content:
@@ -380,7 +380,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
         403:
           description: Forbidden
           content:
@@ -389,18 +389,18 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationHidingForbidden
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
+                    # announcementHidingForbidden
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
         404:
           description: Not Found
-          content: 
+          content:
             application/json:
               schema:
                 type: object
                 properties:
                   code:
-                    # notificationDoesNotExist
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
+                    # announcementDoesNotExist
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
         409:
           description: Conflict
           content:
@@ -409,15 +409,15 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationAlreadyHidden
-                    # notificationNotYetPublished
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/hidePostedNotificationResponses'
+                    # announcementAlreadyHidden
+                    # announcementNotYetPublished
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
   
   # скрытые объявления
-  /notifications/hidden/get-list: # todo учесть получение ограниченного набора 
+  /announcements/hidden/get-list:
     get:
       tags: [ Скрытые объявления ]
-      operationId: getHiddenNotificationList
+      operationId: getHiddenAnnouncementList
       summary: Получить список скрытых объявлений
       responses:
         200:
@@ -430,10 +430,10 @@ paths:
                   content:
                     type: array
                     items:
-                      $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                      $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementSummaryDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getHiddenNotificationListResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getHiddenAnnouncementListResponses'
         401:
           description: Unauthorized
           content:
@@ -443,7 +443,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getHiddenNotificationListResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getHiddenAnnouncementListResponses'
         403:
           description: Forbidden
           content:
@@ -452,19 +452,19 @@ paths:
                 type: object
                 properties:
                   code:
-                    # hiddenNotificationsListAccessForbidden
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getHiddenNotificationListResponses'
+                    # hiddenAnnouncementsListAccessForbidden
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getHiddenAnnouncementListResponses'
   
-  /notifications/hidden/unhide:
+  /announcements/hidden/unhide:
     post:
       tags: [ Скрытые объявления ]
-      operationId: unhideHiddenNotification
+      operationId: unhideHiddenAnnouncement
       summary: Восстановить скрытое объявление
       requestBody:
         content:
           application/json:
             schema:
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+              $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
       responses:
         200:
           description: Ok
@@ -475,7 +475,7 @@ paths:
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
         400:
           description: Bad Request
           content:
@@ -485,7 +485,7 @@ paths:
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
         401:
           description: Unauthorized
           content:
@@ -495,7 +495,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
         403:
           description: Forbidden
           content:
@@ -505,17 +505,17 @@ paths:
                 properties:
                   code:
                     # unhideForbidden
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
         404:
           description: Not Found
-          content: 
+          content:
             application/json:
               schema:
                 type: object
                 properties:
                   code:
-                    # notificationDoesNotExist
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
+                    # announcementDoesNotExist
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
         409:
           description: Conflict
           content:
@@ -524,14 +524,14 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationNotHidden
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/unhideHiddenNotificationResponses'
+                    # announcementNotHidden
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
   
   # отложенные объявления
-  /notifications/delayed/get-list: # todo учесть получение ограниченного набора
+  /announcements/delayed/get-list:
     get:
       tags: [ Отложенные объявления ]
-      operationId: getDelayedNotificationList
+      operationId: getDelayedAnnouncementList
       summary: Получить список отложенных объявлений
       responses:
         200:
@@ -544,10 +544,10 @@ paths:
                   content:
                     type: array
                     items:
-                      $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationSummaryDto'
+                      $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementSummaryDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getDelayedNotificationListResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedAnnouncementListResponses'
         401:
           description: Unauthorized
           content:
@@ -557,7 +557,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getDelayedNotificationListResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedAnnouncementListResponses'
         403:
           description: Forbidden
           content:
@@ -566,19 +566,19 @@ paths:
                 type: object
                 properties:
                   code:
-                    # delayedNotificationsListAccessForbidden
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/getDelayedNotificationListResponses'
+                    # delayedAnnouncementsListAccessForbidden
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedAnnouncementListResponses'
   
-  /notifications/delayed/publish-immediately:
+  /announcements/delayed/publish-immediately:
     post:
       tags: [ Отложенные объявления ]
-      operationId: publishImmediatelyDelayedNotification
+      operationId: publishImmediatelyDelayedAnnouncement
       summary: Сразу опубликовать отложенное объявление
       requestBody:
         content:
           application/json:
             schema:
-              $ref: './schemas/notification-schemas.yaml#/components/schemas/notificationIdentifierDto'
+              $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
       responses:
         200:
           description: Ok
@@ -589,7 +589,7 @@ paths:
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
         400:
           description: Bad Request
           content:
@@ -599,7 +599,7 @@ paths:
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
         401:
           description: Unauthorized
           content:
@@ -609,7 +609,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
         403:
           description: Forbidden
           content:
@@ -619,17 +619,17 @@ paths:
                 properties:
                   code:
                     # immediatePublishingForbidden
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
         404:
           description: Not Found
-          content: 
+          content:
             application/json:
               schema:
                 type: object
                 properties:
                   code:
-                    # notificationDoesNotExist
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
+                    # announcementDoesNotExist
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
         409:
           description: Conflict
           content:
@@ -638,7 +638,7 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationNotDelayed
-                    $ref: './schemas/responses/notification-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedNotificationResponses'
-      
-      
+                    # announcementNotDelayed
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
+        
+        

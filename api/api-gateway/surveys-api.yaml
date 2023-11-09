@@ -59,7 +59,7 @@ paths:
                 type: object
                 properties:
                   code:
-                    # votingClosesBeforeNotificationPublication
+                    # votingClosesBeforeAnnouncementPublication
                     $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/createSurveyResponses'
   
   /survey/get-details:
@@ -133,7 +133,7 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationWithSurveyNotYetPublished
+                    # announcementWithSurveyNotYetPublished
                     $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
   
   /survey/close-survey:
@@ -208,7 +208,7 @@ paths:
                 properties:
                   code:
                     # surveyAlreadyClosed
-                    # notificationWithSurveyNotYetPublished
+                    # announcementWithSurveyNotYetPublished
                     $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
   
   /survey/get-results:
@@ -283,7 +283,7 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationWithSurveyNotYetPublished
+                    # announcementWithSurveyNotYetPublished
                     $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
   
   /survey/download-results:
@@ -359,7 +359,7 @@ paths:
                 type: object
                 properties:
                   code:
-                    # notificationWithSurveyNotYetPublished
+                    # announcementWithSurveyNotYetPublished
                     $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
   
   # question
@@ -435,7 +435,7 @@ paths:
                 properties:
                   code:
                     # surveyClosed
-                    # notificationWithSurveyNotYetPublished
+                    # announcementWithSurveyNotYetPublished
                     # questionAlreadyVoted
                     # cannotSelectMultipleAnswersInSingleChoiceQuestion
                     # selectedAnswersBelongToDifferentQuestions
