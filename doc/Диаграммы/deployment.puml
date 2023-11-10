@@ -3,40 +3,33 @@
 
 left to right direction
 
-rectangle "Кластер" as cluster {
-    node "API server" as api_server
-    node "Брокер" as broker
-    api_server -right- broker
+rectangle "Локальная сеть" {
+    node "Сервер приложения" as server_node {
+        component "Сервер" as app_server
+    }
     
-    node "Сервис 1" as service_1
-    broker -- service_1
-    database "БД" as db_1 
-    service_1 -- db_1
+    node "Сервер основной базы данных" {
+        database "База данных" as announcements_db
+    }
+    app_server -- announcements_db : tcp / ip
     
-    
-    node "Сервис 2" as service_2
-    broker -- service_2
-    database "БД" as db_2 
-    service_2 -- db_2
-        
-    node "Сервис n" as service_n
-    broker -- service_n
-    database "БД" as db_n 
-    service_n -- db_n
-    
+    node "Сервер базы учетных данных" {
+        database "База данных" as accounts_db
+    }
+    app_server -- accounts_db : tcp / ip
 }
 
 cloud "Интернет" as internet
-api_server -up- internet : https / ftp
+app_server -left- internet : https / ftp
 
 node "Мобильный клиент" as mobile_client {
     component "Мобильное приложение" as mobile_app
 }
-internet -up- mobile_app : https / ftp
+internet -- mobile_app : https / ftp
 
 node "Десктопный клиент" as desktop_client {
     component "Браузер" as browser
 }
-internet -up- browser : https / ftp
+internet -- browser : https / ftp
 
 @enduml
