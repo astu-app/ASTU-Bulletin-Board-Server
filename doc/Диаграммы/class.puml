@@ -50,15 +50,10 @@ class File {
     Id: Guid
     Name: string
     
-    BlobId: Guid 
     Hash: string
     LinksCount: int
 }
 Announcement "1..*" o-- "*" File
-note left of File::BlobId
-    Идентификатор файла 
-    в файловом хранилище
-end note
 
 class UserGroup {
     Id: Guid
