@@ -1,4 +1,5 @@
 ﻿using BulletInBoardServer.Models.Announcements.Attachments;
+using BulletInBoardServer.Models.Users;
 
 namespace BulletInBoardServer.Models.Announcements;
 

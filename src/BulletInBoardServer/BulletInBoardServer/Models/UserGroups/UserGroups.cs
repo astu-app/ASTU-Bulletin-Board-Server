@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace BulletInBoardServer.Models;
+namespace BulletInBoardServer.Models.UserGroups;
 
 public class UserGroups : Collection<UserGroup>
 {

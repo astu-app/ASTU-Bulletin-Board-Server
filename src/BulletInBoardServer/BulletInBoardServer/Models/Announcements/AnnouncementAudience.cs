@@ -1,6 +1,6 @@
 ﻿namespace BulletInBoardServer.Models.Announcements;
 
-public class AnnouncementAudience : UserGroups
+public class AnnouncementAudience : UserGroups.UserGroups
 {
     
 }
