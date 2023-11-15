@@ -1,0 +1,791 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+' не нужны:
+' общежития
+' вахты корпусов и кпп
+' склад
+
+' A <|-- B : отдел B входит в состав отдела A (отдел B руководит отделом A)
+' A <-- B : отдел B подчиняется отделу A (отдел A руководит отделом B)
+
+left to right direction
+
+hide methods
+'hide members
+
+entity "Ученый совет" as academicCouncil {
+    + {field} Председатель (ректор)
+}
+
+entity "Ректор" as rector
+hide rector members
+academicCouncil <|-- rector
+
+entity "Ректорат" as rectory {
+    + Ректор
+}
+rector <-- rectory
+
+
+entity "Проректоры" as viceRectors
+hide viceRectors members
+rectory <|-- viceRectors
+
+    entity "Проректор по учебной работе" as viceRectorForAcademicAffairs
+    hide viceRectorForAcademicAffairs members
+    viceRectors <|-- viceRectorForAcademicAffairs
+
+    entity "Проректор по приему в вуз и международной деятельности" as viceRectorForAdmissionsAndInternationalActivities
+    hide viceRectorForAdmissionsAndInternationalActivities members
+    viceRectors <|-- viceRectorForAdmissionsAndInternationalActivities
+
+    entity "Проректор по научной работе и инновациям" as viceRectorForResearchAndInnovations
+    hide viceRectorForResearchAndInnovations members
+    viceRectors <|-- viceRectorForResearchAndInnovations
+
+    entity "Проректор по воспитательной работе и связям с общественностью" as viceRectorForEducationalWorkAndPublicRelations
+    hide viceRectorForEducationalWorkAndPublicRelations members
+    viceRectors <|-- viceRectorForEducationalWorkAndPublicRelations
+
+    entity "Проректор по инфраструктурному развитию и информатизации" as viceRectorForInfrastructureDevelopmentAndInformatization
+    hide viceRectorForInfrastructureDevelopmentAndInformatization members
+    viceRectors <|-- viceRectorForInfrastructureDevelopmentAndInformatization
+
+    entity "Проректор по организационно-правовым вопросам" as viceRectorForOrganizationalAndLegalAffairs
+    hide viceRectorForOrganizationalAndLegalAffairs members
+    viceRectors <|-- viceRectorForOrganizationalAndLegalAffairs
+
+    entity "Проректор по финансово-экономическим вопросам" as viceRectorForFinancialAndEconomicAffairs
+    hide viceRectorForFinancialAndEconomicAffairs members
+    viceRectors <|-- viceRectorForFinancialAndEconomicAffairs
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' УЧЕНЫЕ СОВЕТЫ ИНСТИТУТОВ
+entity "Ученый совет института экономики и права" as instituteAcademicCouncilOfEconomicsAndLaw {
+    + {field} Председатель (директор)
+}
+
+entity "Ученый совет института информационных технологий и коммуникаций" as instituteAcademicCouncilOfInformationTechnologiesAndCommunications {
+    + {field} Председатель (директор)
+}
+
+entity "Ученый совет института морских технологий, энергетики и транспорта" as instituteAcademicCouncilOfMarineTechnologiesEnergyAndTransport {
+    + {field} Председатель (директор)
+}
+
+entity "Ученый совет института нефти и газа" as instituteAcademicCouncilOfOilAndGas {
+    + {field} Председатель (директор)
+}
+
+entity "Ученый совет института рыбного хозяйства, биологии и природопользования" as instituteAcademicCouncilOfFisheriesBiologyAndNatureManagement {
+    + {field} Председатель (директор)
+}
+
+entity "Ученый совет института градостроительства" as instituteAcademicCouncilOfUrbanPlanning {
+    + {field} Председатель (директор)
+}
+
+entity "Совет факультета среднего профессионального образования" as facultyCouncilForSecondaryProfessionalEducation {
+    + {field} Председатель (декан)
+}
+
+entity "Ученый совет института дополнительного профессионального образования" as instituteAcademicCouncilOfContinuingProfessionalEducation {
+    + {field} Председатель (директор)
+}
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' ДИРЕКТОРА ИНСТИТУТОВ И ДЕКАНЫ ФАКУЛЬТЕТОВ
+entity "Директора институтов и деканы факультетов" as directorsAndDeans
+hide directorsAndDeans members
+viceRectorForAcademicAffairs <-- directorsAndDeans
+rectory <|-- directorsAndDeans
+academicCouncil <|-- directorsAndDeans
+
+    entity "Директор института экономики и права" as instituteOfEconomicsAndLawDirector
+    hide instituteOfEconomicsAndLawDirector members
+    directorsAndDeans <|-- instituteOfEconomicsAndLawDirector
+    instituteAcademicCouncilOfEconomicsAndLaw <|-up- instituteOfEconomicsAndLawDirector
+
+    entity "Директор института информационных технологий и коммуникаций" as instituteOfInformationTechnologiesAndCommunicationsDirector
+    hide instituteOfInformationTechnologiesAndCommunicationsDirector members
+    directorsAndDeans <|-- instituteOfInformationTechnologiesAndCommunicationsDirector
+    instituteAcademicCouncilOfInformationTechnologiesAndCommunications <|-up- instituteOfInformationTechnologiesAndCommunicationsDirector
+
+    entity "Директор института морских технологий, энергетики и транспорта" as instituteOfMarineTechnologiesEnergyAndTransportDirector
+    hide instituteOfMarineTechnologiesEnergyAndTransportDirector members
+    directorsAndDeans <|-- instituteOfMarineTechnologiesEnergyAndTransportDirector
+    instituteAcademicCouncilOfMarineTechnologiesEnergyAndTransport <|-up- instituteOfMarineTechnologiesEnergyAndTransportDirector
+
+    entity "Директор института нефти и газа" as instituteOfOilAndGasDirector
+    hide instituteOfOilAndGasDirector members
+    directorsAndDeans <|-- instituteOfOilAndGasDirector
+    instituteAcademicCouncilOfOilAndGas <|-up- instituteOfOilAndGasDirector
+
+    entity "Директор института рыбного хозяйства, биологии и природопользования" as instituteOfFisheryBiologyAndNaturalResourceManagementDirector
+    hide instituteOfFisheryBiologyAndNaturalResourceManagementDirector members
+    directorsAndDeans <|-- instituteOfFisheryBiologyAndNaturalResourceManagementDirector
+    instituteAcademicCouncilOfFisheriesBiologyAndNatureManagement <|-up- instituteOfFisheryBiologyAndNaturalResourceManagementDirector
+
+    entity "Директор института градостроительства" as instituteOfUrbanPlanningDirector
+    hide instituteOfUrbanPlanningDirector members
+    directorsAndDeans <|-- instituteOfUrbanPlanningDirector
+    instituteAcademicCouncilOfUrbanPlanning <|-up- instituteOfUrbanPlanningDirector
+
+    entity "Декан факультета среднего профессионального образования" as facultyOfIntermediateVocationalEducationDean
+    hide facultyOfIntermediateVocationalEducationDean members
+    directorsAndDeans <|-- facultyOfIntermediateVocationalEducationDean
+    facultyCouncilForSecondaryProfessionalEducation <|-up- facultyOfIntermediateVocationalEducationDean
+
+    entity "Директор института дополнительного профессионального образования" as instituteOfContinuingProfessionalEducationDirector
+    hide instituteOfContinuingProfessionalEducationDirector members
+    directorsAndDeans <|-- instituteOfContinuingProfessionalEducationDirector
+    instituteAcademicCouncilOfContinuingProfessionalEducation <|-up- instituteOfContinuingProfessionalEducationDirector
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' ИНСТИТУТЫ
+entity "Институт экономики и права (ИЭиП)" as instituteOfEconomicsAndLaw {
+    + Директор
+}
+instituteOfEconomicsAndLawDirector <-- instituteOfEconomicsAndLaw
+
+entity "Институт информационных технологий и коммуникаций (ИИТиК)" as instituteOfInformationTechnologiesAndCommunications {
+    + Директор
+}
+instituteOfInformationTechnologiesAndCommunicationsDirector <-- instituteOfInformationTechnologiesAndCommunications
+
+entity "Институт морских технологий, энергетики и транспорта (ИМТЭиТ)" as instituteOfMarineTechnologiesEnergyAndTransport {
+    + Директор
+}
+instituteOfMarineTechnologiesEnergyAndTransportDirector <-- instituteOfMarineTechnologiesEnergyAndTransport
+
+entity "Институт нефти и газа (ИНиГ)" as instituteOfOilAndGas {
+    + Директор
+}
+instituteOfOilAndGasDirector <-- instituteOfOilAndGas
+
+entity "Институт рыбного хозяйства, биологии и природопользования (ИРБиП)" as instituteOfFisheryBiologyAndNaturalResourceManagement {
+    + Директор
+}
+instituteOfFisheryBiologyAndNaturalResourceManagementDirector <-- instituteOfFisheryBiologyAndNaturalResourceManagement
+
+entity "Институт градостроительства (ИГ)" as instituteOfUrbanPlanning {
+    + Директор
+}
+instituteOfUrbanPlanningDirector <-- instituteOfUrbanPlanning
+
+entity "Факультет среднего профессионального образования (ФСПО)" as facultyOfIntermediateVocationalEducation {
+    + Декан
+}
+facultyOfIntermediateVocationalEducationDean <-- facultyOfIntermediateVocationalEducation
+
+entity "Институт дополнительного профессионального образования (ИДПО)" as instituteOfContinuingProfessionalEducation {
+    + Директор
+}
+instituteOfContinuingProfessionalEducationDirector <-- instituteOfContinuingProfessionalEducation
+
+entity "Подготовительный факультет для иностранных граждан (ПФдляИГ)" as preparatoryFacultyForForeignCitizens {
+    + Декан
+}
+viceRectorForAdmissionsAndInternationalActivities <-- preparatoryFacultyForForeignCitizens
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' КАФЕДРЫ
+entity "Заведующие кафедрами" as chairpersons
+hide chairpersons members
+academicCouncil <|-- chairpersons
+
+''''''''''' Институт экономики и права (ИЭиП)
+
+entity "Финансы и учет (ФиУ)" as financesAndAccounting {
+    + Заведующий кафедрой
+}
+instituteOfEconomicsAndLaw <-- financesAndAccounting
+entity "Производственный менеджмент (ПМ)" as productionManagement {
+    + Заведующий кафедрой
+}
+instituteOfEconomicsAndLaw <-- productionManagement
+entity "Экономическая безопасность (ЭКБ)" as economicSecurity {
+    + Заведующий кафедрой
+}
+instituteOfEconomicsAndLaw <-- economicSecurity
+entity "Правоведение" as jurisprudence {
+    + Заведующий кафедрой
+}
+instituteOfEconomicsAndLaw <-- jurisprudence
+entity "Экономика и управление предприятием (ЭУП)" as economicsAndEnterpriseManagement {
+    + Заведующий кафедрой
+}
+instituteOfEconomicsAndLaw <-- economicsAndEnterpriseManagement
+entity "Гуманитарные науки и психология (ГНП)" as humanitiesAndPsychology {
+    + Заведующий кафедрой
+}
+instituteOfEconomicsAndLaw <-- humanitiesAndPsychology
+
+''''''''''' Институт информационных технологий и коммуникаций (ИИТиК)
+
+entity "Автоматизированные системы обработки информации и управления (АСОИУ)" as automatedInformationProcessingAndControl {
+    + Заведующий кафедрой
+}
+instituteOfInformationTechnologiesAndCommunications <-- automatedInformationProcessingAndControl
+entity "Прикладная информатика (ПИ)" as appliedInformatics {
+    + Заведующий кафедрой
+}
+instituteOfInformationTechnologiesAndCommunications <-- appliedInformatics
+entity "Связь (СВ)" as communication {
+    + Заведующий кафедрой
+}
+instituteOfInformationTechnologiesAndCommunications <-- communication
+entity "Автоматика и управление (АиУ)" as automationAndControl {
+    + Заведующий кафедрой
+}
+instituteOfInformationTechnologiesAndCommunications <-- automationAndControl
+entity "Информационная безопасность (ИБ)" as informationSecurity {
+    + Заведующий кафедрой
+}
+instituteOfInformationTechnologiesAndCommunications <-- informationSecurity
+entity "Высшая и прикладная математика (ВиПМ)" as higherAndAppliedMathematics {
+    + Заведующий кафедрой
+}
+instituteOfInformationTechnologiesAndCommunications <-- higherAndAppliedMathematics
+
+''''''''''' Институт морских технологий, энергетики и транспорта (ИМТЭиТ)
+
+entity "Общеинженерные дисциплины и наземный транспорт (ОДиНТ)" as generalEngineeringAndGroundTransport {
+    + Заведующий кафедрой
+}
+instituteOfMarineTechnologiesEnergyAndTransport <-- generalEngineeringAndGroundTransport
+entity "Судостроение и энергетические комплексы морской техники (СиЭК)" as shipbuildingAndEnergeticComplexesOfMarineEngineering {
+    + Заведующий кафедрой
+}
+instituteOfMarineTechnologiesEnergyAndTransport <-- shipbuildingAndEnergeticComplexesOfMarineEngineering
+entity "Теплоэнергетика и холодильные машины (ТЭНиХМ)" as thermalPowerEngineeringAndRefrigerationMachines {
+    + Заведующий кафедрой
+}
+instituteOfMarineTechnologiesEnergyAndTransport <-- thermalPowerEngineeringAndRefrigerationMachines
+entity "Электрооборудование и автоматика судов (ЭАС)" as shipElectricalEquipmentAndAutomation {
+    + Заведующий кафедрой
+}
+instituteOfMarineTechnologiesEnergyAndTransport <-- shipElectricalEquipmentAndAutomation
+entity "Эксплуатация водного транспорта и промышленное рыболовство (ЭВТиПР)" as waterTransportOperationAndIndustrialFishing {
+    + Заведующий кафедрой
+}
+instituteOfMarineTechnologiesEnergyAndTransport <-- waterTransportOperationAndIndustrialFishing
+ 
+''''''''''' Институт нефти и газа (ИНиГ)
+
+entity "Химия" as chemistry {
+    + Заведующий кафедрой
+}
+instituteOfOilAndGas <-- chemistry
+entity "Химическая технология переработки нефти и газа (ХТНГ)" as chemicalTechnologyOfOilAndGasProcessing {
+    + Заведующий кафедрой
+}
+instituteOfOilAndGas <-- chemicalTechnologyOfOilAndGasProcessing
+entity "Геология нефти и газа (ГНГ)" as petroleumAndGasGeology {
+    + Заведующий кафедрой
+}
+instituteOfOilAndGas <-- petroleumAndGasGeology
+entity "Технологические машины и оборудование (ТМО)" as technologicalMachinesAndEquipment {
+    + Заведующий кафедрой
+}
+instituteOfOilAndGas <-- technologicalMachinesAndEquipment
+entity "Разработка и эксплуатация нефтяных и газовых месторождений (РЭНГ)" as developmentAndOperationOfOilAndGasFields {
+    + Заведующий кафедрой
+}
+instituteOfOilAndGas <-- developmentAndOperationOfOilAndGasFields
+ 
+''''''''''' Институт рыбного хозяйства, биологии и природопользования (ИРБиП)
+
+entity "Аквакультура и водные биоресурсы (АВБ)" as aquacultureAndAquaticBioresources {
+    + Заведующий кафедрой
+}
+instituteOfFisheryBiologyAndNaturalResourceManagement <-- aquacultureAndAquaticBioresources
+entity "Гидробиология и общая экология (ГОЭ)" as hydrobiologyAndGeneralEcology {
+    + Заведующий кафедрой
+}
+instituteOfFisheryBiologyAndNaturalResourceManagement <-- hydrobiologyAndGeneralEcology
+entity "Экологический туризм (ЭЛТ)" as ecologicalTourism {
+    + Заведующий кафедрой
+}
+instituteOfFisheryBiologyAndNaturalResourceManagement <-- ecologicalTourism
+entity "Иностранные языки и речевые коммуникации (ИЯиРК)" as foreignLanguagesAndSpeechCommunication {
+    + Заведующий кафедрой
+}
+instituteOfFisheryBiologyAndNaturalResourceManagement <-- foreignLanguagesAndSpeechCommunication
+' todo куда относится?
+entity "Центр тестирования иностранных граждан" as foreignCitizensTestingCenter {
+    + Заведующий кафедрой
+}
+instituteOfFisheryBiologyAndNaturalResourceManagement <-- foreignCitizensTestingCenter
+entity "Технология товаров и товароведение (ТТТ)" as goodsTechnologyAndMerchandising {
+    + Заведующий кафедрой
+}
+instituteOfFisheryBiologyAndNaturalResourceManagement <-- goodsTechnologyAndMerchandising
+entity "Прикладная биология и микробиология (ПБМ)" as appliedBiologyAndMicrobiology {
+    + Заведующий кафедрой
+}
+instituteOfFisheryBiologyAndNaturalResourceManagement <-- appliedBiologyAndMicrobiology
+entity "Безопасность жизнедеятельности и инженерная экология (ИЭБ)" as lifeSafetyAndEngineeringEcology {
+    + Заведующий кафедрой
+}
+instituteOfFisheryBiologyAndNaturalResourceManagement <-- lifeSafetyAndEngineeringEcology
+entity "Физическое воспитание и спорт (ФВС)" as physicalEducationAndSports {
+    + Заведующий кафедрой
+}
+instituteOfFisheryBiologyAndNaturalResourceManagement <-- physicalEducationAndSports
+ 
+''''''''''' Институт градостроительства
+
+entity "Строительство (СТР)" as construction {
+    + Заведующий кафедрой
+}
+instituteOfUrbanPlanning <-- construction
+entity "Архитектура (АРХ)" as architecture {
+    + Заведующий кафедрой
+}
+instituteOfUrbanPlanning <-- architecture
+ 
+''''''''''' Факультет среднего профессионального образования
+
+entity "Связь и телекоммуникации" as communicationAndTelecommunications {
+    + Заведующий отделением
+}
+facultyOfIntermediateVocationalEducation <-- communicationAndTelecommunications
+entity "Общеобразовательные дисциплины" as generalEducationDisciplines {
+    + Заведующий отделением
+}
+facultyOfIntermediateVocationalEducation <-- generalEducationDisciplines
+entity "Нефтегазовое" as oilAndGas {
+    + Заведующий отделением
+}
+facultyOfIntermediateVocationalEducation <-- oilAndGas
+entity "Сервис и право" as serviceAndLaw {
+    + Заведующий отделением
+}
+facultyOfIntermediateVocationalEducation <-- serviceAndLaw
+entity "Финансово-экономическое" as financialAndEconomic {
+    + Заведующий отделением
+}
+facultyOfIntermediateVocationalEducation <-- financialAndEconomic
+entity "Техническое" as technical {
+    + Заведующий отделением
+}
+facultyOfIntermediateVocationalEducation <-- technical
+
+''''''''''' Институт дополнительного профессионального образования
+
+' todo нужно?
+'entity "Автотехнический учебный центр повышения квалификации и переподготовки" as automotiveTrainingCenterForProfessionalDevelopment {
+'    ' todo кто руководитель?
+'}
+'instituteOfContinuingProfessionalEducation <-- automotiveTrainingCenterForProfessionalDevelopment
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' ПРОФИЛЬНЫЕ ОТДЕЛЫ
+entity "Первый отдел" as firstDepartment {
+    + Начальник
+}
+rector <-- firstDepartment
+
+entity "Отдел гражданской обороны, чрезвычайных ситуаций и мобилизационной подготовки" as civilDefenseAndEmergencySituationDepartment {
+    + Начальник
+}
+rector <-- civilDefenseAndEmergencySituationDepartment
+
+entity "Президент" as president
+hide president members
+academicCouncil <|-- president
+
+entity "Бухгалтерия" as accounting {
+    + Главный бухгалтер
+}
+rector <-- accounting
+
+entity "Отдел кадров" as hrDepartment {
+    + Начальник
+}
+viceRectorForOrganizationalAndLegalAffairs <-- hrDepartment
+
+entity "Юридический отдел" as legalDepartment {
+    + Начальник
+}
+viceRectorForOrganizationalAndLegalAffairs <-- legalDepartment
+
+entity "Студенческая канцелярия" as studentAffairsOffice {
+    + Начальник
+}
+viceRectorForOrganizationalAndLegalAffairs <-- studentAffairsOffice
+
+entity "Общий отдел" as generalDepartment {
+    + Начальник
+}
+viceRectorForOrganizationalAndLegalAffairs <-- generalDepartment
+    entity "Отдел делопроизводства" as documentManagementDepartment
+    generalDepartment <|-- documentManagementDepartment
+    entity "Секретариат руководства" as executiveSecretariat
+    generalDepartment <|-- executiveSecretariat
+    entity "Военно-учетный стол" as militaryRegistrationDesk
+    generalDepartment <|-- militaryRegistrationDesk
+    entity "Архив" as archive
+    generalDepartment <|-- archive
+
+entity "Международный отдел" as internationalRelationsOffice {
+    + Начальник
+}
+viceRectorForAdmissionsAndInternationalActivities <-- internationalRelationsOffice
+
+entity "Отдел академической мобильности" as academicMobilityOffice {
+    + Начальник
+}
+viceRectorForAdmissionsAndInternationalActivities <-- academicMobilityOffice
+
+entity "Управление массовых коммуникаций и медиа-проектов" as massCommunicationsAndMediaProjectsManagement {
+    + Начальник
+}
+viceRectorForEducationalWorkAndPublicRelations <-- massCommunicationsAndMediaProjectsManagement
+    entity "Пресс-центр АГТУ" as AGTUPressCenter {
+        + Директор
+    }
+    massCommunicationsAndMediaProjectsManagement <|-- AGTUPressCenter
+    entity "Отдел медиа-проектов" as mediaProjectsDepartment {
+        + Начальник
+    }
+    massCommunicationsAndMediaProjectsManagement <|-- mediaProjectsDepartment
+    entity "Рекламно-информационный центр" as advertisingAndInformationCenter {
+        + Директор
+    }
+    massCommunicationsAndMediaProjectsManagement <|-- advertisingAndInformationCenter
+
+entity "Управление по организационно-воспитательной работе" as organizationalAndEducationalWorkManagement {
+    + Начальник
+}
+viceRectorForEducationalWorkAndPublicRelations <-- organizationalAndEducationalWorkManagement
+    entity "Отдел по культурно-массовой работе" as culturalAndMassWorkDepartment {
+        + Начальник
+    }
+    organizationalAndEducationalWorkManagement <|-- culturalAndMassWorkDepartment
+    entity "Отдел по воспитательной и социальной работе" as educationalAndSocialWorkDepartment {
+        + Начальник
+    }
+    organizationalAndEducationalWorkManagement <|-- educationalAndSocialWorkDepartment
+    entity "Спортивный клуб" as sportsClub {
+        + Начальник
+    }
+    organizationalAndEducationalWorkManagement <|-- sportsClub
+    entity "Центр социально-психологической помощи «Доверие»" as TrustSocialAndPsychologicalSupportCenter {
+        + Директор
+    }
+    organizationalAndEducationalWorkManagement <|-- TrustSocialAndPsychologicalSupportCenter
+    entity "Музей истории АГТУ" as AGTUHistoryMuseum {
+        + Директор
+    }
+    organizationalAndEducationalWorkManagement <|-- AGTUHistoryMuseum
+    entity "Студенческий совет АГТУ" as AGTUStudentCouncil {
+        + Председатель
+    }
+    educationalAndSocialWorkDepartment <|-- AGTUStudentCouncil
+        entity "Студенческий совет института экономики и права" as instituteOfEconomicsAndLawStudentCouncil {
+            + Председатель
+        }
+        AGTUStudentCouncil <|-- instituteOfEconomicsAndLawStudentCouncil
+        entity "Студенческий совет института информационных технологий и коммуникаций" as instituteOfInformationTechnologiesAndCommunicationsStudentCouncil {
+            + Председатель
+        }
+        AGTUStudentCouncil <|-- instituteOfInformationTechnologiesAndCommunicationsStudentCouncil
+        entity "Студенческий совет института морских технологий, энергетики и транспорта" as instituteOfMarineTechnologiesEnergyAndTransportStudentCouncil {
+            + Председатель
+        }
+        AGTUStudentCouncil <|-- instituteOfMarineTechnologiesEnergyAndTransportStudentCouncil
+        entity "Студенческий совет института нефти и газа" as instituteOfOilAndGasStudentCouncil {
+            + Председатель
+        }
+        AGTUStudentCouncil <|-- instituteOfOilAndGasStudentCouncil
+        entity "Студенческий совет института рыбного хозяйства, биологии и природопользования" as instituteOfFisheryBiologyAndNaturalResourceManagementStudentCouncil {
+            + Председатель
+        }
+        AGTUStudentCouncil <|-- instituteOfFisheryBiologyAndNaturalResourceManagementStudentCouncil
+        entity "Студенческий совет института градостроительства" as instituteOfUrbanPlanningStudentCouncil {
+            + Председатель
+        }
+        AGTUStudentCouncil <|-- instituteOfUrbanPlanningStudentCouncil
+        entity "Студенческий совет факультета среднего профессионального образования" as facultyOfIntermediateVocationalEducationStudentCouncil {
+            + Председатель
+        }
+        AGTUStudentCouncil <|-- facultyOfIntermediateVocationalEducationStudentCouncil
+        entity "Студенческий совет института дополнительного профессионального образования" as facultyOfIntermediateVocationalEducationStudentCouncilStudentCouncil {
+            + Председатель
+        }
+        AGTUStudentCouncil <|-- facultyOfIntermediateVocationalEducationStudentCouncilStudentCouncil
+
+    entity "Профстудком АГТУ" as AGTUStudentTradeUnionCommittee {
+
+    }
+    educationalAndSocialWorkDepartment <|-- AGTUStudentTradeUnionCommittee
+
+entity "Физкультурно-спортивное сооружение 'Спорткомплекс'" as sportsFacility {
+    + Директор
+}
+viceRectorForInfrastructureDevelopmentAndInformatization <-- sportsFacility
+
+entity "Управление информационных систем и технологий" as informationSystemsAndTechnologiesManagement {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization <-- informationSystemsAndTechnologiesManagement
+    entity "Отдел АСУ" as automationSystemsDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement <|-- automationSystemsDepartment
+    entity "Отдел информационной безопасности" as informationSecurityDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement <|-- informationSecurityDepartment
+    entity "Сервисный отдел" as serviceDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement <|-- serviceDepartment
+    entity "Отдел вычислительных сетей и связи" as computerNetworksAndCommunicationsDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement <|-- computerNetworksAndCommunicationsDepartment
+
+entity "Диспетчерский отдел" as dispatchDepartment {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization <-- dispatchDepartment
+
+entity "Учебный отдел" as academicDepartment {
+    + Начальник
+}
+viceRectorForAcademicAffairs <-- academicDepartment
+
+entity "Центр содействия трудоустройству выпускников АГТУ" as careerDevelopmentCenter {
+    + Директор
+}
+viceRectorForAcademicAffairs <-- careerDevelopmentCenter
+
+entity "Отдел методического обеспечения учебного процесса" as educationalProcessSupportDepartment {
+    + Начальник
+}
+viceRectorForAcademicAffairs <-- educationalProcessSupportDepartment
+
+entity "Центр образовательной политики" as educationalPolicyCenter {
+    + Директор
+}
+viceRectorForAcademicAffairs <-- educationalPolicyCenter
+
+entity "Издательство АГТУ" as AGTUPublishingHouse {
+    + Директор
+}
+viceRectorForAdmissionsAndInternationalActivities <-- AGTUPublishingHouse
+    entity "Отдел допечатной подготовки изданий" as prepressDepartment {
+        + Начальник
+    }
+    AGTUPublishingHouse <|-- prepressDepartment
+
+entity "Научно-образовательный центр профессиональных компетенций" as professionalCompetenciesCenter {
+     + Директор
+}
+viceRectorForAcademicAffairs <-- professionalCompetenciesCenter
+
+entity "Центр довузовской подготовки, профориентации и приему в вуз" as preuniversityPreparationAndAdmissionCenter {
+    + Директор
+}
+viceRectorForAdmissionsAndInternationalActivities <-- preuniversityPreparationAndAdmissionCenter
+
+entity "Научная библиотека" as scientificLibrary {
+    + Директор
+}
+viceRectorForAdmissionsAndInternationalActivities <-- scientificLibrary
+    entity "Отдел комплектования" as acquisitionDepartment {
+        + Начальник
+    }
+    scientificLibrary <|-- acquisitionDepartment
+    entity "Отдел каталогизации" as catalogingDepartment {
+        + Начальник
+    }
+    scientificLibrary <|-- catalogingDepartment
+    entity "Информационно-библиографический отдел" as informationAndBibliographyDepartment {
+        + Начальник
+    }
+    scientificLibrary <|-- informationAndBibliographyDepartment
+    entity "Отделы обслуживания" as serviceDepartments {
+        + Начальник
+    }
+    scientificLibrary <|-- serviceDepartments
+    entity "Читальный зал электронных ресурсов" as electronicResourcesReadingRoom {
+        ' todo кто руководитель?
+    }
+    hide electronicResourcesReadingRoom members
+    scientificLibrary <|-- electronicResourcesReadingRoom
+    ' todo следующие отделы нужны?
+'    entity "Отдел научной литературы" as scientificLiteratureDepartment {
+'
+'    }
+'    scientificLibrary -- scientificLiteratureDepartment
+'    entity "Студенческий читальный зал" as studentReadingRoom {
+'
+'    }
+'    scientificLibrary -- studentReadingRoom
+'    entity "Отдел учебной литературы" as educationalLiteratureDepartment {
+'
+'    }
+'    scientificLibrary -- educationalLiteratureDepartment
+'    entity "Читальный зал экономической и юридической литературы" as economicsAndLawReadingRoom {
+'
+'    }
+'    scientificLibrary -- economicsAndLawReadingRoom
+'    entity "Читальный зал периодических изданий" as periodicalsReadingRoom {
+'
+'    }
+'    scientificLibrary -- periodicalsReadingRoom
+
+entity "Центр научно-инновационного развития" as scientificAndInnovativeDevelopmentCenter {
+    + Директор
+}
+viceRectorForResearchAndInnovations <-- scientificAndInnovativeDevelopmentCenter
+
+entity "Отдел научных проектов" as researchProjectsDepartment {
+    + Начальник
+}
+viceRectorForResearchAndInnovations <-- researchProjectsDepartment
+
+entity "Научно-исследовательская часть" as researchDivision {
+    + Начальник
+}
+viceRectorForResearchAndInnovations <-- researchDivision
+
+entity "Отдел подготовки кадров высшей квалификации" as postgraduateTrainingDepartment {
+    + Начальник
+}
+viceRectorForResearchAndInnovations <-- postgraduateTrainingDepartment
+
+entity "Редакция журнала «Вестник АГТУ»" as AGTUJournalEditorialOffice {
+    + Заведующий
+}
+viceRectorForResearchAndInnovations <-- AGTUJournalEditorialOffice
+
+entity "Редакция научных журналов" as scientificJournalsEditorialOffice {
+    + Начальник
+}
+viceRectorForResearchAndInnovations <-- scientificJournalsEditorialOffice
+
+entity "Отдел маркетинга" as marketingDepartment {
+    + Начальник
+}
+viceRectorForFinancialAndEconomicAffairs <-- marketingDepartment
+
+entity "Договорный отдел" as contractDepartment {
+    + Начальник
+}
+viceRectorForFinancialAndEconomicAffairs <-- contractDepartment
+
+entity "Отдел материально-технического снабжения" as materialsAndTechnicalSupplyDepartment {
+    + Начальник
+}
+viceRectorForFinancialAndEconomicAffairs <-- materialsAndTechnicalSupplyDepartment
+
+entity "Планово-экономический отдел" as planningAndEconomicDepartment {
+    + Начальник
+}
+viceRectorForFinancialAndEconomicAffairs <-- planningAndEconomicDepartment
+    entity "Сектор бюджетирования, аналитического учёта и контроля" as budgetingAndAnalyticalControlSector {
+        + Начальник
+    }
+    planningAndEconomicDepartment <|-- budgetingAndAnalyticalControlSector
+    entity "Сектор труда и заработной платы" as laborAndWageSector {
+        + Начальник
+    }
+    planningAndEconomicDepartment <|-- laborAndWageSector
+
+
+entity "Отдел внебюджетной деятельности и социальной защиты" as extrabudgetaryActivitiesAndSocialProtectionDepartment {
+    + Начальник
+}
+viceRectorForFinancialAndEconomicAffairs <-- extrabudgetaryActivitiesAndSocialProtectionDepartment
+
+entity "Административно-хозяйственное управление" as administrativeAndEconomicManagement {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization <-- administrativeAndEconomicManagement
+    entity "Отдел по комплексному обслуживанию вуза" as comprehensiveUniversityServiceDepartment {
+        + Начальник
+    }
+    administrativeAndEconomicManagement <|-- comprehensiveUniversityServiceDepartment
+    entity "Хозяйственный отдел" as economicDepartment {
+        + Начальник
+    }
+    administrativeAndEconomicManagement <|-- economicDepartment
+    entity "Транспортный отдел" as transportDepartment {
+        + Начальник
+    }
+    administrativeAndEconomicManagement <|-- transportDepartment
+
+entity "Отдел по управлению имуществом и проектами" as propertyAndProjectManagementDepartment {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization <-- propertyAndProjectManagementDepartment
+
+entity "Отдел охраны труда и техники безопасности" as laborProtectionAndTechnicalSafetyDepartment {
+    + Начальник
+}
+viceRectorForOrganizationalAndLegalAffairs <-- laborProtectionAndTechnicalSafetyDepartment
+
+entity "Коменданты учебных корпусов" as academicBuildingsGuardhouses 
+hide academicBuildingsGuardhouses members
+administrativeAndEconomicManagement <-- academicBuildingsGuardhouses
+
+    entity "Главный учебный корпус" as mainAcademicBuildingGuardhouse {
+        + Комендант
+    }
+    academicBuildingsGuardhouses <|-- mainAcademicBuildingGuardhouse
+    entity "Учебный корпус №2" as academicBuilding2Guardhouse {
+        + Комендант
+    }
+    academicBuildingsGuardhouses <|-- academicBuilding2Guardhouse
+    entity "Учебный корпус №3" as academicBuilding3Guardhouse {
+        + Комендант
+    }
+    academicBuildingsGuardhouses <|-- academicBuilding3Guardhouse
+    entity "Учебный корпус №4" as academicBuilding4Guardhouse {
+        + Комендант
+    }
+    academicBuildingsGuardhouses <|-- academicBuilding4Guardhouse
+    entity "Учебный корпус №5" as academicBuilding5Guardhouse {
+        + Комендант
+    }
+    academicBuildingsGuardhouses <|-- academicBuilding5Guardhouse
+    entity "Учебный корпус №6" as academicBuilding6Guardhouse {
+        + Комендант
+    }
+    academicBuildingsGuardhouses <|-- academicBuilding6Guardhouse
+    entity "Учебный корпус №7" as academicBuilding7Guardhouse {
+        + Комендант
+    }
+    academicBuildingsGuardhouses <|-- academicBuilding7Guardhouse
+    entity "Учебный корпус №8" as academicBuilding8Guardhouse {
+        + Комендант
+    }
+    academicBuildingsGuardhouses <|-- academicBuilding8Guardhouse
+    entity "Учебный корпус №9" as academicBuilding9Guardhouse {
+        + Комендант
+    }
+    academicBuildingsGuardhouses <|-- academicBuilding9Guardhouse
+    entity "Учебный корпус №10-11" as academicBuilding10_11Guardhouse {
+        + Комендант
+    }
+    academicBuildingsGuardhouses <|-- academicBuilding10_11Guardhouse
+
+' todo нужны?
+'entity "Дополнительные структуры" as additionalStructures {
+'
+'}
+'    entity "Медицинский пункт" as medicalPoint {
+'
+'    }
+'    additionalStructures -- medicalPoint
+'    entity "Профсоюзный комитет сотрудников ФГБОУ ВО 'АГТУ'" as AGTUStaffTradeUnionCommittee {
+'
+'    }
+'    additionalStructures -- AGTUStaffTradeUnionCommittee
+
+
+
+
+
+@enduml
