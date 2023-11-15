@@ -20,7 +20,8 @@ entity "Ученый совет" as academicCouncil {
 
 entity "Ректор" as rector
 hide rector members
-academicCouncil <|-- rector
+'rector --|> academicCouncil 
+rector <-- academicCouncil 
 
 entity "Ректорат" as rectory {
     + Ректор
@@ -517,6 +518,70 @@ viceRectorForEducationalWorkAndPublicRelations <-- organizationalAndEducationalW
 
     }
     educationalAndSocialWorkDepartment <|-- AGTUStudentTradeUnionCommittee
+    
+entity "Студенческие группы института экономики и права" as instituteOfEconomicsAndLawStudentGroups
+hide instituteOfEconomicsAndLawStudentGroups members
+financesAndAccounting <-- instituteOfEconomicsAndLawStudentGroups
+productionManagement <-- instituteOfEconomicsAndLawStudentGroups 
+economicSecurity <-- instituteOfEconomicsAndLawStudentGroups
+jurisprudence <-- instituteOfEconomicsAndLawStudentGroups
+economicsAndEnterpriseManagement <-- instituteOfEconomicsAndLawStudentGroups
+humanitiesAndPsychology <-- instituteOfEconomicsAndLawStudentGroups
+
+entity "Студенческие группы института информационных технологий и коммуникаций" as instituteOfInformationTechnologiesAndCommunicationsStudentGroups
+hide instituteOfInformationTechnologiesAndCommunicationsStudentGroups members
+automatedInformationProcessingAndControl <-- instituteOfInformationTechnologiesAndCommunicationsStudentGroups
+appliedInformatics <-- instituteOfInformationTechnologiesAndCommunicationsStudentGroups
+communication <-- instituteOfInformationTechnologiesAndCommunicationsStudentGroups
+automationAndControl <-- instituteOfInformationTechnologiesAndCommunicationsStudentGroups
+informationSecurity <-- instituteOfInformationTechnologiesAndCommunicationsStudentGroups
+higherAndAppliedMathematics <-- instituteOfInformationTechnologiesAndCommunicationsStudentGroups
+
+entity "Студенческие группы института морских технологий, энергетики и транспорта" as instituteOfMarineTechnologiesEnergyAndTransportStudentGroups
+hide instituteOfMarineTechnologiesEnergyAndTransportStudentGroups members
+generalEngineeringAndGroundTransport <-- instituteOfMarineTechnologiesEnergyAndTransportStudentGroups
+shipbuildingAndEnergeticComplexesOfMarineEngineering <-- instituteOfMarineTechnologiesEnergyAndTransportStudentGroups
+thermalPowerEngineeringAndRefrigerationMachines <-- instituteOfMarineTechnologiesEnergyAndTransportStudentGroups
+shipElectricalEquipmentAndAutomation <-- instituteOfMarineTechnologiesEnergyAndTransportStudentGroups
+waterTransportOperationAndIndustrialFishing <-- instituteOfMarineTechnologiesEnergyAndTransportStudentGroups
+
+entity "Студенческие группы института нефти и газа" as instituteOfOilAndGasStudentGroups
+hide instituteOfOilAndGasStudentGroups members
+chemistry <-- instituteOfOilAndGasStudentGroups
+chemicalTechnologyOfOilAndGasProcessing <-- instituteOfOilAndGasStudentGroups
+petroleumAndGasGeology <-- instituteOfOilAndGasStudentGroups
+technologicalMachinesAndEquipment <-- instituteOfOilAndGasStudentGroups
+developmentAndOperationOfOilAndGasFields <-- instituteOfOilAndGasStudentGroups
+
+entity "Студенческие группы института рыбного хозяйства, биологии и природопользования" as instituteOfFisheryBiologyAndNaturalResourceManagementStudentGroups
+hide instituteOfFisheryBiologyAndNaturalResourceManagementStudentGroups members
+aquacultureAndAquaticBioresources <-- instituteOfFisheryBiologyAndNaturalResourceManagementStudentGroups
+hydrobiologyAndGeneralEcology <-- instituteOfFisheryBiologyAndNaturalResourceManagementStudentGroups
+ecologicalTourism <-- instituteOfFisheryBiologyAndNaturalResourceManagementStudentGroups
+foreignLanguagesAndSpeechCommunication <-- instituteOfFisheryBiologyAndNaturalResourceManagementStudentGroups
+foreignCitizensTestingCenter <-- instituteOfFisheryBiologyAndNaturalResourceManagementStudentGroups
+goodsTechnologyAndMerchandising <-- instituteOfFisheryBiologyAndNaturalResourceManagementStudentGroups
+appliedBiologyAndMicrobiology <-- instituteOfFisheryBiologyAndNaturalResourceManagementStudentGroups
+lifeSafetyAndEngineeringEcology <-- instituteOfFisheryBiologyAndNaturalResourceManagementStudentGroups
+physicalEducationAndSports <-- instituteOfFisheryBiologyAndNaturalResourceManagementStudentGroups
+
+entity "Студенческие группы института градостроительства" as instituteOfUrbanPlanningStudentGroups
+hide instituteOfUrbanPlanningStudentGroups members
+construction <-- instituteOfUrbanPlanningStudentGroups
+architecture <-- instituteOfUrbanPlanningStudentGroups
+
+entity "Студенческие группы факультета среднего профессионального образования" as facultyOfIntermediateVocationalEducationStudentGroups
+hide facultyOfIntermediateVocationalEducationStudentGroups members
+communicationAndTelecommunications <-- facultyOfIntermediateVocationalEducationStudentGroups
+generalEducationDisciplines <-- facultyOfIntermediateVocationalEducationStudentGroups
+oilAndGas <-- facultyOfIntermediateVocationalEducationStudentGroups
+serviceAndLaw <-- facultyOfIntermediateVocationalEducationStudentGroups
+financialAndEconomic <-- facultyOfIntermediateVocationalEducationStudentGroups
+technical <-- facultyOfIntermediateVocationalEducationStudentGroups
+
+' todo нужно?
+'entity "Студенческие группы факультета дополнительного профессионального образования" as instituteOfContinuingProfessionalEducationStudentGroups
+'hide instituteOfContinuingProfessionalEducationStudentGroups members
 
 entity "Физкультурно-спортивное сооружение 'Спорткомплекс'" as sportsFacility {
     + Директор
