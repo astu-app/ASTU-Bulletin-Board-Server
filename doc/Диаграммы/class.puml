@@ -3,34 +3,27 @@
 
 'left to right direction
 
-'hide members
 hide methods
-
-'class AnnouncementsController 
-'class AnnouncementService
-'AnnouncementsController -- AnnouncementService
-'
-'class SurveysController
-'class SurveyService
-'SurveysController -- SurveyService
 
 class Announcement {
     Id: Guid
     Content: string
     
-    IsHidden: bool    
     ExpectsAutoHiding: bool
     AutoHidingAt: DateTime?
     
     ExpectsAutoPublishing: bool
     AutoPublishingAt: DateTime?
     
+    IsPublished: bool
     PublishedAt: DateTime?
+    
+    IsHidden: bool    
     HiddenAt: DateTime?
     
     Author: User
     
-    Categories: AnnouncementCategory[]
+    Categories: AnnouncementCategory[]?
     
     Files: File[]?
     Survey: Survey?
@@ -59,24 +52,19 @@ class UserGroup {
     Id: Guid
     Name: string
     
-'    Admin: User?
-    MemberRights: MemberRights[]
+    Admin: User?
+    MemberRights: Dictionary<User, MemberRights>
     
     Children: UserGroup[]?
-    
-    GetAdmin() : User?
-    GetAllMembers() : User[]
 }
-show UserGroup methods
 UserGroup "0..1" -- "*" UserGroup : < Дочерний узел
 Announcement "*" o-- "1..*" UserGroup : > Предназначено
 
 class MemberRights {
     Id: Guid
-    UserId: Guid
     ' todo продумать права
 }
-UserGroup "*" *-- "1" MemberRights
+UserGroup "1" *-- "*" MemberRights
 
 class User {
     Id: Guid
@@ -84,8 +72,8 @@ class User {
     SecondName: string
     Patronymic: string?
 }
-'UserGroup "*" o-- "0..1" User : < Админ
-MemberRights "1..*" o-- "1" User
+UserGroup "*" o-- "0..1" User : < Админ
+UserGroup "1..*" o-- "*" User : < Участник
 Announcement "*" o-- "1" User : < Автор
 AnnouncementCategory "*" o-- "*" User : < Подписан
 Survey "*" o-- "*" User : < Проголосовал в 
@@ -97,8 +85,8 @@ class Survey {
     IsAnonymous: bool
     IsMultipleChoiceAllowed: bool
     
-    ExpectsClosing: bool
-    ClosingAt: DateTime?
+    ExpectsAutoClosing: bool
+    AutoClosingAt: DateTime?
     
     Questions: Question[]
     
