@@ -27,9 +27,9 @@ paths:
                 type: object
                 properties:
                   code:
+                    # created
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
                   content:
-                    # created
                     $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
         400:
           description: Bad Request

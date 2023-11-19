@@ -23,7 +23,7 @@ components:
             format: uuid
           minItems: 1
         categoryIds:
-          description: Идентификатор категорий объявлений
+          description: Идентификаторы категорий объявлений
           type: array
           items: 
             type: string
@@ -150,6 +150,7 @@ components:
         id:
           type: string
           format: uuid
+          required: true
         content:
           description: Текстовое содержимое объявления
           type: string

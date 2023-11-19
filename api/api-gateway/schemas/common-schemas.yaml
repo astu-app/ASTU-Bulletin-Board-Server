@@ -9,5 +9,9 @@ paths:
   
 components:
   schemas:
-    
+    identifiers:
+      type: array
+      items: 
+        type: string
+        format: uuid
     
