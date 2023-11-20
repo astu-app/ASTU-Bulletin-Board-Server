@@ -11,6 +11,7 @@ components:
   schemas:
     identifiers:
       type: array
+      nullable: true
       items: 
         type: string
         format: uuid

@@ -424,8 +424,10 @@ paths:
                 properties:
                   code:
                     # surveyDoesNotExist
-                    # questionDoesNotExist
+                    # questionsDoesNotExist
                     $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInQuestionResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -502,6 +504,8 @@ paths:
                   code:
                     # questionDoesNotExist
                     $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/cancelVoteInQuestionResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:

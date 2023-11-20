@@ -69,10 +69,12 @@ paths:
                 type: object
                 properties:
                   code:
-                    # announcementCategoryDoesNotExist
-                    # fileDoesNotExist
+                    # announcementCategoriesDoNotExist
+                    # filesDoNotExist
                     # surveyDoesNotExist
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -81,10 +83,11 @@ paths:
                 type: object
                 properties:
                   code:
-                    # cannotAttachFilesAndSurveyTogether
-                    # automaticHideBeforePublication
-                    # delayedPublicationBeforeCreation
-                    # delayedPublicationAfterAutomaticHide
+                    # attachingFilesAndSurveyTogether 
+                    # automaticPublishMomentIsInPast
+                    # automaticHideMomentIsInPast
+                    # autoHidingAnAlreadyHiddenAnnouncement
+                    # autoPublishingPublishedAndNonHiddenAnnouncement
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
   
   /announcements/get-details:
@@ -171,8 +174,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  content:
-                    $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
                   code:
                     # ok
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
@@ -216,10 +217,12 @@ paths:
                 properties:
                   code:
                     # announcementDoesNotExist
-                    # announcementCategoryDoesNotExist
-                    # fileDoesNotExist
+                    # announcementCategoriesDoNotExist
+                    # filesDoNotExist
                     # surveyDoesNotExist
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -228,10 +231,10 @@ paths:
                 type: object
                 properties:
                   code:
-                    # cannotAttachFilesAndSurveyTogether
-                    # automaticHideBeforePublication
-                    # delayedPublicationBeforeCreation
-                    # delayedPublicationAfterAutomaticHide
+                    # attachingFilesAndSurveyTogether
+                    # automaticPublishMomentIsInPast
+                    # automaticHideMomentIsInPast
+                    # 
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
   
   /announcements/delete:

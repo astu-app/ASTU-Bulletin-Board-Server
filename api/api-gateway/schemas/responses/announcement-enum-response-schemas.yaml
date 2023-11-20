@@ -21,27 +21,25 @@ components:
         # 403
         - announcementCreationForbidden
         # 404
-        - announcementCategoryDoesNotExist
-        - fileDoesNotExist
+        - announcementCategoriesDoNotExist
+        - filesDoNotExist
         - surveyDoesNotExist
         # 409
-        - cannotAttachFilesAndSurveyTogether
-        - automaticHideBeforePublication
-        - delayedPublicationBeforeCreation
-        - delayedPublicationAfterAutomaticHide
+        - attachingFilesAndSurveyTogether
+        - automaticPublishMomentIsInPast
+        - automaticHideMomentIsInPast
       description: >
         Ответы:
           created - Объявление создано
           usergroupListNullOrEmpty - Список групп пользователей null или пустой
           unauthorized - Пользователь не авторизован для выполнения операции
           announcementCreationForbidden - Пользователь не имеет права создать объявление
-          announcementCategoryDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id
-          fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id
+          announcementCategoriesDoNotExist - В качестве одного или нескольких из id категорий объявлений прикреплен несуществующий в базе id
+          filesDoNotExist - В качестве одного или нескольких из id файлов прикреплен несуществующий в базе id
           surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id
-          cannotAttachFilesAndSurvey - Нельзя прикрепить к объявлению и файлы, и опрос
-          automaticHideBeforePublication - Момент автоматического сокрытия наступит до момента публикации объявления
-          delayedPublicationBeforeCreation - Момент отложенной публикации наступит до момента создания объявления
-          delayedPublicationAfterAutomaticHide - Момент отложенной публикации наступит после момента автоматического сокрытия
+          attachingFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос
+          automaticPublishMomentIsInPast - Момент отложенной публикации уже наступил в прошлом
+          automaticHideMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом
 
     getAnnouncementDetailsResponses:
       type: string
@@ -82,10 +80,11 @@ components:
         - fileDoesNotExist
         - surveyDoesNotExist
         # 409
-        - cannotAttachFilesAndSurveyTogether
-        - automaticHideBeforePublication
-        - delayedPublicationBeforeCreation
-        - delayedPublicationAfterAutomaticHide
+        - attachingFilesAndSurveyTogether
+        - automaticPublishMomentIsInPast
+        - automaticHideMomentIsInPast
+        - autoHidingAnAlreadyHiddenAnnouncement
+        - autoPublishingPublishedAndNonHiddenAnnouncement
       description: >
         Ответы:
           ok - Ок
@@ -97,10 +96,11 @@ components:
           announcementCategoryDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id
           fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id
           surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id
-          cannotAttachFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос
-          automaticHideBeforePublication - Момент автоматического сокрытия наступит до момента создания объявления
-          delayedPublicationBeforeCreation - Момент отложенной публикации наступит до момента создания объявления
-          delayedPublicationAfterAutomaticHide - Момент отложенной публикации наступит после момента автоматического сокрытия
+          attachingFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос
+          automaticPublishMomentIsInPast - Момент отложенной публикации уже наступил в прошлом
+          automaticHideMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом
+          autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто
+          autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым
 
     deleteAnnouncementResponses:
       type: string
