@@ -18,9 +18,8 @@ rectangle "Доска объявлений" {
     employee --> (<font color="gray">E-1.</font> Управление объявлениями)
     
     employee <|-r- admin
-    admin --> (<font color="gray">A-3.</font> Управление категориями объявлений)
-    admin --> (<font color="gray">A-1.</font> Управление сотрудниками)
-    admin --> (<font color="gray">A-2.</font> Управление администраторами групп) 
+    admin --> (<font color="gray">A-2.</font> Управление категориями объявлений)
+    admin --> (<font color="gray">A-1.</font> Управление всеми группами)
     
     employee <|-r- groupAdmin
     groupAdmin --> (<font color="gray">G-1.</font> Управление своими группами)

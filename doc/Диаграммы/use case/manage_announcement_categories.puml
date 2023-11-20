@@ -6,24 +6,24 @@ left to right direction
 :Администратор: as admin
 
 rectangle "Доска объявлений" {
-    (<font color="gray">A-3.</font> Управление категориями объявлений) as manage_categories
+    (<font color="gray">A-2.</font> Управление категориями объявлений) as manage_categories
     
-    (<font color="gray">A-3.1.</font> Создать категорию) as create_category
-    (<font color="gray">A-3.2.</font> Редактировать категорию) as edit_category
-    (<font color="gray">A-3.3.</font> Удалить категорию) as delete_category
+    (<font color="gray">A-2.1.</font> Создать категорию) as create_category
+    (<font color="gray">A-2.2.</font> Редактировать категорию) as edit_category
+    (<font color="gray">A-2.3.</font> Удалить категорию) as delete_category
 
     admin -- manage_categories
     manage_categories <|-- delete_category
     manage_categories <|-- edit_category
     manage_categories <|-- create_category
     
-    create_category --> (<font color="gray">A-3.1.2.</font> Указать цвет) : include
-    create_category --> (<font color="gray">A-3.1.1.</font> Указать название) : include
+    create_category --> (<font color="gray">A-2.1.2.</font> Указать цвет) : include
+    create_category --> (<font color="gray">A-2.1.1.</font> Указать название) : include
     
-    edit_category <.. (<font color="gray">A-3.2.4.</font> Отменить изменение) : extend
-    edit_category <.. (<font color="gray">A-3.2.3.</font> Сохранить изменения) : extend
-    edit_category <.. (<font color="gray">A-3.2.2</font> Редактировать цвет) : extend
-    edit_category <.. (<font color="gray">A-3.2.1</font> Редактировать название) : extend
+    edit_category <.. (<font color="gray">A-2.2.4.</font> Отменить изменение) : extend
+    edit_category <.. (<font color="gray">A-2.2.3.</font> Сохранить изменения) : extend
+    edit_category <.. (<font color="gray">A-2.2.2</font> Редактировать цвет) : extend
+    edit_category <.. (<font color="gray">A-2.2.1</font> Редактировать название) : extend
 }
 
 @enduml
