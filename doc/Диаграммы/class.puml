@@ -57,7 +57,7 @@ class UserGroup {
     
     Children: UserGroup[]?
 }
-UserGroup "0..1" -- "*" UserGroup : < Дочерний узел
+UserGroup "*" -- "*" UserGroup : < Дочерний узел
 Announcement "*" o-- "1..*" UserGroup : > Предназначено
 
 class MemberRights {
