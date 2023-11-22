@@ -1,4 +1,4 @@
-﻿namespace BulletInBoardServer.Models.Announcements.Attachments;
+﻿namespace BulletInBoardServer.Models.Announcements;
 
 public class AnnouncementCategory
 {

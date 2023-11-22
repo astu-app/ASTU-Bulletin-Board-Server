@@ -4,15 +4,15 @@ public class User
 {
     public Guid Id { get; set; }
     
-    public string Name { get; set; }
+    public string FirstName { get; set; }
     public string SecondName { get; set; }
     public string? Patronymic { get; set; }
 
 
 
-    public User(Guid id, string name, string secondName, string? patronymic = null)
+    public User(Guid id, string firstName, string secondName, string? patronymic = null)
     {
-        if (string.IsNullOrWhiteSpace(name))
+        if (string.IsNullOrWhiteSpace(firstName))
             throw new ArgumentException("Имя не может быть пустым или null");
         if (string.IsNullOrWhiteSpace(secondName))
             throw new ArgumentException("Фамилия не может быть пустой или null");
@@ -20,7 +20,7 @@ public class User
             throw new ArgumentException("Отчество не может быть пустым");
         
         Id = id;
-        Name = name;
+        FirstName = firstName;
         SecondName = secondName;
         Patronymic = patronymic;
     }
