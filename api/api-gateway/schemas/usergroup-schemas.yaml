@@ -124,7 +124,24 @@ components:
             type: string
             format: uuid
           nullable: true
-  
+
+    addUsersToUsergroupDto:
+      type: object
+      properties: 
+        usergroupId:
+          type: string
+          format: uuid
+        userIds:
+          $ref: './common-schemas.yaml#/components/schemas/identifiers'
+          
+    removeUsersFromUsergroupDto:
+      type: object
+      properties:
+        usergroupId:
+          type: string
+          format: uuid
+        userIds:
+          $ref: './common-schemas.yaml#/components/schemas/identifiers'
 
 
 

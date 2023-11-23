@@ -1,6 +1,6 @@
 ﻿openapi: 3.0.3
 info:
-  title: Схемы enum ответов API шлюза объявлений
+  title: Схемы enum ответов API шлюза опросов
   description: Схемы enum ответов API шлюза объявлений
   version: 1.0.0
 servers:

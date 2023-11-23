@@ -8,6 +8,7 @@ servers:
 paths:
   /usergroups/create:
     post:
+      tags: [ Группы пользователей ]
       operationId: createUsergroup
       summary: Создать группу пользователей
       requestBody:
@@ -83,9 +84,10 @@ paths:
                     # adminCannotBeOrdinaryMember
                     # cyclicDependency
                     $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/createUsergroupResponses'
-      
+
   /usergroups/get-all:
     get:
+      tags: [ Группы пользователей ]
       operationId: getAllUsergroups
       description: Получение списка всех групп пользователей
       responses: 
@@ -121,9 +123,10 @@ paths:
                   code:
                     # getAllUsergroupsForbidden
                     $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/getAllUsergroupsResponses'
-  
+
   /usergroups/get-details:
     get:
+      tags: [ Группы пользователей ]
       operationId: getUsergroupDetails
       description: Получение подробной информации о группе пользователей
       requestBody:
@@ -185,9 +188,10 @@ paths:
                   code:
                     # usergroupDoesNotExist
                     $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/getUsergroupDetailsResponses'
-        
+
   /usergroups/update:
-    put: 
+    put:
+      tags: [ Группы пользователей ]
       operationId: updateUsergroup
       description: Редактирование группы пользователей
       requestBody:
@@ -263,6 +267,7 @@ paths:
 
   /usergroups/delete:
     delete:
+      tags: [ Группы пользователей ]
       operationId: deleteUsergroup
       summary: Удалить группу пользователей
       requestBody:
@@ -322,3 +327,153 @@ paths:
                   code:
                     # usergroupDoesNotExist
                     $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/deleteUsergroupResponses'
+
+  /usergroups/add-users:
+    post:
+      tags: [ Группы пользователей ]
+      operationId: addUsersToUsergroup
+      summary: Добавить пользователей в группу пользователей
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema: 
+              $ref: './schemas/usergroup-schemas.yaml#/components/schemas/addUsersToUsergroupDto'
+      responses: 
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  code: 
+                    # ok
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/addUsersToUsergroupResponses'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/addUsersToUsergroupResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/addUsersToUsergroupResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # addUsersToUsergroupForbidden
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/addUsersToUsergroupResponses'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # usergroupDoesNotExist
+                    # usersDoNotExist
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/addUsersToUsergroupResponses'
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # userAlreadyMember
+                    # userIsAdmin
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/addUsersToUsergroupResponses'
+
+  /usergroups/delete-users:
+    post:
+      tags: [ Группы пользователей ]
+      operationId: deleteUsersFromUsergroup
+      summary: Удалить пользователей из группы пользователей
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/usergroup-schemas.yaml#/components/schemas/addUsersToUsergroupDto'
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # ok
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/deleteUsersFromUsergroupResponses'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/deleteUsersFromUsergroupResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/deleteUsersFromUsergroupResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # addUsersToUsergroupForbidden
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/deleteUsersFromUsergroupResponses'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # usergroupDoesNotExist
+                    # usersDoNotExist
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/deleteUsersFromUsergroupResponses'
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # userIsNotAMember
+                    # userIsAdmin
+                    $ref: './schemas/responses/usergroup-enum-response-schemas.yaml#/components/schemas/deleteUsersFromUsergroupResponses'

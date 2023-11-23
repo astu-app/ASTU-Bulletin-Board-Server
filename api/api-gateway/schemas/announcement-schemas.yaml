@@ -55,11 +55,9 @@ components:
           default: null
 
     announcementIdentifierDto:
-      type: object
-      properties:
-        announcementId:
-          type: string
-          format: uuid
+      description: Идентификатор объявления
+      type: string
+      format: uuid
 
     announcementSummaryDto:
       type: object
@@ -116,7 +114,7 @@ components:
           description: Массив идентификаторов категорий объявлений
           type: array
           items:
-            $ref: './category-schemas.yaml#/components/schemas/categoryDetailsDto'
+            $ref: './announcement-category-schemas.yaml#/components/schemas/announcementCategoryDetailsDto'
         files:
           description: Массив файлов, прикрепленных к объявлению
           type: array

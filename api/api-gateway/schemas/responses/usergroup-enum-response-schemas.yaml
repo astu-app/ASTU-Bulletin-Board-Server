@@ -113,4 +113,61 @@ components:
           unauthorized - Пользователь не авторизован для выполнения операции 
           usergroupDeletionForbidden - Пользователь не имеет права удалить группу пользователей
           usergroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
-  
+
+    addUsersToUsergroupResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - addUsersToUsergroupForbidden
+        # 404
+        - usergroupDoesNotExist
+        - usersDoNotExist
+        # 409
+        - userAlreadyMember
+        - userIsAdmin
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции 
+          addUsersToUsergroupForbidden - Пользователь не имеет права добавить пользователя в группу пользователей
+          usergroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
+          usersDoNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id
+          userAlreadyMember - В качестве одного или нескольких из id прикреплен id пользователя, уже являющегося участником этой группы пользователей
+          userIsAdmin - В качестве одного из id прикреплен id пользователя, уже являющегося администратором этой группы пользователей
+
+    deleteUsersFromUsergroupResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - removeUsersFromUsergroupForbidden
+        # 404
+        - usergroupDoesNotExist
+        - usersDoNotExist
+        # 409
+        - userIsNotAMember
+        - userIsAdmin
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции 
+          addUsersToUsergroupForbidden - Пользователь не имеет права удалить пользователя из группы пользователей
+          usergroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
+          usersDoNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id
+          userIsNotAMember - В качестве одного или нескольких из id прикреплен id пользователя, не являющегося участником этой группы пользователей
+          userIsAdmin - В качестве одного из id прикреплен id пользователя, являющегося администратором этой группы пользователей
+
+      
