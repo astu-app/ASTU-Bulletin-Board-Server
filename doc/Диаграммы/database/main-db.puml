@@ -1,0 +1,156 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+hide methods
+
+'left to right direction
+
+rectangle "schema 'public'"{ 
+    entity users {
+        <b><<PK>></b> id: uuid
+        ..
+        first_name: text
+        second_name: text
+        patronymic: text
+    }
+    
+    entity announcements {
+        <b><<PK>></b> id: uuid
+        ..
+        <<FK>> author_id: uuid
+        ..
+        content: text
+        
+        auto_hiding_at: timestamp
+        auto_publishing_at: timestamp
+        
+        published_at: timestamp
+        hidden_at: timestamp
+    }
+    users <-- announcements : author
+    
+    entity usergroups {
+        <b><<PK>></b> id: uuid
+        ..
+        <<FK>> admin_id: uuid
+        ..
+        name: text
+    }
+    users <-- usergroups : admin
+    
+    entity child_usergroups {
+        <b><<PK>></b> <<FK>> usergroup_id: uuid
+        <b><<PK>></b> <<FK>> child_usergroup_id: uuid
+    }
+    usergroups <-- child_usergroups
+    
+    entity announcements_usergroups {
+        <b><<PK>></b> <<FK>> announcement_id: uuid
+        <b><<PK>></b> <<FK>> usergroup_id: uuid
+    }
+    announcements <-- announcements_usergroups
+    usergroups <-- announcements_usergroups
+    
+    entity member_rights {
+        <b><<PK>></b> <<FK>> user_id: uuid
+        <b><<PK>></b> <<FK>> usergroup_id: uuid
+    }
+    usergroups <-- member_rights
+    users <-- member_rights
+    
+    entity announcement_categories {
+        <b><<PK>></b> id: uuid
+        ..
+        name: text
+    }
+    
+    entity announcements_announcement_categories {
+        <b><<PK>></b> <<FK>> announcement_id: uuid
+        <b><<PK>></b> <<FK>> announcement_category_id: uuid
+    }
+    announcements <-- announcements_announcement_categories
+    announcement_categories <-right- announcements_announcement_categories
+    
+    entity announcement_categories_subscribers {
+        <b><<PK>></b> <<FK>> announcement_category_id: uuid
+        <b><<PK>></b> <<FK>> subscriber_id: uuid
+    }
+    announcement_categories <-- announcement_categories_subscribers
+    users <-- announcement_categories_subscribers
+    
+    entity files {
+        <b><<PK>></b> id: uuid
+        ..
+        name: text
+        hash: text
+        
+        links_count: integer
+    }
+    
+    entity announcements_files {
+        <b><<PK>></b> <<FK>> announcement_id: uuid
+        <b><<PK>></b> <<FK>> file_id: uuid
+    }
+    announcements <-- announcements_files
+    files <-- announcements_files
+    
+    entity surveys {
+        <b><<PK>></b> id: uuid
+        ..
+        <<FK>> announcement_id: uuid
+        ..
+        is_open: boolean
+        is_anonymous: boolean
+        is_multiple_choice_allowed: boolean
+        
+        auto_closing_at: timestamp
+    }
+    announcements <-- surveys
+    
+    entity questions {
+        <b><<PK>></b> id: uuid
+        ..
+        <<FK>> survey_id: uuid
+        ..
+        content: text    
+    }
+    surveys <-- questions
+    
+    entity answers {
+        <b><<PK>></b> id: uuid
+        ..
+        <<FK>> question_id: uuid
+        ..
+        content: text
+        voters_count: integer
+    }
+    questions <-- answers
+    
+    entity voters {
+        <b><<PK>></b> <<FK>> user_id: uuid
+        <b><<PK>></b> <<FK>> answer_id: uuid
+    }
+    users <-- voters
+    answers <-- voters
+}
+
+
+
+rectangle "schema 'logs'" {
+    entity announcements_log {
+    
+    }
+}
+
+
+
+rectangle "schema 'archive'" {
+    entity "announcements" as archived_announcements  {
+        announcement_id: uuid
+        user_id: uuid
+        action: text
+        timestamp: timestamp
+    }
+}
+
+@enduml
