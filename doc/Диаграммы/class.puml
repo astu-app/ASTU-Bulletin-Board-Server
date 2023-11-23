@@ -61,7 +61,6 @@ UserGroup "*" -- "*" UserGroup : < Дочерний узел
 Announcement "*" o-- "1..*" UserGroup : > Предназначено
 
 class MemberRights {
-    Id: Guid
     ' todo продумать права
 }
 UserGroup "1" *-- "*" MemberRights
