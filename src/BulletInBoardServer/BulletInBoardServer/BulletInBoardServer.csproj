@@ -16,6 +16,9 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+        <Content Include="..\Initdb\*">
+            <Link>\Initdb\*</Link>
+        </Content>
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+#    server:
+#        container_name: computer_equipment_ms_server
+#        image: computer_equipment_ms_server:latest
+#        build: ./ComputerEquipmentMS
+#        networks:
+#            - bulletin_board_network
+    
+    postgres:
+        container_name: pg
+        image: postgres:latest
+        environment:
+            POSTGRES_DB: "bulletin_board"
+            POSTGRES_USER: "admin"
+            POSTGRES_PASSWORD: "admin"
+        ports:
+            - "5432:5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U admin -d bulletin_board"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 10s
+        restart: unless-stopped
+        deploy:
+            resources:
+                limits:
+                    cpus: '1'
+                    memory: 512M
+        networks:
+            - bulletin_board_network
+    
+#    pgadmin:
+#        container_name: pgadmin
+#        build: ./service/build_pwless_pgadmin
+#        image: pwdless_pgadmin:latest
+#        depends_on: 
+#            - postgres
+#        environment:
+#            POSTGRES_USER: "administrator"
+#            POSTGRES_PASSWORD: "administrator"
+#            POSTGRES_HOST: "pg"
+#            POSTGRES_NAME: "computer_equipment_ms"
+#            POSTGRES_PORT: "5432"
+#            POSTGRES_DB: "computer_equipment_ms"
+#        ports:
+#            - "5050:80"
+#        restart: unless-stopped
+#        deploy:
+#            resources:
+#                limits:
+#                    cpus: '0.5'
+#                    memory: 256M
+#        networks:
+#            - bulletin_board_network
+
+networks:
+    bulletin_board_network:
+        driver: bridge

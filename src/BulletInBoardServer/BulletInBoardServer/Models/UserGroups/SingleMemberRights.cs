@@ -5,5 +5,4 @@
 /// </summary>
 public class SingleMemberRights
 {
-    public Guid Id { get; set; }
 }
