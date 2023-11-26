@@ -136,6 +136,8 @@ create table announcements_usergroups
 create table files
 (
     id          uuid primary key,
+    
+    uploader_id uuid not null,
 
     name        text,
     hash        text,
@@ -223,12 +225,20 @@ create table answers
         check (is_string_null_or_empty(content))
 );
 
-create table voters
+create table participation
 (
-    user_id   uuid,
-    answer_id uuid,
+    id uuid primary key,
+    
+    user_id     uuid not null,
+    question_id uuid  not null
+);
 
-    primary key (user_id, answer_id)
+create table user_selections
+(
+    participation_id uuid,
+    answer_id uuid,
+    
+    primary key (participation_id, answer_id)
 );
 
 
@@ -265,6 +275,11 @@ alter table announcements_usergroups
             on update cascade on delete cascade,
     add constraint announcements_usergroups_usergroup_id_fkey
         foreign key (usergroup_id) references usergroups (id)
+            on update cascade on delete cascade;
+
+alter table files
+    add constraint files_uploader_id_fkey
+        foreign key (uploader_id) references users (id)
             on update cascade on delete cascade;
 
 alter table announcements_files
@@ -306,12 +321,20 @@ alter table answers
         foreign key (question_id) references questions (id)
             on update cascade on delete cascade;
 
-alter table voters
-    add constraint voters_answer_id_fkey
-        foreign key (answer_id) references answers (id)
+alter table participation
+    add constraint participation_question_id_fkey
+        foreign key (question_id) references questions (id)
             on update cascade on delete cascade,
-    add constraint voters_user_id_fkey
+    add constraint participation_user_id_fkey
         foreign key (user_id) references users (id)
+            on update cascade on delete cascade;
+
+alter table user_selections
+    add constraint user_selections_participation_id_fkey
+        foreign key (participation_id) references participation (id)
+            on update cascade on delete cascade,
+    add constraint participation_answer_id_fkey
+        foreign key (answer_id) references answers (id)
             on update cascade on delete cascade;
 
 
