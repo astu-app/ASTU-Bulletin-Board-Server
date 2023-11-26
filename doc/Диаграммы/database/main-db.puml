@@ -62,6 +62,7 @@ rectangle "schema 'public'"{
         <b><<PK>></b> id: uuid
         ..
         name: text
+        colorHex: text
     }
     
     entity announcements_announcement_categories {
@@ -81,11 +82,14 @@ rectangle "schema 'public'"{
     entity files {
         <b><<PK>></b> id: uuid
         ..
+        <<FK>> uploader_id: uuid
+        ..
         name: text
         hash: text
         
         links_count: integer
     }
+    users -- files
     
     entity announcements_files {
         <b><<PK>></b> <<FK>> announcement_id: uuid
@@ -126,31 +130,137 @@ rectangle "schema 'public'"{
     }
     questions <-- answers
     
-    entity voters {
+    entity participation {
         <b><<PK>></b> <<FK>> user_id: uuid
+        <b><<PK>></b> <<FK>> question_id: uuid
+    }
+    users <-- participation
+    questions <-- participation
+    
+    entity user_selections {
+        <b><<PK>></b> <<FK>> participation_id: uuid
         <b><<PK>></b> <<FK>> answer_id: uuid
     }
-    users <-- voters
-    answers <-- voters
+    participation <-- user_selections
+    answers <-- user_selections
 }
 
 
 
-rectangle "schema 'logs'" {
-    entity announcements_log {
-    
-    }
-}
+'rectangle "schema 'logs'" {
+'    entity announcements_log {
+'        announcement_id: uuid
+'        user_id: uuid
+'        action: text
+'        timestamp: timestamp
+'    }
+'}
 
 
 
 rectangle "schema 'archive'" {
+    ' announcement's related entity group
     entity "announcements" as archived_announcements  {
-        announcement_id: uuid
-        user_id: uuid
-        action: text
-        timestamp: timestamp
+        <b><<PK>></b> id: uuid
+        ..
+        author_id: uuid
+        
+        content: text
+        
+        auto_hiding_at: timestamp
+        auto_publishing_at: timestamp
+        
+        published_at: timestamp
+        hidden_at: timestamp
     }
+    
+    entity "surveys" as archived_surveys {
+            <b><<PK>></b> id: uuid
+            ..
+            announcement_id: uuid
+            
+            is_open: boolean
+            is_anonymous: boolean
+            is_multiple_choice_allowed: boolean
+            
+            auto_closing_at: timestamp
+    }
+    archived_announcements <.. archived_surveys
+    
+    entity "questions" as archived_questions {
+        <b><<PK>></b> id: uuid
+        ..
+        survey_id: uuid
+        content: text    
+    }
+    archived_surveys <.. archived_questions
+    
+    entity "answers" as archived_answers {
+        <b><<PK>></b> id: uuid
+        ..
+        question_id: uuid
+        
+        content: text
+        voters_count: integer
+    }
+    archived_questions <.. archived_answers
+    
+    entity "files" as archived_files {
+        <b><<PK>></b> id: uuid
+        ..
+        uploader_id: uuid
+        
+        name: text
+        hash: text
+        
+        links_count: integer
+    }
+    
+    entity "announcements_files" as archived_announcements_files {
+        <b><<PK>></b> announcement_id: uuid
+        <b><<PK>></b> file_id: uuid
+    }
+    archived_announcements <.. archived_announcements_files
+    archived_files <.. archived_announcements_files
+    
+    ' todo нужно ли при удалении опроса сохранять проголосовавших? 
+    
+    ' usergroup's related entity group
+    entity "usergroups" as archived_usergroups {
+        <b><<PK>></b> id: uuid
+        ..
+        admin_id: uuid
+        name: text
+    } 
+    
+    entity "member_rights" as archived_member_rights {
+        <b><<PK>></b> user_id: uuid
+        <b><<PK>></b> usergroup_id: uuid
+    } 
+    archived_usergroups <.. archived_member_rights
+    
+    entity child_usergroups {
+        <b><<PK>></b> usergroup_id: uuid
+        <b><<PK>></b> child_usergroup_id: uuid
+    }
+    ' todo нужно ли при удалении группы пользователей сохранять список объявлений, опубликованных для нее
+    archived_usergroups <.. child_usergroups
+    
+    entity "announcements_usergroups" as archived_announcements_usergroups {
+        announcement_id: uuid
+        usergroup_id: uuid
+    }
+    archived_usergroups <.. archived_announcements_usergroups
+    archived_announcements <.. archived_announcements_usergroups
+    
+    ' announcement category's related entity group
+    entity "announcement_categories" as archived_announcement_categories {
+        <b><<PK>></b> id: uuid
+        ..
+        name: text
+        colorHex: text
+    }
+    ' todo нужно ли при удалении категории сохранять список ее подписчиков?
 }
 
-@enduml
+@enduml 
