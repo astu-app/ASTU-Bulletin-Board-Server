@@ -19,29 +19,25 @@
     <toc-element toc-title="Аналоги">
         <toc-element topic="analogs-analysis.md"/>
     </toc-element>
-    <toc-element toc-title="Предметная область">
-        <toc-element topic="departments.md"/>
-        <toc-element topic="institutes.md"/>
-    </toc-element>
     <toc-element toc-title="Описание системы">
         <toc-element topic="notification-about-publication.md"/>
         <toc-element topic="registration.md"/>
         <toc-element topic="logging.md"/>
-        <toc-element topic="announcement-feed.md"/>
-        <toc-element topic="announcement-categories.md"/>
         <toc-element topic="users-import.md"/>
         <toc-element topic="restoring-account-access.md"/>
         <toc-element topic="authentication.md"/>
         <toc-element topic="account.md"/>
         <toc-element toc-title="Объявления">
+            <toc-element topic="Цепочки-доставки-объявлений.md"/>
             <toc-element topic="announcement-content.md"/>
             <toc-element topic="operations.md"/>
+            <toc-element topic="announcement-categories.md"/>
+            <toc-element topic="announcement-feed.md"/>
         </toc-element>
         <toc-element toc-title="Описание диаграмм">
             <toc-element topic="deployment.md"/>
             <toc-element toc-title="Entity-relation">
                 <toc-element topic="file.md"/>
-                <toc-element topic="rights-in-usergroups.md"/>
                 <toc-element topic="user.md"/>
                 <toc-element topic="survey.md"/>
                 <toc-element topic="announcement.md"/>

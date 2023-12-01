@@ -26,40 +26,35 @@ rector <-- academicCouncil
 entity "Ректорат" as rectory {
     + Ректор
 }
-rector <-- rectory
-
-
-entity "Проректоры" as viceRectors
-hide viceRectors members
-rectory <|-- viceRectors
+rector <--- rectory
 
     entity "Проректор по учебной работе" as viceRectorForAcademicAffairs
     hide viceRectorForAcademicAffairs members
-    viceRectors <|-- viceRectorForAcademicAffairs
+    rectory <|-- viceRectorForAcademicAffairs
 
     entity "Проректор по приему в вуз и международной деятельности" as viceRectorForAdmissionsAndInternationalActivities
     hide viceRectorForAdmissionsAndInternationalActivities members
-    viceRectors <|-- viceRectorForAdmissionsAndInternationalActivities
+    rectory <|-- viceRectorForAdmissionsAndInternationalActivities
 
     entity "Проректор по научной работе и инновациям" as viceRectorForResearchAndInnovations
     hide viceRectorForResearchAndInnovations members
-    viceRectors <|-- viceRectorForResearchAndInnovations
+    rectory <|-- viceRectorForResearchAndInnovations
 
     entity "Проректор по воспитательной работе и связям с общественностью" as viceRectorForEducationalWorkAndPublicRelations
     hide viceRectorForEducationalWorkAndPublicRelations members
-    viceRectors <|-- viceRectorForEducationalWorkAndPublicRelations
+    rectory <|-- viceRectorForEducationalWorkAndPublicRelations
 
     entity "Проректор по инфраструктурному развитию и информатизации" as viceRectorForInfrastructureDevelopmentAndInformatization
     hide viceRectorForInfrastructureDevelopmentAndInformatization members
-    viceRectors <|-- viceRectorForInfrastructureDevelopmentAndInformatization
+    rectory <|-- viceRectorForInfrastructureDevelopmentAndInformatization
 
     entity "Проректор по организационно-правовым вопросам" as viceRectorForOrganizationalAndLegalAffairs
     hide viceRectorForOrganizationalAndLegalAffairs members
-    viceRectors <|-- viceRectorForOrganizationalAndLegalAffairs
+    rectory <|-- viceRectorForOrganizationalAndLegalAffairs
 
     entity "Проректор по финансово-экономическим вопросам" as viceRectorForFinancialAndEconomicAffairs
     hide viceRectorForFinancialAndEconomicAffairs members
-    viceRectors <|-- viceRectorForFinancialAndEconomicAffairs
+    rectory <|-- viceRectorForFinancialAndEconomicAffairs
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' УЧЕНЫЕ СОВЕТЫ ИНСТИТУТОВ
 entity "Ученый совет института экономики и права" as instituteAcademicCouncilOfEconomicsAndLaw {
@@ -98,7 +93,7 @@ entity "Ученый совет института дополнительног�
 entity "Директора институтов и деканы факультетов" as directorsAndDeans
 hide directorsAndDeans members
 viceRectorForAcademicAffairs <-- directorsAndDeans
-rectory <|-- directorsAndDeans
+rectory <-- directorsAndDeans
 academicCouncil <|-- directorsAndDeans
 
     entity "Директор института экономики и права" as instituteOfEconomicsAndLawDirector
@@ -190,7 +185,7 @@ viceRectorForAdmissionsAndInternationalActivities <-- preparatoryFacultyForForei
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' КАФЕДРЫ
 entity "Заведующие кафедрами" as chairpersons
 hide chairpersons members
-academicCouncil <|-- chairpersons
+academicCouncil <|- chairpersons
 
 ''''''''''' Институт экономики и права (ИЭиП)
 
@@ -391,7 +386,7 @@ rector <-- civilDefenseAndEmergencySituationDepartment
 
 entity "Президент" as president
 hide president members
-academicCouncil <|-- president
+academicCouncil <|-left- president
 
 entity "Бухгалтерия" as accounting {
     + Главный бухгалтер

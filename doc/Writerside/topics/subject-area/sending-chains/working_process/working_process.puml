@@ -1,0 +1,40 @@
+﻿@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+hide methods
+hide fields
+
+rectangle "Цепочки объявлений\nРабочий процесс" {
+    entity "Ректор" as rector
+    entity "Директор /\n Декан" as director
+    entity "Кафедра" as chair
+    entity "ППС" as teachers
+    note right: Профессорско-преподавательский состав
+    
+    entity "Ученые советы" as academicCouncils {
+        Председатели
+        Секретари
+    }
+    show academicCouncils fields
+    
+    entity "Диспетчерская служба" as dispatchingService
+    entity "Отдел гражданской обороны, чрезвычайных ситуаций и мобилизационной подготовки" as civilDefenseAndEmergencySituationDepartment
+    
+    entity "Остальные сотрудники" as employees
+    
+     rector --> director
+     director --> chair
+     chair --> teachers
+     
+     civilDefenseAndEmergencySituationDepartment -right-> teachers
+     civilDefenseAndEmergencySituationDepartment -right-> employees
+     
+     dispatchingService -> teachers
+     dispatchingService -up-> employees
+      
+     academicCouncils -up-> teachers
+}
+
+@enduml

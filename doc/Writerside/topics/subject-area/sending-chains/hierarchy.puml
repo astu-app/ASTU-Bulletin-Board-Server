@@ -6,7 +6,7 @@
 ' вахты корпусов и кпп
 ' склад
 
-' A <-[#red]- B : отдел B получает объявления от отдела A 
+' A <-- B : отдел B получает объявления от отдела A 
 
 left to right direction
 
@@ -25,40 +25,40 @@ rector <-[#red]- academicCouncil
 entity "Ректорат" as rectory {
     + Ректор
 }
-rector <-[#red]- rectory
+rector <-[#red]-- rectory
 
 
-entity "Проректоры" as viceRectors
-hide viceRectors members
-rectory <-[#red]- viceRectors
+'entity "Проректоры" as viceRectors
+'hide viceRectors members
+'rectory <-[#red]- viceRectors
 
     entity "Проректор по учебной работе" as viceRectorForAcademicAffairs
     hide viceRectorForAcademicAffairs members
-    viceRectors <-[#red]- viceRectorForAcademicAffairs
+    rectory <|-[#red]- viceRectorForAcademicAffairs
 
     entity "Проректор по приему в вуз и международной деятельности" as viceRectorForAdmissionsAndInternationalActivities
     hide viceRectorForAdmissionsAndInternationalActivities members
-    viceRectors <-[#red]- viceRectorForAdmissionsAndInternationalActivities
+    rectory <|-[#red]- viceRectorForAdmissionsAndInternationalActivities
 
     entity "Проректор по научной работе и инновациям" as viceRectorForResearchAndInnovations
     hide viceRectorForResearchAndInnovations members
-    viceRectors <-[#red]- viceRectorForResearchAndInnovations
+    rectory <|-[#red]- viceRectorForResearchAndInnovations
 
     entity "Проректор по воспитательной работе и связям с общественностью" as viceRectorForEducationalWorkAndPublicRelations
     hide viceRectorForEducationalWorkAndPublicRelations members
-    viceRectors <-[#red]- viceRectorForEducationalWorkAndPublicRelations
+    rectory <|-[#red]- viceRectorForEducationalWorkAndPublicRelations
 
     entity "Проректор по инфраструктурному развитию и информатизации" as viceRectorForInfrastructureDevelopmentAndInformatization
     hide viceRectorForInfrastructureDevelopmentAndInformatization members
-    viceRectors <-[#red]- viceRectorForInfrastructureDevelopmentAndInformatization
+    rectory <|-[#red]- viceRectorForInfrastructureDevelopmentAndInformatization
 
     entity "Проректор по организационно-правовым вопросам" as viceRectorForOrganizationalAndLegalAffairs
     hide viceRectorForOrganizationalAndLegalAffairs members
-    viceRectors <-[#red]- viceRectorForOrganizationalAndLegalAffairs
+    rectory <|-[#red]- viceRectorForOrganizationalAndLegalAffairs
 
     entity "Проректор по финансово-экономическим вопросам" as viceRectorForFinancialAndEconomicAffairs
     hide viceRectorForFinancialAndEconomicAffairs members
-    viceRectors <-[#red]- viceRectorForFinancialAndEconomicAffairs
+    rectory <|-[#red]- viceRectorForFinancialAndEconomicAffairs
 
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' УЧЕНЫЕ СОВЕТЫ ИНСТИТУТОВ
 entity "Ученый совет института экономики и права" as instituteAcademicCouncilOfEconomicsAndLaw {
@@ -102,43 +102,43 @@ academicCouncil <-[hidden]- directorsAndDeans
 
     entity "Директор института экономики и права" as instituteOfEconomicsAndLawDirector
     hide instituteOfEconomicsAndLawDirector members
-    directorsAndDeans <-[#red]- instituteOfEconomicsAndLawDirector
-    instituteAcademicCouncilOfEconomicsAndLaw <-[#red]up- instituteOfEconomicsAndLawDirector
+    directorsAndDeans <|-[#red]- instituteOfEconomicsAndLawDirector
+    instituteAcademicCouncilOfEconomicsAndLaw <|-up[#red]- instituteOfEconomicsAndLawDirector
 
     entity "Директор института информационных технологий и коммуникаций" as instituteOfInformationTechnologiesAndCommunicationsDirector
     hide instituteOfInformationTechnologiesAndCommunicationsDirector members
-    directorsAndDeans <-[#red]- instituteOfInformationTechnologiesAndCommunicationsDirector
-    instituteAcademicCouncilOfInformationTechnologiesAndCommunications <-up[#red]- instituteOfInformationTechnologiesAndCommunicationsDirector
+    directorsAndDeans <|-[#red]- instituteOfInformationTechnologiesAndCommunicationsDirector
+    instituteAcademicCouncilOfInformationTechnologiesAndCommunications <|-up[#red]- instituteOfInformationTechnologiesAndCommunicationsDirector
 
     entity "Директор института морских технологий, энергетики и транспорта" as instituteOfMarineTechnologiesEnergyAndTransportDirector
     hide instituteOfMarineTechnologiesEnergyAndTransportDirector members
-    directorsAndDeans <-[#red]- instituteOfMarineTechnologiesEnergyAndTransportDirector
-    instituteAcademicCouncilOfMarineTechnologiesEnergyAndTransport <-up[#red]- instituteOfMarineTechnologiesEnergyAndTransportDirector
+    directorsAndDeans <|-[#red]- instituteOfMarineTechnologiesEnergyAndTransportDirector
+    instituteAcademicCouncilOfMarineTechnologiesEnergyAndTransport <|-up[#red]- instituteOfMarineTechnologiesEnergyAndTransportDirector
 
     entity "Директор института нефти и газа" as instituteOfOilAndGasDirector
     hide instituteOfOilAndGasDirector members
-    directorsAndDeans <-[#red]- instituteOfOilAndGasDirector
-    instituteAcademicCouncilOfOilAndGas <-up[#red]- instituteOfOilAndGasDirector
+    directorsAndDeans <|-[#red]- instituteOfOilAndGasDirector
+    instituteAcademicCouncilOfOilAndGas <|-up[#red]- instituteOfOilAndGasDirector
 
     entity "Директор института рыбного хозяйства, биологии и природопользования" as instituteOfFisheryBiologyAndNaturalResourceManagementDirector
     hide instituteOfFisheryBiologyAndNaturalResourceManagementDirector members
-    directorsAndDeans <-[#red]- instituteOfFisheryBiologyAndNaturalResourceManagementDirector
-    instituteAcademicCouncilOfFisheriesBiologyAndNatureManagement <-up[#red]- instituteOfFisheryBiologyAndNaturalResourceManagementDirector
+    directorsAndDeans <|-[#red]- instituteOfFisheryBiologyAndNaturalResourceManagementDirector
+    instituteAcademicCouncilOfFisheriesBiologyAndNatureManagement <|-up[#red]- instituteOfFisheryBiologyAndNaturalResourceManagementDirector
 
     entity "Директор института градостроительства" as instituteOfUrbanPlanningDirector
     hide instituteOfUrbanPlanningDirector members
-    directorsAndDeans <-[#red]- instituteOfUrbanPlanningDirector
-    instituteAcademicCouncilOfUrbanPlanning <-up[#red]- instituteOfUrbanPlanningDirector
+    directorsAndDeans <|-[#red]- instituteOfUrbanPlanningDirector
+    instituteAcademicCouncilOfUrbanPlanning <|-up[#red]- instituteOfUrbanPlanningDirector
 
     entity "Декан факультета среднего профессионального образования" as facultyOfIntermediateVocationalEducationDean
     hide facultyOfIntermediateVocationalEducationDean members
-    directorsAndDeans <-[#red]- facultyOfIntermediateVocationalEducationDean
-    facultyCouncilForSecondaryProfessionalEducation <-up[#red]- facultyOfIntermediateVocationalEducationDean
+    directorsAndDeans <|-[#red]- facultyOfIntermediateVocationalEducationDean
+    facultyCouncilForSecondaryProfessionalEducation <|-up[#red]- facultyOfIntermediateVocationalEducationDean
 
     entity "Директор института дополнительного профессионального образования" as instituteOfContinuingProfessionalEducationDirector
     hide instituteOfContinuingProfessionalEducationDirector members
-    directorsAndDeans <-[#red]- instituteOfContinuingProfessionalEducationDirector
-    instituteAcademicCouncilOfContinuingProfessionalEducation <-up[#red]- instituteOfContinuingProfessionalEducationDirector
+    directorsAndDeans <|-[#red]- instituteOfContinuingProfessionalEducationDirector
+    instituteAcademicCouncilOfContinuingProfessionalEducation <|-up[#red]- instituteOfContinuingProfessionalEducationDirector
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' ИНСТИТУТЫ
 entity "Институт экономики и права (ИЭиП)" as instituteOfEconomicsAndLaw {

@@ -1,0 +1,60 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+left to right direction
+
+hide members
+
+rectangle "Цепочки объявлений\nСистема дополнительного профессионального образования" {
+    entity "Структурное подразделение (СП)" as structuralUnit
+    note left: Отправляет только расписание
+
+'    entity "Группы повышения квалификации" as professionalDevelopmentGroups
+'    structuralUnit --> professionalDevelopmentGroups
+'    entity "Группы переподготовки" as retrainingGroups
+'    structuralUnit --> retrainingGroups
+
+    rectangle "Институт рыбного хозяйства, биологии и природопользования" as instituteOfFisheriesBiologyAndNatureManagement {
+        entity "Научно-образовательный центр микробиологии, биотехнологии и ветеринарно-санитарной экспертизы" as scientificAndEducationalCenterOfMicrobiologyBiotechnologyAndVeterinarySanitaryExpertise
+        entity "Рыбохозяйственный образовательный центр" as fisheriesEducationalCenter
+        entity "Независимый аттестационно-методический центр 'Экологическая безопасность'" as independentAttestationAndMethodicalCenterForEnvironmentalSafety
+        entity "Лингвистический центр" as linguisticCenter
+        entity "Образовательный центр спортивной подготовки, оздоровительной и адаптивной физической культуры" as educationalCenterForSportsTrainingRecreationAndAdaptivePhysicalCulture
+        entity "Научно-производственный центр 'Экотур'" as scientificAndProductionCenterEcotour
+    }
+    structuralUnit --> instituteOfFisheriesBiologyAndNatureManagement
+    
+    rectangle "Институт морских технологий, энергетики и транспорта" as instituteOfMarineTechnologiesEnergyAndTransport {
+        entity "Морской инновационный центр" as maritimeInnovationCenter
+        entity "Образовательный центр морских, энергетических и транспортных технологий" as educationalCenterForMaritimeEnergyAndTransportTechnologies
+        entity "Научно-образовательный центр профессиональных компетенций" as scientificAndEducationalCenterOfProfessionalCompetencies
+    }
+    structuralUnit --> instituteOfMarineTechnologiesEnergyAndTransport
+    
+    rectangle "Институт экономики" as instituteOfEconomics {
+        entity "Центр Бизнес-образования" as businessEducationCenter
+    }
+    structuralUnit --> instituteOfEconomics
+    
+    rectangle "Институт нефти и газа" as instituteOfOilAndGas {
+        entity "Прикаспийский образовательный центр нефтегазовых технологий" as CaspianEducationalCenterOfOilAndGasTechnologies
+    }
+    structuralUnit --> instituteOfOilAndGas
+    
+    rectangle "Институт информационных технологий и коммуникаций" as instituteOfInformationTechnologiesAndCommunications {
+        entity "Инфо-Net" as infoNet
+    }    
+    structuralUnit --> instituteOfInformationTechnologiesAndCommunications
+    
+    rectangle "Институт градостроительства" as instituteOfUrbanPlanning {
+        entity "Научно-исследовательский центр инновационных технологий в строительстве" as ResearchCenterOfInnovativeTechnologiesInConstruction
+    }
+    structuralUnit --> instituteOfUrbanPlanning
+    
+    rectangle "Факультет среднего профессионального образования" as facultyOfSecondaryProfessionalEducation {
+        entity "Центр профессионального развития" as ProfessionalDevelopmentCenter
+    }
+    structuralUnit --> facultyOfSecondaryProfessionalEducation
+}
+
+@enduml
