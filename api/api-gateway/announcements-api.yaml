@@ -154,6 +154,8 @@ paths:
                   code:
                     # announcementDoesNotExist
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getAnnouncementDetailsResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
   
   /announcements/update:
     put:
@@ -299,6 +301,8 @@ paths:
                   code:
                     # announcementDoesNotExist
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
   
   # опубликованные объявления  
   /announcements/posted/get-list:
@@ -404,6 +408,8 @@ paths:
                   code:
                     # announcementDoesNotExist
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -519,6 +525,8 @@ paths:
                   code:
                     # announcementDoesNotExist
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -633,6 +641,8 @@ paths:
                   code:
                     # announcementDoesNotExist
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:

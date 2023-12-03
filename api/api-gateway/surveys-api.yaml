@@ -125,6 +125,8 @@ paths:
                   code:
                     # surveyDoesNotExist
                     $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -199,6 +201,8 @@ paths:
                   code:
                     # surveyDoesNotExist
                     $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -275,6 +279,8 @@ paths:
                   code:
                     # surveyDoesNotExist
                     $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -351,6 +357,8 @@ paths:
                   code:
                     # surveyDoesNotExist
                     $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:

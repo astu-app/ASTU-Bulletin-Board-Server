@@ -163,6 +163,8 @@ paths:
                   code:
                     # announcementCategoryDoesNotExist
                     $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/updateAnnouncementCategoryResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
 
   /announcement-categories/delete:
     delete:
@@ -226,6 +228,8 @@ paths:
                   code:
                     # announcementCategoryDoesNotExist
                     $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementCategoryResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
 
   /announcement-categories/get-subscribtions:
     get:
