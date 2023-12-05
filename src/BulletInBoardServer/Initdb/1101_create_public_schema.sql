@@ -109,6 +109,14 @@ create table usergroups
         check (is_string_null_or_empty(name))
 );
 
+create table announcements_usergroups
+(
+    announcement_id uuid,
+    usergroup_id    uuid,
+
+    primary key (announcement_id, usergroup_id)
+);
+
 create table member_rights
 (
     user_id      uuid,
@@ -123,14 +131,6 @@ create table child_usergroups
     child_usergroup_id uuid,
 
     primary key (usergroup_id, child_usergroup_id)
-);
-
-create table announcements_usergroups
-(
-    announcement_id uuid,
-    usergroup_id    uuid,
-
-    primary key (announcement_id, usergroup_id)
 );
 
 create table files
