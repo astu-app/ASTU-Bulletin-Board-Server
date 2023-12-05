@@ -3,15 +3,13 @@
 
 hide methods
 
-'left to right direction
-
-rectangle "schema 'public'"{ 
+rectangle "schema 'public'" as public_schema { 
     entity users {
         <b><<PK>></b> id: uuid
         ..
         first_name: text
         second_name: text
-        patronymic: text
+        patronymic: text?
     }
     
     entity announcements {
@@ -21,11 +19,11 @@ rectangle "schema 'public'"{
         ..
         content: text
         
-        auto_hiding_at: timestamp
-        auto_publishing_at: timestamp
+        auto_hiding_at: timestamp?
+        auto_publishing_at: timestamp?
         
-        published_at: timestamp
-        hidden_at: timestamp
+        published_at: timestamp?
+        hidden_at: timestamp?
     }
     users <-- announcements : author
     
@@ -107,7 +105,7 @@ rectangle "schema 'public'"{
         is_anonymous: boolean
         is_multiple_choice_allowed: boolean
         
-        auto_closing_at: timestamp
+        auto_closing_at: timestamp?
     }
     announcements <-- surveys
     
@@ -127,8 +125,14 @@ rectangle "schema 'public'"{
         ..
         content: text
         voters_count: integer
+        
+        discriminator: text
     }
     questions <-- answers
+    note right of answers::discriminator
+        Атрибут определяет 
+        хранящийся в записи тип
+    end note
     
     entity participation {
         <b><<PK>></b> <<FK>> user_id: uuid
@@ -147,18 +151,7 @@ rectangle "schema 'public'"{
 
 
 
-'rectangle "schema 'logs'" {
-'    entity announcements_log {
-'        announcement_id: uuid
-'        user_id: uuid
-'        action: text
-'        timestamp: timestamp
-'    }
-'}
-
-
-
-rectangle "schema 'archive'" {
+rectangle "schema 'archive'" as archive_schema {
     ' announcement's related entity group
     entity "announcements" as archived_announcements  {
         <b><<PK>></b> id: uuid
@@ -167,11 +160,11 @@ rectangle "schema 'archive'" {
         
         content: text
         
-        auto_hiding_at: timestamp
-        auto_publishing_at: timestamp
+        auto_hiding_at: timestamp?
+        auto_publishing_at: timestamp?
         
-        published_at: timestamp
-        hidden_at: timestamp
+        published_at: timestamp?
+        hidden_at: timestamp?
     }
     
     entity "surveys" as archived_surveys {
@@ -183,7 +176,7 @@ rectangle "schema 'archive'" {
             is_anonymous: boolean
             is_multiple_choice_allowed: boolean
             
-            auto_closing_at: timestamp
+            auto_closing_at: timestamp?
     }
     archived_announcements <.. archived_surveys
     
@@ -221,9 +214,7 @@ rectangle "schema 'archive'" {
         <b><<PK>></b> file_id: uuid
     }
     archived_announcements <.. archived_announcements_files
-    archived_files <.. archived_announcements_files
-    
-    ' todo нужно ли при удалении опроса сохранять проголосовавших? 
+    archived_files <.up. archived_announcements_files
     
     ' usergroup's related entity group
     entity "usergroups" as archived_usergroups {
@@ -243,7 +234,6 @@ rectangle "schema 'archive'" {
         <b><<PK>></b> usergroup_id: uuid
         <b><<PK>></b> child_usergroup_id: uuid
     }
-    ' todo нужно ли при удалении группы пользователей сохранять список объявлений, опубликованных для нее
     archived_usergroups <.. child_usergroups
     
     entity "announcements_usergroups" as archived_announcements_usergroups {
@@ -260,7 +250,60 @@ rectangle "schema 'archive'" {
         name: text
         colorHex: text
     }
-    ' todo нужно ли при удалении категории сохранять список ее подписчиков?
+    
+    entity "announcements_announcement_categories" as archived_announcements_announcement_categories {
+        <b><<PK>></b> <<FK>> announcement_id: uuid
+        <b><<PK>></b> <<FK>> announcement_category_id: uuid
+    }
+    archived_announcements <.. archived_announcements_announcement_categories
+    archived_announcement_categories <.up. archived_announcements_announcement_categories
 }
+public_schema <.right. archive_schema
+
+
+
+rectangle "schema 'logs'" as logs_schema {
+    entity announcements_logs {
+        operation_time: timestamp
+        operation_type: text
+        announcement_id: uuid
+        user_id: uuid
+        updated_attributes: jsonb?
+    }
+    
+    entity files_logs {
+        operation_time: timestamp
+        operation_type: text
+        file_id: uuid
+        user_id: uuid
+    }
+    
+    entity usergroups_logs {
+        operation_time: timestamp
+        operation_type: text
+        usergroup_id: uuid
+        user_id: uuid
+        updated_attributes: jsonb?
+    }
+    
+    entity announcement_categories_logs {
+        operation_time: timestamp
+        operation_type: text
+        category_id: uuid
+        user_id: uuid
+        updated_attributes: jsonb?
+    }
+    
+    ' todo продумать
+    entity user_logs {
+    }
+    
+    ' todo нужно?
+    entity surveys_logs {
+    
+    }
+}
+public_schema <.. logs_schema
+archive_schema <.. logs_schema
 
 @enduml 
