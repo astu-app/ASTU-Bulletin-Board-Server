@@ -3,6 +3,4 @@
 /// <summary>
 /// Права конкретного участника группы пользователей
 /// </summary>
-public class SingleMemberRights
-{
-}
+public class SingleMemberRights;

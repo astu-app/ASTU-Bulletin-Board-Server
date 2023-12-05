@@ -1,4 +1,6 @@
 ﻿using BulletInBoardServer.Models.Announcements.Attachments;
+using BulletInBoardServer.Models.Announcements.Attachments.Surveys;
+using BulletInBoardServer.Models.Announcements.Categories;
 using BulletInBoardServer.Models.Users;
 
 namespace BulletInBoardServer.Models.Announcements;
@@ -14,7 +16,9 @@ public class AnnouncementBuilder
     private DateTime? _hiddenAt;
     private DateTime? _autoPublishingAt;
     private DateTime? _autoHidingAt;
-    private IAttachment? _attachment;
+    private Attachments.Attachments _attachments = new();
+
+    private bool _containsSurvey;
 
 
 
@@ -75,9 +79,20 @@ public class AnnouncementBuilder
         return this;
     }
 
-    public AnnouncementBuilder SetAttachment(IAttachment attachment)
+    public AnnouncementBuilder Attach(IAttachment attachment)
     {
-        _attachment = attachment ?? throw new ArgumentNullException(nameof(attachment));
+        AddAttachmentOrThrow(attachment);
+        return this;
+    }
+    
+    public AnnouncementBuilder Attach(Attachments.Attachments attachments)
+    {
+        if (attachments is null)
+            throw new ArgumentNullException(nameof(attachments));
+        
+        foreach (var attachment in attachments) 
+            AddAttachmentOrThrow(attachment);
+
         return this;
     }
 
@@ -100,9 +115,22 @@ public class AnnouncementBuilder
             _hiddenAt,
             _autoPublishingAt,
             _autoHidingAt,
-            _attachment
+            _attachments
         );
 
         return announcement;
+    }
+
+    private void AddAttachmentOrThrow(IAttachment attachment)
+    {
+        if (attachment is null)
+            throw new ArgumentNullException(nameof(attachment));
+
+        var isSurvey = attachment is Survey; 
+        if (isSurvey && _containsSurvey)
+            throw new InvalidOperationException("Объявление уже содержит опрос");
+        
+        _attachments.Add(attachment);
+        _containsSurvey = isSurvey;
     }
 }

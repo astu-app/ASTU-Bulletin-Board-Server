@@ -1,4 +1,6 @@
 ﻿using BulletInBoardServer.Models.Announcements.Attachments;
+using BulletInBoardServer.Models.Announcements.Attachments.Surveys;
+using BulletInBoardServer.Models.Announcements.Categories;
 using BulletInBoardServer.Models.Users;
 
 namespace BulletInBoardServer.Models.Announcements;
@@ -8,7 +10,7 @@ public class Announcement
     /// <summary>
     /// Идентификатор объявления
     /// </summary>
-    public Guid Id { get; private init; }
+    public Guid Id { get; }
 
     /// <summary>
     /// Текстовое содержимое объявления
@@ -37,12 +39,12 @@ public class Announcement
     /// <summary>
     /// Категории объявления
     /// </summary>
-    public AnnouncementCategories Categories { get; init; }
+    public AnnouncementCategories Categories { get;  }
 
     /// <summary>
     /// Аудитория объявления
     /// </summary>
-    public AnnouncementAudience Audience { get; init; }
+    public AnnouncementAudience Audience { get; }
 
     /// <summary>
     /// Момент публикации уже опубликованного объявления. Null, если объявления не опубликовано
@@ -91,7 +93,7 @@ public class Announcement
     /// <summary>
     /// Прикрепление к объявлению
     /// </summary>
-    public IAttachment? Attachment { get; private init; }
+    public ReadOnlyAttachments Attachments => _attachments.AsReadOnly();
 
 
 
@@ -101,12 +103,15 @@ public class Announcement
     private DateTime? _autoHidingAt;
     private DateTime? _publishedAt;
     private DateTime? _hiddenAt;
+    private readonly Attachments.Attachments _attachments;
+
+    private bool _containsSurvey;
 
 
 
     public Announcement(Guid id, string content, User author, AnnouncementCategories categories,
         AnnouncementAudience audience, DateTime? publishedAt, DateTime? hiddenAt, DateTime? autoPublishingAt,
-        DateTime? autoHidingAt, IAttachment? attachment)
+        DateTime? autoHidingAt, Attachments.Attachments attachments)
     {
         CategoriesValidOrThrow(categories);
         AudienceValidOrThrow(audience);  
@@ -120,7 +125,28 @@ public class Announcement
         HiddenAt = hiddenAt;
         AutoPublishingAt = autoPublishingAt;
         AutoHidingAt = autoHidingAt;
-        Attachment = attachment;
+        
+        Attach(attachments);
+    }
+
+
+
+    public void Attach(IAttachment attachment) => 
+        AddAttachmentOrThrow(attachment);
+
+    public void Attach(Attachments.Attachments attachments)
+    {
+        if (attachments is null)
+            throw new ArgumentNullException(nameof(attachments));
+        
+        foreach (var attachment in attachments) 
+            AddAttachmentOrThrow(attachment);
+    }
+
+    public void Unattach(IAttachment attachment)
+    {
+        _attachments.Remove(attachment);
+        _containsSurvey = attachment is Survey;
     }
 
 
@@ -204,5 +230,18 @@ public class Announcement
                 "Автоматическое сокрытие объявления не молжет пройзойти в прошлом");
 
         _autoHidingAt = hideAt;
+    }
+    
+    private void AddAttachmentOrThrow(IAttachment attachment)
+    {
+        if (attachment is null)
+            throw new ArgumentNullException(nameof(attachment));
+
+        var isSurvey = attachment is Survey; 
+        if (isSurvey && _containsSurvey)
+            throw new InvalidOperationException("Объявление уже содержит опрос");
+        
+        _attachments.Add(attachment);
+        _containsSurvey = isSurvey;
     }
 }

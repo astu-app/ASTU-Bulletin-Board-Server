@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using BulletInBoardServer.Models.Announcements.Attachments;
 
-namespace BulletInBoardServer.Models.Announcements;
+namespace BulletInBoardServer.Models.Announcements.Categories;
 
 public class AnnouncementCategories : Collection<AnnouncementCategory>
 {

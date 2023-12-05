@@ -2,9 +2,4 @@
 
 namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys.Questions;
 
-public class ReadOnlyQuestions : ReadOnlyCollection<Question>
-{
-    public ReadOnlyQuestions(IList<Question> list) : base(list)
-    {
-    }
-}
+public class ReadOnlyQuestions(IList<Question> list) : ReadOnlyCollection<Question>(list);

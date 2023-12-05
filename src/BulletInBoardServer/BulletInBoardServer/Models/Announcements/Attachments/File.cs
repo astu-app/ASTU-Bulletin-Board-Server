@@ -1,10 +1,17 @@
 ﻿namespace BulletInBoardServer.Models.Announcements.Attachments;
 
-public class File : IAttachment
+public class File(Guid id, string name, string hash, int linksCount)
+    : IAttachment
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    
-    public string Hash  { get; set; }
-    public int LinksCount { get; set; }
+    public Guid Id { get; } = id;
+    public string Name { get; } = name;
+
+    public string Hash  { get; } = hash;
+    public int LinksCount { get; } = linksCount;
+
+    public void AddLink() =>
+        ++linksCount;
+
+    public void RemoveLink() =>
+        --linksCount;
 }

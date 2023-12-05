@@ -7,12 +7,12 @@ public class Question
     /// <summary>
     /// Идентификатор вопроса
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; }
 
     /// <summary>
     /// Текстовое содержимое вопроса
     /// </summary>
-    public string Content { get; set; }
+    public string Content { get; }
 
     /// <summary>
     /// Варианты ответов вопроса

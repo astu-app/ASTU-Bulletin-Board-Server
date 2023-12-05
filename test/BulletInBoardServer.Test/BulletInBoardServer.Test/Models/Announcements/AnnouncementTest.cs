@@ -1,4 +1,5 @@
 ﻿using BulletInBoardServer.Models.Announcements;
+using BulletInBoardServer.Models.Announcements.Categories;
 using BulletInBoardServer.Models.UserGroups;
 using BulletInBoardServer.Models.Users;
 

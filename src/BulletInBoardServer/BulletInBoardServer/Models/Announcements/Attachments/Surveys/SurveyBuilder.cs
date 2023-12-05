@@ -1,10 +1,12 @@
-﻿namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys;
+﻿using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
+
+namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys;
 
 public class SurveyBuilder
 {
     private Guid? _id;
     private bool? _isOpen;
-    private bool? _isAnonymous;
+    private bool _isSurveyAnonymous;
     private bool? _isMultipleChoiceAllowed;
     private DateTime? _autoClosingAt;
     private Questions.Questions? _questions;
@@ -25,7 +27,7 @@ public class SurveyBuilder
     
     public SurveyBuilder IsAnonymous(bool isAnonymous)
     {
-        _isAnonymous = isAnonymous;
+        _isSurveyAnonymous = isAnonymous;
         return this;
     }
     
@@ -43,10 +45,7 @@ public class SurveyBuilder
     
     public SurveyBuilder SetQuestions(Questions.Questions questions)
     {
-        if (questions is null)
-            throw new ArgumentNullException(nameof(questions));
-        if (!questions.Any())
-            throw new ArgumentException("Список вопросов не может быть пустым");
+        AllQuestionsValidOrThrow(questions);
         
         _questions = questions;
         return this;
@@ -56,8 +55,6 @@ public class SurveyBuilder
     {
         if (_isOpen is null)
             throw new InvalidOperationException("Открытость опроса должна быть задана");
-        if (_isAnonymous is null)
-            throw new InvalidOperationException("Анонимность опроса должна быть задана");
         if (_isMultipleChoiceAllowed is null)
             throw new InvalidOperationException(
                 "Возможность выбора в опросе нескольки хвариантов ответов должна быть задана");
@@ -67,10 +64,38 @@ public class SurveyBuilder
         return new Survey(
             _id ?? Guid.NewGuid(),
             _isOpen.Value,
-            _isAnonymous.Value,
+            _isSurveyAnonymous,
             _isMultipleChoiceAllowed.Value,
             _autoClosingAt,
             _questions
         );
+    }
+    
+    
+    
+    private void AllQuestionsValidOrThrow(Questions.Questions questions)
+    {
+        if (questions is null)
+            throw new ArgumentNullException(nameof(questions));
+        if (!questions.Any())
+            throw new ArgumentException("Список вопросов не может быть пустым");
+        
+        foreach (var question in questions) 
+            AllAnswersValidOrThrow(question.Answers);
+    }
+
+    private void AllAnswersValidOrThrow(ReadOnlyAnswers answers)
+    {
+        if (answers is null)
+            throw new ArgumentNullException(nameof(answers));
+        if (answers.Count < 2)
+            throw new ArgumentException("Вариантов ответов не может быть меньше двух");
+        
+        foreach (var answer in answers)
+        {
+            var isAnswerAnonymous = answer is AnonymousAnswer;
+            if (isAnswerAnonymous != _isSurveyAnonymous)
+                throw new InvalidOperationException("Анонимность опроса и варианта ответа не совпадают");
+        }
     }
 }
