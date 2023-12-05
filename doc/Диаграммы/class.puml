@@ -3,115 +3,157 @@
 
 'left to right direction
 
-hide methods
-
 class Announcement {
-    Id: Guid
-    Content: string
+    + GetId(): Guid
     
-    ExpectsAutoHiding: bool
-    AutoHidingAt: DateTime?
+    + GetContent(): string
+    + SetContent(content: string): void
     
-    ExpectsAutoPublishing: bool
-    AutoPublishingAt: DateTime?
+    + GetAuthor(): User
+    + SetAuthor(author: User): void
     
-    IsPublished: bool
-    PublishedAt: DateTime?
+    + GetCategories(): AnnouncementCategory[] 
     
-    IsHidden: bool    
-    HiddenAt: DateTime?
+    + GetAudience(): UserGroup[]
     
-    Author: User
+    + GetPublishedAt(): DateTime?
+    + SetPublishedAt(moment: DateTime?): void
+    + IsPublished(): void
     
-    Categories: AnnouncementCategory[]?
+    + GetAutoPublishingAt(): DateTime?
+    + SetAutoPublishingAt(moment: DateTime?): void
+    + ExpectsAutoPublishing(): bool
     
-    Files: File[]?
-    Survey: Survey?
+    + GetHiddenAt(): DateTime?
+    + SetHiddenAt(moment: DateTime?): void
+    + IsHidden(): bool
     
-    UserGroups: UserGroup[]
+    + GetAutoHidingAt(): DateTime?
+    + SetAutoAutoHidingAt(moment: DateTime?): void
+    + ExpectsAutoHiding(): bool
+    
+    + GetAttachments(): IAttachment?
 }
+hide Announcement fields
 
 class AnnouncementCategory {
-    Id: Guid
-    Name: string
+    + GetId(): Guid
+    + GetName(): string
+    + SetName(name: string): void
     
-    Subscribers: User[]
+    + GetSubscribers(): User[]
+    + Subscribe(user: User): void
+    + Unsubscribe(user: User): void
 }
+hide AnnouncementCategory fields
 Announcement "*" o-- "*" AnnouncementCategory
 
-class File {
-    Id: Guid
-    Name: string
+interface IAttachment {
     
-    Hash: string
-    LinksCount: int
 }
-Announcement "1..*" o-- "*" File
+Announcement "1..*" <-- "*" IAttachment
+
+class File extends IAttachment {
+    + GetId(): void
+    + GetName(): string    
+    + GetHash(): string
+    + GetLinksCount(): int
+    
+    + AddLink(): void
+    + RemoveLink(): void
+}
+hide File fields
 
 class UserGroup {
-    Id: Guid
-    Name: string
+    + GetId(): Guid
+    + GetName(): string
     
-    Admin: User?
-    MemberRights: Dictionary<User, MemberRights>
-    
-    Children: UserGroup[]?
+    + GetAdmin(): User?
+    + GetMemberRights(): Dictionary<User, SingleMemberRights>
+    + GetChildUserGroups(): UserGroup[]
 }
+hide UserGroup fields
 UserGroup "*" -- "*" UserGroup : < Дочерний узел
 Announcement "*" o-- "1..*" UserGroup : > Предназначено
 
-class MemberRights {
+class SingleMemberRights {
     ' todo продумать права
 }
-UserGroup "1" *-- "*" MemberRights
+hide SingleMemberRights members
+UserGroup "1" *-- "*" SingleMemberRights
 
 class User {
-    Id: Guid
-    Name: string
-    SecondName: string
-    Patronymic: string?
+    + GetId(): Guid
+    
+    + GetFirstName(): string
+    + SetFirstName(firstName: string): void
+    
+    + GetSecondName(): string
+    + SetSecondName(secondName: string): void
+    
+    + GetPatronymic(): string?
+    + SetPatronymic(patronymic: string?): void
 }
+hide User fields
 UserGroup "*" o-- "0..1" User : < Админ
 UserGroup "1..*" o-- "*" User : < Участник
 Announcement "*" o-- "1" User : < Автор
 AnnouncementCategory "*" o-- "*" User : < Подписан
 Survey "*" o-- "*" User : < Проголосовал в 
 
-class Survey {
-    Id: Guid
-    
-    IsOpen: bool
-    IsAnonymous: bool
-    IsMultipleChoiceAllowed: bool
-    
-    ExpectsAutoClosing: bool
-    AutoClosingAt: DateTime?
-    
-    Questions: Question[]
-    
-    Voters: User[]?
+class Survey extends IAttachment {
+     + GetId(): Guid
+     
+     + GetIsOpen(): bool
+     + GetIsAnonymous(): bool
+     + GetIsMultipleChoiceAllowed(): bool
+     
+     + GetAutoClosingAt(): DateTime?
+     + GetExpectsAutoClosing(): bool
+     
+     + GetQuestions(): Question[]
+     
+     + GetVotersCount(): int
+     
+     + Close(): void
 }
-Announcement "1" *-- "1" Survey
-'User "*" -- "*" Survey
+hide Survey fields
 
 class Question {
-    Id: Guid
-    Content: string
-    VotersCount: int
+    + GetId(): Guid
     
-    Answers: Answer[]
+    + GetContent(): string
+    + GetVotersCount(): int
+    
+    + GetAnswers(): Answer[]
 }
+hide Question fields
 Survey "1" *-- "1..*" Question
 
-class Answer {
-    Id: Guid
-    Content: string
-    
-    VotersCount: int
-    Voters: User[]?
+class AnswerBase {
+    + GetId(): Guid
+    + GetContent(): string
+    + abstract GetVotersCount(): int
 }
-Question "1" *-- "2..*" Answer
+hide AnswerBase fields
+Question "1" *-- "2..*" AnswerBase
+
+class Answer extends AnswerBase {
+    - _voters: User[]
+    
+    + GetVoters(): User[]
+    + GetVotersCount(): int
+    
+    + Vote (user: User): void
+}
 User "*" --o "*" Answer : > Проголосовал за
+
+class AnonymousAnswer extends AnswerBase {
+    - _votersCount: int
+
+    + GetVotersCount(): int
+    + Vote(): void
+}
 
 
 
