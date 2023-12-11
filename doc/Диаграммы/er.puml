@@ -43,13 +43,13 @@ entity "Опрос" as survey {
     Срок окончания времени голосования
 }
 announcement ||--o| survey
-user }o--o{ survey : > Проголосовал в
 
 entity "Вопрос" as question {
     Текст вопроса
     Количество проголосовавших
 }
 survey ||--|{ question
+user }o--o{ question : > Проголосовал в
 
 entity "Вариант ответа" as answer {
     Текст вариант ответа
@@ -64,7 +64,7 @@ entity "Группа пользователей" as userGroup {
 announcement }o--|{ userGroup : > Предназначено
 user }o--|{ userGroup : > Участник
 user |o-right-o{ userGroup : > Администратор
-userGroup |o--o{ userGroup : Подчинена максимум одной \n Является родителем любого количества
+userGroup }o--o{ userGroup : Подчинена любому количеству \n Является родителем любого количества
 
 entity "Права участника группы" as memberRights {}
 hide memberRights members

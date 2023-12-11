@@ -51,7 +51,7 @@ Announcement "*" o-- "*" AnnouncementCategory
 interface IAttachment {
     
 }
-Announcement "1..*" <-- "*" IAttachment
+Announcement "1..*" o-- "*" IAttachment
 
 class File extends IAttachment {
     + GetId(): void
@@ -99,7 +99,6 @@ UserGroup "*" o-- "0..1" User : < Админ
 UserGroup "1..*" o-- "*" User : < Участник
 Announcement "*" o-- "1" User : < Автор
 AnnouncementCategory "*" o-- "*" User : < Подписан
-Survey "*" o-- "*" User : < Проголосовал в 
 
 class Survey extends IAttachment {
      + GetId(): Guid
@@ -122,38 +121,54 @@ hide Survey fields
 class Question {
     + GetId(): Guid
     
+    + GetSurveyId(): Guid
+    
     + GetContent(): string
+    + GetIsAnonymous(): bool
+    + GetIsMultipleChoiceAllowed(): bool
     + GetVotersCount(): int
+    
+    + GetParticipationList(): Participation[]
     
     + GetAnswers(): Answer[]
 }
 hide Question fields
+User "1" --o "*" Question : Проголосовал в
 Survey "1" *-- "1..*" Question
 
-class AnswerBase {
+class Participation {
+    + GetId(): Guid
+    + GetUser(): Guid
+    + GetQuestion(): Guid
+}
+hide Participation fields
+Question "1" *-- "*" Participation
+User "1" *-- "*" Participation
+
+class Answer {
     + GetId(): Guid
     + GetContent(): string
-    + abstract GetVotersCount(): int
-}
-hide AnswerBase fields
-Question "1" *-- "2..*" AnswerBase
-
-class Answer extends AnswerBase {
-    - _voters: User[]
+    + GetIsAnonymous(): bool
     
-    + GetVoters(): User[]
     + GetVotersCount(): int
-    
-    + Vote (user: User): void
+    + IncreaseVotersCount(): void
+    + DecreaseVotersCount(): void
 }
-User "*" --o "*" Answer : > Проголосовал за
+hide Answer fields
+Question "1" *-- "2..*" Answer
 
-class AnonymousAnswer extends AnswerBase {
-    - _votersCount: int
-
-    + GetVotersCount(): int
-    + Vote(): void
+class UserSelection {
+    + GetParticipation(): Guid
+    + GetAnswer(): Guid
 }
+hide UserSelection fields
+Answer "1" *-- "*" UserSelection
+Participation "1" *-- "*" UserSelection
+note on link
+    Participation не относится
+    ни к одному UserSelection
+    в случае, если вопрос анонимный 
+end note
 
 
 

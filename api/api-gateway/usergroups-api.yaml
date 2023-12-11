@@ -89,7 +89,7 @@ paths:
     get:
       tags: [ Группы пользователей ]
       operationId: getAllUsergroups
-      description: Получение списка всех групп пользователей
+      summary: Получение списка всех групп пользователей
       responses: 
         200:
           description: Ok
@@ -128,7 +128,7 @@ paths:
     get:
       tags: [ Группы пользователей ]
       operationId: getUsergroupDetails
-      description: Получение подробной информации о группе пользователей
+      summary: Получение подробной информации о группе пользователей
       requestBody:
         required: true
         content:
@@ -195,7 +195,7 @@ paths:
     put:
       tags: [ Группы пользователей ]
       operationId: updateUsergroup
-      description: Редактирование группы пользователей
+      summary: Редактирование группы пользователей
       requestBody:
         required: true  
         content:

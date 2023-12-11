@@ -115,6 +115,8 @@ rectangle "schema 'public'" as public_schema {
         <<FK>> survey_id: uuid
         ..
         content: text    
+        voters_count: int
+        is_anonymous: bool
     }
     surveys <-- questions
     
@@ -126,17 +128,18 @@ rectangle "schema 'public'" as public_schema {
         content: text
         voters_count: integer
         
-        discriminator: text
+        is_anonymous: bool
     }
     questions <-- answers
-    note right of answers::discriminator
+    note right of answers::answer_type
         Атрибут определяет 
-        хранящийся в записи тип
+        хранящийся в записи тип вопроса
     end note
     
     entity participation {
-        <b><<PK>></b> <<FK>> user_id: uuid
-        <b><<PK>></b> <<FK>> question_id: uuid
+        <b><<PK>></b> participation_id: uuid
+        <<FK>> user_id: uuid
+        <<FK>> question_id: uuid
     }
     users <-- participation
     questions <-- participation

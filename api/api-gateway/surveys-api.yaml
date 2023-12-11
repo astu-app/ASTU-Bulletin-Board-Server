@@ -141,7 +141,7 @@ paths:
   /survey/close-survey:
     post:
       operationId: closeSurvey
-      description: Закрыть опрос
+      summary: Закрыть опрос
       tags: [ Опрос ]
       requestBody:
         required: true
@@ -218,7 +218,7 @@ paths:
   /survey/get-results:
     get:
       operationId: getSurveysResults
-      description: Получить результаты опроса
+      summary: Получить результаты опроса
       tags: [ Опрос ]
       requestBody:
         required: true
@@ -295,7 +295,7 @@ paths:
   /survey/download-results:
     get:
       operationId: downloadSurveyResults
-      description: Скачать результаты опроса
+      summary: Скачать результаты опроса
       tags: [ Опрос ]
       requestBody:
         required: true
@@ -454,7 +454,7 @@ paths:
   /question/cancel-vote:
     post:
       operationId: cancelVoteInQuestion
-      description: Отменить голос в вопросе
+      summary: Отменить голос в вопросе
       tags: [ Вопрос ]
       requestBody:
         content:

@@ -72,10 +72,14 @@ components:
       description: DTO для голосования в опросе
       type: object
       properties:
+        questionId:
+          description: Идентификатор вопроса
+          type: string
+          format: uuid
         answerIds:
           description: Массив идентификаторов вариантов ответов
           type: array
-          nullable: true
+#          nullable: true
           minItems: 1
           items:
             type: string
@@ -116,8 +120,8 @@ components:
           type: string
         votersAmount:
           description: Количество проголосовавших
-          items:
-            type: string
+          type: integer
+          minimum: 0
         answers:
           description: Варианты ответов опроса
           type: array
