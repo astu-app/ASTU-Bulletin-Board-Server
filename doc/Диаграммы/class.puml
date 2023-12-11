@@ -124,6 +124,7 @@ class Question {
     + GetSurveyId(): Guid
     
     + GetContent(): string
+    + GetIsOpen(): bool
     + GetIsAnonymous(): bool
     + GetIsMultipleChoiceAllowed(): bool
     + GetVotersCount(): int
@@ -148,7 +149,6 @@ User "1" *-- "*" Participation
 class Answer {
     + GetId(): Guid
     + GetContent(): string
-    + GetIsAnonymous(): bool
     
     + GetVotersCount(): int
     + IncreaseVotersCount(): void

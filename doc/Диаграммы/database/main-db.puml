@@ -116,6 +116,7 @@ rectangle "schema 'public'" as public_schema {
         ..
         content: text    
         voters_count: int
+        is_open: bool
         is_anonymous: bool
     }
     surveys <-- questions
@@ -127,8 +128,6 @@ rectangle "schema 'public'" as public_schema {
         ..
         content: text
         voters_count: integer
-        
-        is_anonymous: bool
     }
     questions <-- answers
     note right of answers::answer_type
@@ -188,6 +187,9 @@ rectangle "schema 'archive'" as archive_schema {
         ..
         survey_id: uuid
         content: text    
+        voters_count: int
+        is_open: bool
+        is_anonymous: bool
     }
     archived_surveys <.. archived_questions
     
