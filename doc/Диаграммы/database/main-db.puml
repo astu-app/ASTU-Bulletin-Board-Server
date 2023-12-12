@@ -27,10 +27,10 @@ rectangle "schema 'public'" as public_schema {
     }
     users <-- announcements : author
     
-    entity usergroups {
+    entity usergroups  {
         <b><<PK>></b> id: uuid
         ..
-        <<FK>> admin_id: uuid
+        <<FK>> admin_id: uuid?
         ..
         name: text
     }
@@ -60,7 +60,7 @@ rectangle "schema 'public'" as public_schema {
         <b><<PK>></b> id: uuid
         ..
         name: text
-        colorHex: text
+        color_hex: text
     }
     
     entity announcements_announcement_categories {
@@ -68,17 +68,30 @@ rectangle "schema 'public'" as public_schema {
         <b><<PK>></b> <<FK>> announcement_category_id: uuid
     }
     announcements <-- announcements_announcement_categories
-    announcement_categories <-right- announcements_announcement_categories
+    announcement_categories <-- announcements_announcement_categories
     
     entity announcement_categories_subscribers {
         <b><<PK>></b> <<FK>> announcement_category_id: uuid
         <b><<PK>></b> <<FK>> subscriber_id: uuid
     }
-    announcement_categories <-- announcement_categories_subscribers
-    users <-- announcement_categories_subscribers
+    announcement_categories <-left- announcement_categories_subscribers
+    users <-right- announcement_categories_subscribers
+    
+    entity attachments {
+        <b><<PK>></b> id: uuid
+        ..
+        type: text
+    }
+
+    entity announcements_attachments {
+        <b><<PK>></b> <<FK>> attachment_id: uuid
+        <b><<PK>></b> <<FK>> announcement_id: uuid
+    }
+    announcements <-- announcements_attachments
+    attachments <-- announcements_attachments
     
     entity files {
-        <b><<PK>></b> id: uuid
+        <b><<PK>></b> <<FK>> id: uuid
         ..
         <<FK>> uploader_id: uuid
         ..
@@ -87,27 +100,21 @@ rectangle "schema 'public'" as public_schema {
         
         links_count: integer
     }
-    users -- files
-    
-    entity announcements_files {
-        <b><<PK>></b> <<FK>> announcement_id: uuid
-        <b><<PK>></b> <<FK>> file_id: uuid
-    }
-    announcements <-- announcements_files
-    files <-- announcements_files
+    users <-- files : uploader
+    attachments <-up- files
     
     entity surveys {
-        <b><<PK>></b> id: uuid
+        <b><<PK>></b> <<FK>> id: uuid
         ..
-        <<FK>> announcement_id: uuid
-        ..
+        voters_count: int
+        
         is_open: boolean
         is_anonymous: boolean
         is_multiple_choice_allowed: boolean
         
         auto_closing_at: timestamp?
     }
-    announcements <-- surveys
+    attachments <-- surveys 
     
     entity questions {
         <b><<PK>></b> id: uuid
@@ -136,7 +143,7 @@ rectangle "schema 'public'" as public_schema {
     end note
     
     entity participation {
-        <b><<PK>></b> participation_id: uuid
+        <b><<PK>></b> id: uuid
         <<FK>> user_id: uuid
         <<FK>> question_id: uuid
     }
@@ -169,6 +176,19 @@ rectangle "schema 'archive'" as archive_schema {
         hidden_at: timestamp?
     }
     
+    entity "attachments" as archived_attachments {
+        <b><<PK>></b> id: uuid
+        ..
+        type: text
+    }
+    
+    entity "announcements_attachments" as archived_announcements_attachments {
+        <b><<PK>></b> attachment_id: uuid
+        <b><<PK>></b> announcement_id: uuid
+    }
+    archived_announcements <.. archived_announcements_attachments
+    archived_attachments <.up. archived_announcements_attachments
+    
     entity "surveys" as archived_surveys {
             <b><<PK>></b> id: uuid
             ..
@@ -180,7 +200,7 @@ rectangle "schema 'archive'" as archive_schema {
             
             auto_closing_at: timestamp?
     }
-    archived_announcements <.. archived_surveys
+    archived_attachments <.. archived_surveys
     
     entity "questions" as archived_questions {
         <b><<PK>></b> id: uuid
@@ -202,24 +222,25 @@ rectangle "schema 'archive'" as archive_schema {
         voters_count: integer
     }
     archived_questions <.. archived_answers
-    
+
     entity "files" as archived_files {
         <b><<PK>></b> id: uuid
         ..
         uploader_id: uuid
-        
+
         name: text
         hash: text
-        
+
         links_count: integer
     }
+    archived_attachments <.. archived_files
     
-    entity "announcements_files" as archived_announcements_files {
-        <b><<PK>></b> announcement_id: uuid
-        <b><<PK>></b> file_id: uuid
-    }
-    archived_announcements <.. archived_announcements_files
-    archived_files <.up. archived_announcements_files
+'    entity "announcements_files" as archived_announcements_files {
+'        <b><<PK>></b> announcement_id: uuid
+'        <b><<PK>></b> file_id: uuid
+'    }
+'    archived_announcements <.. archived_announcements_files
+'    archived_files <.up. archived_announcements_files
     
     ' usergroup's related entity group
     entity "usergroups" as archived_usergroups {
@@ -245,8 +266,8 @@ rectangle "schema 'archive'" as archive_schema {
         announcement_id: uuid
         usergroup_id: uuid
     }
-    archived_usergroups <.. archived_announcements_usergroups
-    archived_announcements <.. archived_announcements_usergroups
+    archived_usergroups <.right. archived_announcements_usergroups
+    archived_announcements <.left. archived_announcements_usergroups
     
     ' announcement category's related entity group
     entity "announcement_categories" as archived_announcement_categories {

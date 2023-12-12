@@ -32,7 +32,7 @@ class Announcement {
     + SetAutoAutoHidingAt(moment: DateTime?): void
     + ExpectsAutoHiding(): bool
     
-    + GetAttachments(): IAttachment?
+    + GetAttachments(): Attachment[]?
 }
 hide Announcement fields
 
@@ -48,12 +48,14 @@ class AnnouncementCategory {
 hide AnnouncementCategory fields
 Announcement "*" o-- "*" AnnouncementCategory
 
-interface IAttachment {
-    
+class AttachmentBase {
+    + GetId(): Guid
+    + GetType(): string
 }
-Announcement "1..*" o-- "*" IAttachment
+hide AttachmentBase fields
+Announcement "1..*" o-- "*" AttachmentBase
 
-class File extends IAttachment {
+class File extends AttachmentBase {
     + GetId(): void
     + GetName(): string    
     + GetHash(): string
@@ -100,7 +102,7 @@ UserGroup "1..*" o-- "*" User : < Участник
 Announcement "*" o-- "1" User : < Автор
 AnnouncementCategory "*" o-- "*" User : < Подписан
 
-class Survey extends IAttachment {
+class Survey extends AttachmentBase {
      + GetId(): Guid
      
      + GetIsOpen(): bool
