@@ -3,13 +3,13 @@ using BulletInBoardServer.Models.Users;
 
 namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys.Voters;
 
-public class Voters : Collection<User>
+public class VoterList : Collection<User>
 {
-    public Voters(IList<User> users) : base(users)
+    public VoterList(IList<User> users) : base(users)
     {
     }
 
-    public Voters()
+    public VoterList()
     {
     }
 }

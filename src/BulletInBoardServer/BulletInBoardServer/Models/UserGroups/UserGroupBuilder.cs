@@ -1,14 +1,12 @@
-﻿using BulletInBoardServer.Models.Users;
-
-namespace BulletInBoardServer.Models.UserGroups;
+﻿namespace BulletInBoardServer.Models.UserGroups;
 
 public class UserGroupBuilder
 {
     private Guid? _id;
     private string? _name;
-    private User? _admin;
+    private Guid? _adminId;
     private GroupMemberRights? _memberRights;
-    private UserGroups? _childrenGroups;
+    private UserGroupList? _childrenGroups;
 
 
 
@@ -27,9 +25,9 @@ public class UserGroupBuilder
         return this;
     }
 
-    public UserGroupBuilder SetAdmin(User admin)
+    public UserGroupBuilder SetAdmin(Guid? adminId)
     {
-        _admin = admin ?? throw new ArgumentNullException(nameof(admin));
+        _adminId = adminId;
         return this;
     }
 
@@ -39,7 +37,7 @@ public class UserGroupBuilder
         return this;
     }
 
-    public UserGroupBuilder SetChildrenGroups(UserGroups childrenGroups)
+    public UserGroupBuilder SetChildrenGroups(UserGroupList childrenGroups)
     {
         _childrenGroups = childrenGroups ?? throw new ArgumentNullException(nameof(childrenGroups));
         return this;
@@ -48,14 +46,14 @@ public class UserGroupBuilder
     public UserGroup Build()
     {
         if (string.IsNullOrWhiteSpace(_name))
-            throw new ArgumentException("Название группы пользователей должнно быть задано");
+            throw new ArgumentException("Название группы пользователей должно быть задано");
 
         return new UserGroup(
             _id ?? Guid.NewGuid(),
             _name,
-            _admin,
+            _adminId,
             _memberRights ?? new GroupMemberRights(),
-            _childrenGroups ?? new UserGroups()
+            _childrenGroups ?? []
         );
     }
 }

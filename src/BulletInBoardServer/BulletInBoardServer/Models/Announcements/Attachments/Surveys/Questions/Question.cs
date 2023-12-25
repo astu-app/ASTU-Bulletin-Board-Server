@@ -1,47 +1,68 @@
 using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
+using BulletInBoardServer.Models.Announcements.Attachments.Surveys.QuestionParticipation;
 
 namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys.Questions;
 
+/// <summary>
+/// Вопрос опроса
+/// </summary>
 public class Question
 {
     /// <summary>
     /// Идентификатор вопроса
     /// </summary>
-    public Guid Id { get; }
+    // public Guid Id { get; }
+    public Guid Id { get; set; }
+
+    /// <summary>
+    /// Идентификатор опроса, к которому относится вопрос
+    /// </summary>
+    // public Guid SurveyId { get; }
+    public Guid SurveyId { get; set; }
+
+    /// <summary>
+    /// Опрос, к которому относится вопрос
+    /// </summary>
+    public Survey? Survey { get; set; }
 
     /// <summary>
     /// Текстовое содержимое вопроса
     /// </summary>
-    public string Content { get; }
+    // public string Content { get; }
+    public string Content { get; set; }
 
     /// <summary>
     /// Варианты ответов вопроса
     /// </summary>
-    public ReadOnlyAnswers Answers => _answers.AsReadOnly();
+    public AnswerList Answers { get; set; }
 
     /// <summary>
-    /// Количество проголосовавших в вопросе
+    /// Участия в опросе
     /// </summary>
-    public int VotersCount => _answers.Sum(answer => answer.VotersCount);
+    public ParticipationList ParticipationList { get; set; } = [];
 
 
 
-    private readonly Answers.Answers _answers;
-
-
-
-    public Question(Guid id, string content, Answers.Answers answers)
+    public Question(Guid id, Guid surveyId, string content, AnswerList answers)
     {
         if (string.IsNullOrWhiteSpace(content))
             throw new ArgumentException("Контент вопроса не может быть пустым или Null");
-        
+
         if (answers is null)
             throw new ArgumentNullException(nameof(answers));
         if (answers.Count < 2)
             throw new ArgumentException("Количество вариантов ответов вопроса не может быть меньше двух");
-        
+
         Id = id;
+        SurveyId = surveyId;
+        Answers = answers;
         Content = content;
-        _answers = answers;
+    }
+
+    public Question(Guid id, Guid surveyId, string content)
+    { // debug
+        Id = id;
+        SurveyId = surveyId;
+        Content = content;
     }
 }

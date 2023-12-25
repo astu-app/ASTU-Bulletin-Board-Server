@@ -11,6 +11,7 @@ public class Announcement
     /// Идентификатор объявления
     /// </summary>
     public Guid Id { get; }
+    // public Guid Id { get; set; }
 
     /// <summary>
     /// Текстовое содержимое объявления
@@ -28,23 +29,36 @@ public class Announcement
     }
 
     /// <summary>
+    /// Идентификатор автора объявления
+    /// </summary>
+    public Guid AuthorId { get; }
+
+    /// <summary>
     /// Автор объявления
     /// </summary>
-    public User Author
-    {
-        get => _author;
-        set => _author = value ?? throw new ArgumentNullException(nameof(value));
-    }
+    /// <remarks>
+    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Перед использование обязательно должно быть установлено
+    /// </remarks>
+    public User Author { get; init; } = null!;
 
     /// <summary>
     /// Категории объявления
     /// </summary>
-    public AnnouncementCategories Categories { get;  }
+    /// <remarks>
+    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Перед использование обязательно должно быть установлено
+    /// </remarks>
+    public AnnouncementCategories Categories { get; init; } = null!;
 
     /// <summary>
     /// Аудитория объявления
     /// </summary>
-    public AnnouncementAudience Audience { get; }
+    /// <remarks>
+    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Перед использование обязательно должно быть установлено
+    /// </remarks>
+    public AnnouncementAudience Audience { get; init; } = null!;
 
     /// <summary>
     /// Момент публикации уже опубликованного объявления. Null, если объявления не опубликовано
@@ -80,7 +94,7 @@ public class Announcement
     public bool IsHidden => HiddenAt is not null;
 
     /// <summary>
-    /// Момент автоматического сокрытия объявления. Null, если автоматическок сокрытие не задано
+    /// Момент автоматического сокрытия объявления. Null, если автоматическое сокрытие не задано
     /// </summary>
     public DateTime? AutoHidingAt
     {
@@ -93,31 +107,32 @@ public class Announcement
     /// <summary>
     /// Прикрепление к объявлению
     /// </summary>
-    public ReadOnlyAttachments Attachments => _attachments.AsReadOnly();
+    public ReadOnlyAttachmentList Attachments => _attachments.AsReadOnly();
+    // public AttachmentList Attachments { get; init; }
 
 
 
     private string _content = null!;
-    private User _author = null!;
     private DateTime? _autoPublishingAt;
     private DateTime? _autoHidingAt;
     private DateTime? _publishedAt;
     private DateTime? _hiddenAt;
-    private readonly Attachments.Attachments _attachments;
+    private readonly AttachmentList _attachments = null!;
 
-    private bool _containsSurvey;
+    private bool ContainsSurvey => _attachments.Any(a => a is Survey);
 
 
 
     public Announcement(Guid id, string content, User author, AnnouncementCategories categories,
         AnnouncementAudience audience, DateTime? publishedAt, DateTime? hiddenAt, DateTime? autoPublishingAt,
-        DateTime? autoHidingAt, Attachments.Attachments attachments)
+        DateTime? autoHidingAt, AttachmentList attachments)
     {
         CategoriesValidOrThrow(categories);
         AudienceValidOrThrow(audience);  
         
         Id = id;
         Content = content;
+        AuthorId = author.Id;
         Author = author;
         Categories = categories;
         Audience = audience;
@@ -128,39 +143,60 @@ public class Announcement
         
         Attach(attachments);
     }
+    
+    public Announcement(Guid id, string content, Guid authorId,
+        DateTime? publishedAt, DateTime? hiddenAt, DateTime? autoPublishingAt,
+        DateTime? autoHidingAt)
+    {
+        // CategoriesValidOrThrow(categories);
+        // AudienceValidOrThrow(audience);  
+        
+        Id = id;
+        Content = content;
+        AuthorId = authorId;
+        // Author = author;
+        // Categories = categories;
+        // Audience = audience;
+        PublishedAt = publishedAt;
+        HiddenAt = hiddenAt;
+        AutoPublishingAt = autoPublishingAt;
+        AutoHidingAt = autoHidingAt;
+        
+        // Attach(attachments);
+    }
+
+    // public Announcement(Guid id, string content, Guid authorId,
+    //     DateTime? publishedAt, DateTime? hiddenAt, DateTime? autoPublishingAt,
+    //     DateTime? autoHidingAt)
+    //     : this(id, content, authorId, [], [], publishedAt, hiddenAt, autoPublishingAt, autoHidingAt, [])
+    // {
+    //     
+    // }
 
 
 
-    public void Attach(IAttachment attachment) => 
+    public void Attach(AttachmentBase attachment) => 
         AddAttachmentOrThrow(attachment);
 
-    public void Attach(Attachments.Attachments attachments)
+    public void Attach(AttachmentList attachments)
     {
-        if (attachments is null)
-            throw new ArgumentNullException(nameof(attachments));
+        ArgumentNullException.ThrowIfNull(attachments);
         
         foreach (var attachment in attachments) 
             AddAttachmentOrThrow(attachment);
     }
 
-    public void Unattach(IAttachment attachment)
-    {
+    public void Unattach(AttachmentBase attachment) => 
         _attachments.Remove(attachment);
-        _containsSurvey = attachment is Survey;
-    }
 
 
 
-    private static void CategoriesValidOrThrow(AnnouncementCategories categories)
-    {
-        if (categories is null)
-            throw new ArgumentNullException(nameof(categories));
-    }
+    private static void CategoriesValidOrThrow(AnnouncementCategories categories) => 
+        ArgumentNullException.ThrowIfNull(categories);
 
     private static void AudienceValidOrThrow(AnnouncementAudience audience)
     {
-        if (audience is null)
-            throw new ArgumentNullException(nameof(audience));
+        ArgumentNullException.ThrowIfNull(audience);
         if (!audience.Any())
             throw new ArgumentException("Аудитория объявления не может быть пустой");      
     }
@@ -208,7 +244,7 @@ public class Announcement
 
         if (publishAt < DateTime.UtcNow)
             throw new InvalidOperationException(
-                "Автоматическая публикация объявления не молжет пройзойти в прошлом");
+                "Автоматическая публикация объявления не может произойти в прошлом");
 
         _autoPublishingAt = publishAt;
     }
@@ -227,21 +263,19 @@ public class Announcement
 
         if (hideAt < DateTime.UtcNow)
             throw new InvalidOperationException(
-                "Автоматическое сокрытие объявления не молжет пройзойти в прошлом");
+                "Автоматическое сокрытие объявления не может произойти в прошлом");
 
         _autoHidingAt = hideAt;
     }
     
-    private void AddAttachmentOrThrow(IAttachment attachment)
+    private void AddAttachmentOrThrow(AttachmentBase attachment)
     {
-        if (attachment is null)
-            throw new ArgumentNullException(nameof(attachment));
+        ArgumentNullException.ThrowIfNull(attachment);
 
         var isSurvey = attachment is Survey; 
-        if (isSurvey && _containsSurvey)
+        if (isSurvey && ContainsSurvey)
             throw new InvalidOperationException("Объявление уже содержит опрос");
         
         _attachments.Add(attachment);
-        _containsSurvey = isSurvey;
     }
 }

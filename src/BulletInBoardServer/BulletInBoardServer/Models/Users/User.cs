@@ -1,11 +1,28 @@
 ﻿namespace BulletInBoardServer.Models.Users;
 
+/// <summary>
+/// Пользователь системы
+/// </summary>
 public class User
 {
+    /// <summary>
+    /// Идентификатор пользователя
+    /// </summary>
     public Guid Id { get; set; }
     
+    /// <summary>
+    /// Имя пользователя
+    /// </summary>
     public string FirstName { get; set; }
+    
+    /// <summary>
+    /// Фамилия пользователя
+    /// </summary>
     public string SecondName { get; set; }
+    
+    /// <summary>
+    /// Отчество пользователя
+    /// </summary>
     public string? Patronymic { get; set; }
 
 

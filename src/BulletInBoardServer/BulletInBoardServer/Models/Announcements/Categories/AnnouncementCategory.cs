@@ -3,33 +3,73 @@ using BulletInBoardServer.Models.Users;
 
 namespace BulletInBoardServer.Models.Announcements.Categories;
 
-public class AnnouncementCategory(Guid id, Subscribers.Subscribers subscribers)
+/// <summary>
+/// Категория объявлений
+/// </summary>
+public class AnnouncementCategory
 {
-    public Guid Id { get; } = id;
-    public ReadOnlySubscribers Subscribers => subscribers.AsReadOnly();
-
-
-
-    public AnnouncementCategory(Guid id) : this(id, new Subscribers.Subscribers())
+    /// <summary>
+    /// Категория объявлений
+    /// </summary>
+    /// <param name="id">Идентификатор категории объявлений</param>
+    /// <param name="name">Название категории объявлений</param>
+    /// <param name="colorHex">Цвет категории объявлений в пользовательском интерфейсе</param>
+    /// <param name="subscribers">Подписчики категории объявлений</param>
+    public AnnouncementCategory(Guid id, string name, string colorHex, SubscriberList subscribers)
     {
+        Id = id;
+        Name = name;
+        ColorHex = colorHex;
+        Subscribers = subscribers;
+    }
+    
+    /// <summary>
+    /// Категория объявлений
+    /// </summary>
+    /// <param name="id">Идентификатор категории объявлений</param>
+    /// <param name="name">Название категории объявлений</param>
+    /// <param name="colorHex">Цвет категории объявлений в пользовательском интерфейсе</param>
+    /// <param name="subscribers">Подписчики категории объявлений</param>
+    public AnnouncementCategory(Guid id, string name, string colorHex)
+    {
+        Id = id;
+        Name = name;
+        ColorHex = colorHex;
+        // Subscribers = subscribers; // todo подумать
     }
 
-    public AnnouncementCategory(Subscribers.Subscribers subscribers) : this(Guid.NewGuid(), subscribers)
-    {
-    }
+    /// <summary>
+    /// Идентификатор категории объявлений
+    /// </summary>
+    public Guid Id { get; }
+
+    /// <summary>
+    /// Название категории объявлений 
+    /// </summary>
+    public string Name { get; }
+    
+    /// <summary>
+    /// Цвет категории объявлений в пользовательском интерфейсе 
+    /// </summary>
+    public string ColorHex { get; }
+
+    /// <summary>
+    /// Подписчики категории объявлений
+    /// </summary>
+    public SubscriberList Subscribers { get; }
 
 
 
     public void Subscribe(User user)
     {
-        if (subscribers.Contains(user))
+        if (Subscribers.Contains(user))
             throw new InvalidOperationException("Пользователь уже подписан на категорию объявлений");
         
-        subscribers.Add(user);
+        Subscribers.Add(user);
     }
     
     public void Unsubscribe(User user)
     {
-        subscribers.Remove(user);
+        Subscribers.Remove(user);
     }
 }

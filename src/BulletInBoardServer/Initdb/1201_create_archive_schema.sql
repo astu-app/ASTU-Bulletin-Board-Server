@@ -116,7 +116,9 @@ create table answers
     question_id  uuid not null,
     
     content      text,
-    voters_count integer default 0
+    voters_count integer default 0,
+    
+    answer_type  text
 );
 
 

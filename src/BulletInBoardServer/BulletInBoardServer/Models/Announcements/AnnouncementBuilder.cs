@@ -16,7 +16,7 @@ public class AnnouncementBuilder
     private DateTime? _hiddenAt;
     private DateTime? _autoPublishingAt;
     private DateTime? _autoHidingAt;
-    private Attachments.Attachments _attachments = new();
+    private AttachmentList _attachments = new();
 
     private bool _containsSurvey;
 
@@ -79,13 +79,13 @@ public class AnnouncementBuilder
         return this;
     }
 
-    public AnnouncementBuilder Attach(IAttachment attachment)
+    public AnnouncementBuilder Attach(AttachmentBase attachment)
     {
         AddAttachmentOrThrow(attachment);
         return this;
     }
     
-    public AnnouncementBuilder Attach(Attachments.Attachments attachments)
+    public AnnouncementBuilder Attach(AttachmentList attachments)
     {
         if (attachments is null)
             throw new ArgumentNullException(nameof(attachments));
@@ -96,32 +96,32 @@ public class AnnouncementBuilder
         return this;
     }
 
-    public Announcement Build()
-    {
-        if (string.IsNullOrWhiteSpace(_content))
-            throw new InvalidOperationException("Контент сообщения должен быть задан");
-        if (_author is null)
-            throw new InvalidOperationException("Автор сообщения должен быть задан");
-        if (_audience is null)
-            throw new InvalidOperationException("Аудитория сообщения должна быть задана");
+    // public Announcement Build() // debug
+    // {
+    //     if (string.IsNullOrWhiteSpace(_content))
+    //         throw new InvalidOperationException("Контент сообщения должен быть задан");
+    //     if (_author is null)
+    //         throw new InvalidOperationException("Автор сообщения должен быть задан");
+    //     if (_audience is null)
+    //         throw new InvalidOperationException("Аудитория сообщения должна быть задана");
+    //
+    //     var announcement = new Announcement(
+    //         _id ?? Guid.NewGuid(),
+    //         _content,
+    //         _author,
+    //         _categories ?? new AnnouncementCategories(),
+    //         _audience,
+    //         _publishedAt,
+    //         _hiddenAt,
+    //         _autoPublishingAt,
+    //         _autoHidingAt,
+    //         _attachments
+    //     );
+    //
+    //     return announcement;
+    // }
 
-        var announcement = new Announcement(
-            _id ?? Guid.NewGuid(),
-            _content,
-            _author,
-            _categories ?? new AnnouncementCategories(),
-            _audience,
-            _publishedAt,
-            _hiddenAt,
-            _autoPublishingAt,
-            _autoHidingAt,
-            _attachments
-        );
-
-        return announcement;
-    }
-
-    private void AddAttachmentOrThrow(IAttachment attachment)
+    private void AddAttachmentOrThrow(AttachmentBase attachment)
     {
         if (attachment is null)
             throw new ArgumentNullException(nameof(attachment));

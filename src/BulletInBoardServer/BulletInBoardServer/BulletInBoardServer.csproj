@@ -9,6 +9,12 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.13"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
     </ItemGroup>
 
@@ -16,8 +22,20 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-        <Content Include="..\Initdb\*">
-            <Link>\Initdb\*</Link>
+        <Content Include="..\Initdb\1101_create_public_schema.sql">
+          <Link>Initdb\1101_create_public_schema.sql</Link>
+        </Content>
+        <Content Include="..\Initdb\1111_create_indices.sql">
+          <Link>Initdb\1111_create_indices.sql</Link>
+        </Content>
+        <Content Include="..\Initdb\1121_create_triggers.sql">
+          <Link>Initdb\1121_create_triggers.sql</Link>
+        </Content>
+        <Content Include="..\Initdb\1201_create_archive_schema.sql">
+          <Link>Initdb\1201_create_archive_schema.sql</Link>
+        </Content>
+        <Content Include="..\Initdb\1301_create_logs_schema.sql">
+          <Link>Initdb\1301_create_logs_schema.sql</Link>
         </Content>
     </ItemGroup>
 

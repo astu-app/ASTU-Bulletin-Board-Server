@@ -2,14 +2,14 @@
 
 namespace BulletInBoardServer.Models.UserGroups;
 
-public class UserGroups : Collection<UserGroup>
+public class UserGroupList : Collection<UserGroup>
 {
-    public UserGroups(IList<UserGroup> userGroups) 
+    public UserGroupList(IList<UserGroup> userGroups) 
         : base(userGroups)
     {
     }
 
-    public UserGroups()
+    public UserGroupList()
     {
     }
 }

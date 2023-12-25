@@ -1,3 +1,3 @@
 namespace BulletInBoardServer.Models.Announcements.Categories.Subscribers;
 
-public class Subscribers : Users.Users;
+public class SubscriberList : Users.Users;

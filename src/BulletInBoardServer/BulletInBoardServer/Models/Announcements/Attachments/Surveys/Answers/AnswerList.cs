@@ -2,4 +2,4 @@
 
 namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
 
-public class ReadOnlyAnswers(IList<AnswerBase> list) : ReadOnlyCollection<AnswerBase>(list);
+public class AnswerList : Collection<Answer>;

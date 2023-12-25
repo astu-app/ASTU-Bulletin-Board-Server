@@ -280,10 +280,10 @@ public class AnnouncementTest
     private static Announcement CreateValidAnnouncement() =>
         new(Guid.Empty, "content",
             new User("name", "second name"),
-            new AnnouncementCategories(),
+            [],
             CreateValidAnnouncementAudience(),
-            null, null, null, null, null);
+            null, null, null, null, []);
 
     private static AnnouncementAudience CreateValidAnnouncementAudience() =>
-        new() { new UserGroupBuilder().SetName("name").Build() };
+        [new UserGroupBuilder().SetName("name").Build()];
 }

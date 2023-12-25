@@ -54,6 +54,15 @@ begin
 end
 $$ language plpgsql;
 
+create function is_color_format_correct(color_hex color)
+    returns boolean
+as
+$$
+begin
+    return color_hex ~* '\#[0-9a-f]{6}';
+end
+$$ language plpgsql;
+
 
 ------ create tables
 create table announcements
@@ -151,21 +160,33 @@ create table files
         check (is_string_null_or_empty(hash))
 );
 
-create table announcements_files
+create table attachments
 (
-    announcement_id uuid,
-    file_id         uuid,
+    id   uuid primary key,
+    type text,
+    
+    constraint non_empty_type
+        check (is_string_null_or_empty(type))
+);
 
-    primary key (announcement_id, file_id)
+create table announcements_attachments
+(
+    attachment_id   uuid,
+    announcement_id uuid,
+
+    primary key (announcement_id, announcement_id)
 );
 
 create table announcement_categories
 (
-    id   uuid primary key,
-    name text,
+    id        uuid primary key,
+    name      text,
+    color_hex text,
     
     constraint non_empty_name
-        check (is_string_null_or_empty(name))
+        check (is_string_null_or_empty(name)),
+    constraint non_empty_color
+        check (is_color_format_correct(color_hex))
 );
 
 create table announcement_categories_subscribers
@@ -190,6 +211,8 @@ create table surveys
 
     announcement_id            uuid not null,
 
+    voters_count              integer default 0,
+    
     is_open                    boolean not null default true,
     is_anonymous               boolean not null default false,
     is_multiple_choice_allowed boolean not null default false,
@@ -206,7 +229,7 @@ create table questions
     
     survey_id uuid not null,
 
-    content   text,
+    content      text,
     
     constraint non_empty_content
         check (is_string_null_or_empty(content))
@@ -230,7 +253,7 @@ create table participation
     id uuid primary key,
     
     user_id     uuid not null,
-    question_id uuid  not null
+    survey_id uuid  not null
 );
 
 create table user_selections
@@ -280,14 +303,17 @@ alter table announcements_usergroups
 alter table files
     add constraint files_uploader_id_fkey
         foreign key (uploader_id) references users (id)
+            on update cascade on delete cascade,
+    add constraint files_attachments_id_fkey
+        foreign key (id) references attachments
             on update cascade on delete cascade;
 
-alter table announcements_files
-    add constraint announcements_files_announcement_id_fkey
-        foreign key (announcement_id) references announcements (id)
+alter table announcements_attachments
+    add constraint announcements_attachments_attachments_id_fkey
+        foreign key (attachment_id) references attachments (id)
             on update cascade on delete cascade,
-    add constraint announcements_files_file_id_fkey
-        foreign key (file_id) references files (id)
+    add constraint announcements_attachments_announcements_id_fkey
+        foreign key (announcement_id) references announcements (id)
             on update cascade on delete cascade;
 
 alter table announcement_categories_subscribers
@@ -307,8 +333,8 @@ alter table announcements_announcement_categories
             on update cascade on delete cascade;
 
 alter table surveys
-    add constraint surveys_announcement_id_fkey
-        foreign key (announcement_id) references announcements (id)
+    add constraint surveys_id_fkey
+        foreign key (id) references attachments (id)
             on update cascade on delete cascade;
 
 alter table questions
@@ -322,8 +348,8 @@ alter table answers
             on update cascade on delete cascade;
 
 alter table participation
-    add constraint participation_question_id_fkey
-        foreign key (question_id) references questions (id)
+    add constraint participation_survey_id_fkey
+        foreign key (survey_id) references surveys (id)
             on update cascade on delete cascade,
     add constraint participation_user_id_fkey
         foreign key (user_id) references users (id)
