@@ -33,7 +33,7 @@ entity "Файл" as attachedFile {
     Хэш
     Количество ссылок
 }
-announcement }|--o{ attachedFile
+announcement }|--o{ attachedFile : < Прикреплен
 
 entity "Опрос" as survey {
     Флаг открытости
@@ -42,14 +42,14 @@ entity "Опрос" as survey {
     Флаг ограничения времени голосования
     Срок окончания времени голосования
 }
-announcement ||--o| survey
+announcement ||--o| survey : < Прикреплен
+user }o--o{ survey : > Проголосовал в
 
 entity "Вопрос" as question {
     Текст вопроса
     Количество проголосовавших
 }
 survey ||--|{ question
-user }o--o{ question : > Проголосовал в
 
 entity "Вариант ответа" as answer {
     Текст вариант ответа

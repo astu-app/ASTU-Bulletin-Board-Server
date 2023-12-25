@@ -3,6 +3,7 @@
 
 hide methods
 
+' public schema
 rectangle "schema 'public'" as public_schema { 
     entity users {
         <b><<PK>></b> id: uuid
@@ -27,7 +28,7 @@ rectangle "schema 'public'" as public_schema {
     }
     users <-- announcements : author
     
-    entity usergroups  {
+    entity usergroups {
         <b><<PK>></b> id: uuid
         ..
         <<FK>> admin_id: uuid?
@@ -122,9 +123,6 @@ rectangle "schema 'public'" as public_schema {
         <<FK>> survey_id: uuid
         ..
         content: text    
-        voters_count: int
-        is_open: bool
-        is_anonymous: bool
     }
     surveys <-- questions
     
@@ -145,10 +143,10 @@ rectangle "schema 'public'" as public_schema {
     entity participation {
         <b><<PK>></b> id: uuid
         <<FK>> user_id: uuid
-        <<FK>> question_id: uuid
+        <<FK>> survey_id: uuid
     }
     users <-- participation
-    questions <-- participation
+    surveys <-- participation
     
     entity user_selections {
         <b><<PK>></b> <<FK>> participation_id: uuid
@@ -235,13 +233,6 @@ rectangle "schema 'archive'" as archive_schema {
     }
     archived_attachments <.. archived_files
     
-'    entity "announcements_files" as archived_announcements_files {
-'        <b><<PK>></b> announcement_id: uuid
-'        <b><<PK>></b> file_id: uuid
-'    }
-'    archived_announcements <.. archived_announcements_files
-'    archived_files <.up. archived_announcements_files
-    
     ' usergroup's related entity group
     entity "usergroups" as archived_usergroups {
         <b><<PK>></b> id: uuid
@@ -288,13 +279,14 @@ public_schema <.right. archive_schema
 
 
 
+' logs schema
 rectangle "schema 'logs'" as logs_schema {
     entity announcements_logs {
         operation_time: timestamp
         operation_type: text
         announcement_id: uuid
         user_id: uuid
-        updated_attributes: jsonb?
+        details: jsonb?
     }
     
     entity files_logs {
@@ -309,7 +301,7 @@ rectangle "schema 'logs'" as logs_schema {
         operation_type: text
         usergroup_id: uuid
         user_id: uuid
-        updated_attributes: jsonb?
+        details: jsonb?
     }
     
     entity announcement_categories_logs {
@@ -317,16 +309,35 @@ rectangle "schema 'logs'" as logs_schema {
         operation_type: text
         category_id: uuid
         user_id: uuid
-        updated_attributes: jsonb?
+        details: jsonb?
     }
     
-    ' todo продумать
-    entity user_logs {
-    }
-    
-    ' todo нужно?
     entity surveys_logs {
+        operation_time: timestamp
+        operation_type: text
+        survey_id: uuid
+        user_id: uuid
+    }
     
+    entity questions_logs {
+        operation_time: timestamp
+        operation_type: text
+        question_id: uuid
+        survey_id: uuid
+    }
+    
+    entity answers_logs {
+        operation_time: timestamp
+        operation_type: text
+        answer_id: uuid
+        question_id: uuid
+    }
+    
+    entity users_logs {
+        operation_time: timestamp
+        operation_type: text
+        user_id: uuid
+        details: jsonb?
     }
 }
 public_schema <.. logs_schema
