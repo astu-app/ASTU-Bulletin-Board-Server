@@ -11,6 +11,7 @@ entity "Пользователь" as user {
 
 entity "Объявление" as announcement { 
     Текст
+    Размер аудитории
     Флаг скрытой публикации
     Флаг автоматического сокрытия
     Срок автоматического сокрытия
@@ -20,6 +21,7 @@ entity "Объявление" as announcement {
     Момент сокрытия
 }
 announcement }o--|| user : < Автор
+announcement }o--|{ user : > Предназначено
 
 entity "Категория" as category {
     Название
@@ -36,9 +38,9 @@ entity "Файл" as attachedFile {
 announcement }|--o{ attachedFile : < Прикреплен
 
 entity "Опрос" as survey {
+    Размер аудитории
     Флаг открытости
     Флаг анонимности
-    Флаг множественного выбора
     Флаг ограничения времени голосования
     Срок окончания времени голосования
 }
@@ -48,6 +50,7 @@ user }o--o{ survey : > Проголосовал в
 entity "Вопрос" as question {
     Текст вопроса
     Количество проголосовавших
+    Флаг множественного выбора
 }
 survey ||--|{ question
 
@@ -61,7 +64,6 @@ user }o--o{ answer : > Выбрал
 entity "Группа пользователей" as userGroup { 
     Название
 }
-announcement }o--|{ userGroup : > Предназначено
 user }o--|{ userGroup : > Участник
 user |o-right-o{ userGroup : > Администратор
 userGroup }o--o{ userGroup : Подчинена любому количеству \n Является родителем любого количества

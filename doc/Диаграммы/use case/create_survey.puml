@@ -15,7 +15,7 @@ rectangle "Доска объявлений" {
     create_survey <.. (<font color="gray">E-1.1.7.1.6.</font> Подтвердить создание) : extend
     
     create_survey <.. make_voting_duration_limited : extend 
-    create_survey <.. (<font color="gray">E-1.1.7.1.4.</font> Задать возможность выбора нескольких вариантов ответов) : extend
+    create_survey <.. (<font color="gray">E-1.1.7.1.4.</font> Задать возможность выбора \n нескольких вариантов ответов \n для каждого из вопросов) : extend
     create_survey <.. (<font color="gray">E-1.1.7.1.3.</font> Задать анонимность голосования) : extend
     create_survey --> (<font color="gray">E-1.1.7.1.2.</font> Задать варианты ответов) : include
     create_survey --> (<font color="gray">E-1.1.7.1.1.</font> Указать вопросы) : include

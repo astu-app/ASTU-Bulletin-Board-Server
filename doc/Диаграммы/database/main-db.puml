@@ -19,6 +19,7 @@ rectangle "schema 'public'" as public_schema {
         <<FK>> author_id: uuid
         ..
         content: text
+        auditory_size: integer
         
         auto_hiding_at: timestamp?
         auto_publishing_at: timestamp?
@@ -27,6 +28,13 @@ rectangle "schema 'public'" as public_schema {
         hidden_at: timestamp?
     }
     users <-- announcements : author
+    
+    entity announcements_users {
+        <b><<PK>></b> <<FK>> announcement_id: uuid
+        <b><<PK>></b> <<FK>> user_id: uuid
+    }
+    announcements <-up- announcements_users
+    users <-- announcements_users
     
     entity usergroups {
         <b><<PK>></b> id: uuid
@@ -42,13 +50,6 @@ rectangle "schema 'public'" as public_schema {
         <b><<PK>></b> <<FK>> child_usergroup_id: uuid
     }
     usergroups <-- child_usergroups
-    
-    entity announcements_usergroups {
-        <b><<PK>></b> <<FK>> announcement_id: uuid
-        <b><<PK>></b> <<FK>> usergroup_id: uuid
-    }
-    announcements <-- announcements_usergroups
-    usergroups <-- announcements_usergroups
     
     entity member_rights {
         <b><<PK>></b> <<FK>> user_id: uuid
@@ -68,7 +69,7 @@ rectangle "schema 'public'" as public_schema {
         <b><<PK>></b> <<FK>> announcement_id: uuid
         <b><<PK>></b> <<FK>> announcement_category_id: uuid
     }
-    announcements <-- announcements_announcement_categories
+    announcements <-right- announcements_announcement_categories
     announcement_categories <-- announcements_announcement_categories
     
     entity announcement_categories_subscribers {
@@ -88,8 +89,8 @@ rectangle "schema 'public'" as public_schema {
         <b><<PK>></b> <<FK>> attachment_id: uuid
         <b><<PK>></b> <<FK>> announcement_id: uuid
     }
-    announcements <-- announcements_attachments
-    attachments <-- announcements_attachments
+    announcements <-left- announcements_attachments
+    attachments <-right- announcements_attachments
     
     entity files {
         <b><<PK>></b> <<FK>> id: uuid
@@ -107,11 +108,11 @@ rectangle "schema 'public'" as public_schema {
     entity surveys {
         <b><<PK>></b> <<FK>> id: uuid
         ..
-        voters_count: int
+        voters_count: integer
+        auditory_size: integer
         
         is_open: boolean
         is_anonymous: boolean
-        is_multiple_choice_allowed: boolean
         
         auto_closing_at: timestamp?
     }
@@ -123,6 +124,7 @@ rectangle "schema 'public'" as public_schema {
         <<FK>> survey_id: uuid
         ..
         content: text    
+        is_multiple_choice_allowed: boolean
     }
     surveys <-- questions
     
@@ -205,7 +207,7 @@ rectangle "schema 'archive'" as archive_schema {
         ..
         survey_id: uuid
         content: text    
-        voters_count: int
+        voters_count: integer
         is_open: bool
         is_anonymous: bool
     }
@@ -252,13 +254,6 @@ rectangle "schema 'archive'" as archive_schema {
         <b><<PK>></b> child_usergroup_id: uuid
     }
     archived_usergroups <.. child_usergroups
-    
-    entity "announcements_usergroups" as archived_announcements_usergroups {
-        announcement_id: uuid
-        usergroup_id: uuid
-    }
-    archived_usergroups <.right. archived_announcements_usergroups
-    archived_announcements <.left. archived_announcements_usergroups
     
     ' announcement category's related entity group
     entity "announcement_categories" as archived_announcement_categories {
