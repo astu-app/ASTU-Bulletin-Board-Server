@@ -19,7 +19,6 @@
         <toc-element topic="восстановление-доступа-к-аккаунту.md"/>
         <toc-element topic="аутентификация.md"/>
         <toc-element topic="аккаунт.md"/>
-        <toc-element topic="варианты-использования.md"/>
         <toc-element toc-title="Объявления">
             <toc-element topic="цепочки-доставки-объявлений.md"/>
             <toc-element topic="типы-объявлений.md"/>
