@@ -13,93 +13,124 @@ namespace BulletInBoardServer.Services.Surveys.Voting;
 /// <param name="dbContext">Контекст базы данных</param>
 public class VotingService(ApplicationDbContext dbContext)
 {
+    private Guid _voterId;
+    private Guid _surveyId; 
+    
+    private Survey _survey = null!; // устанавливается при каждом запуске единственного публичного метода Vote()
+    private SurveyVotes _votes = null!; // устанавливается при каждом запуске единственного публичного метода Vote()
+    
+    
+    
     /// <summary>
     /// Голосование в вопросе
     /// </summary>
-    /// <param name="userId">Идентификатор голосующего пользователя</param>
-    /// <param name="questionId">Идентификатор вопроса, в котором пользователь голосует</param>
-    /// <param name="answerIds">Набор идентификаторов выбранных вариантов ответов</param>
-    /// <remarks>
-    /// Список вариантов ответов должен содержать ровно один элемент в случае,
-    /// если в опросе запрещен множественный выбор, и не меньше в противном случае
-    /// </remarks>
-    public void Vote(Guid userId, Guid questionId, IEnumerable<Guid> answerIds)
+    /// <param name="voterId">Идентификатор голосующего пользователя</param>
+    /// <param name="surveyId">Идентификатор опроса, в котором пользователь голосует</param>
+    /// <param name="votes">Голоса пользователя в каждом из вопросов опроса</param>
+    public void Vote(Guid voterId, Guid surveyId, SurveyVotes votes)
     {
-        // todo переработать под голосование в опросе
-        var answerIdList = answerIds.ToList();
-        var question = GetQuestionOrThrow(questionId);
-        var survey = GetSurveyOrThrow(question.SurveyId);
-        QuestionOpenOrThrow(question);
-        AnswersValidOrThrow(answerIdList, question);
+        SetServiceState(voterId, surveyId, votes);
         
-        survey.IncreaseVotersCount();
-        VoteForAnswers(userId, answerIdList, question);
+        _survey = LoadSurveyOrThrow();
+        SurveyOpenOrThrow();
+        
+        AllQuestionsReferToSurveyOrThrow();
+        VotesValidOrThrow();
+        
+        _survey.IncreaseVotersCount();
+        VoteForAllQuestions();
 
         dbContext.SaveChangesAsync();
     }
 
 
 
-    private static void QuestionOpenOrThrow(Question question)
+    private void SetServiceState(Guid voterId, Guid surveyId, SurveyVotes votes)
     {
-        if (!question.IsOpen)
-            throw new InvalidOperationException("Нельзя проголосовать в закрытом вопросе");
+        _voterId = voterId;
+        _surveyId = surveyId;
+        _votes = votes;
     }
     
-    private static void AnswersValidOrThrow(IReadOnlyCollection<Guid> answerIdList, Question question)
+    private Survey LoadSurveyOrThrow()
     {
-        if (answerIdList.Count == 0)
-            throw new ArgumentException("Список вариантов ответов не может быть пустым");
-
-        if (!question.IsMultipleChoiceAllowed && answerIdList.Count > 1)
-            throw new ArgumentException(
-                "Нельзя проголосовать за несколько вариантов ответов в вопросе с единственным выбором");
-
-        if (!IsDbContainsAllAnswers(answerIdList, question))
-            throw new InvalidOperationException("Один или несколько вариантов ответов не относятся к опросу");
+        try
+        {
+            var survey = dbContext.Surveys
+                .Include(survey => survey.Questions)
+                .ThenInclude(question => question.Answers)
+                .Single(s => s.Id == _surveyId);
+            return survey;
+        }
+        catch (InvalidOperationException err)
+        {
+            throw new InvalidOperationException("Не удалось загрузить опрос из БД", err);
+        }
+    }
+    
+    private void SurveyOpenOrThrow()
+    {
+        if (!_survey.IsOpen)
+            throw new InvalidOperationException("Нельзя проголосовать в закрытом опросе");
+    }
+    
+    private void AllQuestionsReferToSurveyOrThrow()
+    {
+        var votesQuestionIds = _votes.GetQuestionsIds();
+        var surveyQuestionIds = _survey.Questions.Select(q => q.Id); 
+        var allRefer = surveyQuestionIds.SequenceEqual(votesQuestionIds);
+        if (!allRefer)
+            throw new InvalidOperationException("Список предоставленных вопросов не соответствует списку вопросов опроса");
     }
 
-    private void VoteForAnswers(Guid userId, IEnumerable<Guid> answerIds, Question question)
+    private void VotesValidOrThrow()
     {
-        var participation = new Participation(userId, question.Id);
+        foreach (var question in _survey.Questions) 
+            AnswersValidForQuestionOrThrow(question, _votes.GetVotes(question.Id));
+    }
+
+    private static void AnswersValidForQuestionOrThrow(Question question, IEnumerable<Guid> answerIds)
+    {
+        var answerIdsList = answerIds.ToList();
+        
+        if (answerIdsList.Count == 0)
+            throw new ArgumentException("Список вариантов ответов не может быть пустым");
+        
+        if (!question.IsMultipleChoiceAllowed && answerIdsList.Count > 1)
+            throw new InvalidOperationException("В вопросе без множественного выбора нельзя выбрать несколько вариантов ответов");
+        
+        if (!AllVotesReferToQuestion(question, answerIdsList))
+            throw new InvalidOperationException("В списке представленных ответов присутствуют не относящиеся к вопросу");
+    }
+
+    private static bool AllVotesReferToQuestion(Question question, IEnumerable<Guid> answerIds)
+    {
+        var questionAnswerIds = question.Answers.Select(a => a.Id);
+        var refer = !answerIds.Except(questionAnswerIds).Any();
+        return refer;
+    }
+    
+    private void VoteForAllQuestions()
+    {
+        var participation = new Participation(Guid.NewGuid(), _voterId, _survey.Id);
         dbContext.Participation.Add(participation);
 
+        foreach (var question in _survey.Questions)
+        {
+            var questionVotes = _votes.GetVotes(question.Id);
+            VoteForSingleQuestion(participation, questionVotes);
+        }
+    }
+
+    private void VoteForSingleQuestion(Participation participation, IEnumerable<Guid> answerIds)
+    {
         foreach (var answerId in answerIds)
         {
             var answer = GetAnswerOrThrow(answerId);
             answer.IncreaseVotersCount();
 
-            if (!question.IsAnonymous)
+            if (!participation.IsAnonymous)
                 dbContext.UserSelections.Add(new UserSelection(participation, answerId));
-        }
-    }
-    
-    private Question GetQuestionOrThrow(Guid questionId)
-    {
-        try
-        {
-            var question = dbContext.Questions
-                .Include(question => question.Answers)
-                .Single(s => s.Id == questionId);
-
-            return question;
-        }
-        catch (InvalidOperationException err)
-        {
-            throw new InvalidOperationException("Не удалось загрузить вопрос из бд", err);
-        }
-    }
-
-    private Survey GetSurveyOrThrow(Guid surveyId)
-    {
-        try
-        {
-            var survey = dbContext.Surveys.Single(s => s.Id == surveyId);
-            return survey;
-        }
-        catch (InvalidOperationException err)
-        {
-            throw new InvalidOperationException("Не удалось загрузить опрос из бд", err);
         }
     }
 
@@ -112,17 +143,7 @@ public class VotingService(ApplicationDbContext dbContext)
         }
         catch (InvalidOperationException err)
         {
-            throw new InvalidOperationException("Не удалось загрузить пользователя из бд", err);
+            throw new InvalidOperationException("Не удалось загрузить пользователя из БД", err);
         }
-    }
-
-    private static bool IsDbContainsAllAnswers(IEnumerable<Guid> answerIdList, Question question)
-    {
-        var dbContainsAllAnswerIds =
-            answerIdList.Except(
-                    question.Answers
-                        .Select(a => a.Id))
-                .Any();
-        return dbContainsAllAnswerIds;
     }
 }

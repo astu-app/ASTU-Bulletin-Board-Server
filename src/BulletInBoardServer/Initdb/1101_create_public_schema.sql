@@ -7,12 +7,12 @@ set search_path to public;
 
 ------ create auxiliary functions
 ---- common
-create function is_string_null_or_empty(str text)
+create function string_not_empty(str text)
     returns boolean 
 as 
 $$
 begin
-    return str is null or trim(str) = '';
+    return not (str is null or trim(str) = '');
 end;
 $$ language plpgsql;
 
@@ -54,12 +54,12 @@ begin
 end
 $$ language plpgsql;
 
-create function is_color_format_correct(color_hex color)
+create function is_color_format_correct(color_hex text)
     returns boolean
 as
 $$
 begin
-    return color_hex ~* '\#[0-9a-f]{6}';
+    return color_hex ~* '#[0-9a-f]{6}';
 end
 $$ language plpgsql;
 
@@ -79,7 +79,7 @@ create table announcements
     hidden_at          timestamp,
     
     constraint non_empty_content
-        check (not is_string_null_or_empty(content)),
+        check (string_not_empty(content)),
     
     constraint set_auto_publishing_moment_to_already_published_announcement
         check (can_set_auto_publishing_moment(auto_publishing_at, published_at)),
@@ -100,10 +100,10 @@ create table users
     patronymic  text,
     
     constraint non_empty_first_name
-        check (is_string_null_or_empty(first_name)),
+        check (string_not_empty(first_name)),
     
     constraint non_empty_second_name
-        check (is_string_null_or_empty(second_name))
+        check (string_not_empty(second_name))
 );
 
 create table usergroups
@@ -115,7 +115,7 @@ create table usergroups
     name     text,
     
     constraint non_empty_name
-        check (is_string_null_or_empty(name))
+        check (string_not_empty(name))
 );
 
 create table announcements_usergroups
@@ -154,10 +154,10 @@ create table files
     links_count integer default 0,
     
     constraint non_empty_name
-        check (is_string_null_or_empty(name)),
+        check (string_not_empty(name)),
     
     constraint non_empty_hash
-        check (is_string_null_or_empty(hash))
+        check (string_not_empty(hash))
 );
 
 create table attachments
@@ -166,7 +166,7 @@ create table attachments
     type text,
     
     constraint non_empty_type
-        check (is_string_null_or_empty(type))
+        check (string_not_empty(type))
 );
 
 create table announcements_attachments
@@ -174,7 +174,7 @@ create table announcements_attachments
     attachment_id   uuid,
     announcement_id uuid,
 
-    primary key (announcement_id, announcement_id)
+    primary key (attachment_id, announcement_id)
 );
 
 create table announcement_categories
@@ -184,7 +184,7 @@ create table announcement_categories
     color_hex text,
     
     constraint non_empty_name
-        check (is_string_null_or_empty(name)),
+        check (string_not_empty(name)),
     constraint non_empty_color
         check (is_color_format_correct(color_hex))
 );
@@ -209,13 +209,10 @@ create table surveys
 (
     id                         uuid primary key,
 
-    announcement_id            uuid not null,
-
     voters_count              integer default 0,
     
     is_open                    boolean not null default true,
     is_anonymous               boolean not null default false,
-    is_multiple_choice_allowed boolean not null default false,
 
     auto_closing_at            timestamp,
     
@@ -230,9 +227,10 @@ create table questions
     survey_id uuid not null,
 
     content      text,
+    is_multiple_choice_allowed boolean not null default false,
     
     constraint non_empty_content
-        check (is_string_null_or_empty(content))
+        check (string_not_empty(content))
 );
 
 create table answers
@@ -245,7 +243,7 @@ create table answers
     voters_count integer default 0,
     
     constraint non_empty_content
-        check (is_string_null_or_empty(content))
+        check (string_not_empty(content))
 );
 
 create table participation

@@ -30,6 +30,11 @@ public class Question
     /// </summary>
     // public string Content { get; }
     public string Content { get; set; }
+    
+    /// <summary>
+    /// Возможно ли при голосовании выбрать несколько вариантов ответов
+    /// </summary>
+    public bool IsMultipleChoiceAllowed { get; set; }
 
     /// <summary>
     /// Варианты ответов вопроса
@@ -43,7 +48,7 @@ public class Question
 
 
 
-    public Question(Guid id, Guid surveyId, string content, AnswerList answers)
+    public Question(Guid id, Guid surveyId, string content, bool isMultipleChoiceAllowed, AnswerList answers)
     {
         if (string.IsNullOrWhiteSpace(content))
             throw new ArgumentException("Контент вопроса не может быть пустым или Null");
@@ -55,8 +60,9 @@ public class Question
 
         Id = id;
         SurveyId = surveyId;
-        Answers = answers;
         Content = content;
+        IsMultipleChoiceAllowed = isMultipleChoiceAllowed;
+        Answers = answers;
     }
 
     public Question(Guid id, Guid surveyId, string content)

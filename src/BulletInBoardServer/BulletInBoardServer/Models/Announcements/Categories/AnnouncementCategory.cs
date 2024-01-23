@@ -1,5 +1,4 @@
-﻿using BulletInBoardServer.Models.Announcements.Categories.Subscribers;
-using BulletInBoardServer.Models.Users;
+﻿using BulletInBoardServer.Models.Users;
 
 namespace BulletInBoardServer.Models.Announcements.Categories;
 
@@ -14,15 +13,11 @@ public class AnnouncementCategory
     /// <param name="id">Идентификатор категории объявлений</param>
     /// <param name="name">Название категории объявлений</param>
     /// <param name="colorHex">Цвет категории объявлений в пользовательском интерфейсе</param>
-    /// <param name="subscribers">Подписчики категории объявлений</param>
-    public AnnouncementCategory(Guid id, string name, string colorHex, SubscriberList subscribers)
+    public AnnouncementCategory(Guid id, string name, string colorHex)
+        : this(id, name, colorHex, [])
     {
-        Id = id;
-        Name = name;
-        ColorHex = colorHex;
-        Subscribers = subscribers;
     }
-    
+
     /// <summary>
     /// Категория объявлений
     /// </summary>
@@ -30,12 +25,12 @@ public class AnnouncementCategory
     /// <param name="name">Название категории объявлений</param>
     /// <param name="colorHex">Цвет категории объявлений в пользовательском интерфейсе</param>
     /// <param name="subscribers">Подписчики категории объявлений</param>
-    public AnnouncementCategory(Guid id, string name, string colorHex)
+    public AnnouncementCategory(Guid id, string name, string colorHex, SubscriberList subscribers)
     {
         Id = id;
         Name = name;
         ColorHex = colorHex;
-        // Subscribers = subscribers; // todo подумать
+        Subscribers = subscribers;
     }
 
     /// <summary>

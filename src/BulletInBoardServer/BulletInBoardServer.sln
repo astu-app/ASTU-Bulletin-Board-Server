@@ -20,9 +20,9 @@ Global
 		{B47ED8F0-AF67-481A-ABC1-C3F3777BB65A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B47ED8F0-AF67-481A-ABC1-C3F3777BB65A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B47ED8F0-AF67-481A-ABC1-C3F3777BB65A}.Release|Any CPU.Build.0 = Release|Any CPU
-        {922DA6D8-77E0-4572-A22A-C7490CEEDF86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-        {922DA6D8-77E0-4572-A22A-C7490CEEDF86}.Debug|Any CPU.Build.0 = Debug|Any CPU
-        {922DA6D8-77E0-4572-A22A-C7490CEEDF86}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-        {922DA6D8-77E0-4572-A22A-C7490CEEDF86}.Release|Any CPU.Build.0 = Debug|Any CPU
+								{922DA6D8-77E0-4572-A22A-C7490CEEDF86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+								{922DA6D8-77E0-4572-A22A-C7490CEEDF86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+								{922DA6D8-77E0-4572-A22A-C7490CEEDF86}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+								{922DA6D8-77E0-4572-A22A-C7490CEEDF86}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -16,17 +16,12 @@ public class Survey : AttachmentBase
     /// <summary>
     /// Анонимен ли опрос
     /// </summary>
-    public bool IsAnonymous { get; }
-    
-    /// <summary>
-    /// Возможно ли при голосовании выбрать несколько вариантов ответов
-    /// </summary>
-    public bool IsMultipleChoiceAllowed { get; }
+    public bool IsAnonymous { get; init; }
 
     /// <summary>
     /// Момент автоматического закрытия опроса. Null, если автоматическое закрытие не задано
     /// </summary>
-    public DateTime? AutoClosingAt { get; }
+    public DateTime? AutoClosingAt { get; init; }
     
     /// <summary>
     /// Задано ли автоматическое закрытие опроса. true, если задано, иначе - false
@@ -36,8 +31,8 @@ public class Survey : AttachmentBase
     /// <summary>
     /// Список вопросов опроса
     /// </summary>
-    public ReadOnlyQuestionList Questions => _questions.AsReadOnly();
-
+    public QuestionList Questions { get; init; }
+    
     /// <summary>
     /// Количество проголосовавших в опросе
     /// </summary>
@@ -45,29 +40,44 @@ public class Survey : AttachmentBase
 
 
 
-    private readonly QuestionList _questions;
-
-
+    /// <summary>
+    /// Опрос
+    /// </summary>
+    /// <exception cref="ArgumentNullException">Список вопросов null</exception>
+    /// <exception cref="ArgumentException">Список вопросов пустой</exception>
+    public Survey(Guid id, bool isOpen, bool isAnonymous, DateTime? autoClosingAt)
+        : this(id, [], isOpen, isAnonymous, autoClosingAt, [])
+    {
+        IsOpen = isOpen;
+        IsAnonymous = isAnonymous;
+        AutoClosingAt = autoClosingAt;
+    }
 
     /// <summary>
-    /// Конструктор опроса
+    /// Опрос
     /// </summary>
+    /// <param name="id">Идентификатор опроса</param>
+    /// <param name="announcements">Объявления, к которым опрос прикреплен</param>
+    /// <param name="isOpen">Открыт ли опрос</param>
+    /// <param name="isAnonymous">Анонимен ли опрос</param>
+    /// <param name="autoClosingAt">Время автоматического закрытия опроса</param>
+    /// <param name="questions">Вопросы опроса</param>
     /// <exception cref="ArgumentNullException">Список вопросов null</exception>
     /// <exception cref="ArgumentException">Список вопросов пустой</exception>
     public Survey(
         Guid id,
-        bool isOpen, bool isAnonymous, bool isMultipleChoiceAllowed,
+        AnnouncementList announcements,
+        bool isOpen, bool isAnonymous,
         DateTime? autoClosingAt,
         QuestionList questions)
-        : base(id, "Survey")
+        : base(id, announcements, "Survey")
     {
         QuestionValidator.AllQuestionsValidOrThrow(questions);
 
         IsOpen = isOpen;
         IsAnonymous = isAnonymous;
-        IsMultipleChoiceAllowed = isMultipleChoiceAllowed;
         AutoClosingAt = autoClosingAt;
-        _questions = questions;
+        Questions = questions;
     }
 
 
@@ -89,10 +99,4 @@ public class Survey : AttachmentBase
     /// </summary>
     public void IncreaseVotersCount() =>
         VotersCount++;
-    
-    /// <summary>
-    /// Уменьшение количества проголосовавших в опросе пользователей
-    /// </summary>
-    public void DecreaseVotersCount() =>
-        VotersCount--;
 }

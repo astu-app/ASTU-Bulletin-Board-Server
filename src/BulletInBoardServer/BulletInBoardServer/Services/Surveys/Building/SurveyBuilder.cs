@@ -1,4 +1,5 @@
-﻿using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
+﻿using BulletInBoardServer.Models.Announcements;
+using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
 using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Questions;
 
 namespace BulletInBoardServer.Services.Surveys.Building;
@@ -8,9 +9,9 @@ using Survey = Models.Announcements.Attachments.Surveys.Survey;
 public class SurveyBuilder
 {
     private Guid? _id;
+    private readonly AnnouncementList _announcements = [];
     private bool _isOpen = true;
     private bool _isAnonymous;
-    private bool _isMultipleChoiceAllowed;
     private DateTime? _autoClosingAt;
     private QuestionBuildingList? _questionBuildings;
 
@@ -19,6 +20,14 @@ public class SurveyBuilder
     public SurveyBuilder SetId(Guid id)
     {
         _id = id;
+        return this;
+    }
+    
+    public SurveyBuilder SetAnnouncements(AnnouncementList announcements)
+    {
+        foreach (var announcement in announcements) 
+            _announcements.Add(announcement);
+        
         return this;
     }
     
@@ -31,12 +40,6 @@ public class SurveyBuilder
     public SurveyBuilder IsAnonymous(bool isAnonymous)
     {
         _isAnonymous = isAnonymous;
-        return this;
-    }
-    
-    public SurveyBuilder IsMultiChoiceAllowed(bool allowed)
-    {
-        _isMultipleChoiceAllowed = allowed;
         return this;
     }
     
@@ -56,15 +59,20 @@ public class SurveyBuilder
     
     public Survey Build()
     {
+        if (_id is null)
+            throw new InvalidOperationException("Id опроса должен быть задан");
+        if (_announcements is null)
+            throw new InvalidOperationException("Id объявления, к которому относится опрос, должен быть задан");
+        
         if (_questionBuildings is null)
             throw new InvalidOperationException("Список вопросов должен быть задан");
 
         var questions = CreateQuestions(_questionBuildings);
         return new Survey(
-            _id ?? Guid.Empty,
+            _id.Value,
+            _announcements,
             _isOpen,
             _isAnonymous,
-            _isMultipleChoiceAllowed,
             _autoClosingAt,
             questions
         );
@@ -113,7 +121,7 @@ public class SurveyBuilder
         foreach (var building in questionBuildings)
         {
             var answers = CreateAnswers(building.Answers);
-            var question = new Question(Guid.Empty, Guid.Empty, building.Content, answers);
+            var question = new Question(Guid.Empty, Guid.Empty, building.Content, building.IsMultipleChoiceAllowed, answers);
             questions.Add(question);
         }
 

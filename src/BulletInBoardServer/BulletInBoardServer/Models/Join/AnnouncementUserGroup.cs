@@ -6,14 +6,12 @@ namespace BulletInBoardServer.Models.Join;
 /// <summary>
 /// Сущность для настройки связи многие-ко-многим <see cref="Announcement"/> & <see cref="UserGroup"/>
 /// </summary>
-/// <param name="announcementId">Идентификатор объявления</param>
-/// <param name="userGroupId">Идентификатор группы пользователей</param>
-public class AnnouncementUserGroup(Guid announcementId, Guid userGroupId)
+public class AnnouncementUserGroup
 {
     /// <summary>
     /// Идентификатор объявления
     /// </summary>
-    public Guid AnnouncementId { get; } = announcementId;
+    public Guid AnnouncementId { get; set; }
 
     /// <summary>
     /// Объявление
@@ -27,7 +25,7 @@ public class AnnouncementUserGroup(Guid announcementId, Guid userGroupId)
     /// <summary>
     /// Идентификатор группы пользователей
     /// </summary>
-    public Guid UserGroupId { get; } = userGroupId;
+    public Guid UserGroupId { get; set; }
 
     /// <summary>
     /// Группа пользователей
@@ -37,4 +35,22 @@ public class AnnouncementUserGroup(Guid announcementId, Guid userGroupId)
     /// если в опросе запрещен множественный выбор, и не меньше в противном случае
     /// </remarks>
     public UserGroup UserGroup { get; set; } = null!;
+    
+    
+    
+    /// <summary>
+    /// Сущность для настройки связи многие-ко-многим <see cref="Announcement"/> & <see cref="UserGroup"/>
+    /// </summary>
+    /// <param name="announcementId">Идентификатор объявления</param>
+    /// <param name="userGroupId">Идентификатор группы пользователей</param>
+    public AnnouncementUserGroup(Guid announcementId, Guid userGroupId)
+    {
+        AnnouncementId = announcementId;
+        UserGroupId = userGroupId;
+    }
+
+    public AnnouncementUserGroup()
+    {
+        
+    }
 }

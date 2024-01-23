@@ -33,13 +33,11 @@ public class AnonymousSurveyVotersGetter(ApplicationDbContext dbContext)
 
 
     protected override QuestionList GetSurveyQuestions(Guid surveyId) =>
-        new(
-            DbContext.Questions
-                .Where(q => q.SurveyId == surveyId)
-                .Include(q => q.ParticipationList)
-                .ThenInclude(p => p.User)
-                .ToList()
-        );
+        DbContext.Questions
+            .Where(q => q.SurveyId == surveyId)
+            .Include(q => q.ParticipationList)
+            .ThenInclude(p => p.User)
+            .ToQuestions();
 
     private static AnonymousSurveyVoters GetSurveyVoters(Guid surveyId, QuestionList questions)
     {

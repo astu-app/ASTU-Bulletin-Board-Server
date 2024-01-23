@@ -8,17 +8,17 @@ namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
 /// <param name="id">Идентификатор варианта ответа</param>
 /// <param name="content">Текст варианта ответа</param>
 /// <param name="votersCount">Количество проголосовавших за вариант ответа</param>
-public class Answer(Guid id, Guid questionId, string content, int votersCount) 
+public class Answer(Guid id, Guid questionId, string content, int votersCount = 0) 
 {
     /// <summary>
     /// Идентификатор варианта ответа
     /// </summary>
-    public Guid Id { get; } = id;
+    public Guid Id { get; init; } = id;
 
     /// <summary>
     /// Идентификатор опроса, к которому относится вариант ответа
     /// </summary>
-    public Guid QuestionId { get; } = questionId;
+    public Guid QuestionId { get; init; } = questionId;
 
     /// <summary>
     /// Опрос, к которому относится вариант ответа
@@ -32,7 +32,7 @@ public class Answer(Guid id, Guid questionId, string content, int votersCount)
     /// <summary>
     /// Текстовое содержимое варианта ответа
     /// </summary>
-    public string Content { get; } = content;
+    public string Content { get; init; } = content;
 
     /// <summary>
     /// Количество выбравших вариант ответа пользователей

@@ -8,39 +8,9 @@ namespace BulletInBoardServer.Models.UserGroups;
 public class UserGroup
 {
     /// <summary>
-    /// Группа пользователей доски объявлений
-    /// </summary>
-    /// <param name="id">Идентификатор группы пользователей</param>
-    /// <param name="name">Название группы пользователей</param>
-    /// <param name="adminId">Идентификатор администратора группы пользователей</param>
-    /// <param name="memberRights">Права участника группы пользователей</param>
-    /// <param name="childrenGroups">Дочерние группы пользователей</param>
-    public UserGroup(Guid id, string name, Guid? adminId, GroupMemberRights memberRights,
-        UserGroupList childrenGroups)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Название группы пользователей не может быть пустым");
-        
-        Id = id;
-        Name = name;
-        AdminId = adminId;
-        MemberRights = memberRights;
-        ChildrenGroups = childrenGroups;
-    }
-
-    public UserGroup(Guid id, string name, Guid? adminId)
-    { // debug
-        Id = id;
-        Name = name;
-        AdminId = adminId;
-        // MemberRights = memberRights;
-        // ChildrenGroups = childrenGroups;
-    }
-
-    /// <summary>
     /// Идентификатор группы пользователей
     /// </summary>
-    public Guid Id { get; }
+    public Guid Id { get; init; }
     
     /// <summary>
     /// Название группы пользователей
@@ -50,7 +20,7 @@ public class UserGroup
     /// <summary>
     /// Идентификатор администратора группы пользователей
     /// </summary>
-    public Guid? AdminId { get; }
+    public Guid? AdminId { get; set; }
     
     /// <summary>
     /// Администратор группы пользователей
@@ -64,10 +34,46 @@ public class UserGroup
     /// <summary>
     /// Права участника группы пользователей
     /// </summary>
-    public GroupMemberRights MemberRights { get; }
+    public GroupMemberRights MemberRights { get; init; }
 
     /// <summary>
     /// Дочерние группы пользователей
     /// </summary>
-    public UserGroupList ChildrenGroups { get; }
+    public UserGroupList ChildrenGroups { get; init; }
+    
+    
+    
+    /// <summary>
+    /// Группа пользователей доски объявлений
+    /// </summary>
+    /// <param name="id">Идентификатор группы пользователей</param>
+    /// <param name="name">Название группы пользователей</param>
+    /// <param name="adminId">Идентификатор администратора группы пользователей</param>
+    /// <throws>ArgumentException - Название группы пользователей пустое</throws>
+    public UserGroup(Guid id, string name, Guid? adminId)
+        : this(id, name, adminId, [], [])
+    {
+    }
+
+    /// <summary>
+    /// Группа пользователей доски объявлений
+    /// </summary>
+    /// <param name="id">Идентификатор группы пользователей</param>
+    /// <param name="name">Название группы пользователей</param>
+    /// <param name="adminId">Идентификатор администратора группы пользователей</param>
+    /// <param name="memberRights">Права участника группы пользователей</param>
+    /// <param name="childrenGroups">Дочерние группы пользователей</param>
+    /// <throws>ArgumentException - Название группы пользователей пустое</throws>
+    public UserGroup(Guid id, string name, Guid? adminId, GroupMemberRights memberRights,
+        UserGroupList childrenGroups)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Название группы пользователей не может быть пустым");
+        
+        Id = id;
+        Name = name;
+        AdminId = adminId;
+        MemberRights = memberRights;
+        ChildrenGroups = childrenGroups;
+    }
 }

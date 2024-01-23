@@ -6,14 +6,12 @@ namespace BulletInBoardServer.Models.Join;
 /// <summary>
 /// Сущность для настройки связи многие-ко-многим <see cref="Announcement"/> & <see cref="Attachment"/>
 /// </summary>
-/// <param name="announcementId">Идентификатор объявления</param>
-/// <param name="attachmentId">Идентификатор вложения</param>
-public class AnnouncementAttachment(Guid announcementId, Guid attachmentId)
+public class AnnouncementAttachment
 {
     /// <summary>
     /// Идентификатор объявления
     /// </summary>
-    public Guid AnnouncementId { get; } = announcementId;
+    public Guid AnnouncementId { get; init; }
     
     /// <summary>
     /// Объявление
@@ -27,7 +25,9 @@ public class AnnouncementAttachment(Guid announcementId, Guid attachmentId)
     /// <summary>
     /// Идентификатор вложения
     /// </summary>
-    public Guid AttachmentId { get; } = attachmentId;
+    public Guid AttachmentId { get; init; }
+    
+    
     
     /// <summary>
     /// Вложение
@@ -37,4 +37,19 @@ public class AnnouncementAttachment(Guid announcementId, Guid attachmentId)
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public AttachmentBase Attachment { get; set; } = null!;
+    
+    /// <summary>
+    /// Сущность для настройки связи многие-ко-многим <see cref="Announcement"/> & <see cref="Attachment"/>
+    /// </summary>
+    /// <param name="announcementId">Идентификатор объявления</param>
+    /// <param name="attachmentId">Идентификатор вложения</param>
+    public AnnouncementAttachment(Guid announcementId, Guid attachmentId)
+    {
+        AnnouncementId = announcementId;
+        AttachmentId = attachmentId;
+    }
+
+    public AnnouncementAttachment()
+    {
+    }
 }

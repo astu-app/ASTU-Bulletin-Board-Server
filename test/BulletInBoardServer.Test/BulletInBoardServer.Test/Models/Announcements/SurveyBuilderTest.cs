@@ -22,10 +22,10 @@ public class SurveyBuilderTest
     {
         var builder = new SurveyBuilder();
         var noAnswers = new QuestionBuildingList {
-            new ("1", [])
+            new ("1", true, [])
         };
         var singleAnswer = new QuestionBuildingList {
-            new ("1", ["1"])
+            new ("1", true, ["1"])
         };
 
         var setZeroAnswers = () => builder.SetQuestions(noAnswers);
@@ -40,7 +40,7 @@ public class SurveyBuilderTest
     {
         var builder = new SurveyBuilder();
         var questions = new QuestionBuildingList {
-            new (string.Empty, ["1", "2"])
+            new (string.Empty, true, ["1", "2"])
         };
 
         var setQuestions = () => builder.SetQuestions(questions);
@@ -53,6 +53,7 @@ public class SurveyBuilderTest
     public void Build_NoQuestions_Throw()
     {
         var builder = new SurveyBuilder();
+        builder.SetId(Guid.Empty);
 
         var build = () => builder.Build();
         build.Should().Throw<InvalidOperationException>().WithMessage("Список вопросов должен быть задан");
@@ -63,6 +64,7 @@ public class SurveyBuilderTest
     public void Build_CorrectQuestions_Success(QuestionBuildingList questions, Survey expected)
     {
         var builder = new SurveyBuilder();
+        builder.SetId(Guid.Empty);
 
         builder.SetQuestions(questions);
         var survey = builder.Build();
@@ -72,62 +74,57 @@ public class SurveyBuilderTest
 
     public static IEnumerable<object[]> CorrectQuestions_TestData()
     {
-        yield return new object[]
-        {
-            new QuestionBuildingList { new ("q1", ["a1", "a2"]), },
+        yield return
+        [
+            new QuestionBuildingList { new ("q1", true, ["a1", "a2"]), },
             new Survey(
                 Guid.Empty, 
-                // Guid.Empty, 
+                [], 
                 true, 
-                false, 
                 false, 
                 null,
                 [
                     new Question(Guid.Empty, Guid.Empty,
                         "q1",
+                        true,
                         [
-                            new Answer(Guid.Empty, Guid.Empty, "a1", 0),
-                            new Answer(Guid.Empty, Guid.Empty, "a2", 0),
-                        ],
-                        0,
-                        false, false)
+                            new Answer(Guid.Empty, Guid.Empty, "a1"),
+                            new Answer(Guid.Empty, Guid.Empty, "a2"),
+                        ])
                 ]
             )
-        };
-        yield return new object[]
-        {
+        ];
+        yield return
+        [
             new QuestionBuildingList
             {
-                new ("q1", ["a1", "a2"]),
-                new ("q2", ["a1", "a2"]),
+                new ("q1", true, ["a1", "a2"]),
+                new ("q2", true, ["a1", "a2"]),
             },
             new Survey(
                 Guid.Empty, 
-                // Guid.Empty, 
+                [], 
                 true, 
-                false, 
                 false, 
                 null,
                 [
                     new Question(Guid.Empty, Guid.Empty,
                         "q1",
+                        true,
                         [
-                            new Answer(Guid.Empty, Guid.Empty, "a1", 0),
-                            new Answer(Guid.Empty, Guid.Empty, "a2", 0)
-                        ],
-                        0,
-                        false, false),
+                            new Answer(Guid.Empty, Guid.Empty, "a1"),
+                            new Answer(Guid.Empty, Guid.Empty, "a2")
+                        ]),
 
                     new Question(Guid.Empty, Guid.Empty,
                         "q2",
+                        true,
                         [
-                            new Answer(Guid.Empty, Guid.Empty,"a1", 0),
-                            new Answer(Guid.Empty, Guid.Empty,"a2", 0)
-                        ],
-                        0,
-                        false, false)
+                            new Answer(Guid.Empty, Guid.Empty,"a1"),
+                            new Answer(Guid.Empty, Guid.Empty,"a2")
+                        ])
                 ]
             )
-        };
+        ];
     }
 }

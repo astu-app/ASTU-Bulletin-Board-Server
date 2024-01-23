@@ -24,7 +24,6 @@ create index questions_survey_id on questions using hash (survey_id);
 
 -- answers table
 create index answers_survey_id on answers using hash (question_id);
-create index answers_answer_type_idx on answers using hash (answer_type);
 
 
 

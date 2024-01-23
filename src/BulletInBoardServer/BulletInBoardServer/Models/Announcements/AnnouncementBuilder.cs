@@ -16,7 +16,7 @@ public class AnnouncementBuilder
     private DateTime? _hiddenAt;
     private DateTime? _autoPublishingAt;
     private DateTime? _autoHidingAt;
-    private AttachmentList _attachments = new();
+    private AttachmentList? _attachments;
 
     private bool _containsSurvey;
 
@@ -96,41 +96,40 @@ public class AnnouncementBuilder
         return this;
     }
 
-    // public Announcement Build() // debug
-    // {
-    //     if (string.IsNullOrWhiteSpace(_content))
-    //         throw new InvalidOperationException("Контент сообщения должен быть задан");
-    //     if (_author is null)
-    //         throw new InvalidOperationException("Автор сообщения должен быть задан");
-    //     if (_audience is null)
-    //         throw new InvalidOperationException("Аудитория сообщения должна быть задана");
-    //
-    //     var announcement = new Announcement(
-    //         _id ?? Guid.NewGuid(),
-    //         _content,
-    //         _author,
-    //         _categories ?? new AnnouncementCategories(),
-    //         _audience,
-    //         _publishedAt,
-    //         _hiddenAt,
-    //         _autoPublishingAt,
-    //         _autoHidingAt,
-    //         _attachments
-    //     );
-    //
-    //     return announcement;
-    // }
+    public Announcement Build()
+    {
+        if (_id is null)
+            throw new InvalidOperationException("Id объявления должен быть задан");
+        
+        if (string.IsNullOrWhiteSpace(_content))
+            throw new InvalidOperationException("Контент объявления должен быть задан");
+        if (_author is null)
+            throw new InvalidOperationException("Автор объявления должен быть задан");
+        if (_audience is null)
+            throw new InvalidOperationException("Аудитория объявления должна быть задана");
+    
+        var announcement = new Announcement(
+            id: _id ?? Guid.NewGuid(),
+            content: _content,
+            author: _author,
+            categories: _categories ?? [],
+            audience: _audience,
+            publishedAt: _publishedAt,
+            hiddenAt: _hiddenAt,
+            autoPublishingAt: _autoPublishingAt,
+            autoHidingAt: _autoHidingAt,
+            attachments: _attachments ?? []
+        );
+    
+        return announcement;
+    }
 
     private void AddAttachmentOrThrow(AttachmentBase attachment)
     {
-        if (attachment is null)
-            throw new ArgumentNullException(nameof(attachment));
+        ArgumentNullException.ThrowIfNull(attachment);
 
-        var isSurvey = attachment is Survey; 
-        if (isSurvey && _containsSurvey)
-            throw new InvalidOperationException("Объявление уже содержит опрос");
-        
+        _attachments ??= [];
         _attachments.Add(attachment);
-        _containsSurvey = isSurvey;
+        _containsSurvey = attachment is Survey;
     }
 }

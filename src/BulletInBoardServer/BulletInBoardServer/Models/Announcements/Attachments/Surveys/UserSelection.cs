@@ -38,7 +38,11 @@ public class UserSelection
     /// <summary>
     /// Участие, с которым связан выбор пользователя
     /// </summary>
-    public Participation Participation { get; set; } = null!; // todo remark
+    /// <remarks>
+    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Перед использование обязательно должно быть установлено
+    /// </remarks>
+    public Participation Participation { get; set; } = null!; 
 
     /// <summary>
     /// Идентификатор ответа, с которым связан выбор

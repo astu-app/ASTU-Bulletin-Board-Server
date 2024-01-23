@@ -16,6 +16,8 @@ namespace BulletInBoardServer.Data;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
     public DbSet<User> Users { get; init; } = null!;
+    public DbSet<UserGroup> UserGroups { get; init; } = null!;
+    public DbSet<SingleMemberRights> MemberRights { get; init; } = null!;
     public DbSet<Announcement> Announcements { get; init; } = null!;
     public DbSet<File> Files { get; init; } = null!;
     public DbSet<Survey> Surveys { get; init; } = null!;
@@ -135,7 +137,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .IsRequired();
 
             entity
-                .HasMany<Announcement>()
+                .HasMany(ab => ab.Announcements)
                 .WithMany(e => e.Attachments)
                 .UsingEntity<AnnouncementAttachment>(
                     join => join
@@ -244,6 +246,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnType("uuid")
                 .ValueGeneratedOnAdd();
 
+            entity.Property(e => e.AdminId)
+                .HasColumnName("admin_id")
+                .HasColumnType("uuid");
+
             entity
                 .HasOne(e => e.Admin)
                 .WithMany()
@@ -327,7 +333,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
             entity
                 .HasOne(e => e.UserGroup)
-                .WithMany()
+                .WithMany(e => e.MemberRights)
                 .HasForeignKey(e => e.UserGroupId);
         });
     }
@@ -411,11 +417,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnType("boolean")
                 .HasDefaultValue(true);
             
-            entity.Property(e => e.IsMultipleChoiceAllowed)
-                .HasColumnName("is_multiple_choice_allowed")
-                .HasColumnType("boolean")
-                .HasDefaultValue(true);
-            
             entity.Property(e => e.AutoClosingAt)
                 .HasColumnName("auto_closing_at")
                 .HasColumnType("timestamp")
@@ -448,6 +449,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnName("content")
                 .HasColumnType("text")
                 .IsRequired();
+            
+            entity.Property(e => e.IsMultipleChoiceAllowed)
+                .HasColumnName("is_multiple_choice_allowed")
+                .HasColumnType("boolean")
+                .HasDefaultValue(true);
         });
     }
 
@@ -469,7 +475,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
             entity
                 .HasOne(e => e.Question)
-                .WithMany()
+                .WithMany(q => q.Answers)
                 .HasForeignKey(e => e.QuestionId)
                 .IsRequired();
 
