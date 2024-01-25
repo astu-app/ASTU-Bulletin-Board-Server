@@ -1,6 +1,7 @@
-﻿using BulletInBoardServer.Models.Users;
+﻿using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
+using BulletInBoardServer.Models.Users;
 
-namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys.QuestionParticipation;
+namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys.SurveyParticipation;
 
 /// <summary>
 /// Участие пользователя в вопросе
@@ -10,12 +11,12 @@ public class Participation
     /// <summary>
     /// Идентификатор участия
     /// </summary>
-    public Guid Id { get; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// Идентификатор пользователя, связанного с участием
     /// </summary>
-    public Guid UserId { get; }
+    public Guid UserId { get; init; }
 
     /// <summary>
     /// Пользователь, связанный с участием
@@ -24,12 +25,12 @@ public class Participation
     /// Поле должно устанавливаться только при помощи Entity Framework.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
-    public User User { get; set; } = null!;
+    public User User { get; init; } = null!;
     
     /// <summary>
     /// Идентификатор опроса, к которому относится участие
     /// </summary>
-    public Guid SurveyId { get; }
+    public Guid SurveyId { get; init; }
 
     /// <summary>
     /// Опрос, к которому относится участие
@@ -38,12 +39,20 @@ public class Participation
     /// Поле должно устанавливаться только при помощи Entity Framework.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
-    public Survey Survey { get; set; } = null!;
+    public Survey Survey { get; init; } = null!;
 
     /// <summary>
     /// Является ли участие анонимным // todo проверить, что будет, если использовать, не загружая Survey
     /// </summary>
     public bool IsAnonymous => Survey.IsAnonymous;
+
+    /// <summary>
+    /// Список вариантов ответов, с которым связано участие
+    /// </summary>
+    /// <remarks>
+    /// Не будет содержать элементов, если варианты ответов связаны с анонимным опросом 
+    /// </remarks>
+    public AnswerList Answers { get; init; } = [];
     
     
     
@@ -58,5 +67,12 @@ public class Participation
         Id = id;
         UserId = userId;
         SurveyId = surveyId;
+    }
+
+    /// <summary>
+    /// Участие пользователя в вопросе
+    /// </summary>
+    public Participation()
+    {
     }
 }

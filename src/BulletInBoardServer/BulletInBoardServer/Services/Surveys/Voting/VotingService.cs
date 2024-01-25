@@ -1,8 +1,8 @@
 ﻿using BulletInBoardServer.Data;
 using BulletInBoardServer.Models.Announcements.Attachments.Surveys;
 using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.QuestionParticipation;
 using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Questions;
+using BulletInBoardServer.Models.Announcements.Attachments.Surveys.SurveyParticipation;
 using Microsoft.EntityFrameworkCore;
 
 namespace BulletInBoardServer.Services.Surveys.Voting;
@@ -22,7 +22,7 @@ public class VotingService(ApplicationDbContext dbContext)
     
     
     /// <summary>
-    /// Голосование в вопросе
+    /// Проголосовать в опросе
     /// </summary>
     /// <param name="voterId">Идентификатор голосующего пользователя</param>
     /// <param name="surveyId">Идентификатор опроса, в котором пользователь голосует</param>
@@ -40,7 +40,7 @@ public class VotingService(ApplicationDbContext dbContext)
         _survey.IncreaseVotersCount();
         VoteForAllQuestions();
 
-        dbContext.SaveChangesAsync();
+        dbContext.SaveChanges();
     }
 
 
@@ -138,8 +138,8 @@ public class VotingService(ApplicationDbContext dbContext)
     {
         try
         {
-            var user = dbContext.Answers.Single(answer => answer.Id == answerId);
-            return user;
+            var answer = dbContext.Answers.Single(answer => answer.Id == answerId);
+            return answer;
         }
         catch (InvalidOperationException err)
         {

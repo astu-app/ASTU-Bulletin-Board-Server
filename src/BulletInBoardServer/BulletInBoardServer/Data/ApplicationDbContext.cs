@@ -2,8 +2,8 @@ using BulletInBoardServer.Models.Announcements;
 using BulletInBoardServer.Models.Announcements.Attachments;
 using BulletInBoardServer.Models.Announcements.Attachments.Surveys;
 using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.QuestionParticipation;
 using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Questions;
+using BulletInBoardServer.Models.Announcements.Attachments.Surveys.SurveyParticipation;
 using BulletInBoardServer.Models.Announcements.Categories;
 using BulletInBoardServer.Models.Join;
 using BulletInBoardServer.Models.UserGroups;
@@ -421,6 +421,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnName("auto_closing_at")
                 .HasColumnType("timestamp")
                 .IsRequired(false);
+
+            entity.HasMany(e => e.Voters)
+                .WithMany()
+                .UsingEntity<Participation>();
         });
     }
 
@@ -452,8 +456,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             
             entity.Property(e => e.IsMultipleChoiceAllowed)
                 .HasColumnName("is_multiple_choice_allowed")
-                .HasColumnType("boolean")
-                .HasDefaultValue(true);
+                .HasColumnType("boolean");
         });
     }
 
@@ -488,6 +491,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnName("voters_count")
                 .HasColumnType("integer")
                 .HasDefaultValue(0);
+
+            entity.HasMany(a => a.Participation)
+                .WithMany(p => p.Answers)
+                .UsingEntity<UserSelection>();
         });
     }
 
@@ -536,7 +543,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(e => e.AnswerId)
                 .HasColumnName("answer_id")
                 .HasColumnType("uuid");
-
+    
             entity
                 .HasOne(e => e.Participation)
                 .WithMany()

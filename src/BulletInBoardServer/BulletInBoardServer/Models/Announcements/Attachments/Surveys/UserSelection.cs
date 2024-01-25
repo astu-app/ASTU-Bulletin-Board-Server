@@ -1,5 +1,5 @@
 ﻿using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.QuestionParticipation;
+using BulletInBoardServer.Models.Announcements.Attachments.Surveys.SurveyParticipation;
 
 namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys;
 
@@ -8,6 +8,36 @@ namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys;
 /// </summary>
 public class UserSelection
 {
+    /// <summary>
+    /// Идентификатор участия, с которы связан выбор пользователя
+    /// </summary>
+    public Guid ParticipationId { get; init; }
+
+    /// <summary>
+    /// Участие, с которым связан выбор пользователя
+    /// </summary>
+    /// <remarks>
+    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Перед использование обязательно должно быть установлено
+    /// </remarks>
+    public Participation Participation { get; init; } = null!;
+
+    /// <summary>
+    /// Идентификатор ответа, с которым связан выбор
+    /// </summary>
+    public Guid AnswerId { get; init; }
+
+    /// <summary>
+    /// Ответ, с которым связан выбор
+    /// </summary>
+    /// <remarks>
+    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Перед использование обязательно должно быть установлено
+    /// </remarks>
+    public Answer Answer { get; init; } = null!;
+
+
+
     /// <summary>
     /// Выбор пользователя в открытом опросе. Содержит связку Пользователь - Вариант ответа
     /// </summary>
@@ -18,7 +48,7 @@ public class UserSelection
         ParticipationId = participationId;
         AnswerId = answerId;
     }
-    
+
     /// <summary>
     /// Выбор пользователя в открытом опросе. Содержит связку Пользователь - Вариант ответа
     /// </summary>
@@ -27,34 +57,7 @@ public class UserSelection
     public UserSelection(Participation participation, Guid answerId)
     {
         Participation = participation;
+        ParticipationId = participation.Id;
         AnswerId = answerId;
     }
-
-    /// <summary>
-    /// Идентификатор участия, с которы связан выбор пользователя
-    /// </summary>
-    public Guid ParticipationId { get; set; }
-    
-    /// <summary>
-    /// Участие, с которым связан выбор пользователя
-    /// </summary>
-    /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
-    /// Перед использование обязательно должно быть установлено
-    /// </remarks>
-    public Participation Participation { get; set; } = null!; 
-
-    /// <summary>
-    /// Идентификатор ответа, с которым связан выбор
-    /// </summary>
-    public Guid AnswerId { get; set; }
-
-    /// <summary>
-    /// Ответ, с которым связан выбор
-    /// </summary>
-    /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
-    /// Перед использование обязательно должно быть установлено
-    /// </remarks>
-    public Answer Answer { get; set; } = null!;
 }

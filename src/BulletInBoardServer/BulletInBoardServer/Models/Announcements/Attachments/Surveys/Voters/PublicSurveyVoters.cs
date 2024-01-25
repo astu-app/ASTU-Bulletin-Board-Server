@@ -1,7 +1,7 @@
 ﻿namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys.Voters;
 
-public class PublicSurveyVoters
+public class PublicSurveyVoters(Guid surveyId, VoterList voters, ICollection<QuestionVoters> everyQuestionVoters)
+    : SurveyVotersBase(surveyId, voters)
 {
-    public Guid SurveyId { get; set; }
-    public ICollection<PublicQuestionVoters> QuestionListVoters { get; set; }
+    public ICollection<QuestionVoters> EveryQuestionVoters { get; init; } = everyQuestionVoters;
 }

@@ -1,4 +1,5 @@
 ﻿using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Questions;
+using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Voters;
 using BulletInBoardServer.Services.Surveys.Validators;
 
 namespace BulletInBoardServer.Models.Announcements.Attachments.Surveys;
@@ -37,6 +38,11 @@ public class Survey : AttachmentBase
     /// Количество проголосовавших в опросе
     /// </summary>
     public int VotersCount { get; private set; }
+
+    /// <summary>
+    /// Пользователи, проголосовавшие в опросе
+    /// </summary>
+    public VoterList Voters { get; init; } = [];
 
 
 

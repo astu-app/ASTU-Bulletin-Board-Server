@@ -51,10 +51,11 @@ public static class DatabaseFiller
         foreach (var mainUsergroupRight in mainUsergroupRights) 
             dbContext.MemberRights.Add(mainUsergroupRight);
         
+        #region Создание объявления с публичным опросом
         // ////////////////////////////// Add announcements
-        var announcement = new Announcement(
-            id: AnnouncementId,
-            content: "content",
+        var announcementWithPublicSurvey = new Announcement(
+            id: AnnouncementWithAnonymousSurveyId,
+            content: "Объявление с публичным опросом",
             author: mainUsergroupAdmin,
             categories: [],
             audience: [mainUsergroup],
@@ -64,16 +65,16 @@ public static class DatabaseFiller
             autoHidingAt: null,
             attachments: []
         );
-        dbContext.Announcements.Add(announcement);
+        dbContext.Announcements.Add(announcementWithPublicSurvey);
         
-                // ////////////////////////////// Add surveys
+        // ////////////////////////////// Add surveys
         // //// Create answers
-        var answer_1_OfPublicSurvey = new Answer(Answer_1_OfPublicSurvey, Question_1_WithSingleChoice_OfPublicSurvey, "ответ 1 публичного опроса");
-        var answer_2_OfPublicSurvey = new Answer(Answer_2_OfPublicSurvey, Question_1_WithSingleChoice_OfPublicSurvey, "ответ 2 публичного опроса");
-        var answer_3_OfPublicSurvey = new Answer(Answer_3_OfPublicSurvey, Question_1_WithSingleChoice_OfPublicSurvey, "ответ 3 публичного опроса");
-        var answer_4_OfPublicSurvey = new Answer(Answer_4_OfPublicSurvey, Question_1_WithSingleChoice_OfPublicSurvey, "ответ 4 публичного опроса");
-        var answer_5_OfPublicSurvey = new Answer(Answer_5_OfPublicSurvey, Question_1_WithSingleChoice_OfPublicSurvey, "ответ 5 публичного опроса");
-        var answer_6_OfPublicSurvey = new Answer(Answer_6_OfPublicSurvey, Question_1_WithSingleChoice_OfPublicSurvey, "ответ 6 публичного опроса");
+        var answer_1_OfPublicSurvey = new Answer(Answer_1_OfPublicSurvey, Question_1_WithSingleChoice_OfPublicSurvey, "ответ 1 вопроса 1 публичного опроса");
+        var answer_2_OfPublicSurvey = new Answer(Answer_2_OfPublicSurvey, Question_1_WithSingleChoice_OfPublicSurvey, "ответ 2 вопроса 1 публичного опроса");
+        var answer_3_OfPublicSurvey = new Answer(Answer_3_OfPublicSurvey, Question_1_WithSingleChoice_OfPublicSurvey, "ответ 3 вопроса 1 публичного опроса");
+        var answer_4_OfPublicSurvey = new Answer(Answer_4_OfPublicSurvey, Question_2_WithMultipleChoice_OfPublicSurvey, "ответ 4 вопроса 2 публичного опроса");
+        var answer_5_OfPublicSurvey = new Answer(Answer_5_OfPublicSurvey, Question_2_WithMultipleChoice_OfPublicSurvey, "ответ 5 вопроса 2 публичного опроса");
+        var answer_6_OfPublicSurvey = new Answer(Answer_6_OfPublicSurvey, Question_2_WithMultipleChoice_OfPublicSurvey, "ответ 6 вопроса 2 публичного опроса");
         dbContext.Answers.Add(answer_1_OfPublicSurvey);
         dbContext.Answers.Add(answer_2_OfPublicSurvey);
         dbContext.Answers.Add(answer_3_OfPublicSurvey);
@@ -109,16 +110,143 @@ public static class DatabaseFiller
         dbContext.Questions.Add(question_2_OfPublicSurvey);
         
         // //// Create surveys
-        var survey = new Survey(
+        var publicSurvey = new Survey(
             id: PublicSurveyId,
-            announcements: [announcement],
+            announcements: [announcementWithPublicSurvey],
             isOpen: true,
             isAnonymous: false,
             autoClosingAt: null,
             questions: [question_1_OfPublicSurvey, question_2_OfPublicSurvey]
         );
-        announcement.Attach(survey);
-        dbContext.Surveys.Add(survey);
+        announcementWithPublicSurvey.Attach(publicSurvey);
+        dbContext.Surveys.Add(publicSurvey);
+        #endregion Создание объявления с публичным опросом
+        
+        
+        
+        #region Создание объявления с анонимным опросом
+        // ////////////////////////////// Add announcements
+        var announcementWithAnonymousSurvey = new Announcement(
+            id: AnnouncementWithPublicSurveyId,
+            content: "Объявление с анонимным опросом",
+            author: mainUsergroupAdmin,
+            categories: [],
+            audience: [mainUsergroup],
+            publishedAt: DateTime.Now,
+            hiddenAt: null,
+            autoPublishingAt: null,
+            autoHidingAt: null,
+            attachments: []
+        );
+        dbContext.Announcements.Add(announcementWithAnonymousSurvey);
+        
+        // ////////////////////////////// Add surveys
+        // //// Create answers
+        var answer_1_OfAnonymousSurvey = new Answer(Answer_1_OfAnonymousSurvey, Question_1_WithSingleChoice_OfAnonymousSurvey, "ответ 1 вопроса 1 анонимного опроса");
+        var answer_2_OfAnonymousSurvey = new Answer(Answer_2_OfAnonymousSurvey, Question_1_WithSingleChoice_OfAnonymousSurvey, "ответ 2 вопроса 1 анонимного опроса");
+        var answer_3_OfAnonymousSurvey = new Answer(Answer_3_OfAnonymousSurvey, Question_1_WithSingleChoice_OfAnonymousSurvey, "ответ 3 вопроса 1 анонимного опроса");
+        var answer_4_OfAnonymousSurvey = new Answer(Answer_4_OfAnonymousSurvey, Question_2_WithMultipleChoice_OfAnonymousSurvey, "ответ 4 вопроса 2 анонимного опроса");
+        var answer_5_OfAnonymousSurvey = new Answer(Answer_5_OfAnonymousSurvey, Question_2_WithMultipleChoice_OfAnonymousSurvey, "ответ 5 вопроса 2 анонимного опроса");
+        var answer_6_OfAnonymousSurvey = new Answer(Answer_6_OfAnonymousSurvey, Question_2_WithMultipleChoice_OfAnonymousSurvey, "ответ 6 вопроса 2 анонимного опроса");
+        dbContext.Answers.Add(answer_1_OfAnonymousSurvey);
+        dbContext.Answers.Add(answer_2_OfAnonymousSurvey);
+        dbContext.Answers.Add(answer_3_OfAnonymousSurvey);
+        dbContext.Answers.Add(answer_4_OfAnonymousSurvey);
+        dbContext.Answers.Add(answer_5_OfAnonymousSurvey);
+        dbContext.Answers.Add(answer_6_OfAnonymousSurvey);
+        
+        // //// Create questions
+        var question_1_OfAnonymousSurvey = new Question(
+            id: Question_1_WithSingleChoice_OfAnonymousSurvey, 
+            surveyId: AnonymousSurveyId, 
+            "вопрос 1 с единственным выбором анонимного опроса", 
+            isMultipleChoiceAllowed: false,
+            answers: [
+                answer_1_OfAnonymousSurvey,
+                answer_2_OfAnonymousSurvey,
+                answer_3_OfAnonymousSurvey,
+            ]
+        );
+        dbContext.Questions.Add(question_1_OfAnonymousSurvey);
+        
+        var question_2_OfAnonymousSurvey = new Question(
+            id: Question_2_WithMultipleChoice_OfAnonymousSurvey, 
+            surveyId: AnonymousSurveyId, 
+            "вопрос 2 с множественным выбором анонимного опроса", 
+            isMultipleChoiceAllowed: true,
+            answers: [
+                answer_4_OfAnonymousSurvey,
+                answer_5_OfAnonymousSurvey,
+                answer_6_OfAnonymousSurvey,
+            ]
+        );
+        dbContext.Questions.Add(question_2_OfPublicSurvey);
+        
+        // //// Create surveys
+        var anonymousSurvey = new Survey(
+            id: AnonymousSurveyId,
+            announcements: [announcementWithAnonymousSurvey],
+            isOpen: true,
+            isAnonymous: true,
+            autoClosingAt: null,
+            questions: [question_1_OfAnonymousSurvey, question_2_OfAnonymousSurvey]
+        );
+        announcementWithAnonymousSurvey.Attach(anonymousSurvey);
+        dbContext.Surveys.Add(anonymousSurvey);
+        #endregion Создание объявления с анонимным опросом
+        
+        
+        
+        #region Создание объявления с закрытыманонимным опросом
+        // ////////////////////////////// Add announcements
+        var announcementWithClosedPublicSurvey = new Announcement(
+            id: AnnouncementWithClosedAnonymousSurveyId,
+            content: "Объявление с закрытым анонимным опросом",
+            author: mainUsergroupAdmin,
+            categories: [],
+            audience: [mainUsergroup],
+            publishedAt: DateTime.Now,
+            hiddenAt: null,
+            autoPublishingAt: null,
+            autoHidingAt: null,
+            attachments: []
+        );
+        dbContext.Announcements.Add(announcementWithClosedPublicSurvey);
+        
+        // ////////////////////////////// Add surveys
+        // //// Create answers
+        var answer_1_OfClosedAnonymousSurvey = new Answer(Answer_1_OfClosedAnonymousSurvey, Question_1_WithSingleChoice_OfClosedAnonymousSurvey, "ответ 1 вопроса 1 закрытого анонимного опроса");
+        var answer_2_OfClosedAnonymousSurvey = new Answer(Answer_2_OfClosedAnonymousSurvey, Question_1_WithSingleChoice_OfClosedAnonymousSurvey, "ответ 2 вопроса 1 закрытого анонимного опроса");
+        dbContext.Answers.Add(answer_1_OfClosedAnonymousSurvey);
+        dbContext.Answers.Add(answer_2_OfClosedAnonymousSurvey);
+        
+        // //// Create questions
+        var question_1_OfClosedAnonymousSurvey = new Question(
+            id: Question_1_WithSingleChoice_OfClosedAnonymousSurvey, 
+            surveyId: ClosedAnonymousSurveyId, 
+            "вопрос 1 с единственным выбором закрытого анонимного опроса", 
+            isMultipleChoiceAllowed: false,
+            answers: [
+                answer_1_OfClosedAnonymousSurvey,
+                answer_2_OfClosedAnonymousSurvey,
+            ]
+        );
+        dbContext.Questions.Add(question_1_OfClosedAnonymousSurvey);
+        
+        // //// Create surveys
+        var closedAnonymousSurvey = new Survey(
+            id: ClosedAnonymousSurveyId,
+            announcements: [announcementWithClosedPublicSurvey],
+            isOpen: false,
+            isAnonymous: true,
+            autoClosingAt: null,
+            questions: [question_1_OfClosedAnonymousSurvey]
+        );
+        announcementWithClosedPublicSurvey.Attach(closedAnonymousSurvey);
+        dbContext.Surveys.Add(closedAnonymousSurvey);
+        #endregion Создание объявления с закрытым анонимным опросом
+        
+        
         
         dbContext.SaveChanges();
     }

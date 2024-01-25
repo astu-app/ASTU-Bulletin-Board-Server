@@ -25,6 +25,8 @@ public class DatabaseCreator : IAsyncLifetime
         new (
             new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseNpgsql(_postgres.GetConnectionString())
+                .LogTo(Console.WriteLine)
+                .EnableSensitiveDataLogging()
                 .Options
         );
 }

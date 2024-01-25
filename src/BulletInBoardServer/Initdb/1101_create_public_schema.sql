@@ -212,7 +212,7 @@ create table surveys
     voters_count              integer default 0,
     
     is_open                    boolean not null default true,
-    is_anonymous               boolean not null default false,
+    is_anonymous               boolean not null default true,
 
     auto_closing_at            timestamp,
     
@@ -227,7 +227,7 @@ create table questions
     survey_id uuid not null,
 
     content      text,
-    is_multiple_choice_allowed boolean not null default false,
+    is_multiple_choice_allowed boolean not null default true,
     
     constraint non_empty_content
         check (string_not_empty(content))
