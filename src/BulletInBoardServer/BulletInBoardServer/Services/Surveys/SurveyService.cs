@@ -1,6 +1,6 @@
-﻿using BulletInBoardServer.Data;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Voters;
+﻿using BulletInBoardServer.DataAccess;
+using BulletInBoardServer.Models.Attachments.Surveys;
+using BulletInBoardServer.Models.Attachments.Surveys.Voters;
 using BulletInBoardServer.Services.Surveys.VotersGetting;
 using BulletInBoardServer.Services.Surveys.Voting;
 using Microsoft.EntityFrameworkCore;

@@ -1,11 +1,11 @@
-﻿using BulletInBoardServer.Data;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Voters;
+﻿using BulletInBoardServer.DataAccess;
+using BulletInBoardServer.Models.Attachments.Surveys;
+using BulletInBoardServer.Models.Attachments.Surveys.Answers;
+using BulletInBoardServer.Models.Attachments.Surveys.Voters;
 using BulletInBoardServer.Services.Surveys;
-using BulletInBoardServer.Test.TestPreparation;
+using BulletInBoardServer.Test.TestInfrastructure;
 using Microsoft.EntityFrameworkCore;
-using static BulletInBoardServer.Test.TestPreparation.TestDataIds;
+using static BulletInBoardServer.Test.TestInfrastructure.TestDataIds;
 
 namespace BulletInBoardServer.Test.Services.Surveys;
 

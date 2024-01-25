@@ -1,6 +1,5 @@
-﻿using BulletInBoardServer.Models.Announcements.Attachments;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys;
-using BulletInBoardServer.Models.Announcements.Categories;
+﻿using BulletInBoardServer.Models.Attachments;
+using BulletInBoardServer.Models.Attachments.Surveys;
 using BulletInBoardServer.Models.Users;
 
 namespace BulletInBoardServer.Models.Announcements;
@@ -42,7 +41,7 @@ public class Announcement
     /// Поле должно устанавливаться только при помощи Entity Framework.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
-    public AnnouncementCategories Categories { get; init; } = null!;
+    public AnnouncementCategories.AnnouncementCategories Categories { get; init; } = null!;
 
     /// <summary>
     /// Аудитория объявления
@@ -118,7 +117,7 @@ public class Announcement
 
 
 
-    public Announcement(Guid id, string content, User author, AnnouncementCategories categories,
+    public Announcement(Guid id, string content, User author, AnnouncementCategories.AnnouncementCategories categories,
         AnnouncementAudience audience, DateTime? publishedAt, DateTime? hiddenAt, DateTime? autoPublishingAt,
         DateTime? autoHidingAt, AttachmentList attachments)
     {
@@ -185,7 +184,7 @@ public class Announcement
         _content = content;
     }
     
-    private static void CategoriesValidOrThrow(AnnouncementCategories categories) => 
+    private static void CategoriesValidOrThrow(AnnouncementCategories.AnnouncementCategories categories) => 
         ArgumentNullException.ThrowIfNull(categories);
 
     private static void AudienceValidOrThrow(AnnouncementAudience audience)

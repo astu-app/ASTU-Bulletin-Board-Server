@@ -1,4 +1,4 @@
-using BulletInBoardServer.Data;
+using BulletInBoardServer.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

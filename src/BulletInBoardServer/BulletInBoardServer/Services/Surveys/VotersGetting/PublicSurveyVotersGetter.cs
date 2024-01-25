@@ -1,6 +1,6 @@
-﻿using BulletInBoardServer.Models.Announcements.Attachments.Surveys;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Questions;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Voters;
+﻿using BulletInBoardServer.Models.Attachments.Surveys;
+using BulletInBoardServer.Models.Attachments.Surveys.Questions;
+using BulletInBoardServer.Models.Attachments.Surveys.Voters;
 
 namespace BulletInBoardServer.Services.Surveys.VotersGetting;
 

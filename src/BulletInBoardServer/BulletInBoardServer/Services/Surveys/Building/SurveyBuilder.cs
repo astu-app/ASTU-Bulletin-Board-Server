@@ -1,10 +1,11 @@
 ﻿using BulletInBoardServer.Models.Announcements;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Questions;
+using BulletInBoardServer.Models.Attachments.Surveys;
+using BulletInBoardServer.Models.Attachments.Surveys.Answers;
+using BulletInBoardServer.Models.Attachments.Surveys.Questions;
 
 namespace BulletInBoardServer.Services.Surveys.Building;
 
-using Survey = Models.Announcements.Attachments.Surveys.Survey;
+using Survey = Survey;
 
 public class SurveyBuilder
 {

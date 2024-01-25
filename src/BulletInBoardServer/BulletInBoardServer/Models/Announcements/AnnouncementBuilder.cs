@@ -1,6 +1,5 @@
-﻿using BulletInBoardServer.Models.Announcements.Attachments;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys;
-using BulletInBoardServer.Models.Announcements.Categories;
+﻿using BulletInBoardServer.Models.Attachments;
+using BulletInBoardServer.Models.Attachments.Surveys;
 using BulletInBoardServer.Models.Users;
 
 namespace BulletInBoardServer.Models.Announcements;
@@ -10,7 +9,7 @@ public class AnnouncementBuilder
     private Guid? _id;
     private string? _content;
     private User? _author;
-    private AnnouncementCategories? _categories;
+    private AnnouncementCategories.AnnouncementCategories? _categories;
     private AnnouncementAudience? _audience;
     private DateTime? _publishedAt;
     private DateTime? _hiddenAt;
@@ -43,7 +42,7 @@ public class AnnouncementBuilder
         return this;
     }
 
-    public AnnouncementBuilder SetCategories(AnnouncementCategories categories)
+    public AnnouncementBuilder SetCategories(AnnouncementCategories.AnnouncementCategories categories)
     {
         _categories = categories ?? throw new ArgumentNullException(nameof(categories));
         return this;

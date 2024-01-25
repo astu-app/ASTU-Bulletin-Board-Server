@@ -1,8 +1,8 @@
-﻿using BulletInBoardServer.Data;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Answers;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Questions;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.SurveyParticipation;
+﻿using BulletInBoardServer.DataAccess;
+using BulletInBoardServer.Models.Attachments.Surveys;
+using BulletInBoardServer.Models.Attachments.Surveys.Answers;
+using BulletInBoardServer.Models.Attachments.Surveys.Questions;
+using BulletInBoardServer.Models.Attachments.Surveys.SurveyParticipation;
 using Microsoft.EntityFrameworkCore;
 
 namespace BulletInBoardServer.Services.Surveys.Voting;

@@ -1,5 +1,5 @@
-﻿using BulletInBoardServer.Models.Announcements.Attachments.Surveys;
-using BulletInBoardServer.Models.Announcements.Attachments.Surveys.Voters;
+﻿using BulletInBoardServer.Models.Attachments.Surveys;
+using BulletInBoardServer.Models.Attachments.Surveys.Voters;
 
 namespace BulletInBoardServer.Services.Surveys.VotersGetting;
 
