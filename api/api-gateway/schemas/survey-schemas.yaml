@@ -20,9 +20,6 @@ components:
           minItems: 1
           items:
             $ref: '#/components/schemas/createQuestionDto'
-        isMultipleChoiceAllowed:
-          description: Доступен ли выбор нескольких вариантов ответов
-          type: boolean
         isAnonymous:
           description: Анонимен ли опрос
           type: boolean
@@ -47,10 +44,6 @@ components:
           description: Анонимен ли опрос
           type: boolean
           default: false
-        isMultipleChoiceAllowed:
-          description: Разрешен ли множественный выбор
-          type: boolean
-          default: false
         voteFinishedAt:
           description: Время окончания голосования (если задано)
           type: string
@@ -71,6 +64,21 @@ components:
     voteInSurveyDto:
       description: DTO для голосования в опросе
       type: object
+      properties: 
+        surveyId:
+          description: Идентификатор опроса
+          type: string
+          format: uuid
+        questionVotes:
+          description: Голоса за варианты ответов в каждом вопросе опроса
+          type: array
+          items:
+            $ref: '#/components/schemas/voteInQuestionDto'
+          minItems: 1
+  
+    voteInQuestionDto:
+      description: DTO для голосования в вопросе опроса
+      type: object
       properties:
         questionId:
           description: Идентификатор вопроса
@@ -79,7 +87,6 @@ components:
         answerIds:
           description: Массив идентификаторов вариантов ответов
           type: array
-#          nullable: true
           minItems: 1
           items:
             type: string
@@ -101,6 +108,9 @@ components:
         content:
           description: Содержимое вопроса
           type: string
+        isMultipleChoiceAllowed:
+          description: Доступен ли выбор нескольких вариантов ответов
+          type: boolean
         answers:
           description: Варианты ответов
           type: array
@@ -118,6 +128,10 @@ components:
         content:
           description: Текстовое содержимое вопроса
           type: string
+        isMultipleChoiceAllowed:
+          description: Разрешен ли множественный выбор
+          type: boolean
+          default: false
         votersAmount:
           description: Количество проголосовавших
           type: integer
@@ -143,11 +157,6 @@ components:
           description: Количество пользователей, проголосовавших за вариант ответа
           type: integer
           minimum: 0
-
-    questionIdentifierDto:
-      description: Идентификатор вопроса
-      type: string
-      format: uuid
     
     # answer
     answerIdentifierDto:
@@ -172,7 +181,7 @@ components:
       type: object
       properties:
         id:
-          description: Идентификатор пользователя
+          description: Числовой идентификатор пользователя
           type: integer
         name:
           description: Имя пользователя

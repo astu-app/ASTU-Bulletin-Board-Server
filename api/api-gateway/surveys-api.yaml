@@ -71,7 +71,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/questionIdentifierDto'
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
       responses:
         200:
           description: Ok
@@ -392,7 +392,7 @@ paths:
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInQuestionResponses'
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
         400:
           description: Bad Request
           content:
@@ -402,7 +402,7 @@ paths:
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInQuestionResponses'
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
         401:
           description: Unauthorized
           content:
@@ -412,7 +412,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInQuestionResponses'
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
         403:
           description: Forbidden
           content:
@@ -422,7 +422,7 @@ paths:
                 properties:
                   code:
                     # votingForbidden
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInQuestionResponses'
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
         404:
           description: Not Found
           content:
@@ -433,7 +433,8 @@ paths:
                   code:
                     # surveyDoesNotExist
                     # questionsDoesNotExist
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInQuestionResponses'
+                    # answerDoesNotExist
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
                   content:
                     $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
         409:
@@ -446,7 +447,9 @@ paths:
                   code:
                     # surveyClosed
                     # announcementWithSurveyNotYetPublished
-                    # questionAlreadyVoted
+                    # answerAlreadyVoted
                     # cannotSelectMultipleAnswersInSingleChoiceQuestion
+                    # selectedQuestionsBelongToDifferentSurveys
+                    # selectedQuestionsBelongToDifferentSurveys
                     # selectedAnswersBelongToDifferentQuestions
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInQuestionResponses'
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'

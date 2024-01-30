@@ -125,7 +125,7 @@ components:
           surveyDoesNotExist - Опрос не существует
           announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
 
-    voteInQuestionResponses:
+    voteInSurveyResponses:
       type: string
       enum:
         # 200
@@ -139,11 +139,13 @@ components:
         # 404
         - surveyDoesNotExist
         - questionDoesNotExist
+        - answerDoesNotExist
         # 409
         - surveyClosed
         - announcementWithSurveyNotYetPublished
-        - questionAlreadyVoted
+        - answerAlreadyVoted
         - cannotSelectMultipleAnswersInSingleChoiceQuestion
+        - selectedQuestionsBelongToDifferentSurveys
         - selectedAnswersBelongToDifferentQuestions
       description: >
         Ответы: 
@@ -153,10 +155,12 @@ components:
           votingForbidden - Пользователь не имеет права голосовать в опросе
           surveyDoesNotExist - Опрос не существует
           questionDoesNotExist - Вопрос не существует
+          answerDoesNotExist - Вариант ответа не существует
           surveyClosed - Опрос закрыт
           announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
-          questionAlreadyVoted - Голос за вопрос уже отдан
+          surveyAlreadyVoted - Голос в опросе уже отдан
           cannotSelectMultipleAnswersInSingleChoiceQuestion - В вопросе с единственным выбором нельзя выбрать несколько вариантов ответов
+          selectedQuestionsBelongToDifferentSurveys - Перечисленные вопросы относятся к разным опросам
           selectedAnswersBelongToDifferentQuestions - Перечисленные варианты ответов относятся к разным вопросам
 
     cancelVoteInQuestionResponses:
