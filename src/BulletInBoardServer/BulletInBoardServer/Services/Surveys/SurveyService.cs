@@ -31,7 +31,7 @@ public class SurveyService(ApplicationDbContext dbContext)
     /// <returns>Структурированный список проголосовавших в опросе пользователей</returns>
     public SurveyVotersBase GetSurveyVoters(Guid surveyId)
     {
-        var survey = LoadSurvey(surveyId);
+        var survey = LoadFullSurvey(surveyId);
         var getter = SurveyVotersGetterBase.ResolveVotersGetter(survey);
         return getter.GetVoters();
     }
@@ -43,7 +43,7 @@ public class SurveyService(ApplicationDbContext dbContext)
     /// <remarks>Закрываемый опрос должен быть открыт</remarks>
     public void CloseSurvey(Guid surveyId)
     {
-        var survey = LoadSurvey(surveyId);
+        var survey = LoadBriefSurvey(surveyId);
         survey.Close();
 
         dbContext.SaveChanges();
@@ -51,7 +51,13 @@ public class SurveyService(ApplicationDbContext dbContext)
 
 
 
-    private Survey LoadSurvey(Guid surveyId)
+    /// <summary>
+    /// Метод загружает опрос полностью, включая все его вопросы, варианты ответов и проголосовавших пользователей
+    /// </summary>
+    /// <param name="surveyId">Идентификатор опроса</param>
+    /// <returns>Загруженный опрос со связанными сущностями</returns>
+    /// <exception cref="InvalidOperationException">Не удалось загрузить опрос из БД</exception>
+    private Survey LoadFullSurvey(Guid surveyId)
     {
         try
         {
@@ -63,6 +69,24 @@ public class SurveyService(ApplicationDbContext dbContext)
                 .ThenInclude(a => a.Participation)
                 .ThenInclude(p => p.User)
                 .Single();
+        }
+        catch (InvalidOperationException err)
+        {
+            throw new InvalidOperationException("Не удалось загрузить опрос из БД", err);
+        }
+    }
+
+    /// <summary>
+    /// Метод загружает только класс опроса, не включая связанные сущности
+    /// </summary>
+    /// <param name="surveyId">Идентификатор опроса</param>
+    /// <returns>Загруженный опрос без связанных сущностей</returns>
+    /// <exception cref="InvalidOperationException">Не удалось загрузить опрос из БД</exception>
+    private Survey LoadBriefSurvey(Guid surveyId)
+    {
+        try
+        {
+            return dbContext.Surveys.Single(s => s.Id == surveyId);
         }
         catch (InvalidOperationException err)
         {
