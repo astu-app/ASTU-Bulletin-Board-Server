@@ -19,7 +19,7 @@ rectangle "schema 'public'" as public_schema {
         <<FK>> author_id: uuid
         ..
         content: text
-        auditory_size: integer
+        audience_size: integer
         
         auto_hiding_at: timestamp?
         auto_publishing_at: timestamp?
@@ -29,12 +29,14 @@ rectangle "schema 'public'" as public_schema {
     }
     users <-- announcements : author
     
-    entity announcements_users {
+    entity announcement_audience {
         <b><<PK>></b> <<FK>> announcement_id: uuid
         <b><<PK>></b> <<FK>> user_id: uuid
+        ..
+        viewed: bool
     }
-    announcements <-up- announcements_users
-    users <-- announcements_users
+    announcements <-up- announcement_audience
+    users <-- announcement_audience
     
     entity usergroups {
         <b><<PK>></b> id: uuid
@@ -109,7 +111,6 @@ rectangle "schema 'public'" as public_schema {
         <b><<PK>></b> <<FK>> id: uuid
         ..
         voters_count: integer
-        auditory_size: integer
         
         is_open: boolean
         is_anonymous: boolean
