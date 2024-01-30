@@ -15,8 +15,8 @@ components:
         content:
           description: Текстовое содержимое объявления
           type: string
-        userGroupIds:
-          description: Идентификаторы групп пользователей, для которых создается объявление
+        userIds:
+          description: Идентификаторы пользователей, для которых создается объявление
           type: array
           items:
             type: string
