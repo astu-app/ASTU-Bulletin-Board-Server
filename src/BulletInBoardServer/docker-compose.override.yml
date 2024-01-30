@@ -13,7 +13,7 @@ services:
               
     postgres:
         volumes:
-            - ./Initdb:/docker-entrypoint-initdb.d
+            - ./initdb:/docker-entrypoint-initdb.d
             - ./service/:/var/lib/postgresql/data
         environment:
             PGDATA: "/var/lib/postgresql/data/pgdata"

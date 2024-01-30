@@ -1,0 +1,455 @@
+﻿openapi: 3.0.3
+info:
+  title: API Шлюз. Опросы
+  description: API шлюза для управления опросами
+  version: 0.0.1
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  # survey
+  /surveys/create:
+    post:
+      operationId: createSurvey
+      summary: Создать опрос
+      tags: [ Опрос ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/createSurveyDto'
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
+                  code:
+                    # created
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/createSurveyResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/createSurveyResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # createSurveyForbidden
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/createSurveyResponses'
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # votingClosesBeforeAnnouncementPublication
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/createSurveyResponses'
+  
+  /survey/get-details:
+    get:
+      operationId: getSurveyDetails
+      summary: Получить детали выбранного опроса
+      tags: [ Опрос ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyDetailsDto'
+                  code:
+                    # ok
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # detailsAccessForbidden
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # surveyDoesNotExist
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # announcementWithSurveyNotYetPublished
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+  
+  /survey/close-survey:
+    post:
+      operationId: closeSurvey
+      summary: Закрыть опрос
+      tags: [ Опрос ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # ok
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # surveyClosingForbidden
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # surveyDoesNotExist
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # surveyAlreadyClosed
+                    # announcementWithSurveyNotYetPublished
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+  
+  /survey/get-results:
+    get:
+      operationId: getSurveysResults
+      summary: Получить результаты опроса
+      tags: [ Опрос ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyResultsDto'
+                  code:
+                    # ok
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # surveyResultsAccessForbidden
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # surveyDoesNotExist
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # announcementWithSurveyNotYetPublished
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+  
+  /survey/download-results:
+    get:
+      operationId: downloadSurveyResults
+      summary: Скачать результаты опроса
+      tags: [ Опрос ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
+      responses:
+        200:
+          description: Ok
+          content:
+            application/octet-stream:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    format: binary
+                  code:
+                    # ok
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # surveyResultsDownloadingForbidden
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # surveyDoesNotExist
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # announcementWithSurveyNotYetPublished
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+  
+  # question
+  /question/vote:
+    post:
+      operationId: voteInQuestion
+      summary: Проголосовать в вопросе
+      tags: [ Вопрос ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/survey-schemas.yaml#/components/schemas/voteInSurveyDto'
+      responses:
+        200:
+          description: Ok
+          content:
+            application/octet-stream:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # ok
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # incorrectIdentifierFormat
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # votingForbidden
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # surveyDoesNotExist
+                    # questionsDoesNotExist
+                    # answerDoesNotExist
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
+                  content:
+                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+        409:
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # surveyClosed
+                    # announcementWithSurveyNotYetPublished
+                    # answerAlreadyVoted
+                    # cannotSelectMultipleAnswersInSingleChoiceQuestion
+                    # selectedQuestionsBelongToDifferentSurveys
+                    # selectedQuestionsBelongToDifferentSurveys
+                    # selectedAnswersBelongToDifferentQuestions
+                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'

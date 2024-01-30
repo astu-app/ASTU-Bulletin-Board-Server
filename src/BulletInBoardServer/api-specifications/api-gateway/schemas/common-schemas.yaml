@@ -1,0 +1,18 @@
+﻿openapi: 3.0.3
+info:
+  title: Общие схемы для API шлюза
+  description: Общие схемы для API шлюза
+  version: 0.0.1
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  
+components:
+  schemas:
+    identifiers:
+      type: array
+      nullable: true
+      items: 
+        type: string
+        format: uuid
+    

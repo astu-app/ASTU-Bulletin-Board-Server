@@ -22,21 +22,82 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-        <Content Include="..\Initdb\1101_create_public_schema.sql">
-          <Link>Initdb\1101_create_public_schema.sql</Link>
+      <Content Include="..\api-specifications\api-gateway\announcement-categories-api.yaml">
+        <Link>api-specifications\api-gateway\announcement-categories-api.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\announcements-api.yaml">
+        <Link>api-specifications\api-gateway\announcements-api.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\employees-api.yaml">
+        <Link>api-specifications\api-gateway\employees-api.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\files-api.yaml">
+        <Link>api-specifications\api-gateway\files-api.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\portfolio-manager-example-api.json">
+        <Link>api-specifications\api-gateway\portfolio-manager-example-api.json</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\schemas\announcement-category-schemas.yaml">
+        <Link>api-specifications\api-gateway\schemas\announcement-category-schemas.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\schemas\announcement-schemas.yaml">
+        <Link>api-specifications\api-gateway\schemas\announcement-schemas.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\schemas\common-schemas.yaml">
+        <Link>api-specifications\api-gateway\schemas\common-schemas.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\schemas\file-schemas.yaml">
+        <Link>api-specifications\api-gateway\schemas\file-schemas.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\schemas\responses\announcement-category-enum-response-schemas.yaml">
+        <Link>api-specifications\api-gateway\schemas\responses\announcement-category-enum-response-schemas.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\schemas\responses\announcement-enum-response-schemas.yaml">
+        <Link>api-specifications\api-gateway\schemas\responses\announcement-enum-response-schemas.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\schemas\responses\survey-enum-response-schemas.yaml">
+        <Link>api-specifications\api-gateway\schemas\responses\survey-enum-response-schemas.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\schemas\responses\usergroup-enum-response-schemas.yaml">
+        <Link>api-specifications\api-gateway\schemas\responses\usergroup-enum-response-schemas.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\schemas\survey-schemas.yaml">
+        <Link>api-specifications\api-gateway\schemas\survey-schemas.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\schemas\user-schemas.yaml">
+        <Link>api-specifications\api-gateway\schemas\user-schemas.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\schemas\usergroup-schemas.yaml">
+        <Link>api-specifications\api-gateway\schemas\usergroup-schemas.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\surveys-api.yaml">
+        <Link>api-specifications\api-gateway\surveys-api.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\usergroups-api.yaml">
+        <Link>api-specifications\api-gateway\usergroups-api.yaml</Link>
+      </Content>
+      <Content Include="..\api-specifications\api-gateway\users-api.yaml">
+        <Link>api-specifications\api-gateway\users-api.yaml</Link>
+      </Content>
+        <Content Include="..\initdb\1101_create_public_schema.sql">
+          <Link>initdb\1101_create_public_schema.sql</Link>
         </Content>
-        <Content Include="..\Initdb\1111_create_indices.sql">
-          <Link>Initdb\1111_create_indices.sql</Link>
+        <Content Include="..\initdb\1111_create_indices.sql">
+          <Link>initdb\1111_create_indices.sql</Link>
         </Content>
-        <Content Include="..\Initdb\1121_create_triggers.sql">
-          <Link>Initdb\1121_create_triggers.sql</Link>
+        <Content Include="..\initdb\1121_create_triggers.sql">
+          <Link>initdb\1121_create_triggers.sql</Link>
         </Content>
-        <Content Include="..\Initdb\1201_create_archive_schema.sql">
-          <Link>Initdb\1201_create_archive_schema.sql</Link>
+        <Content Include="..\initdb\1201_create_archive_schema.sql">
+          <Link>initdb\1201_create_archive_schema.sql</Link>
         </Content>
-        <Content Include="..\Initdb\1301_create_logs_schema.sql">
-          <Link>Initdb\1301_create_logs_schema.sql</Link>
+        <Content Include="..\initdb\1301_create_logs_schema.sql">
+          <Link>initdb\1301_create_logs_schema.sql</Link>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Update="..\api-specifications" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,244 @@
+﻿openapi: 3.0.3
+info:
+  title: Схемы enum ответов API шлюза объявлений
+  description: Схемы enum ответов API шлюза объявлений
+  version: 0.0.1
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  
+components: 
+  schemas:
+    createAnnouncementResponses:
+      type: string
+      enum:
+        # 201 
+        - created
+        # 400
+        - usergroupListNullOrEmpty
+        # 401
+        - unauthorized
+        # 403
+        - announcementCreationForbidden
+        # 404
+        - announcementCategoriesDoNotExist
+        - filesDoNotExist
+        - surveyDoesNotExist
+        # 409
+        - attachingFilesAndSurveyTogether
+        - automaticPublishMomentIsInPast
+        - automaticHideMomentIsInPast
+      description: >
+        Ответы:
+          created - Объявление создано
+          usergroupListNullOrEmpty - Список групп пользователей null или пустой
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementCreationForbidden - Пользователь не имеет права создать объявление
+          announcementCategoriesDoNotExist - В качестве одного или нескольких из id категорий объявлений прикреплен несуществующий в базе id
+          filesDoNotExist - В качестве одного или нескольких из id файлов прикреплен несуществующий в базе id
+          surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id
+          attachingFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос
+          automaticPublishMomentIsInPast - Момент отложенной публикации уже наступил в прошлом
+          automaticHideMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом
+
+    getAnnouncementDetailsResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - detailsAccessForbidden
+        # 404
+        - announcementDoesNotExist
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора 
+          unauthorized - Пользователь не авторизован для выполнения операции
+          detailsAccessForbidden - Пользователь не имеет права просмотреть подробности объявления
+          announcementDoesNotExist - Объявление не существует
+
+    updateAnnouncementResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - usergroupListNullOrEmpty
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - announcementEditingForbidden
+        # 404
+        - announcementDoesNotExist
+        - announcementCategoryDoesNotExist
+        - fileDoesNotExist
+        - surveyDoesNotExist
+        # 409
+        - attachingFilesAndSurveyTogether
+        - automaticPublishMomentIsInPast
+        - automaticHideMomentIsInPast
+        - autoHidingAnAlreadyHiddenAnnouncement
+        - autoPublishingPublishedAndNonHiddenAnnouncement
+      description: >
+        Ответы:
+          ok - Ок
+          usergroupListNullOrEmpty - Список групп пользователей null или пустой
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementEditingForbidden - Пользователь не имеет права изменить объявление
+          announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id
+          announcementCategoryDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id
+          fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id
+          surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id
+          attachingFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос
+          automaticPublishMomentIsInPast - Момент отложенной публикации уже наступил в прошлом
+          automaticHideMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом
+          autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто
+          autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым
+
+    deleteAnnouncementResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - announcementDeletionForbidden
+        # 409
+        - announcementDoesNotExist
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementDeletionForbidden - Пользователь не имеет права удалить объявление
+          announcementDoesNotExist - Объявление не существует
+    
+    getPostedAnnouncementListResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - postedAnnouncementsListAccessForbidden
+      description: >
+        Ответы:
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          postedAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки опубликованных объявлений
+          
+    hidePostedAnnouncementResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - announcementHidingForbidden
+        # 404
+        - announcementDoesNotExist
+        # 409
+        - announcementAlreadyHidden
+        - announcementNotYetPublished
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора 
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementHidingForbidden - Пользователь не имеет права скрыть объявление
+          announcementDoesNotExist - Объявление не существует
+          announcementAlreadyHidden - Объявление уже скрыто
+          announcementNotYetPublished - Объявление еще не опубликовано
+    
+    getHiddenAnnouncementListResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - hiddenAnnouncementsListAccessForbidden
+      description: >
+        Ответы:
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          hiddenAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки скрытых объявлений
+        
+    unhideHiddenAnnouncementResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - unhideForbidden
+        # 404
+        - announcementDoesNotExist
+        # 409
+        - announcementNotHidden
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          unhideForbidden - Пользователь не имеет права скрыть объявление
+          announcementDoesNotExist - Объявление не существует
+          announcementNotHidden - Объявление не является скрытым
+        
+    getDelayedAnnouncementListResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - delayedAnnouncementsListAccessForbidden
+      description: >
+        Ответы: 
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          delayedAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки отложенных объявлений
+    
+    publishImmediatelyDelayedAnnouncementResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - immediatePublishingForbidden
+        # 404
+        - announcementDoesNotExist
+        # 409
+        - announcementNotDelayed
+      description: >
+        Ответы: 
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          immediatePublishingForbidden - Пользователь не имеет права незамедлительно опубликовать отложенное объявление
+          announcementDoesNotExist - Объявление не существует
+          announcementNotDelayed - Объявление не является отложенным
+        

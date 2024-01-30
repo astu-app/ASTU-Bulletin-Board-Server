@@ -1,0 +1,207 @@
+﻿openapi: 3.0.3
+info:
+  title: Схемы опросов для API Шлюза
+  description: Схемы опросов и непосредственно с ними связанных объектов для API Шлюза
+  version: 0.0.1
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  
+components:
+  schemas:
+    ### public
+    # survey
+    createSurveyDto:
+      type: object
+      properties:
+        questions:
+          description: Вопросы опроса
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/createQuestionDto'
+        isAnonymous:
+          description: Анонимен ли опрос
+          type: boolean
+        voteUntil:
+          description: Срок окончания голосования. Null, если голосование не ограничено по сроку
+          type: string
+          format: date-time
+          nullable: true
+    
+    surveyDetailsDto:
+      type: object
+      properties:
+        id:
+          description: Идентификатор опроса
+          type: string
+          format: uuid
+        isOpen:
+          description: Открыт ли опрос
+          type: boolean
+          default: true
+        isAnonymous:
+          description: Анонимен ли опрос
+          type: boolean
+          default: false
+        voteFinishedAt:
+          description: Время окончания голосования (если задано)
+          type: string
+          format: date-time
+          nullable: true
+        questions:
+          description: Вопросы опроса
+          type: array
+          items:
+            $ref: '#/components/schemas/questionDetailsDto'
+          minItems: 1
+    
+    surveyIdentifierDto:
+      description: Идентификатор опроса
+      type: string
+      format: uuid
+    
+    voteInSurveyDto:
+      description: DTO для голосования в опросе
+      type: object
+      properties: 
+        surveyId:
+          description: Идентификатор опроса
+          type: string
+          format: uuid
+        questionVotes:
+          description: Голоса за варианты ответов в каждом вопросе опроса
+          type: array
+          items:
+            $ref: '#/components/schemas/voteInQuestionDto'
+          minItems: 1
+  
+    voteInQuestionDto:
+      description: DTO для голосования в вопросе опроса
+      type: object
+      properties:
+        questionId:
+          description: Идентификатор вопроса
+          type: string
+          format: uuid
+        answerIds:
+          description: Массив идентификаторов вариантов ответов
+          type: array
+          minItems: 1
+          items:
+            type: string
+            format: uuid
+
+    surveyResultsDto:
+      description: Результаты опроса
+      type: object
+      properties:
+        voters:
+          $ref: '#/components/schemas/votersDto'
+        answerResults:
+          $ref: '#/components/schemas/answerResultsDto'
+
+    # question
+    createQuestionDto:
+      type: object
+      properties: 
+        content:
+          description: Содержимое вопроса
+          type: string
+        isMultipleChoiceAllowed:
+          description: Доступен ли выбор нескольких вариантов ответов
+          type: boolean
+        answers:
+          description: Варианты ответов
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/createAnswerDto'
+
+    questionDetailsDto:
+      type: object
+      properties:
+        id:
+          description: Идентификатор опроса
+          type: string
+          format: uuid
+        content:
+          description: Текстовое содержимое вопроса
+          type: string
+        isMultipleChoiceAllowed:
+          description: Разрешен ли множественный выбор
+          type: boolean
+          default: false
+        votersAmount:
+          description: Количество проголосовавших
+          type: integer
+          minimum: 0
+        answers:
+          description: Варианты ответов опроса
+          type: array
+          items:
+            $ref: '#/components/schemas/questionAnswerDetailsDto'
+          minItems: 2
+    
+    questionAnswerDetailsDto:
+      type: object
+      properties:
+        id:
+          description: Идентификатор варианта ответа
+          type: string
+          format: uuid
+        content:
+          description: Текстовое содержимое варианта ответа
+          type: string
+        votersAmount:
+          description: Количество пользователей, проголосовавших за вариант ответа
+          type: integer
+          minimum: 0
+    
+    # answer
+    answerIdentifierDto:
+      description: Идентификатор варианта ответа
+      type: string
+      format: uuid
+    
+    createAnswerDto:
+      type: object
+      properties: 
+        content:
+          description: текстовое содержимое варианта ответа
+          type: string
+      
+    ### private
+    votersDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/voterDto'
+    
+    voterDto:
+      type: object
+      properties:
+        id:
+          description: Числовой идентификатор пользователя
+          type: integer
+        name:
+          description: Имя пользователя
+          type: string
+    
+    answerResultsDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/answerResultDto'
+    
+    answerResultDto:
+      type: object
+      properties:
+        questionId:
+          description: Идентификатор варианта ответа
+          type: string
+          format: uuid
+        voterIds:
+          description: Числовые идентификаторы проголосовавших пользователей
+          type: array
+          items:
+            type: integer
+

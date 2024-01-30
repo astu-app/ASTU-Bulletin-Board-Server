@@ -1,0 +1,154 @@
+﻿openapi: 3.0.3
+info:
+  title: Схемы объявлений для API Шлюза
+  description: Схемы объявлений для API Шлюза
+  version: 0.0.1
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  
+components: 
+  schemas:
+    usergroupIdentifierDto:
+      type: object
+      properties:
+        announcementId:
+          type: string
+          format: uuid
+
+    createUsergroupDto:
+      type: object
+      properties: 
+        name:
+          description: Название группы пользователей
+          type: string
+          required: true
+        adminId:
+          description: Идентификатор администратора группы пользователей
+          type: string
+          format: uuid
+          nullable: true
+        memberIds:
+          description: Идентификаторы участников группы пользователей
+          type: array
+          items:
+            type: string
+            format: uuid
+        parentIds:
+          description: Идентификаторы групп пользователей, являющихся родителями создаваемой
+          type: array
+          items:
+            type: string
+            format: uuid
+        childIds:
+          description: Идентификаторы групп пользователей, являющихся дочерними создаваемой
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    usergroupSummaryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+
+    usergroupListDto:
+      type: array
+      items:
+        type: object
+        properties: 
+          summary:
+            $ref: '#/components/schemas/usergroupSummaryDto'
+          localId:
+            description: Идентификатор группы пользователей в пределах текущего списка групп пользователей
+            type: integer
+          parentLocalIds:
+            type: array
+            items:
+              type: integer
+          childLocalIds:
+            type: array
+            items:
+              type: integer
+    
+    usergroupDetailsDto:
+      type: object
+      properties:
+        name:
+          description: Название группы пользователей
+          type: string
+        admin:
+          $ref: './user-schemas.yaml#/components/schemas/userSummaryDto'
+        members:  
+          description: Краткая информация об участниках группы пользователей
+          type: array
+          items:
+            $ref: './user-schemas.yaml#/components/schemas/userSummaryDto'
+        parents:
+          description: Родительские группы пользователей
+          type: array
+          items:
+            $ref: '#/components/schemas/usergroupSummaryDto'
+        children:
+          description: Дочерние группы пользователей
+          type: array
+          items:
+            $ref: '#/components/schemas/usergroupSummaryDto'
+
+    updateUsergroupDto:
+      type: object
+      properties: 
+        id:
+          type: string
+          format: uuid
+          required: true
+        name:
+          description: Новое название группы пользователей
+          type: string
+          nullable: true
+          default: null
+        adminId:
+          description: Новый идентификатор администратора. Null отправляется для удаления администратора 
+          type: string
+          format: uuid
+          nullable: true
+          default: null
+        memberIds:
+          description: Идентификаторы участников группы пользователей
+          type: array
+          items:
+            type: string
+            format: uuid
+          nullable: true
+
+    addUsersToUsergroupDto:
+      type: object
+      properties: 
+        usergroupId:
+          type: string
+          format: uuid
+        userIds:
+          $ref: './common-schemas.yaml#/components/schemas/identifiers'
+          
+    removeUsersFromUsergroupDto:
+      type: object
+      properties:
+        usergroupId:
+          type: string
+          format: uuid
+        userIds:
+          $ref: './common-schemas.yaml#/components/schemas/identifiers'
+
+
+
+
+
+
+
+
+
+
