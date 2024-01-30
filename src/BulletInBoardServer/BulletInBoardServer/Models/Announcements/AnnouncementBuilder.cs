@@ -9,7 +9,7 @@ public class AnnouncementBuilder
     private Guid? _id;
     private string? _content;
     private User? _author;
-    private AnnouncementCategories.AnnouncementCategories? _categories;
+    private AnnouncementCategories.AnnouncementCategoryList? _categories;
     private AnnouncementAudience? _audience;
     private DateTime? _publishedAt;
     private DateTime? _hiddenAt;
@@ -42,7 +42,7 @@ public class AnnouncementBuilder
         return this;
     }
 
-    public AnnouncementBuilder SetCategories(AnnouncementCategories.AnnouncementCategories categories)
+    public AnnouncementBuilder SetCategories(AnnouncementCategories.AnnouncementCategoryList categories)
     {
         _categories = categories ?? throw new ArgumentNullException(nameof(categories));
         return this;

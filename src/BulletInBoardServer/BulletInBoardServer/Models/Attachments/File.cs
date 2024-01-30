@@ -17,7 +17,7 @@ public class File : AttachmentBase
     /// Пользователь, впервые загрузивший файл на сервер
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public User Uploader { get; init; } = null!;

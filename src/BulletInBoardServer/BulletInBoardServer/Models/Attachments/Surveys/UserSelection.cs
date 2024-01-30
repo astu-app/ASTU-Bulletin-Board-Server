@@ -17,7 +17,7 @@ public class UserSelection
     /// Участие, с которым связан выбор пользователя
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public Participation Participation { get; init; } = null!;
@@ -31,7 +31,7 @@ public class UserSelection
     /// Ответ, с которым связан выбор
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public Answer Answer { get; init; } = null!;

@@ -1,4 +1,5 @@
-﻿using BulletInBoardServer.Models.Attachments;
+﻿using BulletInBoardServer.Models.AnnouncementCategories;
+using BulletInBoardServer.Models.Attachments;
 using BulletInBoardServer.Models.Attachments.Surveys;
 using BulletInBoardServer.Models.Users;
 
@@ -29,7 +30,7 @@ public class Announcement
     /// Автор объявления
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public User Author { get; init; } = null!;
@@ -38,19 +39,24 @@ public class Announcement
     /// Категории объявления
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
-    public AnnouncementCategories.AnnouncementCategories Categories { get; init; } = null!;
+    public AnnouncementCategoryList Categories { get; init; } = null!;
 
     /// <summary>
     /// Аудитория объявления
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public AnnouncementAudience Audience { get; init; } = null!;
+    
+    /// <summary>
+    /// Размер аудитории объявления
+    /// </summary>
+    public int AudienceSize { get; init; }
 
     /// <summary>
     /// Момент публикации уже опубликованного объявления. Null, если объявления не опубликовано
@@ -100,7 +106,7 @@ public class Announcement
     /// Прикрепление к объявлению
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public AttachmentList Attachments { get; init; } = [];
@@ -117,7 +123,7 @@ public class Announcement
 
 
 
-    public Announcement(Guid id, string content, User author, AnnouncementCategories.AnnouncementCategories categories,
+    public Announcement(Guid id, string content, User author, AnnouncementCategories.AnnouncementCategoryList categories,
         AnnouncementAudience audience, DateTime? publishedAt, DateTime? hiddenAt, DateTime? autoPublishingAt,
         DateTime? autoHidingAt, AttachmentList attachments)
     {
@@ -130,6 +136,7 @@ public class Announcement
         Author = author;
         Categories = categories;
         Audience = audience;
+        AudienceSize = audience.Count;
         PublishedAt = publishedAt;
         HiddenAt = hiddenAt;
         AutoPublishingAt = autoPublishingAt;
@@ -142,20 +149,14 @@ public class Announcement
     public Announcement(Guid id, string content, Guid authorId,
         DateTime? publishedAt, DateTime? hiddenAt, DateTime? autoPublishingAt,
         DateTime? autoHidingAt)
-        // : this()
     {
         Id = id;
         Content = content;
         AuthorId = authorId;
-        // Author = author;
-        // Categories = categories;
-        // Audience = audience;
         PublishedAt = publishedAt;
         HiddenAt = hiddenAt;
         AutoPublishingAt = autoPublishingAt;
         AutoHidingAt = autoHidingAt;
-        
-        // Attach(attachments);
     }
 
 
@@ -184,7 +185,7 @@ public class Announcement
         _content = content;
     }
     
-    private static void CategoriesValidOrThrow(AnnouncementCategories.AnnouncementCategories categories) => 
+    private static void CategoriesValidOrThrow(AnnouncementCategories.AnnouncementCategoryList categories) => 
         ArgumentNullException.ThrowIfNull(categories);
 
     private static void AudienceValidOrThrow(AnnouncementAudience audience)

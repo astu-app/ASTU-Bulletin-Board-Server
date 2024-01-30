@@ -1,5 +1,4 @@
 ﻿using BulletInBoardServer.Models.Announcements;
-using BulletInBoardServer.Models.UserGroups;
 using BulletInBoardServer.Models.Users;
 
 namespace BulletInBoardServer.Test.Models.Announcements;
@@ -269,9 +268,6 @@ public class AnnouncementTest
         new(Guid.Empty, "content",
             new User("name", "second name"),
             [],
-            CreateValidAnnouncementAudience(),
+            [new User("name", "second name")],
             null, null, null, null, []);
-
-    private static AnnouncementAudience CreateValidAnnouncementAudience() =>
-        [new UserGroupBuilder().SetName("name").Build()];
 }

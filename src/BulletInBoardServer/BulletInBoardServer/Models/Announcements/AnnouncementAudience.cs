@@ -1,5 +1,5 @@
-﻿using BulletInBoardServer.Models.UserGroups;
+﻿using BulletInBoardServer.Models.Users;
 
 namespace BulletInBoardServer.Models.Announcements;
 
-public class AnnouncementAudience : UserGroupList;
+public class AnnouncementAudience : UserList;

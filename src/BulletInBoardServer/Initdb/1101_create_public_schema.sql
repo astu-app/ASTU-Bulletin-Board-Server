@@ -70,6 +70,7 @@ create table announcements
     id                 uuid primary key,
 
     author_id          uuid not null,
+    audience_size      int not null, 
 
     content            text,
     auto_publishing_at timestamp,
@@ -77,6 +78,9 @@ create table announcements
 
     published_at       timestamp,
     hidden_at          timestamp,
+    
+    constraint non_negative_audience_size
+        check (audience_size >= 0),
     
     constraint non_empty_content
         check (string_not_empty(content)),
@@ -118,12 +122,13 @@ create table usergroups
         check (string_not_empty(name))
 );
 
-create table announcements_usergroups
+create table announcement_audience
 (
     announcement_id uuid,
-    usergroup_id    uuid,
-
-    primary key (announcement_id, usergroup_id)
+    user_id         uuid,
+    viewed          boolean,
+    
+    primary key (announcement_id, user_id)
 );
 
 create table member_rights
@@ -290,12 +295,12 @@ alter table child_usergroups
         foreign key (child_usergroup_id) references usergroups(id)
             on update cascade on delete cascade;
 
-alter table announcements_usergroups
-    add constraint announcements_usergroups_announcement_id_fkey
+alter table announcement_audience
+    add constraint announcement_audience_announcement_id_fkey
         foreign key (announcement_id) references announcements (id)
             on update cascade on delete cascade,
-    add constraint announcements_usergroups_usergroup_id_fkey
-        foreign key (usergroup_id) references usergroups (id)
+    add constraint announcement_audience_user_id_fkey
+        foreign key (user_id) references users (id)
             on update cascade on delete cascade;
 
 alter table files

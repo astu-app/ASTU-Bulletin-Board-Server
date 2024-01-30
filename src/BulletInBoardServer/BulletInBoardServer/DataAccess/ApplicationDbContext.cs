@@ -9,6 +9,7 @@ using BulletInBoardServer.Models.JoinEntities;
 using BulletInBoardServer.Models.UserGroups;
 using BulletInBoardServer.Models.Users;
 using Microsoft.EntityFrameworkCore;
+using AnnouncementAudience = BulletInBoardServer.Models.JoinEntities.AnnouncementAudience;
 using File = BulletInBoardServer.Models.Attachments.File;
 
 namespace BulletInBoardServer.DataAccess;
@@ -34,6 +35,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         ConfigureAttachments(modelBuilder);
         ConfigureFiles(modelBuilder);
         ConfigureUsers(modelBuilder);
+        ConfigureAnnouncementAudience(modelBuilder);
         ConfigureUsergroups(modelBuilder);
         ConfigureMemberRights(modelBuilder);
         ConfigureAnnouncementCategories(modelBuilder);
@@ -67,6 +69,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .WithMany()
                 .HasForeignKey(e => e.AuthorId);
 
+            entity.Property(e => e.AudienceSize)
+                .HasColumnName("audience_size")
+                .HasColumnType("integer")
+                .IsRequired();
+            
             entity.Property(e => e.Content)
                 .HasColumnName("content")
                 .HasColumnType("text")
@@ -116,6 +123,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                             .HasColumnType("uuid");
                     }
                 );
+            
+            entity
+                .HasMany(e => e.Audience)
+                .WithMany()
+                .UsingEntity<AnnouncementAudience>();
         });
     }
 
@@ -235,6 +247,36 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         });
     }
 
+    private static void ConfigureAnnouncementAudience(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<AnnouncementAudience>(entity =>
+        {
+            entity.ToTable("announcement_audience");
+            entity.HasKey(e => new { e.AnnouncementId, e.UserId });
+            entity.Property(e => e.AnnouncementId)
+                .HasColumnName("announcement_id")
+                .HasColumnType("uuid");
+            
+            entity
+                .HasOne(e => e.Announcement)
+                .WithMany()
+                .HasForeignKey(e => e.AnnouncementId);
+            
+            entity.Property(e => e.UserId)
+                .HasColumnName("user_id")
+                .HasColumnType("uuid");
+            
+            entity
+                .HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId);
+
+            entity.Property(e => e.Viewed)
+                .HasColumnName("viewed")
+                .HasColumnType("boolean");
+        });
+    }
+    
     private static void ConfigureUsergroups(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserGroup>(entity =>
@@ -282,31 +324,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                             .HasColumnType("uuid");
                         join.Property(e => e.ChildUserGroupId)
                             .HasColumnName("child_usergroup_id")
-                            .HasColumnType("uuid");
-                    }
-                );
-
-            entity
-                .HasMany<Announcement>()
-                .WithMany(e => e.Audience)
-                .UsingEntity<AnnouncementUserGroup>(
-                    join => join
-                        .HasOne(e => e.Announcement)
-                        .WithMany()
-                        .HasForeignKey(e => e.AnnouncementId),
-                    join => join
-                        .HasOne(e => e.UserGroup)
-                        .WithMany()
-                        .HasForeignKey(e => e.UserGroupId),
-                    join =>
-                    {
-                        join.ToTable("announcements_usergroups");
-                        join.HasKey(e => new { e.AnnouncementId, e.UserGroupId });
-                        join.Property(e => e.AnnouncementId)
-                            .HasColumnName("announcement_id")
-                            .HasColumnType("uuid");
-                        join.Property(e => e.UserGroupId)
-                            .HasColumnName("usergroup_id")
                             .HasColumnType("uuid");
                     }
                 );

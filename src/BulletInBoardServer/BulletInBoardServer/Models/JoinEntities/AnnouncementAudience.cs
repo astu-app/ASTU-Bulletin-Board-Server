@@ -1,18 +1,18 @@
 ﻿using BulletInBoardServer.Models.Announcements;
-using BulletInBoardServer.Models.Attachments;
+using BulletInBoardServer.Models.Users;
 
 namespace BulletInBoardServer.Models.JoinEntities;
 
 /// <summary>
-/// Сущность для настройки связи многие-ко-многим <see cref="Announcement"/> & <see cref="Attachment"/>
+/// Сущность для настройки связи многие-ко-многим <see cref="Announcement"/> & <see cref="User"/>
 /// </summary>
-public class AnnouncementAttachment
+public class AnnouncementAudience
 {
     /// <summary>
     /// Идентификатор объявления
     /// </summary>
     public Guid AnnouncementId { get; init; }
-    
+
     /// <summary>
     /// Объявление
     /// </summary>
@@ -20,36 +20,44 @@ public class AnnouncementAttachment
     /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
-    public Announcement Announcement { get; set; } = null!;
-    
+    public Announcement Announcement { get; init; } = null!;
+
     /// <summary>
-    /// Идентификатор вложения
+    /// Идентификатор пользователя
     /// </summary>
-    public Guid AttachmentId { get; init; }
-    
-    
-    
+    public Guid UserId { get; init; }
+
     /// <summary>
-    /// Вложение
+    /// Пользователь
     /// </summary>
     /// <remarks>
     /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
-    public AttachmentBase Attachment { get; set; } = null!;
+    public User User { get; init; } = null!;
     
     /// <summary>
-    /// Сущность для настройки связи многие-ко-многим <see cref="Announcement"/> & <see cref="Attachment"/>
+    /// Просмотрено ли объявление пользователем
+    /// </summary>
+    public bool Viewed { get; init; }
+    
+    
+    
+    /// <summary>
+    /// Сущность для настройки связи многие-ко-многим <see cref="Announcement"/> & <see cref="User"/>
     /// </summary>
     /// <param name="announcementId">Идентификатор объявления</param>
-    /// <param name="attachmentId">Идентификатор вложения</param>
-    public AnnouncementAttachment(Guid announcementId, Guid attachmentId)
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="viewed">Просмотрено ли объявление пользователем</param>
+    public AnnouncementAudience(Guid announcementId, Guid userId, bool viewed)
     {
         AnnouncementId = announcementId;
-        AttachmentId = attachmentId;
+        UserId = userId;
+        Viewed = viewed;
     }
 
-    public AnnouncementAttachment()
+    public AnnouncementAudience()
     {
+        
     }
 }

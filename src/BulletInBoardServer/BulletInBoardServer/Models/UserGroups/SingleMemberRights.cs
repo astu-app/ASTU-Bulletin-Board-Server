@@ -17,7 +17,7 @@ public class SingleMemberRights
     /// Участник группы пользователей, к которому относятся права
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public User User { get; init; } = null!;
@@ -31,7 +31,7 @@ public class SingleMemberRights
     /// Группа пользователей, в рамках которой существуют права
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public UserGroup UserGroup { get; init; } = null!;

@@ -19,7 +19,7 @@ public class AnnouncementCategorySubscriber(Guid announcementCategoryId, Guid su
     /// Категория объявлений
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public AnnouncementCategory AnnouncementCategory { get; set; } = null!;
@@ -33,7 +33,7 @@ public class AnnouncementCategorySubscriber(Guid announcementCategoryId, Guid su
     /// Подписчик
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public User Subscriber { get; set; } = null!;

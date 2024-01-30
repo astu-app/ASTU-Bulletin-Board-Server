@@ -1,3 +1,5 @@
+using BulletInBoardServer.Models.Users;
+
 namespace BulletInBoardServer.Models.AnnouncementCategories;
 
-public class SubscriberList : Users.Users;
+public class SubscriberList : UserList;

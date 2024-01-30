@@ -22,7 +22,7 @@ public class Participation
     /// Пользователь, связанный с участием
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public User User { get; init; } = null!;
@@ -36,7 +36,7 @@ public class Participation
     /// Опрос, к которому относится участие
     /// </summary>
     /// <remarks>
-    /// Поле должно устанавливаться только при помощи Entity Framework.
+    /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
     public Survey Survey { get; init; } = null!;

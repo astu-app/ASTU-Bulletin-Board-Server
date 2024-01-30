@@ -8,22 +8,22 @@ public class User
     /// <summary>
     /// Идентификатор пользователя
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
     
     /// <summary>
     /// Имя пользователя
     /// </summary>
-    public string FirstName { get; set; }
+    public string FirstName { get; init; }
     
     /// <summary>
     /// Фамилия пользователя
     /// </summary>
-    public string SecondName { get; set; }
+    public string SecondName { get; init; }
     
     /// <summary>
     /// Отчество пользователя
     /// </summary>
-    public string? Patronymic { get; set; }
+    public string? Patronymic { get; init; }
 
 
 
