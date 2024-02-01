@@ -21,8 +21,10 @@ rectangle "schema 'public'" as public_schema {
         content: text
         audience_size: integer
         
-        auto_hiding_at: timestamp?
-        auto_publishing_at: timestamp?
+        expects_delayed_publishing: boolean
+        delayed_publishing_at: timestamp?
+        expects_delayed_hiding: boolean
+        delayed_hiding_at: timestamp?
         
         published_at: timestamp?
         hidden_at: timestamp?
