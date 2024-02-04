@@ -8,7 +8,8 @@ create extension pg_trgm;
 -- create index users_second_name_idx on users using gin (second_name gin_trgm_ops); 
 
 -- announcements_index
-create index announcements_published_at on announcements (published_at); -- todo тип индекса?
+create index announcements_published_at_idx on announcements (published_at); -- todo тип индекса?
+create index announcements_is_published_idx on announcements (is_published);
 
 -- usergroups table
 create index usergroups_name_idx on usergroups using gin (name gin_trgm_ops);

@@ -1,4 +1,5 @@
 using BulletInBoardServer.DataAccess;
+using BulletInBoardServer.Services.Announcements.DelayedOperations;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,8 +11,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-const string connectionString = "Host = localhost; Port = 5432; Database = bulletin_board; Username = admin; Password = admin";
+var connectionString = builder.Configuration.GetConnectionString("MainDatabase") ??
+                       throw new ApplicationException("Не удалось подключить строку подключения к базу данных");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+
+builder.Services.AddSingleton<IDelayedAnnouncementOperationsDispatcher, DelayedAnnouncementOperationsDispatcher>();
 
 var app = builder.Build();
 
@@ -22,6 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+InitDelayedAnnouncementOperationsDispatcher();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -29,3 +35,16 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+return;
+
+
+void InitDelayedAnnouncementOperationsDispatcher()
+{
+    var serviceScopeFactory = app.Services.GetService<IServiceScopeFactory>() ?? throw new ApplicationException($"Не удалось получить экземпляр {nameof(IServiceScopeFactory)}");
+    using var scope = serviceScopeFactory.CreateScope();
+    
+    var services = scope.ServiceProvider;
+
+    var dispatcher = services.GetService<DelayedAnnouncementOperationsDispatcher>() ?? throw new ApplicationException("Диспетчер отложенных объявлений не зарегистрирован");
+    dispatcher.Init();
+}

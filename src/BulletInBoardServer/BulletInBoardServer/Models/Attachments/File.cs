@@ -76,7 +76,7 @@ public class File : AttachmentBase
     /// <param name="hash">Хэш файла в кодировке base64</param>
     /// <param name="linksCount">Количество объявлений, ссылающихся на файл</param>
     public File(Guid id, AnnouncementList announcements, Guid uploaderId, string name, string hash, int linksCount)
-        : base(id, announcements, "File")
+        : base(id, announcements, AttachmentTypes.File)
     {
         UploaderId = uploaderId;
         Name = name;

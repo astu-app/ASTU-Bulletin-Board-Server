@@ -67,17 +67,22 @@ $$ language plpgsql;
 ------ create tables
 create table announcements
 (
-    id                 uuid primary key,
-
-    author_id          uuid not null,
-    audience_size      int not null, 
-
-    content            text,
-    auto_publishing_at timestamp,
-    auto_hiding_at     timestamp,
-
-    published_at       timestamp,
-    hidden_at          timestamp,
+    id                         uuid primary key,
+    
+    author_id                  uuid not null,
+    audience_size              int  not null,
+    
+    content                    text,
+    
+    delayed_publishing_at      timestamp,
+    expects_delayed_publishing boolean generated always as ( delayed_publishing_at is not null ) stored,
+    delayed_hiding_at          timestamp,
+    expects_delayed_hiding     boolean generated always as ( delayed_hiding_at is not null ) stored,
+    
+    published_at               timestamp,
+    is_published               bool generated always as ( published_at is not null ) stored,
+    hidden_at                  timestamp,
+    is_hidden                  bool generated always as ( hidden_at is not null ) stored
     
     constraint non_negative_audience_size
         check (audience_size >= 0),
@@ -86,10 +91,10 @@ create table announcements
         check (string_not_empty(content)),
     
     constraint set_auto_publishing_moment_to_already_published_announcement
-        check (can_set_auto_publishing_moment(auto_publishing_at, published_at)),
+        check (can_set_auto_publishing_moment(delayed_publishing_at, published_at)),
     
     constraint set_auto_hiding_moment_to_already_hidden_announcement
-        check (can_set_auto_hiding_moment(auto_hiding_at, hidden_at)),
+        check (can_set_auto_hiding_moment(delayed_hiding_at, hidden_at)),
     
     constraint set_published_and_hidden_moments
         check (can_set_published_and_hidden_moments(published_at, hidden_at))

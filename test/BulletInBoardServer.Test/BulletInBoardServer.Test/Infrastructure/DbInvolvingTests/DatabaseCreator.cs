@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Testcontainers.PostgreSql;
 
-namespace BulletInBoardServer.Test.TestInfrastructure;
+namespace BulletInBoardServer.Test.Infrastructure.DbInvolvingTests;
 
 public class DatabaseCreator : IAsyncLifetime
 {

@@ -20,12 +20,16 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<UserGroup> UserGroups { get; init; } = null!;
     public DbSet<SingleMemberRights> MemberRights { get; init; } = null!;
     public DbSet<Announcement> Announcements { get; init; } = null!;
+    public DbSet<AnnouncementAudience> AnnouncementAudience { get; init; } = null!;
+    public DbSet<AnnouncementAttachment> AnnouncementAttachmentJoins { get; init; } = null!;
     public DbSet<File> Files { get; init; } = null!;
     public DbSet<Survey> Surveys { get; init; } = null!;
     public DbSet<Question> Questions { get; init; } = null!;
     public DbSet<Answer> Answers { get; init; } = null!;
     public DbSet<Participation> Participation { get; init; } = null!;
     public DbSet<UserSelection> UserSelections { get; init; } = null!;
+    public DbSet<AnnouncementCategory> AnnouncementCategories { get; init; } = null!;
+    public DbSet<AnnouncementAnnouncementCategory> AnnouncementCategoryJoins { get; init; } = null!;
 
 
 
@@ -78,27 +82,43 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnName("content")
                 .HasColumnType("text")
                 .IsRequired();
-
-            entity.Property(e => e.AutoHidingAt)
-                .HasColumnName("auto_hiding_at")
+            
+            entity.Property(e => e.DelayedPublishingAt)
+                .HasColumnName("delayed_publishing_at")
                 .HasColumnType("timestamp")
                 .IsRequired(false);
-
-            entity.Property(e => e.AutoPublishingAt)
-                .HasColumnName("auto_publishing_at")
+            
+            entity.Property(e => e.ExpectsDelayedPublishing)
+                .HasColumnName("expects_delayed_publishing")
+                .HasComputedColumnSql(sql: "(delayed_publishing_at is not null)", true);
+            
+            entity.Property(e => e.DelayedHidingAt)
+                .HasColumnName("delayed_hiding_at")
                 .HasColumnType("timestamp")
                 .IsRequired(false);
+            
+            entity.Property(e => e.ExpectsDelayedHiding)
+                .HasColumnName("expects_delayed_hiding")
+                .HasComputedColumnSql(sql: "(delayed_hiding_at is not null)", true);
 
             entity.Property(e => e.PublishedAt)
                 .HasColumnName("published_at")
                 .HasColumnType("timestamp")
                 .IsRequired(false);
-
+            
+            entity.Property(e => e.IsPublished)
+                .HasColumnName("is_published")
+                .HasComputedColumnSql(sql: "(published_at is not null)", true);
+            
             entity.Property(e => e.HiddenAt)
                 .HasColumnName("hidden_at")
                 .HasColumnType("timestamp")
                 .IsRequired(false);
-
+            
+            entity.Property(e => e.IsHidden)
+                .HasColumnName("is_hidden")
+                .HasComputedColumnSql(sql: "(hidden_at is not null)", stored: true);
+            
             entity
                 .HasMany(e => e.Categories)
                 .WithMany()
@@ -359,7 +379,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         modelBuilder.Entity<AnnouncementCategory>(entity =>
         {
-            entity.ToTable("announcement_category");
+            entity.ToTable("announcement_categories");
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id)
                 .HasColumnName("id")

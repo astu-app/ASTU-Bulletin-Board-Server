@@ -8,7 +8,7 @@ public static class QuestionValidator
     public static void AllQuestionsValidOrThrow(QuestionList questions)
     {
         ArgumentNullException.ThrowIfNull(questions);
-        if (questions.Count == 0)
+        if (questions.Count == 0) 
             throw new ArgumentException("Список вопросов не может быть пустым");
         
         foreach (var question in questions)

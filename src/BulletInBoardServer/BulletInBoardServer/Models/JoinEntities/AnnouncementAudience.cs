@@ -49,7 +49,7 @@ public class AnnouncementAudience
     /// <param name="announcementId">Идентификатор объявления</param>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <param name="viewed">Просмотрено ли объявление пользователем</param>
-    public AnnouncementAudience(Guid announcementId, Guid userId, bool viewed)
+    public AnnouncementAudience(Guid announcementId, Guid userId, bool viewed = false)
     {
         AnnouncementId = announcementId;
         UserId = userId;

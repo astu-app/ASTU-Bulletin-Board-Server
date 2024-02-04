@@ -33,7 +33,7 @@ public class Survey : AttachmentBase
     /// <summary>
     /// Список вопросов опроса
     /// </summary>
-    public QuestionList Questions { get; init; }
+    public QuestionList Questions { get; init; } = null!;
     
     /// <summary>
     /// Количество проголосовавших в опросе
@@ -50,10 +50,8 @@ public class Survey : AttachmentBase
     /// <summary>
     /// Опрос
     /// </summary>
-    /// <exception cref="ArgumentNullException">Список вопросов null</exception>
-    /// <exception cref="ArgumentException">Список вопросов пустой</exception>
     public Survey(Guid id, bool isOpen, bool isAnonymous, DateTime? autoClosingAt)
-        : this(id, [], isOpen, isAnonymous, autoClosingAt, [])
+        : base(id, [], AttachmentTypes.Survey)
     {
         IsOpen = isOpen;
         IsAnonymous = isAnonymous;
@@ -77,7 +75,7 @@ public class Survey : AttachmentBase
         bool isOpen, bool isAnonymous,
         DateTime? autoClosingAt,
         QuestionList questions)
-        : base(id, announcements, "Survey")
+        : base(id, announcements, AttachmentTypes.Survey)
     {
         QuestionValidator.AllQuestionsValidOrThrow(questions);
 

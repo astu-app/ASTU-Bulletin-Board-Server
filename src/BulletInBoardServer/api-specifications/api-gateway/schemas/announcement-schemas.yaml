@@ -28,27 +28,22 @@ components:
           items: 
             type: string
             format: uuid
-        surveyId:
-          description: Идентификатор опроса, прикрепляемого к объявлению
-          type: string
-          format: uuid
-          nullable: true
-          default: null
-        fileIds:
-          description: Идентификаторы файлов, прикрепляемых к объявлению
+        attachmentIds:
+          description: Идентификаторы вложений, прикрепляемых к объявлению
           type: array
           items:
             type: string
             format: uuid
+          minItems: 1
           nullable: true
-        hideAt:
-          description: Срок автоматического сокрытия объявления
+        delayedPublishingAt:
+          description: Срок отложенной публикации объявления
           type: string
           format: date-time
           nullable: true
           default: null
-        publishAt:
-          description: Срок отложенной публикации объявления
+        delayedHidingAt:
+          description: Срок отложенного сокрытия объявления
           type: string
           format: date-time
           nullable: true

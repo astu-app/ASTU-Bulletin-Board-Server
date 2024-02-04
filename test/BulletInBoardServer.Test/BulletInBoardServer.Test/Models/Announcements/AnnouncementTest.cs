@@ -53,7 +53,9 @@ public class AnnouncementTest
         var announcement = CreateValidAnnouncement();
 
         var setPublishedAt = () => announcement.PublishedAt = DateTime.Now.AddHours(1);
-        setPublishedAt.Should().Throw<InvalidOperationException>();
+        setPublishedAt.Should()
+            .Throw<InvalidOperationException>()
+            .WithMessage("Момент публикации уже опубликованного объявления не может наступить в будущем");
     }
 
     [Fact]
@@ -73,7 +75,9 @@ public class AnnouncementTest
         announcement.PublishedAt = DateTime.MinValue;
 
         var changePublishedAt = () => announcement.PublishedAt = DateTime.Today;
-        changePublishedAt.Should().Throw<InvalidOperationException>();
+        changePublishedAt.Should()
+            .Throw<InvalidOperationException>()
+            .WithMessage("Время публикации уже опубликованного объявления не может быть изменено");
     }
 
     [Fact]
@@ -106,7 +110,9 @@ public class AnnouncementTest
         announcement.HiddenAt = fiveHoursAgo;
 
         var changePublishedAt = () => announcement.PublishedAt = fiveHoursAgo;
-        changePublishedAt.Should().Throw<InvalidOperationException>();
+        changePublishedAt.Should()
+            .Throw<InvalidOperationException>()
+            .WithMessage("Момент публикации уже опубликованного объявления не может наступить позже момента его сокрытия");
     }
 
     [Fact]
@@ -191,7 +197,7 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
         var fiveHoursLater = DateTime.Now.AddHours(5);
-        announcement.AutoPublishingAt = fiveHoursLater;
+        announcement.DelayedPublishingAt = fiveHoursLater;
 
         var threeHoursLater = DateTime.Now.AddHours(3);
         var changePublishedAt = () => announcement.HiddenAt = threeHoursLater;
@@ -205,7 +211,7 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
 
-        var setAutoPublishingMoment = () => announcement.AutoPublishingAt = null;
+        var setAutoPublishingMoment = () => announcement.DelayedPublishingAt = null;
         setAutoPublishingMoment.Should().NotThrow();
     }
 
@@ -216,8 +222,10 @@ public class AnnouncementTest
         announcement.PublishedAt = DateTime.Now;
 
         var threeHoursLater = DateTime.Now.AddHours(3);
-        var setAutoPublishingMoment = () => announcement.AutoPublishingAt = threeHoursLater;
-        setAutoPublishingMoment.Should().Throw<InvalidOperationException>();
+        var setAutoPublishingMoment = () => announcement.DelayedPublishingAt = threeHoursLater;
+        setAutoPublishingMoment.Should()
+            .Throw<InvalidOperationException>()
+            .WithMessage("Нельзя задать момент автоматической публикации уже опубликованному объявлению");
     }
 
     [Fact]
@@ -226,7 +234,7 @@ public class AnnouncementTest
         var announcement = CreateValidAnnouncement();
 
         var threeHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(3));
-        var setAutoPublishingMoment = () => announcement.AutoPublishingAt = threeHoursAgo;
+        var setAutoPublishingMoment = () => announcement.DelayedPublishingAt = threeHoursAgo;
         setAutoPublishingMoment.Should().Throw<InvalidOperationException>();
     }
 
@@ -237,7 +245,7 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
 
-        var setAutoHidingMoment = () => announcement.AutoHidingAt = null;
+        var setAutoHidingMoment = () => announcement.DelayedHidingAt = null;
         setAutoHidingMoment.Should().NotThrow();
     }
 
@@ -248,17 +256,7 @@ public class AnnouncementTest
         announcement.HiddenAt = DateTime.Now;
 
         var threeHoursLater = DateTime.Now.AddHours(3);
-        var setAutoHidingMoment = () => announcement.AutoHidingAt = threeHoursLater;
-        setAutoHidingMoment.Should().Throw<InvalidOperationException>();
-    }
-
-    [Fact]
-    public void SetAutoHidingAt_BeforeCurrentMoment_Throws()
-    {
-        var announcement = CreateValidAnnouncement();
-
-        var threeHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(3));
-        var setAutoHidingMoment = () => announcement.AutoHidingAt = threeHoursAgo;
+        var setAutoHidingMoment = () => announcement.DelayedHidingAt = threeHoursLater;
         setAutoHidingMoment.Should().Throw<InvalidOperationException>();
     }
 
@@ -269,5 +267,6 @@ public class AnnouncementTest
             new User("name", "second name"),
             [],
             [new User("name", "second name")],
-            null, null, null, null, []);
+            null, null, null, null, 
+            []);
 }
