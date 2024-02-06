@@ -3,17 +3,17 @@
 
 left to right direction
 
-:Администратор: as admin
+:Администратор группы: as admin
 
 rectangle "Доска объявлений" {
-    (<font color="gray">A-1.3.</font> Создать группу пользователей) as create_usergroup
+    (<font color="gray">G-1.1.</font> Создать группу пользователей) as create_usergroup
     admin --> create_usergroup
     
-    create_usergroup <.. (<font color="gray">A-1.3.5</font> Задать дочерние группы пользователей) : extend
-    create_usergroup <.. (<font color="gray">A-1.3.4</font> Задать родительские группы пользователей) : extend
-    create_usergroup <.. (<font color="gray">A-1.3.3</font> Добавить участников) : extend
-    create_usergroup <.. (<font color="gray">A-1.3.2</font> Задать администратора) : extend
-    create_usergroup --> (<font color="gray">A-1.3.1</font> Указать название) : include
+    create_usergroup <.. (<font color="gray">G-1.1.5</font> Задать дочерние группы пользователей) : extend
+    create_usergroup <.. (<font color="gray">G-1.1.4</font> Задать родительские группы пользователей) : extend
+    create_usergroup <.. (<font color="gray">G-1.1.3</font> Добавить участников) : extend
+    create_usergroup <.. (<font color="gray">G-1.1.2</font> Задать администратора) : extend
+    create_usergroup --> (<font color="gray">G-1.1.1</font> Указать название) : include
 }
 
 @enduml
