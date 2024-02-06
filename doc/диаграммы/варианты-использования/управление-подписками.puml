@@ -6,15 +6,12 @@ left to right direction
 :Студент: as student
 
 rectangle "Доска объявлений" {
-    (<font color="gray">S-2.</font> Управление подписками) as manage_subscriptions
+    (<font color="gray">S-3.</font> Управление подписками) as manage_subscriptions
     
     student --> manage_subscriptions
     
-    manage_subscriptions <.. (<font color="gray">S-2.4.</font> Отменить изменение) : extend
-    manage_subscriptions <.. (<font color="gray">S-2.3.</font> Сохранить изменения) : extend
-    
-    manage_subscriptions <.. (<font color="gray">S-2.2.</font> Удалить категории объявлений) : extend
-    manage_subscriptions <.. (<font color="gray">S-2.1.</font> Добавить категории объявлений) : extend 
+    manage_subscriptions <.. (<font color="gray">S-3.2.</font> Удалить категории объявлений) : extend
+    manage_subscriptions <.. (<font color="gray">S-3.1.</font> Добавить категории объявлений) : extend 
 }
 
 @enduml

@@ -10,8 +10,8 @@ left to right direction
 
 rectangle "Доска объявлений" {
     student --> (<font color="gray">S-1.</font> Просмотреть доску объявлений)
-    student --> (<font color="gray">S-2.</font> Управление подписками)
-    student --> (<font color="gray">S-3.</font> Получить уведомление \n о новом объявлении)
+    student --> (<font color="gray">S-3.</font> Управление подписками)
+    student --> (<font color="gray">S-2.</font> Получить уведомление \n о новом объявлении)
     
     student <|-r- employee
     employee --> (<font color="gray">E-2.</font> Управление опросами)

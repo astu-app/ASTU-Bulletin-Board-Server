@@ -6,12 +6,12 @@ left to right direction
 :Студент: as student
 
 rectangle "Доска объявлений" {
-    (<font color="gray">S-3.</font> Получить уведомление о новом объявлении) as get_notification_about_publishing
+    (<font color="gray">S-2.</font> Получить уведомление \n о новом объявлении) as get_notification_about_publishing
     
     student --> get_notification_about_publishing
     
-    get_notification_about_publishing <.. (<font color="gray">S-3.1.</font> Получить уведомление \n по электронной почте) : extend   
-    get_notification_about_publishing --> (<font color="gray">S-3.1.</font> Получить push-уведомление) : include   
+    get_notification_about_publishing <.. (<font color="gray">S-2.2.</font> Получить уведомление \n по электронной почте) : extend   
+    get_notification_about_publishing --> (<font color="gray">S-2.1.</font> Получить push-уведомление) : include   
 }
 
 @enduml

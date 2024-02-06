@@ -7,13 +7,14 @@ left to right direction
 
 rectangle "Доска объявлений" {
     (<font color="gray">E-2.</font> Управление опросами) as manage_surveys
-    (<font color="gray">E-2.1.</font> Собрать результаты опроса) as collect_survey_results
+    (<font color="gray">E-2.2.</font> Собрать результаты опроса) as collect_survey_results
 
     employee --> manage_surveys    
-    manage_surveys <|-- (<font color="gray">E-2.2.</font> Закрыть опрос) 
+    manage_surveys <|-- (<font color="gray">E-2.3.</font> Закрыть опрос) 
+    manage_surveys <|-- (<font color="gray">E-2.1.</font> Создать опрос)
     manage_surveys <|-- collect_survey_results
     
-    collect_survey_results <.. (<font color="gray">E-2.1.1.</font> Выгрузить результаты опроса) : extend
+    collect_survey_results <.. (<font color="gray">E-2.2.1.</font> Выгрузить результаты опроса) : extend
 }
 
 @enduml

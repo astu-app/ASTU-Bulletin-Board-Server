@@ -20,8 +20,6 @@ rectangle "Доска объявлений" {
     create_category --> (<font color="gray">A-2.1.2.</font> Указать цвет) : include
     create_category --> (<font color="gray">A-2.1.1.</font> Указать название) : include
     
-    edit_category <.. (<font color="gray">A-2.2.4.</font> Отменить изменение) : extend
-    edit_category <.. (<font color="gray">A-2.2.3.</font> Сохранить изменения) : extend
     edit_category <.. (<font color="gray">A-2.2.2</font> Редактировать цвет) : extend
     edit_category <.. (<font color="gray">A-2.2.1</font> Редактировать название) : extend
 }
