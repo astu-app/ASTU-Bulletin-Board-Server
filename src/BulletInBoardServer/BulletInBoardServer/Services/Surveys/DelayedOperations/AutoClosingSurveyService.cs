@@ -15,7 +15,6 @@ public class AutoClosingSurveyService(
 
         survey.Close();
         dbContext.SaveChanges();
-        Console.Out.WriteLine("closed automatically"); // debug
     }
 
 
