@@ -1,7 +1,7 @@
 ﻿using BulletInBoardServer.Models.Announcements;
 using BulletInBoardServer.Models.Attachments.Surveys.Questions;
 using BulletInBoardServer.Models.Attachments.Surveys.Voters;
-using BulletInBoardServer.Services.Surveys.Validating;
+using BulletInBoardServer.Services.Surveys.Validation;
 
 namespace BulletInBoardServer.Models.Attachments.Surveys;
 
@@ -24,11 +24,11 @@ public class Survey : AttachmentBase
     /// Момент автоматического закрытия опроса. Null, если автоматическое закрытие не задано
     /// </summary>
     public DateTime? AutoClosingAt { get; init; }
-    
+
     /// <summary>
     /// Задано ли автоматическое закрытие опроса. true, если задано, иначе - false
     /// </summary>
-    public bool ExpectsAutoClosing => AutoClosingAt is not null;
+    public bool ExpectsAutoClosing { get; private set; }
 
     /// <summary>
     /// Список вопросов опроса

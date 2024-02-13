@@ -85,7 +85,6 @@ public class DelayedAnnouncementOperationsDispatcher : IDelayedAnnouncementOpera
 
     public void ConfigureDelayedHiding(Guid announcementId, DateTime hideAt)
     {
-        
         var service = new DelayedAnnouncementHidingService(announcementId, hideAt, _hidingService);
         service.WorkerSupportsCancellation = true;
         service.RunWorkerCompleted += RemoveDelayedHidingServiceFromCollection;

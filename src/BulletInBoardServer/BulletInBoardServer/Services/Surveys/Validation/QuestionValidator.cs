@@ -1,16 +1,16 @@
 ﻿using BulletInBoardServer.Models.Attachments.Surveys.Answers;
 using BulletInBoardServer.Models.Attachments.Surveys.Questions;
 
-namespace BulletInBoardServer.Services.Surveys.Validating;
+namespace BulletInBoardServer.Services.Surveys.Validation;
 
 public static class QuestionValidator
 {
     public static void AllQuestionsValidOrThrow(QuestionList questions)
     {
         ArgumentNullException.ThrowIfNull(questions);
-        if (questions.Count == 0) 
+        if (questions.Count == 0)
             throw new ArgumentException("Список вопросов не может быть пустым");
-        
+
         foreach (var question in questions)
         {
             QuestionContentValidOrThrow(question.Content);
@@ -18,25 +18,25 @@ public static class QuestionValidator
         }
     }
 
-    private static void QuestionContentValidOrThrow(string content)
+    public static void QuestionContentValidOrThrow(string content)
     {
         if (string.IsNullOrWhiteSpace(content))
-            throw new ArgumentException("Контент не может быть пустым");
+            throw new ArgumentException("Контент вопроса не может быть пустым");
     }
-    
-    private static void AllAnswersValidOrThrow(AnswerList answers)
+
+    public static void AllAnswersValidOrThrow(AnswerList answers)
     {
         ArgumentNullException.ThrowIfNull(answers);
         if (answers.Count < 2)
             throw new ArgumentException("Вариантов ответов не может быть меньше двух");
-        
-        foreach (var answer in answers) 
+
+        foreach (var answer in answers)
             AnswerContentValidOrThrow(answer.Content);
     }
-    
-    private static void AnswerContentValidOrThrow(string content)
+
+    public static void AnswerContentValidOrThrow(string content)
     {
         if (string.IsNullOrWhiteSpace(content))
-            throw new ArgumentException("Контент не может быть пустым");
+            throw new ArgumentException("Контент варианта ответа не может быть пустым");
     }
 }

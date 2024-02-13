@@ -4,14 +4,14 @@ using BulletInBoardServer.Services.Announcements.ServiceCore;
 namespace BulletInBoardServer.Services.Announcements.DelayedOperations;
 
 /// <summary>
-/// Сервис автоматического сокрытия объявлений
+/// Сервис, осуществляющий отложенное сокрытие объявлений
 /// </summary>
 public class DelayedAnnouncementHidingService : BackgroundWorker
 {
     /// <summary>
-    /// Частота проверки наступления момента публикации в миллисекундах
+    /// Частота проверки наступления момента сокрытия в миллисекундах
     /// </summary>
-    private const int PublicationMomentOccurenceCheckingFrequencyInMsecs = 1000;
+    private const int HidingMomentOccurenceCheckingFrequencyInMsecs = 1000;
     
     private readonly Guid _announcementId;
 
@@ -21,11 +21,11 @@ public class DelayedAnnouncementHidingService : BackgroundWorker
 
 
     /// <summary>
-    /// Сервис автоматического сокрытия объявлений
+    /// Сервис, осуществляющий отложенное сокрытие объявлений
     /// </summary>
     /// <param name="announcementId">Id объявления, которое требуется сокрыть</param>
     /// <param name="hideAt">Момент отложенного сокрытия объявления</param>
-    /// <param name="hidingAnnouncementService">Делегат метода, скрывающего объявление</param>
+    /// <param name="hidingAnnouncementService">Сервис, осуществляющий отложенное сокрытие объявлений</param>
     public DelayedAnnouncementHidingService(Guid announcementId, DateTime hideAt,
         DelayedHidingAnnouncementService hidingAnnouncementService)
     {
@@ -45,7 +45,7 @@ public class DelayedAnnouncementHidingService : BackgroundWorker
             if (CancellationPending)
                 return;
 
-            Thread.Sleep(PublicationMomentOccurenceCheckingFrequencyInMsecs);
+            Thread.Sleep(HidingMomentOccurenceCheckingFrequencyInMsecs);
         }
 
         _hidingAnnouncementService.HideAutomatically(_announcementId, _hideAt);

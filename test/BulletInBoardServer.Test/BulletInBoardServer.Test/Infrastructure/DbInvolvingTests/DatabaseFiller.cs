@@ -110,6 +110,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
         AddAnonymousSurvey_1();
         AddClosedAnonymousSurvey_1();
         AddPublicSurvey_2();
+        AddSurveyExpectsAutoClosing();
         return;
 
 
@@ -312,6 +313,40 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 isOpen: true,
                 isAnonymous: false,
                 autoClosingAt: null,
+                questions: [question_1]
+            );
+            dbContext.Surveys.Add(survey);
+            AddDbEntity(survey.Id, survey);
+        }
+
+        void AddSurveyExpectsAutoClosing()
+        {
+            // Create answers
+            var answer_1 = new Answer(Answer_1_OfSurveyExpectsAutoClosing_Id, Question_1_WithSingleChoice_OfSurveyExpectsAutoClosing_Id, "ответ 1 вопроса, ожидающего автоматическое закрытие");
+            var answer_2 = new Answer(Answer_2_OfSurveyExpectsAutoClosing_Id, Question_1_WithSingleChoice_OfSurveyExpectsAutoClosing_Id, "ответ 2 вопроса, ожидающего автоматическое закрытие");
+            dbContext.Answers.Add(answer_1);
+            dbContext.Answers.Add(answer_2);
+            AddDbEntity(answer_1.Id, answer_1);
+            AddDbEntity(answer_2.Id, answer_2);
+
+            // Create questions
+            var question_1 = new Question(
+                id: Question_1_WithSingleChoice_OfSurveyExpectsAutoClosing_Id,
+                surveyId: PublicSurvey_2_Id,
+                "вопрос 1 опроса, ожидающего автоматическое закрытие",
+                isMultipleChoiceAllowed: false,
+                answers: [answer_1, answer_2,]
+            );
+            dbContext.Questions.Add(question_1);
+            AddDbEntity(question_1.Id, question_1);
+            
+            // Create survey
+            var survey = new Survey(
+                id: SurveyExpectsAutoClosingId,
+                announcements: [],
+                isOpen: true,
+                isAnonymous: false,
+                autoClosingAt: DateTime.Now.AddHours(12), 
                 questions: [question_1]
             );
             dbContext.Surveys.Add(survey);

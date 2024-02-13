@@ -3,11 +3,13 @@ using BulletInBoardServer.Services.Announcements;
 using BulletInBoardServer.Services.Announcements.Infrastructure;
 using BulletInBoardServer.Test.Infrastructure.DbInvolvingTests;
 using BulletInBoardServer.Test.Services.Announcements.DelayedOperations;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using static BulletInBoardServer.Test.Infrastructure.DbInvolvingTests.TestDataIds;
 
 namespace BulletInBoardServer.Test.Services.Announcements;
 
+[TestSubject(typeof(AnnouncementService))]
 public class AnnouncementServiceTest : DbInvolvingTestBase
 {
     private readonly DelayedAnnouncementOperationsDispatcherMock _dispatcher; 

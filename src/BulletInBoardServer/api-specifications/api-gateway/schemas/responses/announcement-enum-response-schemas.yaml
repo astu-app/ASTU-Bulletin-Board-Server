@@ -203,7 +203,7 @@ components:
           announcementDoesNotExist - Объявление не существует
           announcementNotHidden - Объявление не является скрытым
         
-    getDelayedAnnouncementListResponses:
+    getDelayedPublishingAnnouncementListResponses:
       type: string
       enum:
         # 200
@@ -211,12 +211,12 @@ components:
         # 401
         - unauthorized
         # 403
-        - delayedAnnouncementsListAccessForbidden
+        - getDelayedPublishingAnnouncementListResponsesAccessForbidden
       description: >
         Ответы: 
           ok - Ок
           unauthorized - Пользователь не авторизован для выполнения операции
-          delayedAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки отложенных объявлений
+          getDelayedPublishingAnnouncementListResponsesAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие
     
     publishImmediatelyDelayedAnnouncementResponses:
       type: string
@@ -242,3 +242,17 @@ components:
           announcementDoesNotExist - Объявление не существует
           announcementNotDelayed - Объявление не является отложенным
         
+    getDelayedHiddenAnnouncementListResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - getDelayedHiddenAnnouncementListAccessForbidden
+      description: >
+        Ответы: 
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          getDelayedHiddenAnnouncementListAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие

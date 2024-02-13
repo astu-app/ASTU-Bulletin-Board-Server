@@ -1,8 +1,10 @@
 ﻿using BulletInBoardServer.Models.Announcements;
 using BulletInBoardServer.Models.Users;
+using JetBrains.Annotations;
 
 namespace BulletInBoardServer.Test.Models.Announcements;
 
+[TestSubject(typeof(Announcement))]
 public class AnnouncementTest
 {
     [Fact]

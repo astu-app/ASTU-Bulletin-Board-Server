@@ -4,7 +4,7 @@ using BulletInBoardServer.Services.Announcements.ServiceCore;
 namespace BulletInBoardServer.Services.Announcements.DelayedOperations;
 
 /// <summary>
-/// Сервис автоматической публикации объявлений
+/// Сервис, осуществляющий отложенную публикацию объявлений
 /// </summary>
 public class DelayedAnnouncementPublishingService : BackgroundWorker
 {
@@ -21,11 +21,11 @@ public class DelayedAnnouncementPublishingService : BackgroundWorker
 
 
     /// <summary>
-    /// Сервис автоматической публикации объявлений
+    /// Сервис, осуществляющий отложенную публикацию объявлений
     /// </summary>
     /// <param name="announcementId">Id объявления, которое требуется опубликовать</param>
     /// <param name="publishAt">Момент отложенной публикации объявления</param>
-    /// <param name="publishingService">Делегат метода, публикующего объявление</param>
+    /// <param name="publishingService">Сервис работы с объявлениями, ожидающими отложенную публикацию</param>
     public DelayedAnnouncementPublishingService(Guid announcementId, DateTime publishAt,
         DelayedPublicationAnnouncementService publishingService)
     {

@@ -64,6 +64,13 @@ public static class TestDataIds
     public static readonly Guid Question_1_WithSingleChoice_OfPublicSurvey_2_Id = Guid.Parse("9b798d5a-ba0f-4268-a4a6-f4aa06d24cf1");
     public static readonly Guid Answer_1_OfPublicSurvey_2_Id = Guid.Parse("d0420c46-5d0b-4907-af5b-52ae1f31aa38");
     public static readonly Guid Answer_2_OfPublicSurvey_2_Id = Guid.Parse("68d83c63-1d56-43d8-bf12-f37dc4502bb3");
+    
+    // опрос, ожидающий автоматическое закрытие
+    public static readonly Guid SurveyExpectsAutoClosingId = Guid.Parse("9348b68c-52f8-46ae-902d-0501b2d31f03");
+    
+    public static readonly Guid Question_1_WithSingleChoice_OfSurveyExpectsAutoClosing_Id = Guid.Parse("a4d30949-a510-4f28-9606-2852995ee823");
+    public static readonly Guid Answer_1_OfSurveyExpectsAutoClosing_Id = Guid.Parse("c8462a11-a3f1-4b72-bc39-62983f42d6c7");
+    public static readonly Guid Answer_2_OfSurveyExpectsAutoClosing_Id = Guid.Parse("228c41be-bfd5-4bd8-85f9-536c915dd5a5");
     #endregion опросы
     
     

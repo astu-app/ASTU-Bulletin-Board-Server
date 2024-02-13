@@ -446,8 +446,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             
             entity.Property(e => e.IsOpen)
                 .HasColumnName("is_open")
-                .HasColumnType("boolean")
-                .HasDefaultValue(true);
+                .HasColumnType("boolean");
             
             entity.Property(e => e.IsAnonymous)
                 .HasColumnName("is_anonymous")
@@ -458,6 +457,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnName("auto_closing_at")
                 .HasColumnType("timestamp")
                 .IsRequired(false);
+            
+            entity.Property(e => e.ExpectsAutoClosing)
+                .HasColumnName("expects_auto_closing")
+                .HasComputedColumnSql(sql: "(auto_closing_at is not null)", true);
 
             entity.HasMany(e => e.Voters)
                 .WithMany()

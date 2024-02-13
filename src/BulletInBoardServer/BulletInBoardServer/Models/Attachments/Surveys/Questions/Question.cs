@@ -1,4 +1,5 @@
 using BulletInBoardServer.Models.Attachments.Surveys.Answers;
+using BulletInBoardServer.Services.Surveys.Validation;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -28,7 +29,7 @@ public class Question
     /// Текстовое содержимое вопроса
     /// </summary>
     // public string Content { get; }
-    public string Content { get; init; }
+    public string Content { get; init; } 
     
     /// <summary>
     /// Возможно ли при голосовании выбрать несколько вариантов ответов
@@ -44,14 +45,9 @@ public class Question
 
     public Question(Guid id, Guid surveyId, string content, bool isMultipleChoiceAllowed, AnswerList answers)
     {
-        if (string.IsNullOrWhiteSpace(content))
-            throw new ArgumentException("Контент вопроса не может быть пустым или Null");
-
-        if (answers is null)
-            throw new ArgumentNullException(nameof(answers));
-        if (answers.Count < 2)
-            throw new ArgumentException("Количество вариантов ответов вопроса не может быть меньше двух");
-
+        QuestionValidator.QuestionContentValidOrThrow(content);
+        QuestionValidator.AllAnswersValidOrThrow(answers);
+        
         Id = id;
         SurveyId = surveyId;
         Content = content;
@@ -59,7 +55,7 @@ public class Question
         Answers = answers;
     }
     
-    public Question() // конструктор нужен для EF'а 
+    private Question() // конструктор нужен для EF'а 
     {
     }
 }

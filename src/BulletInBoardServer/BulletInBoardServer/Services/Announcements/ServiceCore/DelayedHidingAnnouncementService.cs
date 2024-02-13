@@ -4,6 +4,9 @@ using BulletInBoardServer.Services.Announcements.Infrastructure;
 
 namespace BulletInBoardServer.Services.Announcements.ServiceCore;
 
+/// <summary>
+/// Сервис для управления объявлениями, ожидающими отложенного сокрытия
+/// </summary>
 public class DelayedHidingAnnouncementService(
     ApplicationDbContext dbContext,
     IDelayedAnnouncementOperationsDispatcher dispatcher)

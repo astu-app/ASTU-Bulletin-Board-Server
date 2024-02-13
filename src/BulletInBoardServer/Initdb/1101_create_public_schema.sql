@@ -45,15 +45,6 @@ end
 $$ language plpgsql;
 
 ----
-create function can_set_auto_closing_moment(closing_at timestamp, is_open boolean)
-    returns boolean
-as
-$$
-begin
-    return (is_open is true) or (is_open is false and closing_at is null);
-end
-$$ language plpgsql;
-
 create function is_color_format_correct(color_hex text)
     returns boolean
 as
@@ -217,17 +208,15 @@ create table announcements_announcement_categories
 
 create table surveys
 (
-    id                         uuid primary key,
-
-    voters_count              integer default 0,
+    id                   uuid primary key,
     
-    is_open                    boolean not null default true,
-    is_anonymous               boolean not null default true,
-
-    auto_closing_at            timestamp,
+    voters_count         integer          default 0,
     
-    constraint set_auto_closing_moment
-        check (can_set_auto_closing_moment(auto_closing_at, is_open))
+    is_open              boolean not null default true,
+    is_anonymous         boolean not null default true,
+    
+    auto_closing_at      timestamp,
+    expects_auto_closing boolean generated always as ( auto_closing_at is not null ) stored
 );
 
 create table questions

@@ -5,7 +5,7 @@ info:
   version: 0.0.1
 servers:
   - url: 'https://localhost:8080'
-paths:  
+paths:
   # общие операции
   /announcements/create:
     post:
@@ -305,7 +305,7 @@ paths:
                     $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
   
   # опубликованные объявления  
-  /announcements/posted/get-list:
+  /announcements/published/get-list:
     get:
       tags: [ Опубликованные объявления ]
       operationId: getPostedAnnouncementList
@@ -346,7 +346,7 @@ paths:
                     # postedAnnouncementsListAccessForbidden
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getPostedAnnouncementListResponses'
   
-  /announcements/posted/hide:
+  /announcements/published/hide:
     post:
       tags: [ Опубликованные объявления ]
       operationId: hidePostedAnnouncement
@@ -464,10 +464,10 @@ paths:
                     # hiddenAnnouncementsListAccessForbidden
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getHiddenAnnouncementListResponses'
   
-  /announcements/hidden/unhide:
+  /announcements/hidden/restore:
     post:
       tags: [ Скрытые объявления ]
-      operationId: unhideHiddenAnnouncement
+      operationId: restoreHiddenAnnouncement
       summary: Восстановить скрытое объявление
       requestBody:
         content:
@@ -538,12 +538,12 @@ paths:
                     # announcementNotHidden
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
   
-  # отложенные объявления
-  /announcements/delayed/get-list:
+  # объявления с отложенной публикацией
+  /announcements/delayed-publishing/get-list:
     get:
       tags: [ Отложенные объявления ]
-      operationId: getDelayedAnnouncementList
-      summary: Получить список отложенных объявлений
+      operationId: getDelayedPublishingAnnouncementList
+      summary: Получить список объявлений, ожидающих отложенную публикацию
       responses:
         200:
           description: Ok
@@ -558,7 +558,7 @@ paths:
                       $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementSummaryDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedAnnouncementListResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedPublishingAnnouncementListResponses'
         401:
           description: Unauthorized
           content:
@@ -568,7 +568,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedAnnouncementListResponses'
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedPublishingAnnouncementListResponses'
         403:
           description: Forbidden
           content:
@@ -577,13 +577,13 @@ paths:
                 type: object
                 properties:
                   code:
-                    # delayedAnnouncementsListAccessForbidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedAnnouncementListResponses'
+                    # getDelayedPublishingAnnouncementListResponses
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedPublishingAnnouncementListResponses'
   
-  /announcements/delayed/publish-immediately:
+  /announcements/delayed-publishing/publish-immediately:
     post:
       tags: [ Отложенные объявления ]
-      operationId: publishImmediatelyDelayedAnnouncement
+      operationId: publishImmediatelyDelayedPublishingAnnouncement
       summary: Сразу опубликовать отложенное объявление
       requestBody:
         content:
@@ -653,5 +653,45 @@ paths:
                   code:
                     # announcementNotDelayed
                     $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
-        
-        
+  
+  # объявления с отложенным сокрытием
+  /announcements/delayed-hidden/get-list:
+    get:
+      tags: [ Отложенные объявления ]
+      operationId: getDelayedHiddenAnnouncementList
+      summary: Получить список объявлений, ожидающих отложенное сокрытие
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementSummaryDto'
+                  code:
+                    # ok
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedHiddenAnnouncementListResponses'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # unauthorized
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedHiddenAnnouncementListResponses'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    # getDelayedHiddenAnnouncementListAccessForbidden
+                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedHiddenAnnouncementListResponses'
