@@ -15,53 +15,56 @@ paths:
         required: true
         content:
           application/json:
-            schema: 
-              $ref: './schemas//announcement-category-schemas.yaml#/components/schemas/createAnnouncementCategoryDto'
+            schema:
+              $ref: '#/components/schemas/createAnnouncementCategoryDto'
       responses:
         201:
           description: Created
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                title: createAnnouncementCategoryCreated  
+                properties:
                   code:
                     # created
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/createAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/createAnnouncementCategoryResponses'
                   content:
-                    $ref: './schemas/announcement-category-schemas.yaml#/components/schemas/announcementCategoryIdentifierDto'
+                    $ref: '#/components/schemas/announcementCategoryIdentifierDto'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: createAnnouncementCategoryBadRequest
                 properties:
                   code:
                     # colorIsIncorrectHex
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/createAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/createAnnouncementCategoryResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: createAnnouncementCategoryUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/createAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/createAnnouncementCategoryResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: createAnnouncementCategoryForbidden
                 properties:
                   code:
                     # announcementCategoryCreationForbidden
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/createAnnouncementCategoryResponses'
-          
-  
+                    $ref: '#/components/schemas/createAnnouncementCategoryResponses'
+
   /announcement-categories/get-list:
     get:
       tags: [ Основные операции ]
@@ -74,32 +77,35 @@ paths:
             application/json:
               schema:
                 type: object
+                title: getAllAnnouncementCategoriesOk
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/getAllAnnouncementCategoriesResponses'
+                    $ref: '#/components/schemas/getAllAnnouncementCategoriesResponses'
                   content:
-                    $ref: './schemas/announcement-category-schemas.yaml#/components/schemas/announcementCategoriesListDto'
+                    $ref: '#/components/schemas/announcementCategoriesListDto'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: getAllAnnouncementCategoriesUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/getAllAnnouncementCategoriesResponses'
+                    $ref: '#/components/schemas/getAllAnnouncementCategoriesResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: getAllAnnouncementCategoriesForbidden
                 properties:
                   code:
                     # announcementCategoryListAccessForbidden
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/getAllAnnouncementCategoriesResponses'
+                    $ref: '#/components/schemas/getAllAnnouncementCategoriesResponses'
     
   /announcement-categories/update:
     put:
@@ -108,63 +114,68 @@ paths:
       summary: Редактировать категорию объявлений
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
-              $ref: './schemas/announcement-category-schemas.yaml#/components/schemas/updateAnnouncementCategoryDto'
+            schema:
+              $ref: '#/components/schemas/updateAnnouncementCategoryDto'
       responses:
         200:
           description: Ok
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                title: updateAnnouncementCategoryOk
+                properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/updateAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementCategoryBadRequest
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/updateAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementCategoryUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/updateAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementCategoryForbidden
                 properties:
                   code:
                     # announcementCategoryUpdatingForbidden
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/updateAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementCategoryNotFound
                 properties:
                   code:
                     # announcementCategoryDoesNotExist
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/updateAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
 
   /announcement-categories/delete:
     delete:
@@ -173,63 +184,68 @@ paths:
       summary: Удалить категорию объявлений
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
-              $ref: './schemas/announcement-category-schemas.yaml#/components/schemas/announcementCategoryIdentifierDto'
-      responses: 
+            schema:
+              $ref: '#/components/schemas/announcementCategoryIdentifierDto'
+      responses:
         200:
           description: Ok
-          content: 
+          content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
-                  code: 
+                title: deleteAnnouncementCategoryOk
+                properties:
+                  code:
                     # ok
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/deleteAnnouncementCategoryResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: deleteAnnouncementCategoryBadRequest
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/deleteAnnouncementCategoryResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: deleteAnnouncementCategoryUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/deleteAnnouncementCategoryResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: deleteAnnouncementCategoryForbidden
                 properties:
                   code:
                     # announcementCategoryDeletionForbidden
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/deleteAnnouncementCategoryResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: deleteAnnouncementCategoryNotFound
                 properties:
                   code:
                     # announcementCategoryDoesNotExist
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementCategoryResponses'
+                    $ref: '#/components/schemas/deleteAnnouncementCategoryResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
 
   /announcement-categories/get-subscribtions:
     get:
@@ -238,44 +254,47 @@ paths:
       summary: Получить список всех категорий объявлений с отмеченными подписками для текущего пользователя
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
-              $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
-      responses: 
+            schema:
+              $ref: './common-schemas.yaml#/components/schemas/identifiers'
+      responses:
         200:
           description: Ok
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
-                properties: 
+                title: getAnnouncementCategoriesSubscriptionsOk
+                properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/getAnnouncementCategoriesSubscriptionsResponses'
+                    $ref: '#/components/schemas/getAnnouncementCategoriesSubscriptionsResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: getAnnouncementCategoriesSubscriptionsUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/getAnnouncementCategoriesSubscriptionsResponses'
+                    $ref: '#/components/schemas/getAnnouncementCategoriesSubscriptionsResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: getAnnouncementCategoriesSubscriptionsForbidden
                 properties:
                   code:
                     # getSubscriptionsListForbidden
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/getAnnouncementCategoriesSubscriptionsResponses'
+                    $ref: '#/components/schemas/getAnnouncementCategoriesSubscriptionsResponses'
 
   /announcement-categories/update-subscribtions:
-    post: 
+    post:
       tags: [ Подписки ]
       operationId: updateAnnouncementCategoriesSubscriptions
       summary: Обновить список подписок текущего пользователя
@@ -284,7 +303,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+              $ref: './common-schemas.yaml#/components/schemas/identifiers'
       responses:
         200:
           description: Ok
@@ -292,51 +311,215 @@ paths:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementCategoriesSubscriptionsOk
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
+                    $ref: '#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementCategoriesSubscriptionsBadRequest
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
+                    $ref: '#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementCategoriesSubscriptionsUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
+                    $ref: '#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementCategoriesSubscriptionsForbidden
                 properties:
                   code:
                     # updateSubscriptionsForbidden
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
+                    $ref: '#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementCategoriesSubscriptionsNotFound
                 properties:
                   code:
                     # categoriesDoNotExist
-                    $ref: './schemas/responses/announcement-category-enum-response-schemas.yaml#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
+                    $ref: '#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
+
+components:
+  schemas:
+    announcementCategoryDetailsDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        color:
+          type: string
+    
+    createAnnouncementCategoryDto:
+      type: object
+      properties:
+        name:
+          type: string
+        colorHex:
+          type: string
+          format: hex
+    
+    announcementCategoryIdentifierDto:
+      description: Идентификатор категории объявлений
+      type: string
+      format: uuid
+    
+    announcementCategoriesListDto:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/announcementCategoryDetailsDto'
+    
+    updateAnnouncementCategoryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        colorHex:
+          type: string
+          nullable: true
+    
+    createAnnouncementCategoryResponses:
+      type: string
+      enum:
+        # 201
+        - created
+        # 400
+        - colorIsIncorrectHex
+        # 401
+        - unauthorized
+        # 403
+        - announcementCategoryCreationForbidden
+      description: >
+        Ответы:
+          created - Категория объявлений создана
+          colorIsIncorrectHex - Код цвета передан не в HEX формате 
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementCategoryCreationForbidden - Пользователь не имеет права создать категорию объявлений
+
+    getAllAnnouncementCategoriesResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - announcementCategoryListAccessForbidden
+      description: >
+        Ответы:
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementCategoryListAccessForbidden - Пользователь не имеет права получить список категорий объявлений
+
+    updateAnnouncementCategoryResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - announcementCategoryUpdatingForbidden
+        # 404
+        - announcementCategoryDoesNotExist
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementCategoryUpdatingForbidden - Пользователь не имеет права редактировать категорию объявлений
+          announcementCategoryDoesNotExist - Категория объявлений с указанным id не существует  
+
+    deleteAnnouncementCategoryResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - announcementCategoryDeletionForbidden
+        # 404
+        - announcementCategoryDoesNotExist
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementCategoryDeletionForbidden - Пользователь не имеет права удалить категорию объявлений
+          announcementCategoryDoesNotExist - Категория объявлений с указанным id не существует
+
+    getAnnouncementCategoriesSubscriptionsResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - getSubscriptionsListForbidden
+      description: >
+        Ответы:
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          getSubscriptionsListForbidden - Пользователь не имеет права получить список категорий объявлений, на которые подписан
+
+    updateAnnouncementCategoriesSubscriptionsResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - updateSubscriptionsForbidden
+        # 404
+        - categoriesDoNotExist
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          updateSubscriptionsForbidden - Пользователь не имеет права получить список категорий объявлений, на которые подписан
+          categoriesDoNotExist - В качестве одного или нескольких id категорий объявлений прикреплен несуществующий в базе id

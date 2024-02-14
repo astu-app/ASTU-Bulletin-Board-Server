@@ -6,5 +6,20 @@ info:
 servers:
   - url: 'https://localhost:8080'
 paths:
-  /users/get-usergroups:
-    
+#  /users/get-usergroups:
+  
+components:
+  schemas:
+    userSummaryDto:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        secondName:
+          type: string
+        patronymic:
+          type: string

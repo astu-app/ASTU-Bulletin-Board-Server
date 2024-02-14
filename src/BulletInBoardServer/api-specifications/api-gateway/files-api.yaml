@@ -6,4 +6,22 @@ info:
 servers:
   - url: 'https://localhost:8080'
 paths:
-  
+
+components:
+  schemas:
+    fileSummaryDto:
+      type: object
+      properties:
+        id:
+          description: Идентификатор файла
+          type: string
+          format: uuid
+        name:
+          description: Название файла
+          type: string
+        type:
+          description: Тип файла
+          type: string
+          enum:
+            - mediafile # Медиафайл отображается в объявлении сразу
+            - file # Обычный файл загружается вручную

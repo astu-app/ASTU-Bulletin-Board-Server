@@ -14,6 +14,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
     </ItemGroup>
@@ -28,47 +29,17 @@
       <Content Include="..\api-specifications\api-gateway\announcements-api.yaml">
         <Link>api-specifications\api-gateway\announcements-api.yaml</Link>
       </Content>
-      <Content Include="..\api-specifications\api-gateway\employees-api.yaml">
-        <Link>api-specifications\api-gateway\employees-api.yaml</Link>
+      <Content Include="..\api-specifications\api-gateway\common-schemas.yaml">
+        <Link>api-specifications\api-gateway\common-schemas.yaml</Link>
       </Content>
       <Content Include="..\api-specifications\api-gateway\files-api.yaml">
         <Link>api-specifications\api-gateway\files-api.yaml</Link>
       </Content>
+      <Content Include="..\api-specifications\api-gateway\ping-api.yaml">
+        <Link>api-specifications\api-gateway\ping-api.yaml</Link>
+      </Content>
       <Content Include="..\api-specifications\api-gateway\portfolio-manager-example-api.json">
         <Link>api-specifications\api-gateway\portfolio-manager-example-api.json</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\schemas\announcement-category-schemas.yaml">
-        <Link>api-specifications\api-gateway\schemas\announcement-category-schemas.yaml</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\schemas\announcement-schemas.yaml">
-        <Link>api-specifications\api-gateway\schemas\announcement-schemas.yaml</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\schemas\common-schemas.yaml">
-        <Link>api-specifications\api-gateway\schemas\common-schemas.yaml</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\schemas\file-schemas.yaml">
-        <Link>api-specifications\api-gateway\schemas\file-schemas.yaml</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\schemas\responses\announcement-category-enum-response-schemas.yaml">
-        <Link>api-specifications\api-gateway\schemas\responses\announcement-category-enum-response-schemas.yaml</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\schemas\responses\announcement-enum-response-schemas.yaml">
-        <Link>api-specifications\api-gateway\schemas\responses\announcement-enum-response-schemas.yaml</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\schemas\responses\survey-enum-response-schemas.yaml">
-        <Link>api-specifications\api-gateway\schemas\responses\survey-enum-response-schemas.yaml</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\schemas\responses\usergroup-enum-response-schemas.yaml">
-        <Link>api-specifications\api-gateway\schemas\responses\usergroup-enum-response-schemas.yaml</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\schemas\survey-schemas.yaml">
-        <Link>api-specifications\api-gateway\schemas\survey-schemas.yaml</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\schemas\user-schemas.yaml">
-        <Link>api-specifications\api-gateway\schemas\user-schemas.yaml</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\schemas\usergroup-schemas.yaml">
-        <Link>api-specifications\api-gateway\schemas\usergroup-schemas.yaml</Link>
       </Content>
       <Content Include="..\api-specifications\api-gateway\surveys-api.yaml">
         <Link>api-specifications\api-gateway\surveys-api.yaml</Link>

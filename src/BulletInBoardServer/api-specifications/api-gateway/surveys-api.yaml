@@ -17,7 +17,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/createSurveyDto'
+              $ref: '#/components/schemas/createSurveyDto'
       responses:
         201:
           description: Created
@@ -25,42 +25,46 @@ paths:
             application/json:
               schema:
                 type: object
+                title: createSurveyCreated
                 properties:
                   content:
-                    $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
+                    $ref: '#/components/schemas/surveyIdentifierDto'
                   code:
                     # created
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/createSurveyResponses'
+                    $ref: '#/components/schemas/createSurveyResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: createSurveyUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/createSurveyResponses'
+                    $ref: '#/components/schemas/createSurveyResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: createSurveyForbidden
                 properties:
                   code:
                     # createSurveyForbidden
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/createSurveyResponses'
+                    $ref: '#/components/schemas/createSurveyResponses'
         409:
           description: Conflict
           content:
             application/json:
               schema:
                 type: object
+                title: createSurveyConflict
                 properties:
                   code:
                     # votingClosesBeforeAnnouncementPublication
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/createSurveyResponses'
+                    $ref: '#/components/schemas/createSurveyResponses'
   
   /survey/get-details:
     get:
@@ -71,7 +75,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
+              $ref: '#/components/schemas/surveyIdentifierDto'
       responses:
         200:
           description: Ok
@@ -81,10 +85,10 @@ paths:
                 type: object
                 properties:
                   content:
-                    $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyDetailsDto'
+                    $ref: '#/components/schemas/surveyDetailsDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+                    $ref: '#/components/schemas/getSurveyDetailsResponses'
         400:
           description: Bad Request
           content:
@@ -94,7 +98,7 @@ paths:
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+                    $ref: '#/components/schemas/getSurveyDetailsResponses'
         401:
           description: Unauthorized
           content:
@@ -104,7 +108,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+                    $ref: '#/components/schemas/getSurveyDetailsResponses'
         403:
           description: Forbidden
           content:
@@ -114,7 +118,7 @@ paths:
                 properties:
                   code:
                     # detailsAccessForbidden
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+                    $ref: '#/components/schemas/getSurveyDetailsResponses'
         404:
           description: Not Found
           content:
@@ -124,9 +128,9 @@ paths:
                 properties:
                   code:
                     # surveyDoesNotExist
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+                    $ref: '#/components/schemas/getSurveyDetailsResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -136,7 +140,7 @@ paths:
                 properties:
                   code:
                     # announcementWithSurveyNotYetPublished
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveyDetailsResponses'
+                    $ref: '#/components/schemas/getSurveyDetailsResponses'
   
   /survey/close-survey:
     post:
@@ -148,7 +152,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
+              $ref: '#/components/schemas/surveyIdentifierDto'
       responses:
         200:
           description: Ok
@@ -159,7 +163,7 @@ paths:
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+                    $ref: '#/components/schemas/closeSurveyResponses'
 
         400:
           description: Bad Request
@@ -170,7 +174,7 @@ paths:
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+                    $ref: '#/components/schemas/closeSurveyResponses'
         401:
           description: Unauthorized
           content:
@@ -180,7 +184,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+                    $ref: '#/components/schemas/closeSurveyResponses'
         403:
           description: Forbidden
           content:
@@ -190,7 +194,7 @@ paths:
                 properties:
                   code:
                     # surveyClosingForbidden
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+                    $ref: '#/components/schemas/closeSurveyResponses'
         404:
           description: Not Found
           content:
@@ -200,9 +204,9 @@ paths:
                 properties:
                   code:
                     # surveyDoesNotExist
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+                    $ref: '#/components/schemas/closeSurveyResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -213,7 +217,7 @@ paths:
                   code:
                     # surveyAlreadyClosed
                     # announcementWithSurveyNotYetPublished
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/closeSurveyResponses'
+                    $ref: '#/components/schemas/closeSurveyResponses'
   
   /survey/get-results:
     get:
@@ -225,7 +229,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
+              $ref: '#/components/schemas/surveyIdentifierDto'
       responses:
         200:
           description: Ok
@@ -235,10 +239,10 @@ paths:
                 type: object
                 properties:
                   content:
-                    $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyResultsDto'
+                    $ref: '#/components/schemas/surveyResultsDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+                    $ref: '#/components/schemas/getSurveysResultsResponses'
         400:
           description: Bad Request
           content:
@@ -248,7 +252,7 @@ paths:
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+                    $ref: '#/components/schemas/getSurveysResultsResponses'
         401:
           description: Unauthorized
           content:
@@ -258,7 +262,7 @@ paths:
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+                    $ref: '#/components/schemas/getSurveysResultsResponses'
         403:
           description: Forbidden
           content:
@@ -268,7 +272,7 @@ paths:
                 properties:
                   code:
                     # surveyResultsAccessForbidden
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+                    $ref: '#/components/schemas/getSurveysResultsResponses'
         404:
           description: Not Found
           content:
@@ -278,9 +282,9 @@ paths:
                 properties:
                   code:
                     # surveyDoesNotExist
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+                    $ref: '#/components/schemas/getSurveysResultsResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -290,7 +294,7 @@ paths:
                 properties:
                   code:
                     # announcementWithSurveyNotYetPublished
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/getSurveysResultsResponses'
+                    $ref: '#/components/schemas/getSurveysResultsResponses'
   
   /survey/download-results:
     get:
@@ -302,7 +306,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/surveyIdentifierDto'
+              $ref: '#/components/schemas/surveyIdentifierDto'
       responses:
         200:
           description: Ok
@@ -310,65 +314,71 @@ paths:
             application/octet-stream:
               schema:
                 type: object
+                title: downloadSurveyResultsOk
                 properties:
                   content:
                     type: string
                     format: binary
                   code:
                     # ok
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+                    $ref: '#/components/schemas/downloadSurveyResultsResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: downloadSurveyResultsBadRequest
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+                    $ref: '#/components/schemas/downloadSurveyResultsResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: downloadSurveyResultsUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+                    $ref: '#/components/schemas/downloadSurveyResultsResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: downloadSurveyResultsForbidden
                 properties:
                   code:
                     # surveyResultsDownloadingForbidden
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+                    $ref: '#/components/schemas/downloadSurveyResultsResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: downloadSurveyResultsNotFound
                 properties:
                   code:
                     # surveyDoesNotExist
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+                    $ref: '#/components/schemas/downloadSurveyResultsResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
             application/json:
               schema:
                 type: object
+                title: downloadSurveyResultsConflict
                 properties:
                   code:
                     # announcementWithSurveyNotYetPublished
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/downloadSurveyResultsResponses'
+                    $ref: '#/components/schemas/downloadSurveyResultsResponses'
   
   # question
   /question/vote:
@@ -381,7 +391,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/survey-schemas.yaml#/components/schemas/voteInSurveyDto'
+              $ref: '#/components/schemas/voteInSurveyDto'
       responses:
         200:
           description: Ok
@@ -389,60 +399,66 @@ paths:
             application/octet-stream:
               schema:
                 type: object
+                title: voteInQuestionOk
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
+                    $ref: '#/components/schemas/voteInSurveyResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: voteInQuestionBadRequest
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
+                    $ref: '#/components/schemas/voteInSurveyResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: voteInQuestionUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
+                    $ref: '#/components/schemas/voteInSurveyResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: voteInQuestionForbidden
                 properties:
                   code:
                     # votingForbidden
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
+                    $ref: '#/components/schemas/voteInSurveyResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: voteInQuestionNotFound
                 properties:
                   code:
                     # surveyDoesNotExist
                     # questionsDoesNotExist
                     # answerDoesNotExist
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
+                    $ref: '#/components/schemas/voteInSurveyResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
             application/json:
               schema:
                 type: object
+                title: voteInQuestionConflict
                 properties:
                   code:
                     # surveyClosed
@@ -452,4 +468,382 @@ paths:
                     # selectedQuestionsBelongToDifferentSurveys
                     # selectedQuestionsBelongToDifferentSurveys
                     # selectedAnswersBelongToDifferentQuestions
-                    $ref: './schemas/responses/survey-enum-response-schemas.yaml#/components/schemas/voteInSurveyResponses'
+                    $ref: '#/components/schemas/voteInSurveyResponses'
+
+components:
+  schemas:
+    ### public
+    # survey
+    createSurveyDto:
+      type: object
+      properties:
+        questions:
+          description: Вопросы опроса
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/createQuestionDto'
+        isAnonymous:
+          description: Анонимен ли опрос
+          type: boolean
+        voteUntil:
+          description: Срок окончания голосования. Null, если голосование не ограничено по сроку
+          type: string
+          format: date-time
+          nullable: true
+    
+    surveyDetailsDto:
+      type: object
+      properties:
+        id:
+          description: Идентификатор опроса
+          type: string
+          format: uuid
+        isOpen:
+          description: Открыт ли опрос
+          type: boolean
+          default: true
+        isAnonymous:
+          description: Анонимен ли опрос
+          type: boolean
+          default: false
+        voteFinishedAt:
+          description: Время окончания голосования (если задано)
+          type: string
+          format: date-time
+          nullable: true
+        questions:
+          description: Вопросы опроса
+          type: array
+#          items:
+#            $ref: '#/components/schemas/questionDetailsDto'
+          minItems: 1
+    
+    surveyIdentifierDto:
+      description: Идентификатор опроса
+      type: string
+      format: uuid
+    
+    voteInSurveyDto:
+      description: DTO для голосования в опросе
+      type: object
+      properties:
+        surveyId:
+          description: Идентификатор опроса
+          type: string
+          format: uuid
+        questionVotes:
+          description: Голоса за варианты ответов в каждом вопросе опроса
+          type: array
+          items:
+            $ref: '#/components/schemas/voteInQuestionDto'
+          minItems: 1
+    
+    voteInQuestionDto:
+      description: DTO для голосования в вопросе опроса
+      type: object
+      properties:
+        questionId:
+          description: Идентификатор вопроса
+          type: string
+          format: uuid
+        answerIds:
+          description: Массив идентификаторов вариантов ответов
+          type: array
+          minItems: 1
+          items:
+            type: string
+            format: uuid
+
+    surveyResultsDto:
+      description: Результаты опроса
+      type: object
+      properties:
+        voters:
+          $ref: '#/components/schemas/votersDto'
+        answerResults:
+          $ref: '#/components/schemas/answerResultsDto'
+
+    # question
+    createQuestionDto:
+      type: object
+      properties:
+        content:
+          description: Содержимое вопроса
+          type: string
+        isMultipleChoiceAllowed:
+          description: Доступен ли выбор нескольких вариантов ответов
+          type: boolean
+        answers:
+          description: Варианты ответов
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/createAnswerDto'
+
+    questionDetailsDto:
+      type: object
+      properties:
+        id:
+          description: Идентификатор опроса
+          type: string
+          format: uuid
+        content:
+          description: Текстовое содержимое вопроса
+          type: string
+        isMultipleChoiceAllowed:
+          description: Разрешен ли множественный выбор
+          type: boolean
+          default: false
+        votersAmount:
+          description: Количество проголосовавших
+          type: integer
+          minimum: 0
+        answers:
+          description: Варианты ответов опроса
+          type: array
+          items:
+            $ref: '#/components/schemas/questionAnswerDetailsDto'
+          minItems: 2
+    
+    questionAnswerDetailsDto:
+      type: object
+      properties:
+        id:
+          description: Идентификатор варианта ответа
+          type: string
+          format: uuid
+        content:
+          description: Текстовое содержимое варианта ответа
+          type: string
+        votersAmount:
+          description: Количество пользователей, проголосовавших за вариант ответа
+          type: integer
+          minimum: 0
+    
+    # answer
+    answerIdentifierDto:
+      description: Идентификатор варианта ответа
+      type: string
+      format: uuid
+    
+    createAnswerDto:
+      type: object
+      properties:
+        content:
+          description: текстовое содержимое варианта ответа
+          type: string
+    
+    ### private
+    votersDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/voterDto'
+    
+    voterDto:
+      type: object
+      properties:
+        id:
+          description: Числовой идентификатор пользователя
+          type: integer
+        name:
+          description: Имя пользователя
+          type: string
+    
+    answerResultsDto:
+      type: array
+      items:
+        $ref: '#/components/schemas/answerResultDto'
+    
+    answerResultDto:
+      type: object
+      properties:
+        questionId:
+          description: Идентификатор варианта ответа
+          type: string
+          format: uuid
+        voterIds:
+          description: Числовые идентификаторы проголосовавших пользователей
+          type: array
+          items:
+            type: integer
+
+    createSurveyResponses:
+      type: string
+      enum:
+        # 201
+        - created
+        # 401
+        - unauthorized
+        # 403
+        - createSurveyForbidden
+        # 409
+        - votingClosesBeforeAnnouncementPublication
+      description: >
+        Ответы:
+          created - Опрос создан
+          unauthorized - 
+          createSurveyForbidden - Пользователь не имеет права создать опрос
+          votingClosesBeforeAnnouncementPublication - Срок окончания голосования наступит до момента публикации объявления
+
+    getSurveyDetailsResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - detailsAccessForbidden
+        # 404
+        - surveyDoesNotExist
+        # 409
+        - announcementWithSurveyNotYetPublished
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          detailsAccessForbidden - Пользователь не имеет права просмотреть подробности этого опроса
+          surveyDoesNotExist - Опрос не существует
+          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+
+    closeSurveyResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - surveyClosingForbidden
+        # 404
+        - surveyDoesNotExist
+        # 409
+        - surveyAlreadyClosed
+        - announcementWithSurveyNotYetPublished
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          surveyClosingForbidden - Пользователь не имеет права закрыть этот опрос
+          surveyDoesNotExist - Опрос не существует
+          surveyAlreadyClosed - Опрос уже закрыт
+          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+
+    getSurveysResultsResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - surveyResultsAccessForbidden
+        # 404
+        - surveyDoesNotExist
+        # 409
+        - announcementWithSurveyNotYetPublished
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          surveyResultsAccessForbidden - Пользователь не имеет права получить результаты этого опроса
+          surveyDoesNotExist - Опрос не существует
+          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+
+    downloadSurveyResultsResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - surveyResultsDownloadingForbidden
+        # 404
+        - surveyDoesNotExist
+        # 409
+        - announcementWithSurveyNotYetPublished
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          surveyResultsDownloadingForbidden - Пользователь не имеет права выгрузить результаты этого опроса
+          surveyDoesNotExist - Опрос не существует
+          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+
+    voteInSurveyResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - votingForbidden
+        # 404
+        - surveyDoesNotExist
+        - questionDoesNotExist
+        - answerDoesNotExist
+        # 409
+        - surveyClosed
+        - announcementWithSurveyNotYetPublished
+        - answerAlreadyVoted
+        - cannotSelectMultipleAnswersInSingleChoiceQuestion
+        - selectedQuestionsBelongToDifferentSurveys
+        - selectedAnswersBelongToDifferentQuestions
+      description: >
+        Ответы: 
+          ok - Ок 
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          votingForbidden - Пользователь не имеет права голосовать в опросе
+          surveyDoesNotExist - Опрос не существует
+          questionDoesNotExist - Вопрос не существует
+          answerDoesNotExist - Вариант ответа не существует
+          surveyClosed - Опрос закрыт
+          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
+          surveyAlreadyVoted - Голос в опросе уже отдан
+          cannotSelectMultipleAnswersInSingleChoiceQuestion - В вопросе с единственным выбором нельзя выбрать несколько вариантов ответов
+          selectedQuestionsBelongToDifferentSurveys - Перечисленные вопросы относятся к разным опросам
+          selectedAnswersBelongToDifferentQuestions - Перечисленные варианты ответов относятся к разным вопросам
+
+    cancelVoteInQuestionResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - votingForbidden
+        # 404
+        - questionDoesNotExist
+        # 409
+        - surveyClosed
+        - surveyNotVoted
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - 
+          votingForbidden - Пользователь не имеет права голосовать в этом опросе
+          questionDoesNotExist - Вопрос не существует 
+          surveyClosed - Опрос закрыт
+          surveyNotVoted - Пользователь не проголосовал в вопросе

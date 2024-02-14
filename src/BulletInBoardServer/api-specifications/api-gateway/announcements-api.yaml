@@ -17,7 +17,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/announcement-schemas.yaml#/components/schemas/createAnnouncementDto'
+              $ref: '#/components/schemas/createAnnouncementDto'
       responses:
         201:
           description: Created
@@ -25,70 +25,76 @@ paths:
             application/json:
               schema:
                 type: object
+                title: createAnnouncementCreated 
                 properties:
                   code:
                     # created
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
+                    $ref: '#/components/schemas/createAnnouncementResponses'
                   content:
-                    $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
+                    $ref: '#/components/schemas/announcementIdentifierDto'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: createAnnouncementBadRequest
                 properties:
                   code:
                     # usergroupListNullOrEmpty
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
+                    $ref: '#/components/schemas/createAnnouncementResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: createAnnouncementUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
+                    $ref: '#/components/schemas/createAnnouncementResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: createAnnouncementForbidden
                 properties:
                   code:
                     # announcementCreationForbidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
+                    $ref: '#/components/schemas/createAnnouncementResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: createAnnouncementNotFound
                 properties:
                   code:
                     # announcementCategoriesDoNotExist
                     # filesDoNotExist
                     # surveyDoesNotExist
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
+                    $ref: '#/components/schemas/createAnnouncementResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
             application/json:
               schema:
                 type: object
+                title: createAnnouncementConflict
                 properties:
                   code:
-                    # attachingFilesAndSurveyTogether 
+                    # attachingFilesAndSurveyTogether
                     # automaticPublishMomentIsInPast
                     # automaticHideMomentIsInPast
                     # autoHidingAnAlreadyHiddenAnnouncement
                     # autoPublishingPublishedAndNonHiddenAnnouncement
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/createAnnouncementResponses'
+                    $ref: '#/components/schemas/createAnnouncementResponses'
   
   /announcements/get-details:
     get:
@@ -100,7 +106,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
+              $ref: '#/components/schemas/announcementIdentifierDto'
       responses:
         200:
           description: Ok
@@ -108,55 +114,60 @@ paths:
             application/json:
               schema:
                 type: object
+                title: getAnnouncementDetailsOk
                 properties:
                   content:
-                    $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementDetailsDto'
+                    $ref: '#/components/schemas/announcementDetailsDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getAnnouncementDetailsResponses'
+                    $ref: '#/components/schemas/getAnnouncementDetailsResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: getAnnouncementDetailsBadRequest
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getAnnouncementDetailsResponses'
+                    $ref: '#/components/schemas/getAnnouncementDetailsResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: getAnnouncementDetailsUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getAnnouncementDetailsResponses'
+                    $ref: '#/components/schemas/getAnnouncementDetailsResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: getAnnouncementDetailsForbidden
                 properties:
                   code:
                     # detailsAccessForbidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getAnnouncementDetailsResponses'
+                    $ref: '#/components/schemas/getAnnouncementDetailsResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: getAnnouncementDetailsNotFound
                 properties:
                   code:
                     # announcementDoesNotExist
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getAnnouncementDetailsResponses'
+                    $ref: '#/components/schemas/getAnnouncementDetailsResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
-  
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
+
   /announcements/update:
     put:
       tags: [ Общие операции ]
@@ -167,7 +178,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/announcement-schemas.yaml#/components/schemas/updateAnnouncementDto'
+              $ref: '#/components/schemas/updateAnnouncementDto'
       responses:
         200:
           description: Ok
@@ -175,69 +186,76 @@ paths:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementOk  
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
+                    $ref: '#/components/schemas/updateAnnouncementResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementBadRequest
                 properties:
                   code:
                     # usergroupListNullOrEmpty
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
+                    $ref: '#/components/schemas/updateAnnouncementResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
+                    $ref: '#/components/schemas/updateAnnouncementResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementForbidden
                 properties:
                   code:
                     # announcementEditingForbidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
+                    $ref: '#/components/schemas/updateAnnouncementResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementNotFound
                 properties:
                   code:
                     # announcementDoesNotExist
                     # announcementCategoriesDoNotExist
                     # filesDoNotExist
                     # surveyDoesNotExist
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
+                    $ref: '#/components/schemas/updateAnnouncementResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
             application/json:
               schema:
                 type: object
+                title: updateAnnouncementConflict
                 properties:
                   code:
                     # attachingFilesAndSurveyTogether
                     # automaticPublishMomentIsInPast
                     # automaticHideMomentIsInPast
-                    # 
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/updateAnnouncementResponses'
+                    # autoHidingAnAlreadyHiddenAnnouncement
+                    # autoPublishingPublishedAndNonHiddenAnnouncement
+                    $ref: '#/components/schemas/updateAnnouncementResponses'
   
   /announcements/delete:
     delete:
@@ -249,7 +267,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
+              $ref: '#/components/schemas/announcementIdentifierDto'
       responses:
         200:
           description: Ok
@@ -257,52 +275,57 @@ paths:
             application/json:
               schema:
                 type: object
+                title: deleteAnnouncementOk
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementResponses'
+                    $ref: '#/components/schemas/deleteAnnouncementResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: deleteAnnouncementBadRequest
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementResponses'
+                    $ref: '#/components/schemas/deleteAnnouncementResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: deleteAnnouncementUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementResponses'
+                    $ref: '#/components/schemas/deleteAnnouncementResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: deleteAnnouncementForbidden
                 properties:
                   code:
                     # announcementDeletionForbidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementResponses'
+                    $ref: '#/components/schemas/deleteAnnouncementResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: deleteAnnouncementNotFound
                 properties:
                   code:
                     # announcementDoesNotExist
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/deleteAnnouncementResponses'
+                    $ref: '#/components/schemas/deleteAnnouncementResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
   
   # опубликованные объявления  
   /announcements/published/get-list:
@@ -317,34 +340,37 @@ paths:
             application/json:
               schema:
                 type: object
+                title: getPostedAnnouncementListOk
                 properties:
                   content:
                     type: array
                     items:
-                      $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementSummaryDto'
+                      $ref: '#/components/schemas/announcementSummaryDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getPostedAnnouncementListResponses'
+                    $ref: '#/components/schemas/getPostedAnnouncementListResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: getPostedAnnouncementListUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getPostedAnnouncementListResponses'
+                    $ref: '#/components/schemas/getPostedAnnouncementListResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: getPostedAnnouncementListForbidden
                 properties:
                   code:
                     # postedAnnouncementsListAccessForbidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getPostedAnnouncementListResponses'
+                    $ref: '#/components/schemas/getPostedAnnouncementListResponses'
   
   /announcements/published/hide:
     post:
@@ -356,7 +382,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
+              $ref: '#/components/schemas/announcementIdentifierDto'
       responses:
         200:
           description: Ok
@@ -364,63 +390,69 @@ paths:
             application/json:
               schema:
                 type: object
+                title: hidePostedAnnouncementOk
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
+                    $ref: '#/components/schemas/hidePostedAnnouncementResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: hidePostedAnnouncementBadRequest
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
+                    $ref: '#/components/schemas/hidePostedAnnouncementResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: hidePostedAnnouncementUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
+                    $ref: '#/components/schemas/hidePostedAnnouncementResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: hidePostedAnnouncementForbidden
                 properties:
                   code:
                     # announcementHidingForbidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
+                    $ref: '#/components/schemas/hidePostedAnnouncementResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: hidePostedAnnouncementNotFound
                 properties:
                   code:
                     # announcementDoesNotExist
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
+                    $ref: '#/components/schemas/hidePostedAnnouncementResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
             application/json:
               schema:
                 type: object
+                title: hidePostedAnnouncementConflict
                 properties:
                   code:
                     # announcementAlreadyHidden
                     # announcementNotYetPublished
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/hidePostedAnnouncementResponses'
+                    $ref: '#/components/schemas/hidePostedAnnouncementResponses'
   
   # скрытые объявления
   /announcements/hidden/get-list:
@@ -435,34 +467,37 @@ paths:
             application/json:
               schema:
                 type: object
+                title: getHiddenAnnouncementListOk
                 properties:
                   content:
                     type: array
                     items:
-                      $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementSummaryDto'
+                      $ref: '#/components/schemas/announcementSummaryDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getHiddenAnnouncementListResponses'
+                    $ref: '#/components/schemas/getHiddenAnnouncementListResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: getHiddenAnnouncementListUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getHiddenAnnouncementListResponses'
+                    $ref: '#/components/schemas/getHiddenAnnouncementListResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: getHiddenAnnouncementListForbidden
                 properties:
                   code:
                     # hiddenAnnouncementsListAccessForbidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getHiddenAnnouncementListResponses'
+                    $ref: '#/components/schemas/getHiddenAnnouncementListResponses'
   
   /announcements/hidden/restore:
     post:
@@ -473,7 +508,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
+              $ref: '#/components/schemas/announcementIdentifierDto'
       responses:
         200:
           description: Ok
@@ -481,62 +516,68 @@ paths:
             application/json:
               schema:
                 type: object
+                title: restoreHiddenAnnouncementOk 
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
+                    $ref: '#/components/schemas/unhideHiddenAnnouncementResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: restoreHiddenAnnouncementBadRequest
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
+                    $ref: '#/components/schemas/unhideHiddenAnnouncementResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: restoreHiddenAnnouncementUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
+                    $ref: '#/components/schemas/unhideHiddenAnnouncementResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: restoreHiddenAnnouncementForbidden
                 properties:
                   code:
                     # unhideForbidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
+                    $ref: '#/components/schemas/unhideHiddenAnnouncementResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: restoreHiddenAnnouncementNotFound
                 properties:
                   code:
                     # announcementDoesNotExist
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
+                    $ref: '#/components/schemas/unhideHiddenAnnouncementResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
             application/json:
               schema:
                 type: object
+                title: restoreHiddenAnnouncementConflict
                 properties:
                   code:
                     # announcementNotHidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/unhideHiddenAnnouncementResponses'
+                    $ref: '#/components/schemas/unhideHiddenAnnouncementResponses'
   
   # объявления с отложенной публикацией
   /announcements/delayed-publishing/get-list:
@@ -551,34 +592,37 @@ paths:
             application/json:
               schema:
                 type: object
+                title: getDelayedPublishingAnnouncementListOk  
                 properties:
                   content:
                     type: array
                     items:
-                      $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementSummaryDto'
+                      $ref: '#/components/schemas/announcementSummaryDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedPublishingAnnouncementListResponses'
+                    $ref: '#/components/schemas/getDelayedPublishingAnnouncementListResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: getDelayedPublishingAnnouncementListUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedPublishingAnnouncementListResponses'
+                    $ref: '#/components/schemas/getDelayedPublishingAnnouncementListResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: getDelayedPublishingAnnouncementListForbidden
                 properties:
                   code:
                     # getDelayedPublishingAnnouncementListResponses
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedPublishingAnnouncementListResponses'
+                    $ref: '#/components/schemas/getDelayedPublishingAnnouncementListResponses'
   
   /announcements/delayed-publishing/publish-immediately:
     post:
@@ -589,7 +633,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementIdentifierDto'
+              $ref: '#/components/schemas/announcementIdentifierDto'
       responses:
         200:
           description: Ok
@@ -597,62 +641,68 @@ paths:
             application/json:
               schema:
                 type: object
+                title: publishImmediatelyDelayedPublishingAnnouncementOk
                 properties:
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
+                    $ref: '#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
         400:
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
+                title: publishImmediatelyDelayedPublishingAnnouncementBadRequest
                 properties:
                   code:
                     # incorrectIdentifierFormat
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
+                    $ref: '#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: publishImmediatelyDelayedPublishingAnnouncementUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
+                    $ref: '#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: publishImmediatelyDelayedPublishingAnnouncementForbidden
                 properties:
                   code:
                     # immediatePublishingForbidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
+                    $ref: '#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
+                title: publishImmediatelyDelayedPublishingAnnouncementNotFound
                 properties:
                   code:
                     # announcementDoesNotExist
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
+                    $ref: '#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
                   content:
-                    $ref: './schemas/common-schemas.yaml#/components/schemas/identifiers'
+                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
             application/json:
               schema:
                 type: object
+                title: publishImmediatelyDelayedPublishingAnnouncementConflict
                 properties:
                   code:
                     # announcementNotDelayed
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
+                    $ref: '#/components/schemas/publishImmediatelyDelayedAnnouncementResponses'
   
   # объявления с отложенным сокрытием
   /announcements/delayed-hidden/get-list:
@@ -667,31 +717,465 @@ paths:
             application/json:
               schema:
                 type: object
+                title: getDelayedHiddenAnnouncementListOk 
                 properties:
                   content:
                     type: array
                     items:
-                      $ref: './schemas/announcement-schemas.yaml#/components/schemas/announcementSummaryDto'
+                      $ref: '#/components/schemas/announcementSummaryDto'
                   code:
                     # ok
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedHiddenAnnouncementListResponses'
+                    $ref: '#/components/schemas/getDelayedHiddenAnnouncementListResponses'
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
+                title: getDelayedHiddenAnnouncementListUnauthorized
                 properties:
                   code:
                     # unauthorized
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedHiddenAnnouncementListResponses'
+                    $ref: '#/components/schemas/getDelayedHiddenAnnouncementListResponses'
         403:
           description: Forbidden
           content:
             application/json:
               schema:
                 type: object
+                title: getDelayedHiddenAnnouncementListForbidden
                 properties:
                   code:
                     # getDelayedHiddenAnnouncementListAccessForbidden
-                    $ref: './schemas/responses/announcement-enum-response-schemas.yaml#/components/schemas/getDelayedHiddenAnnouncementListResponses'
+                    $ref: '#/components/schemas/getDelayedHiddenAnnouncementListResponses'
+
+components:
+  schemas:
+    createAnnouncementDto:
+      type: object
+      properties:
+        content:
+          description: Текстовое содержимое объявления
+          type: string
+        userIds:
+          description: Идентификаторы пользователей, для которых создается объявление
+          type: array
+          items:
+            type: string
+            format: uuid
+          minItems: 1
+        categoryIds:
+          description: Идентификаторы категорий объявлений
+          type: array
+          items:
+            type: string
+            format: uuid
+        attachmentIds:
+          description: Идентификаторы вложений, прикрепляемых к объявлению
+          type: array
+          items:
+            type: string
+            format: uuid
+          minItems: 1
+          nullable: true
+        delayedPublishingAt:
+          description: Срок отложенной публикации объявления
+          type: string
+          format: date-time
+          nullable: true
+          default: null
+        delayedHidingAt:
+          description: Срок отложенного сокрытия объявления
+          type: string
+          format: date-time
+          nullable: true
+          default: null
+
+    announcementIdentifierDto:
+      description: Идентификатор объявления
+      type: string
+      format: uuid
+
+    announcementSummaryDto:
+      type: object
+      properties:
+        id:
+          description: Идентификатор объявления
+          type: string
+          format: uuid
+        author:
+          description: Автор объявления
+          type: string
+        content:
+          description: Текстовое содержимое объявления
+          type: string
+        publishedAt:
+          description: Время публикации объявления
+          type: string
+          format: date-time
+        viewers:
+          description: Количество просмотревших объявление пользователей
+          type: integer
+          minimum: 0
+        audienceSize:
+          description: Размер аудитории объявления
+          type: integer
+          minimum: 0
+        files:
+          description: Массив файлов, прикрепленных к объявлению
+          type: array
+          nullable: true
+          items:
+            $ref: './files-api.yaml#/components/schemas/fileSummaryDto'
+        survey:
+          $ref: './surveys-api.yaml#/components/schemas/surveyDetailsDto'
+
+    announcementDetailsDto:
+      type: object
+      properties:
+        content:
+          description: Текстовое содержимое объявления
+          type: string
+        author:
+          description: Автор объявления
+          type: string
+        viewers:
+          description: Количество просмотревших объявление пользователей
+          type: integer
+          minimum: 0
+        audienceSize:
+          description: Размер аудитории объявления
+          type: integer
+          minimum: 0
+        categories:
+          description: Массив категорий объявлений
+          type: array
+          items:
+            $ref: './announcement-categories-api.yaml#/components/schemas/announcementCategoryDetailsDto'
+        files:
+          description: Массив файлов, прикрепленных к объявлению
+          type: array
+          nullable: true
+          items:
+            $ref: './files-api.yaml#/components/schemas/fileSummaryDto'
+        survey:
+          $ref: './surveys-api.yaml#/components/schemas/surveyDetailsDto'
+        hiddenAt:
+          description: Момент сокрытия объявления. Объявление не является скрытым, если null
+          type: string
+          format: date-time
+          nullable: true
+          default: null
+        hideAt:
+          description: Срок автоматического сокрытия объявления. Объявление не будет скрыто автоматически, если null
+          type: string
+          format: date-time
+          nullable: true
+          default: null
+        publishAt:
+          description: Срок отложенной публикации объявления. Объявление не будет опубликовано автоматически, если null
+          type: string
+          format: date-time
+          nullable: true
+          default: null
+    
+    updateAnnouncementDto:
+      type: object
+      required: 
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        content:
+          description: Текстовое содержимое объявления
+          type: string
+          nullable: true
+          default: null
+        categoryIds:
+          description: Массив идентификаторов категорий объявлений
+          type: array
+          items:
+            type: string
+            format: uuid
+        userGroupIds:
+          description: Идентификаторы групп пользователей, для которых создается объявление
+          type: array
+          items:
+            type: string
+            format: uuid
+          minItems: 1
+          nullable: true
+        surveyId:
+          description: Идентификатор опроса, прикрепляемого к объявлению
+          type: string
+          format: uuid
+          nullable: true
+          default: null
+        fileIds:
+          description: Идентификаторы файлов, прикрепляемых к объявлению
+          type: array
+          items:
+            type: string
+            format: uuid
+          nullable: true
+        hideAt:
+          description: Срок автоматического сокрытия объявления
+          type: string
+          format: date-time
+          nullable: true
+          default: null
+        publishAt:
+          description: Срок отложенной публикации объявления
+          type: string
+          format: date-time
+          nullable: true
+          default: null
+    
+    createAnnouncementResponses:
+      type: string
+      enum:
+        # 201 
+        - created
+        # 400
+        - usergroupListNullOrEmpty
+        # 401
+        - unauthorized
+        # 403
+        - announcementCreationForbidden
+        # 404
+        - announcementCategoriesDoNotExist
+        - filesDoNotExist
+        - surveyDoesNotExist
+        # 409
+        - attachingFilesAndSurveyTogether
+        - automaticPublishMomentIsInPast
+        - automaticHideMomentIsInPast
+      description: >
+        Ответы:
+          created - Объявление создано
+          usergroupListNullOrEmpty - Список групп пользователей null или пустой
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementCreationForbidden - Пользователь не имеет права создать объявление
+          announcementCategoriesDoNotExist - В качестве одного или нескольких из id категорий объявлений прикреплен несуществующий в базе id
+          filesDoNotExist - В качестве одного или нескольких из id файлов прикреплен несуществующий в базе id
+          surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id
+          attachingFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос
+          automaticPublishMomentIsInPast - Момент отложенной публикации уже наступил в прошлом
+          automaticHideMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом
+
+    getAnnouncementDetailsResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - detailsAccessForbidden
+        # 404
+        - announcementDoesNotExist
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора 
+          unauthorized - Пользователь не авторизован для выполнения операции
+          detailsAccessForbidden - Пользователь не имеет права просмотреть подробности объявления
+          announcementDoesNotExist - Объявление не существует
+
+    updateAnnouncementResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - usergroupListNullOrEmpty
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - announcementEditingForbidden
+        # 404
+        - announcementDoesNotExist
+        - announcementCategoryDoesNotExist
+        - fileDoesNotExist
+        - surveyDoesNotExist
+        # 409
+        - attachingFilesAndSurveyTogether
+        - automaticPublishMomentIsInPast
+        - automaticHideMomentIsInPast
+        - autoHidingAnAlreadyHiddenAnnouncement
+        - autoPublishingPublishedAndNonHiddenAnnouncement
+      description: >
+        Ответы:
+          ok - Ок
+          usergroupListNullOrEmpty - Список групп пользователей null или пустой
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementEditingForbidden - Пользователь не имеет права изменить объявление
+          announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id
+          announcementCategoryDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id
+          fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id
+          surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id
+          attachingFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос
+          automaticPublishMomentIsInPast - Момент отложенной публикации уже наступил в прошлом
+          automaticHideMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом
+          autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто
+          autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым
+
+    deleteAnnouncementResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - announcementDeletionForbidden
+        # 409
+        - announcementDoesNotExist
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementDeletionForbidden - Пользователь не имеет права удалить объявление
+          announcementDoesNotExist - Объявление не существует
+
+    getPostedAnnouncementListResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - postedAnnouncementsListAccessForbidden
+      description: >
+        Ответы:
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          postedAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки опубликованных объявлений
+
+    hidePostedAnnouncementResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - announcementHidingForbidden
+        # 404
+        - announcementDoesNotExist
+        # 409
+        - announcementAlreadyHidden
+        - announcementNotYetPublished
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора 
+          unauthorized - Пользователь не авторизован для выполнения операции
+          announcementHidingForbidden - Пользователь не имеет права скрыть объявление
+          announcementDoesNotExist - Объявление не существует
+          announcementAlreadyHidden - Объявление уже скрыто
+          announcementNotYetPublished - Объявление еще не опубликовано
+
+    getHiddenAnnouncementListResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - hiddenAnnouncementsListAccessForbidden
+      description: >
+        Ответы:
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          hiddenAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки скрытых объявлений
+
+    unhideHiddenAnnouncementResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - unhideForbidden
+        # 404
+        - announcementDoesNotExist
+        # 409
+        - announcementNotHidden
+      description: >
+        Ответы:
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          unhideForbidden - Пользователь не имеет права скрыть объявление
+          announcementDoesNotExist - Объявление не существует
+          announcementNotHidden - Объявление не является скрытым
+
+    getDelayedPublishingAnnouncementListResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - getDelayedPublishingAnnouncementListResponsesAccessForbidden
+      description: >
+        Ответы: 
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          getDelayedPublishingAnnouncementListResponsesAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие
+
+    publishImmediatelyDelayedAnnouncementResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 400
+        - incorrectIdentifierFormat
+        # 401
+        - unauthorized
+        # 403
+        - immediatePublishingForbidden
+        # 404
+        - announcementDoesNotExist
+        # 409
+        - announcementNotDelayed
+      description: >
+        Ответы: 
+          ok - Ок
+          incorrectIdentifierFormat - Некорректный формат идентификатора
+          unauthorized - Пользователь не авторизован для выполнения операции
+          immediatePublishingForbidden - Пользователь не имеет права незамедлительно опубликовать отложенное объявление
+          announcementDoesNotExist - Объявление не существует
+          announcementNotDelayed - Объявление не является отложенным
+
+    getDelayedHiddenAnnouncementListResponses:
+      type: string
+      enum:
+        # 200
+        - ok
+        # 401
+        - unauthorized
+        # 403
+        - getDelayedHiddenAnnouncementListAccessForbidden
+      description: >
+        Ответы: 
+          ok - Ок
+          unauthorized - Пользователь не авторизован для выполнения операции
+          getDelayedHiddenAnnouncementListAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие
