@@ -4,7 +4,7 @@
   "documentGenerator": {
     "fromDocument": {
       "json": "",
-      "url": "../dev/bbs/src/BulletInBoardServer/api-specifications/api-gateway/surveys-api.yaml",
+      "url": "../../api-specifications/api-gateway/surveys-api.yaml",
       "output": null,
       "newLineBehavior": "Auto"
     }
@@ -18,7 +18,7 @@
       "useActionResultType": false,
       "generateModelValidationAttributes": false,
       "routeNamingStrategy": "OperationId",
-      "basePath": "api/",
+      "basePath": "",
       "className": "Surveys",
       "operationGenerationMode": "MultipleClientsFromOperationId",
       "additionalNamespaceUsages": [],
@@ -30,7 +30,7 @@
       "parameterDictionaryType": "System.Collections.Generic.IDictionary",
       "responseArrayType": "System.Collections.Generic.ICollection",
       "responseDictionaryType": "System.Collections.Generic.IDictionary",
-      "wrapResponses": false,
+      "wrapResponses": true,
       "wrapResponseMethods": [],
       "generateResponseClasses": true,
       "responseClass": "SwaggerResponse",
@@ -68,7 +68,7 @@
       "templateDirectory": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../dev/bbs/src/BulletInBoardServer/BulletInBoardServer/Controllers/SurveysController.cs",
+      "output": "../../BulletInBoardServer/Controllers/SurveysController.cs",
       "newLineBehavior": "Auto"
     }
   }

@@ -221,11 +221,11 @@ create table surveys
 
 create table questions
 (
-    id        uuid primary key,
+    id                         uuid primary key,
     
-    survey_id uuid not null,
+    survey_id                  uuid not null,
 
-    content      text,
+    content                    text,
     is_multiple_choice_allowed boolean not null default true,
     
     constraint non_empty_content
@@ -247,16 +247,16 @@ create table answers
 
 create table participation
 (
-    id uuid primary key,
+    id        uuid primary key,
     
-    user_id     uuid not null,
+    user_id   uuid not null,
     survey_id uuid  not null
 );
 
 create table user_selections
 (
     participation_id uuid,
-    answer_id uuid,
+    answer_id        uuid,
     
     primary key (participation_id, answer_id)
 );

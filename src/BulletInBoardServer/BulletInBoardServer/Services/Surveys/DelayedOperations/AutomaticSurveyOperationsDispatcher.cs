@@ -5,29 +5,26 @@ namespace BulletInBoardServer.Services.Surveys.DelayedOperations;
 
 public class AutomaticSurveyOperationsDispatcher : IAutomaticSurveyOperationsDispatcher
 {
-    private Dictionary<Guid, AutomaticSurveyClosingService> _automaticClosingServices = [];
-
-    private readonly ApplicationDbContext _dbContext;
+    private static Dictionary<Guid, AutomaticSurveyClosingService> _automaticClosingServices = [];
 
     private readonly AutoClosingSurveyService _closingService;
 
 
 
-    public AutomaticSurveyOperationsDispatcher(ApplicationDbContext dbContext)
+    public AutomaticSurveyOperationsDispatcher(AutoClosingSurveyService closingService)
     {
-        _dbContext = dbContext;
-        _closingService = new AutoClosingSurveyService(dbContext, this);
+        _closingService = closingService;
     }
     
     
     
-    public void Init()
+    public static void Init(ApplicationDbContext dbContext, AutoClosingSurveyService closingService)
     {
-        _automaticClosingServices = _dbContext.Surveys
+        _automaticClosingServices = dbContext.Surveys
             .Where(a => a.ExpectsAutoClosing)
             .ToDictionary(
                 a => a.Id,
-                a => new AutomaticSurveyClosingService(a.Id, a.AutoClosingAt!.Value, _closingService));
+                a => new AutomaticSurveyClosingService(a.Id, a.AutoClosingAt!.Value, closingService));
         // AutoClosingAt не null, если ExpectsAutoClosing true
     }
 

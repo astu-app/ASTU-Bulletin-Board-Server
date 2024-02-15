@@ -1,6 +1,7 @@
 ﻿using BulletInBoardServer.Models.Announcements;
 using BulletInBoardServer.Services.Announcements;
 using BulletInBoardServer.Services.Announcements.Infrastructure;
+using BulletInBoardServer.Services.Announcements.ServiceCore;
 using BulletInBoardServer.Test.Infrastructure.DbInvolvingTests;
 using BulletInBoardServer.Test.Services.Announcements.DelayedOperations;
 using JetBrains.Annotations;
@@ -18,7 +19,12 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
     public AnnouncementServiceTest()
     {
         _dispatcher = new DelayedAnnouncementOperationsDispatcherMock();
-        _announcementService = new AnnouncementService(DbContext, _dispatcher);
+        _announcementService = new AnnouncementService(
+            new GeneralOperationsService(DbContext, _dispatcher), 
+            new PublishedAnnouncementService(DbContext, _dispatcher),
+            new HiddenAnnouncementService(DbContext, _dispatcher),
+            new DelayedPublicationAnnouncementService(DbContext),
+            new DelayedHidingAnnouncementService(DbContext));
     }
 
     /* ********************************** Общие операции *********************************** */

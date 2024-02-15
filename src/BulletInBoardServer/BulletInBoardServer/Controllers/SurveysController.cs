@@ -31,7 +31,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Created</returns>
 
-        System.Threading.Tasks.Task<CreateSurveyCreated> CreateSurveyAsync(CreateSurveyDto body);
+        System.Threading.Tasks.Task<SwaggerResponse<CreateSurveyCreated>> CreateSurveyAsync(CreateSurveyDto body);
 
         /// <summary>
         /// Получить детали выбранного опроса
@@ -40,7 +40,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<Response> GetSurveyDetailsAsync(System.Guid? body);
+        System.Threading.Tasks.Task<SwaggerResponse<Response>> GetSurveyDetailsAsync(System.Guid? body);
 
         /// <summary>
         /// Закрыть опрос
@@ -49,7 +49,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<Response2> CloseSurveyAsync(System.Guid body);
+        System.Threading.Tasks.Task<SwaggerResponse<Response2>> CloseSurveyAsync(System.Guid body);
 
         /// <summary>
         /// Получить результаты опроса
@@ -58,7 +58,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<Response3> GetSurveysResultsAsync(System.Guid body);
+        System.Threading.Tasks.Task<SwaggerResponse<Response3>> GetSurveysResultsAsync(System.Guid body);
 
         /// <summary>
         /// Скачать результаты опроса
@@ -67,7 +67,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<DownloadSurveyResultsOk> DownloadSurveyResultsAsync(System.Guid body);
+        System.Threading.Tasks.Task<SwaggerResponse<DownloadSurveyResultsOk>> DownloadSurveyResultsAsync(System.Guid body);
 
         /// <summary>
         /// Проголосовать в вопросе
@@ -76,12 +76,12 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<VoteInQuestionOk> VoteInQuestionAsync(VoteInSurveyDto body);
+        System.Threading.Tasks.Task<SwaggerResponse<VoteInQuestionOk>> VoteInQuestionAsync(VoteInSurveyDto body);
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    [Microsoft.AspNetCore.Mvc.Route("api/")]
+    [Microsoft.AspNetCore.Mvc.Route("api")]
 
     public partial class SurveysController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
@@ -97,10 +97,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Created</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("surveys/create", Name = "createSurvey")]
-        public System.Threading.Tasks.Task<CreateSurveyCreated> CreateSurvey([Microsoft.AspNetCore.Mvc.FromBody] CreateSurveyDto body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> CreateSurvey([Microsoft.AspNetCore.Mvc.FromBody] CreateSurveyDto body)
         {
 
-            return _implementation.CreateSurveyAsync(body);
+            var result = await _implementation.CreateSurveyAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -108,10 +116,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("survey/get-details", Name = "getSurveyDetails")]
-        public System.Threading.Tasks.Task<Response> GetSurveyDetails([Microsoft.AspNetCore.Mvc.FromBody] System.Guid? body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetSurveyDetails([Microsoft.AspNetCore.Mvc.FromBody] System.Guid? body)
         {
 
-            return _implementation.GetSurveyDetailsAsync(body);
+            var result = await _implementation.GetSurveyDetailsAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -119,10 +135,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("survey/close-survey", Name = "closeSurvey")]
-        public System.Threading.Tasks.Task<Response2> CloseSurvey([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> CloseSurvey([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
         {
 
-            return _implementation.CloseSurveyAsync(body);
+            var result = await _implementation.CloseSurveyAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -130,10 +154,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("survey/get-results", Name = "getSurveysResults")]
-        public System.Threading.Tasks.Task<Response3> GetSurveysResults([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetSurveysResults([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
         {
 
-            return _implementation.GetSurveysResultsAsync(body);
+            var result = await _implementation.GetSurveysResultsAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -141,10 +173,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("survey/download-results", Name = "downloadSurveyResults")]
-        public System.Threading.Tasks.Task<DownloadSurveyResultsOk> DownloadSurveyResults([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> DownloadSurveyResults([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
         {
 
-            return _implementation.DownloadSurveyResultsAsync(body);
+            var result = await _implementation.DownloadSurveyResultsAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -152,10 +192,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("question/vote", Name = "voteInQuestion")]
-        public System.Threading.Tasks.Task<VoteInQuestionOk> VoteInQuestion([Microsoft.AspNetCore.Mvc.FromBody] VoteInSurveyDto body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> VoteInQuestion([Microsoft.AspNetCore.Mvc.FromBody] VoteInSurveyDto body)
         {
 
-            return _implementation.VoteInQuestionAsync(body);
+            var result = await _implementation.VoteInQuestionAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
     }
@@ -225,7 +273,7 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         [Newtonsoft.Json.JsonProperty("questions", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [System.ComponentModel.DataAnnotations.MinLength(1)]
-        public System.Collections.Generic.List<QuestionDetailsDto> Questions { get; set; }
+        public System.Collections.Generic.List<object> Questions { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 

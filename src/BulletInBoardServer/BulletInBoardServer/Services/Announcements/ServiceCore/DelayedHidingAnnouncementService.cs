@@ -1,5 +1,4 @@
 ﻿using BulletInBoardServer.DataAccess;
-using BulletInBoardServer.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Announcements.Infrastructure;
 
 namespace BulletInBoardServer.Services.Announcements.ServiceCore;
@@ -7,10 +6,8 @@ namespace BulletInBoardServer.Services.Announcements.ServiceCore;
 /// <summary>
 /// Сервис для управления объявлениями, ожидающими отложенного сокрытия
 /// </summary>
-public class DelayedHidingAnnouncementService(
-    ApplicationDbContext dbContext,
-    IDelayedAnnouncementOperationsDispatcher dispatcher)
-    : CoreAnnouncementServiceBase(dbContext, dispatcher)
+public class DelayedHidingAnnouncementService(ApplicationDbContext dbContext)
+    : CoreAnnouncementServiceBase(dbContext)
 {
     /// <summary>
     /// Метод возвращает список объявлений, ожидающих отложенного автоматического сокрытия,
@@ -35,12 +32,8 @@ public class DelayedHidingAnnouncementService(
     /// <param name="hiddenAt">Момент сокрытия объявления</param>
     public void HideAutomatically(Guid announcementId, DateTime hiddenAt)
     {
+        // Отключение отложенного сокрытия происходит при вызове диспетчером этого метода
         var announcement = GetAnnouncementSummary(announcementId);
-
-        // Мы не вызываем отключения отложенного сокрытия, так как попадаем в этот метод во время процесса
-        // автоматического отложенного сокрытия
-        Dispatcher.DisableDelayedPublishing(announcementId);
-
         announcement.Hide(hiddenAt);
         DbContext.SaveChanges();
     }

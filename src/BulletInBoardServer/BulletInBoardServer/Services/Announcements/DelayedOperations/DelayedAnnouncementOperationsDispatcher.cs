@@ -6,39 +6,38 @@ namespace BulletInBoardServer.Services.Announcements.DelayedOperations;
 
 public class DelayedAnnouncementOperationsDispatcher : IDelayedAnnouncementOperationsDispatcher
 {
-    private Dictionary<Guid, DelayedAnnouncementPublishingService> _delayedPublishingServices = [];
-    private Dictionary<Guid, DelayedAnnouncementHidingService> _delayedHidingServices = [];
+    private static Dictionary<Guid, DelayedAnnouncementPublishingService> _delayedPublishingServices = [];
+    private static Dictionary<Guid, DelayedAnnouncementHidingService> _delayedHidingServices = [];
 
-    private readonly ApplicationDbContext _dbContext;
-    
     private readonly DelayedPublicationAnnouncementService _publicationService;
     private readonly DelayedHidingAnnouncementService _hidingService;
 
     
     
-    public DelayedAnnouncementOperationsDispatcher(ApplicationDbContext dbContext)
+    public DelayedAnnouncementOperationsDispatcher(DelayedPublicationAnnouncementService publicationService,
+        DelayedHidingAnnouncementService hidingService)
     {
-        _dbContext = dbContext;
-        _publicationService = new DelayedPublicationAnnouncementService(dbContext, this);
-        _hidingService = new DelayedHidingAnnouncementService(dbContext, this);
+        _publicationService = publicationService;
+        _hidingService = hidingService;
     }
 
 
 
-    public void Init()
+    public static void Init(ApplicationDbContext dbContext,
+        DelayedPublicationAnnouncementService publicationService, DelayedHidingAnnouncementService hidingService)
     {
-        _delayedPublishingServices = _dbContext.Announcements
+        _delayedPublishingServices = dbContext.Announcements
             .Where(a => a.ExpectsDelayedPublishing)
             .ToDictionary(
                 a => a.Id,
-                a => new DelayedAnnouncementPublishingService(a.Id, a.DelayedPublishingAt!.Value, _publicationService));
+                a => new DelayedAnnouncementPublishingService(a.Id, a.DelayedPublishingAt!.Value, publicationService));
         // AutoPublishingAt не null, если ExpectsAutoPublishing true
         
-        _delayedHidingServices = _dbContext.Announcements
+        _delayedHidingServices = dbContext.Announcements
             .Where(a => a.ExpectsDelayedHiding)
             .ToDictionary(
                 a => a.Id,
-                a => new DelayedAnnouncementHidingService(a.Id, a.DelayedHidingAt!.Value, _hidingService));
+                a => new DelayedAnnouncementHidingService(a.Id, a.DelayedHidingAt!.Value, hidingService));
         // AutoHidingAt не null, если ExpectsAutoHiding true
     }
     

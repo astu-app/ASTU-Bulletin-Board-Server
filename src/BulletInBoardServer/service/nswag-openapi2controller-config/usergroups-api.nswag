@@ -4,7 +4,7 @@
   "documentGenerator": {
     "fromDocument": {
       "json": "",
-      "url": "../dev/bbs/src/BulletInBoardServer/api-specifications/api-gateway/usergroups-api.yaml",
+      "url": "../../api-specifications/api-gateway/usergroups-api.yaml",
       "output": null,
       "newLineBehavior": "Auto"
     }
@@ -18,7 +18,7 @@
       "useActionResultType": false,
       "generateModelValidationAttributes": false,
       "routeNamingStrategy": "OperationId",
-      "basePath": "api/",
+      "basePath": "",
       "className": "UserGroups",
       "operationGenerationMode": "MultipleClientsFromOperationId",
       "additionalNamespaceUsages": [],
@@ -71,7 +71,7 @@
       "templateDirectory": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../dev/bbs/src/BulletInBoardServer/BulletInBoardServer/Controllers/UserGroupsController.cs",
+      "output": "../../BulletInBoardServer/Controllers/UserGroupsController.cs",
       "newLineBehavior": "Auto"
     }
   }

@@ -13,7 +13,7 @@ namespace BulletInBoardServer.Services.Announcements.ServiceCore;
 public class GeneralOperationsService(
     ApplicationDbContext dbContext,
     IDelayedAnnouncementOperationsDispatcher dispatcher)
-    : CoreAnnouncementServiceBase(dbContext, dispatcher)
+    : DispatcherDependentAnnouncementServiceBase(dbContext, dispatcher)
 {
     public Announcement Create(Guid requesterId, CreateAnnouncement create)
     {

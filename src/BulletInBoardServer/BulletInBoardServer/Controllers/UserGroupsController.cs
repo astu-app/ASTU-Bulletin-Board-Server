@@ -31,7 +31,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Created</returns>
 
-        System.Threading.Tasks.Task<SwaggerResponse<CreateUsergroupCreated>> CreateUsergroupAsync(CreateUsergroupDto body);
+        System.Threading.Tasks.Task<CreateUsergroupCreated> CreateUsergroupAsync(CreateUsergroupDto body);
 
         /// <summary>
         /// Получение списка всех групп пользователей
@@ -39,7 +39,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<SwaggerResponse<GetAllUsergroupsOk>> GetAllUsergroupsAsync();
+        System.Threading.Tasks.Task<GetAllUsergroupsOk> GetAllUsergroupsAsync();
 
         /// <summary>
         /// Получение подробной информации о группе пользователей
@@ -48,7 +48,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<SwaggerResponse<GetUsergroupDetailsOk>> GetUsergroupDetailsAsync(UsergroupIdentifierDto body);
+        System.Threading.Tasks.Task<GetUsergroupDetailsOk> GetUsergroupDetailsAsync(UsergroupIdentifierDto body);
 
         /// <summary>
         /// Редактирование группы пользователей
@@ -57,7 +57,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<SwaggerResponse<UpdateUsergroupOk>> UpdateUsergroupAsync(UpdateUsergroupDto body);
+        System.Threading.Tasks.Task<UpdateUsergroupOk> UpdateUsergroupAsync(UpdateUsergroupDto body);
 
         /// <summary>
         /// Удалить группу пользователей
@@ -66,7 +66,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<SwaggerResponse<DeleteUsergroupOk>> DeleteUsergroupAsync(UsergroupIdentifierDto body);
+        System.Threading.Tasks.Task<DeleteUsergroupOk> DeleteUsergroupAsync(UsergroupIdentifierDto body);
 
         /// <summary>
         /// Добавить пользователей в группу пользователей
@@ -75,7 +75,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<SwaggerResponse<AddUsersToUsergroupOk>> AddUsersToUsergroupAsync(AddUsersToUsergroupDto body);
+        System.Threading.Tasks.Task<AddUsersToUsergroupOk> AddUsersToUsergroupAsync(AddUsersToUsergroupDto body);
 
         /// <summary>
         /// Удалить пользователей из группы пользователей
@@ -84,12 +84,12 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<SwaggerResponse<DeleteUsersFromUsergroupOK>> DeleteUsersFromUsergroupAsync(AddUsersToUsergroupDto body);
+        System.Threading.Tasks.Task<DeleteUsersFromUsergroupOK> DeleteUsersFromUsergroupAsync(AddUsersToUsergroupDto body);
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    [Microsoft.AspNetCore.Mvc.Route("api/")]
+    [Microsoft.AspNetCore.Mvc.Route("api")]
 
     public partial class UserGroupsController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
@@ -105,18 +105,10 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Created</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("usergroups/create", Name = "createUsergroup")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> CreateUsergroup([Microsoft.AspNetCore.Mvc.FromBody] CreateUsergroupDto body)
+        public System.Threading.Tasks.Task<CreateUsergroupCreated> CreateUsergroup([Microsoft.AspNetCore.Mvc.FromBody] CreateUsergroupDto body)
         {
 
-            var result = await _implementation.CreateUsergroupAsync(body).ConfigureAwait(false);
-
-            var status = result.StatusCode;
-            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
-
-            foreach (var header in result.Headers)
-                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
-
-            return response;
+            return _implementation.CreateUsergroupAsync(body);
         }
 
         /// <summary>
@@ -124,18 +116,10 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("usergroups/get-all", Name = "getAllUsergroups")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetAllUsergroups()
+        public System.Threading.Tasks.Task<GetAllUsergroupsOk> GetAllUsergroups()
         {
 
-            var result = await _implementation.GetAllUsergroupsAsync().ConfigureAwait(false);
-
-            var status = result.StatusCode;
-            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
-
-            foreach (var header in result.Headers)
-                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
-
-            return response;
+            return _implementation.GetAllUsergroupsAsync();
         }
 
         /// <summary>
@@ -143,18 +127,10 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("usergroups/get-details", Name = "getUsergroupDetails")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetUsergroupDetails([Microsoft.AspNetCore.Mvc.FromBody] UsergroupIdentifierDto body)
+        public System.Threading.Tasks.Task<GetUsergroupDetailsOk> GetUsergroupDetails([Microsoft.AspNetCore.Mvc.FromBody] UsergroupIdentifierDto body)
         {
 
-            var result = await _implementation.GetUsergroupDetailsAsync(body).ConfigureAwait(false);
-
-            var status = result.StatusCode;
-            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
-
-            foreach (var header in result.Headers)
-                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
-
-            return response;
+            return _implementation.GetUsergroupDetailsAsync(body);
         }
 
         /// <summary>
@@ -162,18 +138,10 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("usergroups/update", Name = "updateUsergroup")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> UpdateUsergroup([Microsoft.AspNetCore.Mvc.FromBody] UpdateUsergroupDto body)
+        public System.Threading.Tasks.Task<UpdateUsergroupOk> UpdateUsergroup([Microsoft.AspNetCore.Mvc.FromBody] UpdateUsergroupDto body)
         {
 
-            var result = await _implementation.UpdateUsergroupAsync(body).ConfigureAwait(false);
-
-            var status = result.StatusCode;
-            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
-
-            foreach (var header in result.Headers)
-                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
-
-            return response;
+            return _implementation.UpdateUsergroupAsync(body);
         }
 
         /// <summary>
@@ -181,18 +149,10 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpDelete, Microsoft.AspNetCore.Mvc.Route("usergroups/delete", Name = "deleteUsergroup")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> DeleteUsergroup([Microsoft.AspNetCore.Mvc.FromBody] UsergroupIdentifierDto body)
+        public System.Threading.Tasks.Task<DeleteUsergroupOk> DeleteUsergroup([Microsoft.AspNetCore.Mvc.FromBody] UsergroupIdentifierDto body)
         {
 
-            var result = await _implementation.DeleteUsergroupAsync(body).ConfigureAwait(false);
-
-            var status = result.StatusCode;
-            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
-
-            foreach (var header in result.Headers)
-                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
-
-            return response;
+            return _implementation.DeleteUsergroupAsync(body);
         }
 
         /// <summary>
@@ -200,18 +160,10 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("usergroups/add-users", Name = "addUsersToUsergroup")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> AddUsersToUsergroup([Microsoft.AspNetCore.Mvc.FromBody] AddUsersToUsergroupDto body)
+        public System.Threading.Tasks.Task<AddUsersToUsergroupOk> AddUsersToUsergroup([Microsoft.AspNetCore.Mvc.FromBody] AddUsersToUsergroupDto body)
         {
 
-            var result = await _implementation.AddUsersToUsergroupAsync(body).ConfigureAwait(false);
-
-            var status = result.StatusCode;
-            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
-
-            foreach (var header in result.Headers)
-                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
-
-            return response;
+            return _implementation.AddUsersToUsergroupAsync(body);
         }
 
         /// <summary>
@@ -219,18 +171,10 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("usergroups/delete-users", Name = "deleteUsersFromUsergroup")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> DeleteUsersFromUsergroup([Microsoft.AspNetCore.Mvc.FromBody] AddUsersToUsergroupDto body)
+        public System.Threading.Tasks.Task<DeleteUsersFromUsergroupOK> DeleteUsersFromUsergroup([Microsoft.AspNetCore.Mvc.FromBody] AddUsersToUsergroupDto body)
         {
 
-            var result = await _implementation.DeleteUsersFromUsergroupAsync(body).ConfigureAwait(false);
-
-            var status = result.StatusCode;
-            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
-
-            foreach (var header in result.Headers)
-                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
-
-            return response;
+            return _implementation.DeleteUsersFromUsergroupAsync(body);
         }
 
     }
@@ -838,34 +782,6 @@ namespace BulletInBoardServer.Controllers
         }
 
     }
-
-
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class SwaggerResponse
-    {
-        public int StatusCode { get; private set; }
-
-        public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
-
-        public SwaggerResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers)
-        {
-            StatusCode = statusCode;
-            Headers = headers;
-        }
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class SwaggerResponse<TResult> : SwaggerResponse
-    {
-        public TResult Result { get; private set; }
-
-        public SwaggerResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result)
-            : base(statusCode, headers)
-        {
-            Result = result;
-        }
-    }
-
 
 
 }

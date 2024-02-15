@@ -4,7 +4,7 @@ info:
   description: Общие схемы для API шлюза
   version: 0.0.1
 servers:
-  - url: 'https://localhost:8080'
+  - url: '/api'
 paths:
   
 components:

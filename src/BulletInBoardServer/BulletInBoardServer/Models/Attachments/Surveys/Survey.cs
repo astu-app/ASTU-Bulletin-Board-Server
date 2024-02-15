@@ -23,7 +23,7 @@ public class Survey : AttachmentBase
     /// <summary>
     /// Момент автоматического закрытия опроса. Null, если автоматическое закрытие не задано
     /// </summary>
-    public DateTime? AutoClosingAt { get; init; }
+    public DateTime? AutoClosingAt { get; private set; }
 
     /// <summary>
     /// Задано ли автоматическое закрытие опроса. true, если задано, иначе - false
@@ -97,6 +97,7 @@ public class Survey : AttachmentBase
             throw new InvalidOperationException("Нельзя закрыть уже закрытый опрос");
 
         IsOpen = false;
+        AutoClosingAt = null;
     }
     
     /// <summary>

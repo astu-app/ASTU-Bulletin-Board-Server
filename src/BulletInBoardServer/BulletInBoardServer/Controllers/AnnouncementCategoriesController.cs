@@ -31,7 +31,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Created</returns>
 
-        System.Threading.Tasks.Task<CreateAnnouncementCategoryCreated> CreateAnnouncementCategoryAsync(CreateAnnouncementCategoryDto body);
+        System.Threading.Tasks.Task<SwaggerResponse<CreateAnnouncementCategoryCreated>> CreateAnnouncementCategoryAsync(CreateAnnouncementCategoryDto body);
 
         /// <summary>
         /// Получить список всех категорий объявлений
@@ -39,7 +39,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<GetAllAnnouncementCategoriesOk> GetAllAnnouncementCategoriesAsync();
+        System.Threading.Tasks.Task<SwaggerResponse<GetAllAnnouncementCategoriesOk>> GetAllAnnouncementCategoriesAsync();
 
         /// <summary>
         /// Редактировать категорию объявлений
@@ -48,7 +48,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<UpdateAnnouncementCategoryOk> UpdateAnnouncementCategoryAsync(UpdateAnnouncementCategoryDto body);
+        System.Threading.Tasks.Task<SwaggerResponse<UpdateAnnouncementCategoryOk>> UpdateAnnouncementCategoryAsync(UpdateAnnouncementCategoryDto body);
 
         /// <summary>
         /// Удалить категорию объявлений
@@ -57,7 +57,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<DeleteAnnouncementCategoryOk> DeleteAnnouncementCategoryAsync(System.Guid body);
+        System.Threading.Tasks.Task<SwaggerResponse<DeleteAnnouncementCategoryOk>> DeleteAnnouncementCategoryAsync(System.Guid body);
 
         /// <summary>
         /// Получить список всех категорий объявлений с отмеченными подписками для текущего пользователя
@@ -66,7 +66,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<GetAnnouncementCategoriesSubscriptionsOk> GetAnnouncementCategoriesSubscriptionsAsync(System.Collections.Generic.IEnumerable<System.Guid> body);
+        System.Threading.Tasks.Task<SwaggerResponse<GetAnnouncementCategoriesSubscriptionsOk>> GetAnnouncementCategoriesSubscriptionsAsync(System.Collections.Generic.IEnumerable<System.Guid> body);
 
         /// <summary>
         /// Обновить список подписок текущего пользователя
@@ -75,12 +75,12 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<UpdateAnnouncementCategoriesSubscriptionsOk> UpdateAnnouncementCategoriesSubscriptionsAsync(System.Collections.Generic.IEnumerable<System.Guid> body);
+        System.Threading.Tasks.Task<SwaggerResponse<UpdateAnnouncementCategoriesSubscriptionsOk>> UpdateAnnouncementCategoriesSubscriptionsAsync(System.Collections.Generic.IEnumerable<System.Guid> body);
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    [Microsoft.AspNetCore.Mvc.Route("localhost:8080")]
+    [Microsoft.AspNetCore.Mvc.Route("api")]
 
     public partial class AnnouncementCategoriesController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
@@ -96,10 +96,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Created</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("announcement-categories/create", Name = "createAnnouncementCategory")]
-        public System.Threading.Tasks.Task<CreateAnnouncementCategoryCreated> CreateAnnouncementCategory([Microsoft.AspNetCore.Mvc.FromBody] CreateAnnouncementCategoryDto body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> CreateAnnouncementCategory([Microsoft.AspNetCore.Mvc.FromBody] CreateAnnouncementCategoryDto body)
         {
 
-            return _implementation.CreateAnnouncementCategoryAsync(body);
+            var result = await _implementation.CreateAnnouncementCategoryAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -107,10 +115,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("announcement-categories/get-list", Name = "getAllAnnouncementCategories")]
-        public System.Threading.Tasks.Task<GetAllAnnouncementCategoriesOk> GetAllAnnouncementCategories()
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetAllAnnouncementCategories()
         {
 
-            return _implementation.GetAllAnnouncementCategoriesAsync();
+            var result = await _implementation.GetAllAnnouncementCategoriesAsync().ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -118,10 +134,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("announcement-categories/update", Name = "updateAnnouncementCategory")]
-        public System.Threading.Tasks.Task<UpdateAnnouncementCategoryOk> UpdateAnnouncementCategory([Microsoft.AspNetCore.Mvc.FromBody] UpdateAnnouncementCategoryDto body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> UpdateAnnouncementCategory([Microsoft.AspNetCore.Mvc.FromBody] UpdateAnnouncementCategoryDto body)
         {
 
-            return _implementation.UpdateAnnouncementCategoryAsync(body);
+            var result = await _implementation.UpdateAnnouncementCategoryAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -129,10 +153,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpDelete, Microsoft.AspNetCore.Mvc.Route("announcement-categories/delete", Name = "deleteAnnouncementCategory")]
-        public System.Threading.Tasks.Task<DeleteAnnouncementCategoryOk> DeleteAnnouncementCategory([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> DeleteAnnouncementCategory([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
         {
 
-            return _implementation.DeleteAnnouncementCategoryAsync(body);
+            var result = await _implementation.DeleteAnnouncementCategoryAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -140,10 +172,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("announcement-categories/get-subscribtions", Name = "getAnnouncementCategoriesSubscriptions")]
-        public System.Threading.Tasks.Task<GetAnnouncementCategoriesSubscriptionsOk> GetAnnouncementCategoriesSubscriptions([Microsoft.AspNetCore.Mvc.FromBody] System.Collections.Generic.IEnumerable<System.Guid> body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetAnnouncementCategoriesSubscriptions([Microsoft.AspNetCore.Mvc.FromBody] System.Collections.Generic.IEnumerable<System.Guid> body)
         {
 
-            return _implementation.GetAnnouncementCategoriesSubscriptionsAsync(body);
+            var result = await _implementation.GetAnnouncementCategoriesSubscriptionsAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -151,10 +191,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("announcement-categories/update-subscribtions", Name = "updateAnnouncementCategoriesSubscriptions")]
-        public System.Threading.Tasks.Task<UpdateAnnouncementCategoriesSubscriptionsOk> UpdateAnnouncementCategoriesSubscriptions([Microsoft.AspNetCore.Mvc.FromBody] System.Collections.Generic.IEnumerable<System.Guid> body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> UpdateAnnouncementCategoriesSubscriptions([Microsoft.AspNetCore.Mvc.FromBody] System.Collections.Generic.IEnumerable<System.Guid> body)
         {
 
-            return _implementation.UpdateAnnouncementCategoriesSubscriptionsAsync(body);
+            var result = await _implementation.UpdateAnnouncementCategoriesSubscriptionsAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
     }

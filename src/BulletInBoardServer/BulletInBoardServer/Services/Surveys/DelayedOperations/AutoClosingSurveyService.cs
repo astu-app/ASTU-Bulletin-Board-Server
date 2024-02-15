@@ -3,16 +3,12 @@ using BulletInBoardServer.Models.Attachments.Surveys;
 
 namespace BulletInBoardServer.Services.Surveys.DelayedOperations;
 
-public class AutoClosingSurveyService(
-    ApplicationDbContext dbContext,
-    IAutomaticSurveyOperationsDispatcher dispatcher)
+public class AutoClosingSurveyService(ApplicationDbContext dbContext)
 {
     public void CloseAutomatically(Guid surveyId)
     {
+        // Автоматическое сокрытие отменяется в диспетчере, вызывающем этот метод
         var survey = GetSurveySummary(surveyId);
-        
-        dispatcher.DisableAutoClosing(surveyId);
-
         survey.Close();
         dbContext.SaveChanges();
     }

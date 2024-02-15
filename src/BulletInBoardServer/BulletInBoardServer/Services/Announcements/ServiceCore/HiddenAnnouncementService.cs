@@ -7,7 +7,7 @@ namespace BulletInBoardServer.Services.Announcements.ServiceCore;
 public class HiddenAnnouncementService(
     ApplicationDbContext dbContext,
     IDelayedAnnouncementOperationsDispatcher dispatcher)
-    : CoreAnnouncementServiceBase(dbContext, dispatcher)
+    : DispatcherDependentAnnouncementServiceBase(dbContext, dispatcher)
 {
     /// <summary>
     /// Метод возвращает список скрытых объявлений для указанного пользователя

@@ -31,7 +31,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Created</returns>
 
-        System.Threading.Tasks.Task<CreateAnnouncementCreated> CreateAnnouncementAsync(CreateAnnouncementDto body);
+        System.Threading.Tasks.Task<SwaggerResponse<CreateAnnouncementCreated>> CreateAnnouncementAsync(CreateAnnouncementDto body);
 
         /// <summary>
         /// Получить подробности о выбранном объявлении
@@ -40,7 +40,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<GetAnnouncementDetailsOk> GetAnnouncementDetailsAsync(System.Guid body);
+        System.Threading.Tasks.Task<SwaggerResponse<GetAnnouncementDetailsOk>> GetAnnouncementDetailsAsync(System.Guid body);
 
         /// <summary>
         /// Редактировать объявление
@@ -49,7 +49,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<UpdateAnnouncementOk> UpdateAnnouncementAsync(UpdateAnnouncementDto body);
+        System.Threading.Tasks.Task<SwaggerResponse<UpdateAnnouncementOk>> UpdateAnnouncementAsync(UpdateAnnouncementDto body);
 
         /// <summary>
         /// Удалить объявление
@@ -58,7 +58,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<DeleteAnnouncementOk> DeleteAnnouncementAsync(System.Guid body);
+        System.Threading.Tasks.Task<SwaggerResponse<DeleteAnnouncementOk>> DeleteAnnouncementAsync(System.Guid body);
 
         /// <summary>
         /// Получить список опубликованных объявлений
@@ -66,7 +66,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<GetPostedAnnouncementListOk> GetPostedAnnouncementListAsync();
+        System.Threading.Tasks.Task<SwaggerResponse<GetPostedAnnouncementListOk>> GetPostedAnnouncementListAsync();
 
         /// <summary>
         /// Скрыть опубликованное объявление
@@ -75,7 +75,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<HidePostedAnnouncementOk> HidePostedAnnouncementAsync(System.Guid body);
+        System.Threading.Tasks.Task<SwaggerResponse<HidePostedAnnouncementOk>> HidePostedAnnouncementAsync(System.Guid body);
 
         /// <summary>
         /// Получить список скрытых объявлений
@@ -83,7 +83,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<GetHiddenAnnouncementListOk> GetHiddenAnnouncementListAsync();
+        System.Threading.Tasks.Task<SwaggerResponse<GetHiddenAnnouncementListOk>> GetHiddenAnnouncementListAsync();
 
         /// <summary>
         /// Восстановить скрытое объявление
@@ -92,7 +92,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<RestoreHiddenAnnouncementOk> RestoreHiddenAnnouncementAsync(System.Guid? body);
+        System.Threading.Tasks.Task<SwaggerResponse<RestoreHiddenAnnouncementOk>> RestoreHiddenAnnouncementAsync(System.Guid? body);
 
         /// <summary>
         /// Получить список объявлений, ожидающих отложенную публикацию
@@ -100,7 +100,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<GetDelayedPublishingAnnouncementListOk> GetDelayedPublishingAnnouncementListAsync();
+        System.Threading.Tasks.Task<SwaggerResponse<GetDelayedPublishingAnnouncementListOk>> GetDelayedPublishingAnnouncementListAsync();
 
         /// <summary>
         /// Сразу опубликовать отложенное объявление
@@ -109,7 +109,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<PublishImmediatelyDelayedPublishingAnnouncementOk> PublishImmediatelyDelayedPublishingAnnouncementAsync(System.Guid? body);
+        System.Threading.Tasks.Task<SwaggerResponse<PublishImmediatelyDelayedPublishingAnnouncementOk>> PublishImmediatelyDelayedPublishingAnnouncementAsync(System.Guid? body);
 
         /// <summary>
         /// Получить список объявлений, ожидающих отложенное сокрытие
@@ -117,7 +117,7 @@ namespace BulletInBoardServer.Controllers
 
         /// <returns>Ok</returns>
 
-        System.Threading.Tasks.Task<GetDelayedHiddenAnnouncementListOk> GetDelayedHiddenAnnouncementListAsync();
+        System.Threading.Tasks.Task<SwaggerResponse<GetDelayedHiddenAnnouncementListOk>> GetDelayedHiddenAnnouncementListAsync();
 
     }
 
@@ -138,10 +138,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Created</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("announcements/create", Name = "createAnnouncement")]
-        public System.Threading.Tasks.Task<CreateAnnouncementCreated> CreateAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] CreateAnnouncementDto body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> CreateAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] CreateAnnouncementDto body)
         {
 
-            return _implementation.CreateAnnouncementAsync(body);
+            var result = await _implementation.CreateAnnouncementAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -149,10 +157,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("announcements/get-details", Name = "getAnnouncementDetails")]
-        public System.Threading.Tasks.Task<GetAnnouncementDetailsOk> GetAnnouncementDetails([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetAnnouncementDetails([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
         {
 
-            return _implementation.GetAnnouncementDetailsAsync(body);
+            var result = await _implementation.GetAnnouncementDetailsAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -160,10 +176,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("announcements/update", Name = "updateAnnouncement")]
-        public System.Threading.Tasks.Task<UpdateAnnouncementOk> UpdateAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] UpdateAnnouncementDto body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> UpdateAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] UpdateAnnouncementDto body)
         {
 
-            return _implementation.UpdateAnnouncementAsync(body);
+            var result = await _implementation.UpdateAnnouncementAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -171,10 +195,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpDelete, Microsoft.AspNetCore.Mvc.Route("announcements/delete", Name = "deleteAnnouncement")]
-        public System.Threading.Tasks.Task<DeleteAnnouncementOk> DeleteAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> DeleteAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
         {
 
-            return _implementation.DeleteAnnouncementAsync(body);
+            var result = await _implementation.DeleteAnnouncementAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -182,10 +214,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("announcements/published/get-list", Name = "getPostedAnnouncementList")]
-        public System.Threading.Tasks.Task<GetPostedAnnouncementListOk> GetPostedAnnouncementList()
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetPostedAnnouncementList()
         {
 
-            return _implementation.GetPostedAnnouncementListAsync();
+            var result = await _implementation.GetPostedAnnouncementListAsync().ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -193,10 +233,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("announcements/published/hide", Name = "hidePostedAnnouncement")]
-        public System.Threading.Tasks.Task<HidePostedAnnouncementOk> HidePostedAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> HidePostedAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] System.Guid body)
         {
 
-            return _implementation.HidePostedAnnouncementAsync(body);
+            var result = await _implementation.HidePostedAnnouncementAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -204,10 +252,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("announcements/hidden/get-list", Name = "getHiddenAnnouncementList")]
-        public System.Threading.Tasks.Task<GetHiddenAnnouncementListOk> GetHiddenAnnouncementList()
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetHiddenAnnouncementList()
         {
 
-            return _implementation.GetHiddenAnnouncementListAsync();
+            var result = await _implementation.GetHiddenAnnouncementListAsync().ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -215,10 +271,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("announcements/hidden/restore", Name = "restoreHiddenAnnouncement")]
-        public System.Threading.Tasks.Task<RestoreHiddenAnnouncementOk> RestoreHiddenAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] System.Guid? body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> RestoreHiddenAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] System.Guid? body)
         {
 
-            return _implementation.RestoreHiddenAnnouncementAsync(body);
+            var result = await _implementation.RestoreHiddenAnnouncementAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -226,10 +290,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("announcements/delayed-publishing/get-list", Name = "getDelayedPublishingAnnouncementList")]
-        public System.Threading.Tasks.Task<GetDelayedPublishingAnnouncementListOk> GetDelayedPublishingAnnouncementList()
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetDelayedPublishingAnnouncementList()
         {
 
-            return _implementation.GetDelayedPublishingAnnouncementListAsync();
+            var result = await _implementation.GetDelayedPublishingAnnouncementListAsync().ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -237,10 +309,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("announcements/delayed-publishing/publish-immediately", Name = "publishImmediatelyDelayedPublishingAnnouncement")]
-        public System.Threading.Tasks.Task<PublishImmediatelyDelayedPublishingAnnouncementOk> PublishImmediatelyDelayedPublishingAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] System.Guid? body)
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> PublishImmediatelyDelayedPublishingAnnouncement([Microsoft.AspNetCore.Mvc.FromBody] System.Guid? body)
         {
 
-            return _implementation.PublishImmediatelyDelayedPublishingAnnouncementAsync(body);
+            var result = await _implementation.PublishImmediatelyDelayedPublishingAnnouncementAsync(body).ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
         /// <summary>
@@ -248,10 +328,18 @@ namespace BulletInBoardServer.Controllers
         /// </summary>
         /// <returns>Ok</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("announcements/delayed-hidden/get-list", Name = "getDelayedHiddenAnnouncementList")]
-        public System.Threading.Tasks.Task<GetDelayedHiddenAnnouncementListOk> GetDelayedHiddenAnnouncementList()
+        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetDelayedHiddenAnnouncementList()
         {
 
-            return _implementation.GetDelayedHiddenAnnouncementListAsync();
+            var result = await _implementation.GetDelayedHiddenAnnouncementListAsync().ConfigureAwait(false);
+
+            var status = result.StatusCode;
+            Microsoft.AspNetCore.Mvc.ObjectResult response = new Microsoft.AspNetCore.Mvc.ObjectResult(result.Result) { StatusCode = status };
+
+            foreach (var header in result.Headers)
+                Request.HttpContext.Response.Headers.Add(header.Key, new Microsoft.Extensions.Primitives.StringValues(header.Value.ToArray()));
+
+            return response;
         }
 
     }
@@ -1110,6 +1198,34 @@ namespace BulletInBoardServer.Controllers
         }
 
     }
+
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SwaggerResponse
+    {
+        public int StatusCode { get; private set; }
+
+        public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
+
+        public SwaggerResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers)
+        {
+            StatusCode = statusCode;
+            Headers = headers;
+        }
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.3.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SwaggerResponse<TResult> : SwaggerResponse
+    {
+        public TResult Result { get; private set; }
+
+        public SwaggerResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result)
+            : base(statusCode, headers)
+        {
+            Result = result;
+        }
+    }
+
 
 
 }

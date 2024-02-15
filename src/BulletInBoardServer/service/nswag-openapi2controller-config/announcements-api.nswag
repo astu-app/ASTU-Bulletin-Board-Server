@@ -4,7 +4,7 @@
   "documentGenerator": {
     "fromDocument": {
       "json": "",
-      "url": "../dev/bbs/src/BulletInBoardServer/api-specifications/api-gateway/announcements-api.yaml",
+      "url": "../../api-specifications/api-gateway/announcements-api.yaml",
       "output": null,
       "newLineBehavior": "Auto"
     }
@@ -30,7 +30,7 @@
       "parameterDictionaryType": "System.Collections.Generic.IDictionary",
       "responseArrayType": "System.Collections.Generic.ICollection",
       "responseDictionaryType": "System.Collections.Generic.IDictionary",
-      "wrapResponses": false,
+      "wrapResponses": true,
       "wrapResponseMethods": [],
       "generateResponseClasses": true,
       "responseClass": "SwaggerResponse",
@@ -74,7 +74,7 @@
       "templateDirectory": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../dev/bbs/src/BulletInBoardServer/BulletInBoardServer/Controllers/AnnouncementsController.cs",
+      "output": "../../BulletInBoardServer/Controllers/AnnouncementsController.cs",
       "newLineBehavior": "Auto"
     }
   }

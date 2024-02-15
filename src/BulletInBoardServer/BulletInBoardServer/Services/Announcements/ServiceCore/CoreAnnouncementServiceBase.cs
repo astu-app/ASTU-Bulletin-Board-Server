@@ -1,15 +1,11 @@
 ﻿using BulletInBoardServer.DataAccess;
 using BulletInBoardServer.Models.Announcements;
-using BulletInBoardServer.Services.Announcements.DelayedOperations;
 
 namespace BulletInBoardServer.Services.Announcements.ServiceCore;
 
-public class CoreAnnouncementServiceBase(
-    ApplicationDbContext dbContext,
-    IDelayedAnnouncementOperationsDispatcher dispatcher)
+public class CoreAnnouncementServiceBase(ApplicationDbContext dbContext)
 {
     protected readonly ApplicationDbContext DbContext = dbContext;
-    protected readonly IDelayedAnnouncementOperationsDispatcher Dispatcher = dispatcher;
 
 
 
@@ -25,3 +21,4 @@ public class CoreAnnouncementServiceBase(
         }
     }
 }
+

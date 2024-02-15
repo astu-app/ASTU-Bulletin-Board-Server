@@ -1,6 +1,4 @@
-﻿using BulletInBoardServer.DataAccess;
-using BulletInBoardServer.Models.Announcements;
-using BulletInBoardServer.Services.Announcements.DelayedOperations;
+﻿using BulletInBoardServer.Models.Announcements;
 using BulletInBoardServer.Services.Announcements.Infrastructure;
 using BulletInBoardServer.Services.Announcements.ServiceCore;
 
@@ -9,11 +7,12 @@ namespace BulletInBoardServer.Services.Announcements;
 /// <summary>
 /// Класс, агрегирующий операции непосредственно над объявлениями
 /// </summary>
-/// <param name="dbContext">Контекст базы данных</param>
-/// <param name="dispatcher">Диспетчер отложенных публикаций над объявлениями</param>
 public class AnnouncementService(
-    ApplicationDbContext dbContext,
-    IDelayedAnnouncementOperationsDispatcher dispatcher)
+    GeneralOperationsService generalOperationsService, 
+    PublishedAnnouncementService publishedAnnouncementService,
+    HiddenAnnouncementService hiddenAnnouncementService,
+    DelayedPublicationAnnouncementService delayedPublicationAnnouncementService,
+    DelayedHidingAnnouncementService delayedHidingAnnouncementService)
 {
     /* ********************************** Общие операции *********************************** */
 
@@ -23,11 +22,8 @@ public class AnnouncementService(
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="createAnnouncement">Объект со сведениями о создаваемом объявлении</param>
     /// <returns>Созданное объявление</returns>
-    public Announcement Create(Guid requesterId, CreateAnnouncement createAnnouncement)
-    {
-        var service = new GeneralOperationsService(dbContext, dispatcher);
-        return service.Create(requesterId, createAnnouncement);
-    }
+    public Announcement Create(Guid requesterId, CreateAnnouncement createAnnouncement) => 
+        generalOperationsService.Create(requesterId, createAnnouncement);
 
     /// <summary>
     /// Метод возвращает объявление со всеми связанными сущностями
@@ -35,33 +31,24 @@ public class AnnouncementService(
     /// <param name="requesterId"></param>
     /// <param name="announcementId"></param>
     /// <returns></returns>
-    public Announcement GetDetails(Guid requesterId, Guid announcementId)
-    {
-        var service = new GeneralOperationsService(dbContext, dispatcher);
-        return service.GetDetails(requesterId, announcementId);
-    }
+    public Announcement GetDetails(Guid requesterId, Guid announcementId) => 
+        generalOperationsService.GetDetails(requesterId, announcementId);
 
     /// <summary>
     /// Метод редактирует объявление
     /// </summary>
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="editAnnouncement">Объект с измененными свойствами объявления</param>
-    public void Edit(Guid requesterId, EditAnnouncement editAnnouncement)
-    {
-        var service = new GeneralOperationsService(dbContext, dispatcher);
-        service.Edit(requesterId, editAnnouncement);
-    }
+    public void Edit(Guid requesterId, EditAnnouncement editAnnouncement) => 
+        generalOperationsService.Edit(requesterId, editAnnouncement);
 
     /// <summary>
     /// Метод удаляем заданное объявление
     /// </summary>
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="announcementId">Id заданного объявления</param>
-    public void Delete(Guid requesterId, Guid announcementId)
-    {
-        var service = new GeneralOperationsService(dbContext, dispatcher);
-        service.Delete(requesterId, announcementId);
-    }
+    public void Delete(Guid requesterId, Guid announcementId) => 
+        generalOperationsService.Delete(requesterId, announcementId);
 
     /// <summary>
     /// Метод немедленно публикует заданное объявление
@@ -69,11 +56,8 @@ public class AnnouncementService(
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="announcementId">Id заданного объявления</param>
     /// <param name="publishedAt">Время публикации объявления</param>
-    public void Publish(Guid requesterId, Guid announcementId, DateTime publishedAt)
-    {
-        var service = new GeneralOperationsService(dbContext, dispatcher);
-        service.PublishManually(requesterId, announcementId, publishedAt);
-    }
+    public void Publish(Guid requesterId, Guid announcementId, DateTime publishedAt) => 
+        generalOperationsService.PublishManually(requesterId, announcementId, publishedAt);
 
 
 
@@ -86,11 +70,8 @@ public class AnnouncementService(
     /// </summary>
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <returns>Список с краткой информацией об объявлениях</returns>
-    public IEnumerable<AnnouncementSummary> GetPublishedAnnouncements(Guid requesterId)
-    {
-        var service = new PublishedAnnouncementService(dbContext, dispatcher);
-        return service.GetListForUser(requesterId);
-    }
+    public IEnumerable<AnnouncementSummary> GetPublishedAnnouncements(Guid requesterId) => 
+        publishedAnnouncementService.GetListForUser(requesterId);
 
     /// <summary>
     /// Метод скрывает указанное объявление
@@ -98,11 +79,8 @@ public class AnnouncementService(
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <param name="announcementId">Id объявления, которое требуется скрыть</param>
     /// <param name="hiddenAt">Момент сокрытия объявления</param>
-    public void Hide(Guid requesterId, Guid announcementId, DateTime hiddenAt)
-    {
-        var service = new PublishedAnnouncementService(dbContext, dispatcher);
-        service.HideManually(requesterId, announcementId, hiddenAt);
-    }
+    public void Hide(Guid requesterId, Guid announcementId, DateTime hiddenAt) => 
+        publishedAnnouncementService.HideManually(requesterId, announcementId, hiddenAt);
 
 
 
@@ -115,11 +93,8 @@ public class AnnouncementService(
     /// </summary>
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <returns>Список с краткой информацией об объявлениях</returns>
-    public IEnumerable<AnnouncementSummary> GetHiddenAnnouncements(Guid requesterId)
-    {
-        var service = new HiddenAnnouncementService(dbContext, dispatcher);
-        return service.GetListForUser(requesterId);
-    }
+    public IEnumerable<AnnouncementSummary> GetHiddenAnnouncements(Guid requesterId) => 
+        hiddenAnnouncementService.GetListForUser(requesterId);
 
     /// <summary>
     /// Метод восстанавливает скрытое объявление
@@ -127,11 +102,8 @@ public class AnnouncementService(
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <param name="announcementId">Id восстанавливаемого объявления</param>
     /// <param name="restoredAt">Время восстановления объявления</param>
-    public void Restore(Guid requesterId, Guid announcementId, DateTime restoredAt)
-    {
-        var service = new HiddenAnnouncementService(dbContext, dispatcher);
-        service.Restore(requesterId, announcementId, restoredAt);
-    }
+    public void Restore(Guid requesterId, Guid announcementId, DateTime restoredAt) => 
+        hiddenAnnouncementService.Restore(requesterId, announcementId, restoredAt);
 
 
 
@@ -145,11 +117,8 @@ public class AnnouncementService(
     /// </summary>
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <returns>Список с краткой информацией об объявлениях</returns>
-    public IEnumerable<AnnouncementSummary> GetDelayedPublicationAnnouncements(Guid requesterId)
-    {
-        var service = new DelayedPublicationAnnouncementService(dbContext, dispatcher);
-        return service.GetDelayedPublicationAnnouncementListForUser(requesterId);
-    }
+    public IEnumerable<AnnouncementSummary> GetDelayedPublicationAnnouncements(Guid requesterId) => 
+        delayedPublicationAnnouncementService.GetDelayedPublicationAnnouncementListForUser(requesterId);
 
     /// <summary>
     /// Метод возвращает список объявлений, ожидающих отложенного автоматического сокрытия,
@@ -157,9 +126,6 @@ public class AnnouncementService(
     /// </summary>
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <returns>Список с краткой информацией об объявлениях</returns>
-    public IEnumerable<AnnouncementSummary> GetDelayedHidingAnnouncementsForUser(Guid requesterId) 
-    {
-        var service = new DelayedHidingAnnouncementService(dbContext, dispatcher);
-        return service.GetDelayedHiddenAnnouncementListForUser(requesterId);
-    }
+    public IEnumerable<AnnouncementSummary> GetDelayedHidingAnnouncementsForUser(Guid requesterId) => 
+        delayedHidingAnnouncementService.GetDelayedHiddenAnnouncementListForUser(requesterId);
 }

@@ -7,7 +7,7 @@ namespace BulletInBoardServer.Services.Announcements.ServiceCore;
 public class PublishedAnnouncementService(
     ApplicationDbContext dbContext,
     IDelayedAnnouncementOperationsDispatcher dispatcher) 
-    : CoreAnnouncementServiceBase(dbContext, dispatcher)
+    : DispatcherDependentAnnouncementServiceBase(dbContext, dispatcher)
 {
     /// <summary>
     /// Метод возвращает список опубликованных для пользователя объявлений

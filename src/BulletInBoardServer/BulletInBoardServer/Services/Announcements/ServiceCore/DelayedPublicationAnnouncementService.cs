@@ -1,5 +1,4 @@
 ﻿using BulletInBoardServer.DataAccess;
-using BulletInBoardServer.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Announcements.Infrastructure;
 
 namespace BulletInBoardServer.Services.Announcements.ServiceCore;
@@ -7,10 +6,8 @@ namespace BulletInBoardServer.Services.Announcements.ServiceCore;
 /// <summary>
 /// Сервис работы с объявлениями, ожидающими отложенную публикацию
 /// </summary>
-public class DelayedPublicationAnnouncementService(
-    ApplicationDbContext dbContext,
-    IDelayedAnnouncementOperationsDispatcher dispatcher)
-    : CoreAnnouncementServiceBase(dbContext, dispatcher)
+public class DelayedPublicationAnnouncementService(ApplicationDbContext dbContext)
+    : CoreAnnouncementServiceBase(dbContext)
 {
     /// <summary>
     /// Метод возвращает список объявлений, ожидающих отложенной автоматической публикации,
@@ -35,12 +32,8 @@ public class DelayedPublicationAnnouncementService(
     /// <param name="publishedAt">Время публикации объявления</param>
     public void PublishAutomatically(Guid announcementId, DateTime publishedAt)
     {
+        // Отключение отложенной публикации происходит при вызове диспетчером этого метода
         var announcement = GetAnnouncementSummary(announcementId);
-
-        // Мы не вызываем отключения отложенную публикацию, так как попадаем в этот метод во время процесса
-        // автоматической отложенной публикации
-        Dispatcher.DisableDelayedPublishing(announcementId);
-
         announcement.Publish(publishedAt);
         DbContext.SaveChanges();
 
