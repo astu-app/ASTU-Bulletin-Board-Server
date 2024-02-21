@@ -6,13 +6,13 @@ info:
 servers:
   - url: '/api'
 paths:
-  
+
 components:
   schemas:
     identifiers:
       type: array
       nullable: true
-      items: 
+      items:
         type: string
         format: uuid
     

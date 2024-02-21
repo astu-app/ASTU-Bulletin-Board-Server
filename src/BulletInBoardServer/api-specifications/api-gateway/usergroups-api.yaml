@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: API Шлюз. Группы пользователей
   description: API шлюза для управления группами пользователей
-  version: 0.0.1
+  version: 0.0.2
 servers:
   - url: '/api'
 paths:
@@ -15,17 +15,17 @@ paths:
         required: true
         content:
           application/json:
-            schema: 
+            schema:
               $ref: '#/components/schemas/createUsergroupDto'
-      responses: 
+      responses:
         201:
           description: Created
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 title: createUsergroupCreated
-                properties: 
+                properties:
                   code:
                     # created
                     $ref: '#/components/schemas/createUsergroupResponses'
@@ -44,15 +44,6 @@ paths:
                     $ref: '#/components/schemas/createUsergroupResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: createUsergroupUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/createUsergroupResponses'
         403:
           description: Forbidden
           content:
@@ -76,8 +67,6 @@ paths:
                     # usersDoNotExist
                     # usergroupsDoNotExist
                     $ref: '#/components/schemas/createUsergroupResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -96,15 +85,15 @@ paths:
       tags: [ Группы пользователей ]
       operationId: getAllUsergroups
       summary: Получение списка всех групп пользователей
-      responses: 
+      responses:
         200:
           description: Ok
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 title: getAllUsergroupsOk
-                properties: 
+                properties:
                   code:
                     # ok
                     $ref: '#/components/schemas/getAllUsergroupsResponses'
@@ -112,15 +101,6 @@ paths:
                     $ref: '#/components/schemas/usergroupListDto'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getAllUsergroupsUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/getAllUsergroupsResponses'
         403:
           description: Forbidden
           content:
@@ -171,15 +151,6 @@ paths:
                     $ref: '#/components/schemas/getUsergroupDetailsResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getUsergroupDetailsUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/getUsergroupDetailsResponses'
         403:
           description: Forbidden
           content:
@@ -202,8 +173,6 @@ paths:
                   code:
                     # usergroupDoesNotExist
                     $ref: '#/components/schemas/getUsergroupDetailsResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
 
   /usergroups/update:
     put:
@@ -211,20 +180,20 @@ paths:
       operationId: updateUsergroup
       summary: Редактирование группы пользователей
       requestBody:
-        required: true  
+        required: true
         content:
           application/json:
-            schema: 
+            schema:
               $ref: '#/components/schemas/updateUsergroupDto'
-      responses: 
+      responses:
         200:
           description: Ok
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 title: updateUsergroupOk
-                properties: 
+                properties:
                   code:
                     # ok
                     $ref: '#/components/schemas/updateUsergroupResponses'
@@ -242,15 +211,6 @@ paths:
                     $ref: '#/components/schemas/updateUsergroupResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: updateUsergroupUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/updateUsergroupResponses'
         403:
           description: Forbidden
           content:
@@ -273,8 +233,6 @@ paths:
                   code:
                     # usersDoNotExist
                     $ref: '#/components/schemas/updateUsergroupResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -323,15 +281,6 @@ paths:
                     $ref: '#/components/schemas/deleteUsergroupResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: deleteUsergroupUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/deleteUsergroupResponses'
         403:
           description: Forbidden
           content:
@@ -354,8 +303,6 @@ paths:
                   code:
                     # usergroupDoesNotExist
                     $ref: '#/components/schemas/deleteUsergroupResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
 
   /usergroups/add-users:
     post:
@@ -364,20 +311,20 @@ paths:
       summary: Добавить пользователей в группу пользователей
       requestBody:
         required: true
-        content: 
+        content:
           application/json:
-            schema: 
+            schema:
               $ref: '#/components/schemas/addUsersToUsergroupDto'
-      responses: 
+      responses:
         200:
           description: Ok
           content:
             application/json:
-              schema: 
+              schema:
                 type: object
                 title: addUsersToUsergroupOk
-                properties: 
-                  code: 
+                properties:
+                  code:
                     # ok
                     $ref: '#/components/schemas/addUsersToUsergroupResponses'
         400:
@@ -393,15 +340,6 @@ paths:
                     $ref: '#/components/schemas/addUsersToUsergroupResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: addUsersToUsergroupUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/addUsersToUsergroupResponses'
         403:
           description: Forbidden
           content:
@@ -425,8 +363,6 @@ paths:
                     # usergroupDoesNotExist
                     # usersDoNotExist
                     $ref: '#/components/schemas/addUsersToUsergroupResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -476,15 +412,6 @@ paths:
                     $ref: '#/components/schemas/deleteUsersFromUsergroupResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: deleteUsersFromUsergroupUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/deleteUsersFromUsergroupResponses'
         403:
           description: Forbidden
           content:
@@ -508,8 +435,6 @@ paths:
                     # usergroupDoesNotExist
                     # usersDoNotExist
                     $ref: '#/components/schemas/deleteUsersFromUsergroupResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -534,7 +459,7 @@ components:
 
     createUsergroupDto:
       type: object
-      required: 
+      required:
         - name
       properties:
         name:
@@ -617,7 +542,7 @@ components:
 
     updateUsergroupDto:
       type: object
-      required: 
+      required:
         - id
       properties:
         id:
@@ -667,8 +592,6 @@ components:
         - created
         # 400
         - nameNullOrWhitespace
-        # 401
-        - unauthorized
         # 403
         - usergroupCreationForbidden
         # 404
@@ -693,8 +616,6 @@ components:
       enum:
         # 200
         - ok
-        # 401
-        - unauthorized
         # 403
         - getAllUsergroupsForbidden
 
@@ -705,8 +626,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - getUsergroupDetailsForbidden
         # 404
@@ -726,8 +645,6 @@ components:
         # 400
         - incorrectIdentifierFormat
         - nameIsEmptyOrWhitespace
-        # 401
-        - unauthorized
         # 403
         - updateUsergroupForbidden
         # 404
@@ -751,8 +668,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - usergroupDeletionForbidden
         # 404
@@ -772,8 +687,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - addUsersToUsergroupForbidden
         # 404
@@ -800,8 +713,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - removeUsersFromUsergroupForbidden
         # 404

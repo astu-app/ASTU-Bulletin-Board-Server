@@ -8,11 +8,11 @@ servers:
 paths:
   /ping:
     get:
-      responses: 
+      responses:
         200:
           description: Ok
           content:
             text/plain:
-              schema: 
+              schema:
                 type: string
                 example: pong

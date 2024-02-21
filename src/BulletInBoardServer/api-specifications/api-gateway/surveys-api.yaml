@@ -2,7 +2,7 @@
 info:
   title: API Шлюз. Опросы
   description: API шлюза для управления опросами
-  version: 0.0.1
+  version: 0.0.2
 servers:
   - url: '/api'
 paths:
@@ -34,15 +34,6 @@ paths:
                     $ref: '#/components/schemas/createSurveyResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: createSurveyUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/createSurveyResponses'
         403:
           description: Forbidden
           content:
@@ -101,14 +92,6 @@ paths:
                     $ref: '#/components/schemas/getSurveyDetailsResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/getSurveyDetailsResponses'
         403:
           description: Forbidden
           content:
@@ -129,8 +112,6 @@ paths:
                   code:
                     # surveyDoesNotExist
                     $ref: '#/components/schemas/getSurveyDetailsResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -177,14 +158,6 @@ paths:
                     $ref: '#/components/schemas/closeSurveyResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/closeSurveyResponses'
         403:
           description: Forbidden
           content:
@@ -205,8 +178,6 @@ paths:
                   code:
                     # surveyDoesNotExist
                     $ref: '#/components/schemas/closeSurveyResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -255,14 +226,6 @@ paths:
                     $ref: '#/components/schemas/getSurveysResultsResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/getSurveysResultsResponses'
         403:
           description: Forbidden
           content:
@@ -283,8 +246,6 @@ paths:
                   code:
                     # surveyDoesNotExist
                     $ref: '#/components/schemas/getSurveysResultsResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -335,15 +296,6 @@ paths:
                     $ref: '#/components/schemas/downloadSurveyResultsResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: downloadSurveyResultsUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/downloadSurveyResultsResponses'
         403:
           description: Forbidden
           content:
@@ -366,8 +318,6 @@ paths:
                   code:
                     # surveyDoesNotExist
                     $ref: '#/components/schemas/downloadSurveyResultsResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -417,15 +367,6 @@ paths:
                     $ref: '#/components/schemas/voteInSurveyResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: voteInQuestionUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/voteInSurveyResponses'
         403:
           description: Forbidden
           content:
@@ -450,8 +391,6 @@ paths:
                     # questionsDoesNotExist
                     # answerDoesNotExist
                     $ref: '#/components/schemas/voteInSurveyResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         409:
           description: Conflict
           content:
@@ -515,8 +454,8 @@ components:
         questions:
           description: Вопросы опроса
           type: array
-#          items:
-#            $ref: '#/components/schemas/questionDetailsDto'
+          items:
+            $ref: '#/components/schemas/questionDetailsDto'
           minItems: 1
     
     surveyIdentifierDto:
@@ -673,8 +612,6 @@ components:
       enum:
         # 201
         - created
-        # 401
-        - unauthorized
         # 403
         - createSurveyForbidden
         # 409
@@ -693,8 +630,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - detailsAccessForbidden
         # 404
@@ -717,8 +652,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - surveyClosingForbidden
         # 404
@@ -743,8 +676,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - surveyResultsAccessForbidden
         # 404
@@ -767,8 +698,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - surveyResultsDownloadingForbidden
         # 404
@@ -791,8 +720,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - votingForbidden
         # 404
@@ -829,8 +756,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - votingForbidden
         # 404

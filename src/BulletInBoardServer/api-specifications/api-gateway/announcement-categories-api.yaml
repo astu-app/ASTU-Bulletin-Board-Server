@@ -2,7 +2,7 @@
 info:
   title: API Шлюз. Категории объявлений
   description: API Шлюза для управления категориями объявлений
-  version: 0.0.1
+  version: 0.0.2
 servers:
   - url: '/api'
 paths:
@@ -24,7 +24,7 @@ paths:
             application/json:
               schema:
                 type: object
-                title: createAnnouncementCategoryCreated  
+                title: createAnnouncementCategoryCreated
                 properties:
                   code:
                     # created
@@ -44,15 +44,6 @@ paths:
                     $ref: '#/components/schemas/createAnnouncementCategoryResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: createAnnouncementCategoryUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/createAnnouncementCategoryResponses'
         403:
           description: Forbidden
           content:
@@ -86,15 +77,6 @@ paths:
                     $ref: '#/components/schemas/announcementCategoriesListDto'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getAllAnnouncementCategoriesUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/getAllAnnouncementCategoriesResponses'
         403:
           description: Forbidden
           content:
@@ -106,7 +88,7 @@ paths:
                   code:
                     # announcementCategoryListAccessForbidden
                     $ref: '#/components/schemas/getAllAnnouncementCategoriesResponses'
-    
+  
   /announcement-categories/update:
     put:
       tags: [ Основные операции ]
@@ -143,15 +125,6 @@ paths:
                     $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: updateAnnouncementCategoryUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
         403:
           description: Forbidden
           content:
@@ -174,8 +147,6 @@ paths:
                   code:
                     # announcementCategoryDoesNotExist
                     $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
 
   /announcement-categories/delete:
     delete:
@@ -213,15 +184,6 @@ paths:
                     $ref: '#/components/schemas/deleteAnnouncementCategoryResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: deleteAnnouncementCategoryUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/deleteAnnouncementCategoryResponses'
         403:
           description: Forbidden
           content:
@@ -244,8 +206,6 @@ paths:
                   code:
                     # announcementCategoryDoesNotExist
                     $ref: '#/components/schemas/deleteAnnouncementCategoryResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
 
   /announcement-categories/get-subscribtions:
     get:
@@ -272,15 +232,6 @@ paths:
                     $ref: '#/components/schemas/getAnnouncementCategoriesSubscriptionsResponses'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getAnnouncementCategoriesSubscriptionsUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/getAnnouncementCategoriesSubscriptionsResponses'
         403:
           description: Forbidden
           content:
@@ -331,15 +282,6 @@ paths:
                     $ref: './common-schemas.yaml#/components/schemas/identifiers'
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                title: updateAnnouncementCategoriesSubscriptionsUnauthorized
-                properties:
-                  code:
-                    # unauthorized
-                    $ref: '#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
         403:
           description: Forbidden
           content:
@@ -362,8 +304,6 @@ paths:
                   code:
                     # categoriesDoNotExist
                     $ref: '#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
 
 components:
   schemas:
@@ -420,8 +360,6 @@ components:
         - created
         # 400
         - colorIsIncorrectHex
-        # 401
-        - unauthorized
         # 403
         - announcementCategoryCreationForbidden
       description: >
@@ -436,8 +374,6 @@ components:
       enum:
         # 200
         - ok
-        # 401
-        - unauthorized
         # 403
         - announcementCategoryListAccessForbidden
       description: >
@@ -453,8 +389,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - announcementCategoryUpdatingForbidden
         # 404
@@ -474,8 +408,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - announcementCategoryDeletionForbidden
         # 404
@@ -493,8 +425,6 @@ components:
       enum:
         # 200
         - ok
-        # 401
-        - unauthorized
         # 403
         - getSubscriptionsListForbidden
       description: >
@@ -510,8 +440,6 @@ components:
         - ok
         # 400
         - incorrectIdentifierFormat
-        # 401
-        - unauthorized
         # 403
         - updateSubscriptionsForbidden
         # 404
