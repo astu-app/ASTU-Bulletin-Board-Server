@@ -1,0 +1,2202 @@
+{
+  "openapi" : "3.0.3",
+  "info" : {
+    "description" : "API шлюза для управления объявлениями",
+    "title" : "API Шлюз. Объявления",
+    "version" : "0.0.2"
+  },
+  "servers" : [ {
+    "url" : "/api"
+  } ],
+  "tags" : [ {
+    "description" : "Технический тэг, добавляемый к каждому описанному в файле эндпоинту. Нужен для генерации правильного имени соответствующего контроллера",
+    "name" : "Announcements"
+  } ],
+  "paths" : {
+    "/announcements/create" : {
+      "post" : {
+        "operationId" : "createAnnouncement",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/createAnnouncementDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/createAnnouncementCreated"
+                }
+              }
+            },
+            "description" : "Created"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/createAnnouncementBadRequest"
+                }
+              }
+            },
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/createAnnouncementForbidden"
+                }
+              }
+            },
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/createAnnouncementNotFound"
+                }
+              }
+            },
+            "description" : "Not Found"
+          },
+          "409" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/createAnnouncementConflict"
+                }
+              }
+            },
+            "description" : "Conflict"
+          }
+        },
+        "summary" : "Создать объявление",
+        "tags" : [ "Announcements" ]
+      }
+    },
+    "/announcements/get-details" : {
+      "get" : {
+        "operationId" : "getAnnouncementDetails",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/announcementIdentifierDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getAnnouncementDetailsOk"
+                }
+              }
+            },
+            "description" : "Ok"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getAnnouncementDetailsBadRequest"
+                }
+              }
+            },
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getAnnouncementDetailsForbidden"
+                }
+              }
+            },
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getAnnouncementDetailsNotFound"
+                }
+              }
+            },
+            "description" : "Not Found"
+          }
+        },
+        "summary" : "Получить подробности о выбранном объявлении",
+        "tags" : [ "Announcements" ]
+      }
+    },
+    "/announcements/update" : {
+      "put" : {
+        "operationId" : "updateAnnouncement",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/updateAnnouncementDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/updateAnnouncementOk"
+                }
+              }
+            },
+            "description" : "Ok"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/updateAnnouncementBadRequest"
+                }
+              }
+            },
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/updateAnnouncementForbidden"
+                }
+              }
+            },
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/updateAnnouncementNotFound"
+                }
+              }
+            },
+            "description" : "Not Found"
+          },
+          "409" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/updateAnnouncementConflict"
+                }
+              }
+            },
+            "description" : "Conflict"
+          }
+        },
+        "summary" : "Редактировать объявление",
+        "tags" : [ "Announcements" ]
+      }
+    },
+    "/announcements/delete" : {
+      "delete" : {
+        "operationId" : "deleteAnnouncement",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/announcementIdentifierDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/deleteAnnouncementOk"
+                }
+              }
+            },
+            "description" : "Ok"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/deleteAnnouncementBadRequest"
+                }
+              }
+            },
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/deleteAnnouncementForbidden"
+                }
+              }
+            },
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/deleteAnnouncementNotFound"
+                }
+              }
+            },
+            "description" : "Not Found"
+          }
+        },
+        "summary" : "Удалить объявление",
+        "tags" : [ "Announcements" ]
+      }
+    },
+    "/announcements/published/get-list" : {
+      "get" : {
+        "operationId" : "getPostedAnnouncementList",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getPostedAnnouncementListOk"
+                }
+              }
+            },
+            "description" : "Ok"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getPostedAnnouncementListForbidden"
+                }
+              }
+            },
+            "description" : "Forbidden"
+          }
+        },
+        "summary" : "Получить список опубликованных объявлений",
+        "tags" : [ "Announcements" ]
+      }
+    },
+    "/announcements/published/hide" : {
+      "post" : {
+        "operationId" : "hidePostedAnnouncement",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/announcementIdentifierDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/hidePostedAnnouncementOk"
+                }
+              }
+            },
+            "description" : "Ok"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/hidePostedAnnouncementBadRequest"
+                }
+              }
+            },
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/hidePostedAnnouncementForbidden"
+                }
+              }
+            },
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/hidePostedAnnouncementNotFound"
+                }
+              }
+            },
+            "description" : "Not Found"
+          },
+          "409" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/hidePostedAnnouncementConflict"
+                }
+              }
+            },
+            "description" : "Conflict"
+          }
+        },
+        "summary" : "Скрыть опубликованное объявление",
+        "tags" : [ "Announcements" ]
+      }
+    },
+    "/announcements/hidden/get-list" : {
+      "get" : {
+        "operationId" : "getHiddenAnnouncementList",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getHiddenAnnouncementListOk"
+                }
+              }
+            },
+            "description" : "Ok"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getHiddenAnnouncementListForbidden"
+                }
+              }
+            },
+            "description" : "Forbidden"
+          }
+        },
+        "summary" : "Получить список скрытых объявлений",
+        "tags" : [ "Announcements" ]
+      }
+    },
+    "/announcements/hidden/restore" : {
+      "post" : {
+        "operationId" : "restoreHiddenAnnouncement",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/announcementIdentifierDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/restoreHiddenAnnouncementOk"
+                }
+              }
+            },
+            "description" : "Ok"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/restoreHiddenAnnouncementBadRequest"
+                }
+              }
+            },
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/restoreHiddenAnnouncementForbidden"
+                }
+              }
+            },
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/restoreHiddenAnnouncementNotFound"
+                }
+              }
+            },
+            "description" : "Not Found"
+          },
+          "409" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/restoreHiddenAnnouncementConflict"
+                }
+              }
+            },
+            "description" : "Conflict"
+          }
+        },
+        "summary" : "Восстановить скрытое объявление",
+        "tags" : [ "Announcements" ]
+      }
+    },
+    "/announcements/delayed-publishing/get-list" : {
+      "get" : {
+        "operationId" : "getDelayedPublishingAnnouncementList",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getDelayedPublishingAnnouncementListOk"
+                }
+              }
+            },
+            "description" : "Ok"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getDelayedPublishingAnnouncementListForbidden"
+                }
+              }
+            },
+            "description" : "Forbidden"
+          }
+        },
+        "summary" : "Получить список объявлений, ожидающих отложенную публикацию",
+        "tags" : [ "Announcements" ]
+      }
+    },
+    "/announcements/delayed-publishing/publish-immediately" : {
+      "post" : {
+        "operationId" : "publishImmediatelyDelayedPublishingAnnouncement",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/announcementIdentifierDto"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/publishImmediatelyDelayedPublishingAnnouncementOk"
+                }
+              }
+            },
+            "description" : "Ok"
+          },
+          "400" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/publishImmediatelyDelayedPublishingAnnouncementBadRequest"
+                }
+              }
+            },
+            "description" : "Bad Request"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/publishImmediatelyDelayedPublishingAnnouncementForbidden"
+                }
+              }
+            },
+            "description" : "Forbidden"
+          },
+          "404" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/publishImmediatelyDelayedPublishingAnnouncementNotFound"
+                }
+              }
+            },
+            "description" : "Not Found"
+          },
+          "409" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/publishImmediatelyDelayedPublishingAnnouncementConflict"
+                }
+              }
+            },
+            "description" : "Conflict"
+          }
+        },
+        "summary" : "Сразу опубликовать отложенное объявление",
+        "tags" : [ "Announcements" ]
+      }
+    },
+    "/announcements/delayed-hidden/get-list" : {
+      "get" : {
+        "operationId" : "getDelayedHiddenAnnouncementList",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getDelayedHiddenAnnouncementListOk"
+                }
+              }
+            },
+            "description" : "Ok"
+          },
+          "401" : {
+            "description" : "Unauthorized"
+          },
+          "403" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/getDelayedHiddenAnnouncementListForbidden"
+                }
+              }
+            },
+            "description" : "Forbidden"
+          }
+        },
+        "summary" : "Получить список объявлений, ожидающих отложенное сокрытие",
+        "tags" : [ "Announcements" ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "createAnnouncementDto" : {
+        "properties" : {
+          "content" : {
+            "description" : "Текстовое содержимое объявления",
+            "type" : "string"
+          },
+          "userIds" : {
+            "description" : "Идентификаторы пользователей, для которых создается объявление",
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "minItems" : 1,
+            "type" : "array"
+          },
+          "categoryIds" : {
+            "description" : "Идентификаторы категорий объявлений",
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "attachmentIds" : {
+            "description" : "Идентификаторы вложений, прикрепляемых к объявлению",
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "minItems" : 1,
+            "nullable" : true,
+            "type" : "array"
+          },
+          "delayedPublishingAt" : {
+            "description" : "Срок отложенной публикации объявления",
+            "format" : "date-time",
+            "nullable" : true,
+            "type" : "string"
+          },
+          "delayedHidingAt" : {
+            "description" : "Срок отложенного сокрытия объявления",
+            "format" : "date-time",
+            "nullable" : true,
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "announcementIdentifierDto" : {
+        "description" : "Идентификатор объявления",
+        "format" : "uuid",
+        "type" : "string"
+      },
+      "announcementSummaryDto" : {
+        "example" : {
+          "audienceSize" : 0,
+          "publishedAt" : "2000-01-23T04:56:07.000+00:00",
+          "authorName" : "authorName",
+          "viewsCount" : 0,
+          "files" : [ {
+            "name" : "name",
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "type" : "mediafile"
+          }, {
+            "name" : "name",
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "type" : "mediafile"
+          } ],
+          "survey" : {
+            "isAnonymous" : false,
+            "isOpen" : true,
+            "questions" : [ {
+              "votersAmount" : 0,
+              "answers" : [ {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "isMultipleChoiceAllowed" : false,
+              "content" : "content"
+            }, {
+              "votersAmount" : 0,
+              "answers" : [ {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "isMultipleChoiceAllowed" : false,
+              "content" : "content"
+            } ],
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+          },
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "content" : "content"
+        },
+        "properties" : {
+          "id" : {
+            "description" : "Идентификатор объявления",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "authorName" : {
+            "description" : "Автор объявления",
+            "type" : "string"
+          },
+          "content" : {
+            "description" : "Текстовое содержимое объявления",
+            "type" : "string"
+          },
+          "publishedAt" : {
+            "description" : "Время публикации объявления",
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "viewsCount" : {
+            "description" : "Количество просмотревших объявление пользователей",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "audienceSize" : {
+            "description" : "Размер аудитории объявления",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "files" : {
+            "description" : "Массив файлов, прикрепленных к объявлению",
+            "items" : {
+              "$ref" : "#/components/schemas/fileSummaryDto"
+            },
+            "nullable" : true,
+            "type" : "array"
+          },
+          "survey" : {
+            "$ref" : "#/components/schemas/surveyDetailsDto"
+          }
+        },
+        "type" : "object"
+      },
+      "announcementDetailsDto" : {
+        "example" : {
+          "hiddenAt" : "2000-01-23T04:56:07.000+00:00",
+          "audienceSize" : 0,
+          "publishedAt" : "2000-01-23T04:56:07.000+00:00",
+          "authorName" : "authorName",
+          "viewsCount" : 0,
+          "surveys" : [ {
+            "isAnonymous" : false,
+            "isOpen" : true,
+            "questions" : [ {
+              "votersAmount" : 0,
+              "answers" : [ {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "isMultipleChoiceAllowed" : false,
+              "content" : "content"
+            }, {
+              "votersAmount" : 0,
+              "answers" : [ {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "isMultipleChoiceAllowed" : false,
+              "content" : "content"
+            } ],
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+          }, {
+            "isAnonymous" : false,
+            "isOpen" : true,
+            "questions" : [ {
+              "votersAmount" : 0,
+              "answers" : [ {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "isMultipleChoiceAllowed" : false,
+              "content" : "content"
+            }, {
+              "votersAmount" : 0,
+              "answers" : [ {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "isMultipleChoiceAllowed" : false,
+              "content" : "content"
+            } ],
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+          } ],
+          "delayedHidingAt" : "2000-01-23T04:56:07.000+00:00",
+          "delayedPublishingAt" : "2000-01-23T04:56:07.000+00:00",
+          "files" : [ {
+            "name" : "name",
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "type" : "mediafile"
+          }, {
+            "name" : "name",
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "type" : "mediafile"
+          } ],
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "categories" : [ {
+            "color" : "color",
+            "name" : "name",
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          }, {
+            "color" : "color",
+            "name" : "name",
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          } ],
+          "content" : "content"
+        },
+        "properties" : {
+          "id" : {
+            "description" : "Идентификатор объявления",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "content" : {
+            "description" : "Текстовое содержимое объявления",
+            "type" : "string"
+          },
+          "authorName" : {
+            "description" : "Автор объявления",
+            "type" : "string"
+          },
+          "viewsCount" : {
+            "description" : "Количество просмотревших объявление пользователей",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "audienceSize" : {
+            "description" : "Размер аудитории объявления",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "categories" : {
+            "description" : "Массив категорий объявлений",
+            "items" : {
+              "$ref" : "#/components/schemas/announcementCategoryDetailsDto"
+            },
+            "type" : "array"
+          },
+          "files" : {
+            "description" : "Массив файлов, прикрепленных к объявлению",
+            "items" : {
+              "$ref" : "#/components/schemas/fileSummaryDto"
+            },
+            "nullable" : true,
+            "type" : "array"
+          },
+          "surveys" : {
+            "description" : "Массив опросов объявления",
+            "items" : {
+              "$ref" : "#/components/schemas/surveyDetailsDto"
+            },
+            "nullable" : true,
+            "type" : "array"
+          },
+          "publishedAt" : {
+            "description" : "Момент публикации объявления. Объявление не является опубликованным, если null",
+            "format" : "date-time",
+            "nullable" : true,
+            "type" : "string"
+          },
+          "hiddenAt" : {
+            "description" : "Момент сокрытия объявления. Объявление не является скрытым, если null",
+            "format" : "date-time",
+            "nullable" : true,
+            "type" : "string"
+          },
+          "delayedHidingAt" : {
+            "description" : "Момент отложенного сокрытия объявления. Объявление не будет скрыто автоматически, если null",
+            "format" : "date-time",
+            "nullable" : true,
+            "type" : "string"
+          },
+          "delayedPublishingAt" : {
+            "description" : "Момент отложенной публикации объявления. Объявление не будет опубликовано автоматически, если null",
+            "format" : "date-time",
+            "nullable" : true,
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "updateAnnouncementDto" : {
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "content" : {
+            "description" : "Текстовое содержимое объявления. Null, если значение свойства не изменилось",
+            "nullable" : true,
+            "type" : "string"
+          },
+          "categoryIds" : {
+            "description" : "Массив идентификаторов категорий объявлений. Null, если значение свойства не изменилось",
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "audienceIds" : {
+            "description" : "Идентификаторы пользователей, для которых создается объявление. Null, если значение свойства не изменилось",
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "minItems" : 1,
+            "nullable" : true,
+            "type" : "array"
+          },
+          "attachmentIds" : {
+            "description" : "Идентификаторы новых вложений объявления. Null, если значение свойства не изменилось",
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "minItems" : 1,
+            "nullable" : true,
+            "type" : "array"
+          },
+          "delayedPublishingAtChanged" : {
+            "description" : "Было ли изменено значение момента отложенной публикации",
+            "type" : "boolean"
+          },
+          "delayedPublishingAt" : {
+            "description" : "Момент отложенной публикации объявления. Null, если отложенная публикация не предполагается",
+            "format" : "date-time",
+            "nullable" : true,
+            "type" : "string"
+          },
+          "delayedHidingAtChanged" : {
+            "description" : "Было ли изменено значение момента отложенного сокрытия",
+            "type" : "boolean"
+          },
+          "delayedHidingAt" : {
+            "description" : "Момент отложенного сокрытия объявления. Null, если отложенное сокрытие не предполагается",
+            "format" : "date-time",
+            "nullable" : true,
+            "type" : "string"
+          }
+        },
+        "required" : [ "delayedHidingAtChanged", "delayedPublishingAtChanged", "id" ],
+        "type" : "object"
+      },
+      "createAnnouncementResponses" : {
+        "description" : "Ответы:\n  created - Объявление создано\n  audience - Список аудитории null или пустой\n  announcementCreationForbidden - Пользователь не имеет права создать объявление\n  announcementCategoriesDoNotExist - В качестве одного или нескольких из id категорий объявлений прикреплен несуществующий в базе id\n  filesDoNotExist - В качестве одного или нескольких из id файлов прикреплен несуществующий в базе id\n  surveysDoNotExist - В качестве одного или нескольких из id опросов прикреплен несуществующий в базе id\n  delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом\n  delayedHidingMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом\n",
+        "enum" : [ "created", "usergroupListNullOrEmpty", "announcementCreationForbidden", "announcementCategoriesDoNotExist", "filesDoNotExist", "surveysDoNotExist", "delayedPublishingMomentIsInPast", "delayedHidingMomentIsInPast" ],
+        "type" : "string"
+      },
+      "getAnnouncementDetailsResponses" : {
+        "description" : "Ответы:\n  ok - Ок\n  incorrectIdentifierFormat - Некорректный формат идентификатора \n  unauthorized - Пользователь не авторизован для выполнения операции\n  detailsAccessForbidden - Пользователь не имеет права просмотреть подробности объявления\n  announcementDoesNotExist - Объявление не существует\n",
+        "enum" : [ "ok", "incorrectIdentifierFormat", "detailsAccessForbidden", "announcementDoesNotExist" ],
+        "type" : "string"
+      },
+      "updateAnnouncementResponses" : {
+        "description" : "Ответы:\n  ok - Ок\n  usergroupListNullOrEmpty - Список групп пользователей null или пустой\n  incorrectIdentifierFormat - Некорректный формат идентификатора\n  unauthorized - Пользователь не авторизован для выполнения операции\n  announcementEditingForbidden - Пользователь не имеет права изменить объявление\n  announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id\n  announcementCategoryDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id\n  fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id\n  surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id\n  attachingFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос\n  automaticPublishMomentIsInPast - Момент отложенной публикации уже наступил в прошлом\n  automaticHideMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом\n  autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто\n  autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым\n",
+        "enum" : [ "ok", "usergroupListNullOrEmpty", "incorrectIdentifierFormat", "announcementEditingForbidden", "announcementDoesNotExist", "announcementCategoryDoesNotExist", "fileDoesNotExist", "surveyDoesNotExist", "attachingFilesAndSurveyTogether", "automaticPublishMomentIsInPast", "automaticHideMomentIsInPast", "autoHidingAnAlreadyHiddenAnnouncement", "autoPublishingPublishedAndNonHiddenAnnouncement" ],
+        "type" : "string"
+      },
+      "deleteAnnouncementResponses" : {
+        "description" : "Ответы:\n  ok - Ок\n  incorrectIdentifierFormat - Некорректный формат идентификатора\n  unauthorized - Пользователь не авторизован для выполнения операции\n  announcementDeletionForbidden - Пользователь не имеет права удалить объявление\n  announcementDoesNotExist - Объявление не существует\n",
+        "enum" : [ "ok", "incorrectIdentifierFormat", "announcementDeletionForbidden", "announcementDoesNotExist" ],
+        "type" : "string"
+      },
+      "getPostedAnnouncementListResponses" : {
+        "description" : "Ответы:\n  ok - Ок\n  unauthorized - Пользователь не авторизован для выполнения операции\n  postedAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки опубликованных объявлений\n",
+        "enum" : [ "ok", "postedAnnouncementsListAccessForbidden" ],
+        "type" : "string"
+      },
+      "hidePostedAnnouncementResponses" : {
+        "description" : "Ответы:\n  ok - Ок\n  incorrectIdentifierFormat - Некорректный формат идентификатора \n  unauthorized - Пользователь не авторизован для выполнения операции\n  announcementHidingForbidden - Пользователь не имеет права скрыть объявление\n  announcementDoesNotExist - Объявление не существует\n  announcementAlreadyHidden - Объявление уже скрыто\n  announcementNotYetPublished - Объявление еще не опубликовано\n",
+        "enum" : [ "ok", "incorrectIdentifierFormat", "announcementHidingForbidden", "announcementDoesNotExist", "announcementAlreadyHidden", "announcementNotYetPublished" ],
+        "type" : "string"
+      },
+      "getHiddenAnnouncementListResponses" : {
+        "description" : "Ответы:\n  ok - Ок\n  unauthorized - Пользователь не авторизован для выполнения операции\n  hiddenAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки скрытых объявлений\n",
+        "enum" : [ "ok", "hiddenAnnouncementsListAccessForbidden" ],
+        "type" : "string"
+      },
+      "restoreHiddenAnnouncementResponses" : {
+        "description" : "Ответы:\n  ok - Ок\n  incorrectIdentifierFormat - Некорректный формат идентификатора\n  unauthorized - Пользователь не авторизован для выполнения операции\n  unhideForbidden - Пользователь не имеет права скрыть объявление\n  announcementDoesNotExist - Объявление не существует\n  announcementNotHidden - Объявление не является скрытым\n",
+        "enum" : [ "ok", "incorrectIdentifierFormat", "unhideForbidden", "announcementDoesNotExist", "announcementNotHidden" ],
+        "type" : "string"
+      },
+      "getDelayedPublishingAnnouncementListResponses" : {
+        "description" : "Ответы: \n  ok - Ок\n  unauthorized - Пользователь не авторизован для выполнения операции\n  getDelayedPublishingAnnouncementListResponsesAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие\n",
+        "enum" : [ "ok", "getDelayedPublishingAnnouncementListResponsesAccessForbidden" ],
+        "type" : "string"
+      },
+      "publishImmediatelyDelayedAnnouncementResponses" : {
+        "description" : "Ответы: \n  ok - Ок\n  incorrectIdentifierFormat - Некорректный формат идентификатора\n  unauthorized - Пользователь не авторизован для выполнения операции\n  immediatePublishingForbidden - Пользователь не имеет права незамедлительно опубликовать отложенное объявление\n  announcementDoesNotExist - Объявление не существует\n  announcementNotDelayed - Объявление не является отложенным\n",
+        "enum" : [ "ok", "incorrectIdentifierFormat", "immediatePublishingForbidden", "announcementDoesNotExist", "announcementNotDelayed" ],
+        "type" : "string"
+      },
+      "getDelayedHiddenAnnouncementListResponses" : {
+        "description" : "Ответы: \n  ok - Ок\n  unauthorized - Пользователь не авторизован для выполнения операции\n  getDelayedHiddenAnnouncementListAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие",
+        "enum" : [ "ok", "getDelayedHiddenAnnouncementListAccessForbidden" ],
+        "type" : "string"
+      },
+      "fileSummaryDto" : {
+        "example" : {
+          "name" : "name",
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "type" : "mediafile"
+        },
+        "properties" : {
+          "id" : {
+            "description" : "Идентификатор файла",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "name" : {
+            "description" : "Название файла",
+            "type" : "string"
+          },
+          "type" : {
+            "description" : "Тип файла",
+            "enum" : [ "mediafile", "file" ],
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "surveyDetailsDto" : {
+        "example" : {
+          "isAnonymous" : false,
+          "isOpen" : true,
+          "questions" : [ {
+            "votersAmount" : 0,
+            "answers" : [ {
+              "votersAmount" : 0,
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "content" : "content"
+            }, {
+              "votersAmount" : 0,
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "content" : "content"
+            } ],
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "isMultipleChoiceAllowed" : false,
+            "content" : "content"
+          }, {
+            "votersAmount" : 0,
+            "answers" : [ {
+              "votersAmount" : 0,
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "content" : "content"
+            }, {
+              "votersAmount" : 0,
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "content" : "content"
+            } ],
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "isMultipleChoiceAllowed" : false,
+            "content" : "content"
+          } ],
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+        },
+        "properties" : {
+          "id" : {
+            "description" : "Идентификатор опроса",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "isOpen" : {
+            "default" : true,
+            "description" : "Открыт ли опрос",
+            "type" : "boolean"
+          },
+          "isAnonymous" : {
+            "default" : false,
+            "description" : "Анонимен ли опрос",
+            "type" : "boolean"
+          },
+          "voteFinishedAt" : {
+            "description" : "Время окончания голосования (если задано)",
+            "format" : "date-time",
+            "nullable" : true,
+            "type" : "string"
+          },
+          "questions" : {
+            "description" : "Вопросы опроса",
+            "items" : {
+              "$ref" : "#/components/schemas/questionDetailsDto"
+            },
+            "minItems" : 1,
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "questionDetailsDto" : {
+        "example" : {
+          "votersAmount" : 0,
+          "answers" : [ {
+            "votersAmount" : 0,
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "content" : "content"
+          }, {
+            "votersAmount" : 0,
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "content" : "content"
+          } ],
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "isMultipleChoiceAllowed" : false,
+          "content" : "content"
+        },
+        "properties" : {
+          "id" : {
+            "description" : "Идентификатор опроса",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "content" : {
+            "description" : "Текстовое содержимое вопроса",
+            "type" : "string"
+          },
+          "isMultipleChoiceAllowed" : {
+            "default" : false,
+            "description" : "Разрешен ли множественный выбор",
+            "type" : "boolean"
+          },
+          "votersAmount" : {
+            "description" : "Количество проголосовавших",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "answers" : {
+            "description" : "Варианты ответов опроса",
+            "items" : {
+              "$ref" : "#/components/schemas/questionAnswerDetailsDto"
+            },
+            "minItems" : 2,
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "questionAnswerDetailsDto" : {
+        "example" : {
+          "votersAmount" : 0,
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "content" : "content"
+        },
+        "properties" : {
+          "id" : {
+            "description" : "Идентификатор варианта ответа",
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "content" : {
+            "description" : "Текстовое содержимое варианта ответа",
+            "type" : "string"
+          },
+          "votersAmount" : {
+            "description" : "Количество пользователей, проголосовавших за вариант ответа",
+            "minimum" : 0,
+            "type" : "integer"
+          }
+        },
+        "type" : "object"
+      },
+      "announcementCategoryDetailsDto" : {
+        "example" : {
+          "color" : "color",
+          "name" : "name",
+          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "color" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "createAnnouncementCreated" : {
+        "example" : {
+          "code" : null,
+          "content" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/createAnnouncementResponses"
+          },
+          "content" : {
+            "description" : "Идентификатор объявления",
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "title" : "createAnnouncementCreated",
+        "type" : "object"
+      },
+      "createAnnouncementBadRequest" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/createAnnouncementResponses"
+          }
+        },
+        "title" : "createAnnouncementBadRequest",
+        "type" : "object"
+      },
+      "createAnnouncementForbidden" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/createAnnouncementResponses"
+          }
+        },
+        "title" : "createAnnouncementForbidden",
+        "type" : "object"
+      },
+      "createAnnouncementNotFound" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/createAnnouncementResponses"
+          }
+        },
+        "title" : "createAnnouncementNotFound",
+        "type" : "object"
+      },
+      "createAnnouncementConflict" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/createAnnouncementResponses"
+          }
+        },
+        "title" : "createAnnouncementConflict",
+        "type" : "object"
+      },
+      "getAnnouncementDetailsOk" : {
+        "example" : {
+          "code" : null,
+          "content" : {
+            "hiddenAt" : "2000-01-23T04:56:07.000+00:00",
+            "audienceSize" : 0,
+            "publishedAt" : "2000-01-23T04:56:07.000+00:00",
+            "authorName" : "authorName",
+            "viewsCount" : 0,
+            "surveys" : [ {
+              "isAnonymous" : false,
+              "isOpen" : true,
+              "questions" : [ {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+            }, {
+              "isAnonymous" : false,
+              "isOpen" : true,
+              "questions" : [ {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+            } ],
+            "delayedHidingAt" : "2000-01-23T04:56:07.000+00:00",
+            "delayedPublishingAt" : "2000-01-23T04:56:07.000+00:00",
+            "files" : [ {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            }, {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            } ],
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "categories" : [ {
+              "color" : "color",
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+            }, {
+              "color" : "color",
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+            } ],
+            "content" : "content"
+          }
+        },
+        "properties" : {
+          "content" : {
+            "$ref" : "#/components/schemas/announcementDetailsDto"
+          },
+          "code" : {
+            "$ref" : "#/components/schemas/getAnnouncementDetailsResponses"
+          }
+        },
+        "title" : "getAnnouncementDetailsOk",
+        "type" : "object"
+      },
+      "getAnnouncementDetailsBadRequest" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/getAnnouncementDetailsResponses"
+          }
+        },
+        "title" : "getAnnouncementDetailsBadRequest",
+        "type" : "object"
+      },
+      "getAnnouncementDetailsForbidden" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/getAnnouncementDetailsResponses"
+          }
+        },
+        "title" : "getAnnouncementDetailsForbidden",
+        "type" : "object"
+      },
+      "getAnnouncementDetailsNotFound" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/getAnnouncementDetailsResponses"
+          }
+        },
+        "title" : "getAnnouncementDetailsNotFound",
+        "type" : "object"
+      },
+      "updateAnnouncementOk" : {
+        "example" : {
+          "code" : null
+        },
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/updateAnnouncementResponses"
+          }
+        },
+        "title" : "updateAnnouncementOk",
+        "type" : "object"
+      },
+      "updateAnnouncementBadRequest" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/updateAnnouncementResponses"
+          }
+        },
+        "title" : "updateAnnouncementBadRequest",
+        "type" : "object"
+      },
+      "updateAnnouncementForbidden" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/updateAnnouncementResponses"
+          }
+        },
+        "title" : "updateAnnouncementForbidden",
+        "type" : "object"
+      },
+      "updateAnnouncementNotFound" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/updateAnnouncementResponses"
+          }
+        },
+        "title" : "updateAnnouncementNotFound",
+        "type" : "object"
+      },
+      "updateAnnouncementConflict" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/updateAnnouncementResponses"
+          }
+        },
+        "title" : "updateAnnouncementConflict",
+        "type" : "object"
+      },
+      "deleteAnnouncementOk" : {
+        "example" : {
+          "code" : null
+        },
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/deleteAnnouncementResponses"
+          }
+        },
+        "title" : "deleteAnnouncementOk",
+        "type" : "object"
+      },
+      "deleteAnnouncementBadRequest" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/deleteAnnouncementResponses"
+          }
+        },
+        "title" : "deleteAnnouncementBadRequest",
+        "type" : "object"
+      },
+      "deleteAnnouncementForbidden" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/deleteAnnouncementResponses"
+          }
+        },
+        "title" : "deleteAnnouncementForbidden",
+        "type" : "object"
+      },
+      "deleteAnnouncementNotFound" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/deleteAnnouncementResponses"
+          }
+        },
+        "title" : "deleteAnnouncementNotFound",
+        "type" : "object"
+      },
+      "getPostedAnnouncementListOk" : {
+        "example" : {
+          "code" : null,
+          "content" : [ {
+            "audienceSize" : 0,
+            "publishedAt" : "2000-01-23T04:56:07.000+00:00",
+            "authorName" : "authorName",
+            "viewsCount" : 0,
+            "files" : [ {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            }, {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            } ],
+            "survey" : {
+              "isAnonymous" : false,
+              "isOpen" : true,
+              "questions" : [ {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+            },
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "content" : "content"
+          }, {
+            "audienceSize" : 0,
+            "publishedAt" : "2000-01-23T04:56:07.000+00:00",
+            "authorName" : "authorName",
+            "viewsCount" : 0,
+            "files" : [ {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            }, {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            } ],
+            "survey" : {
+              "isAnonymous" : false,
+              "isOpen" : true,
+              "questions" : [ {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+            },
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "content" : "content"
+          } ]
+        },
+        "properties" : {
+          "content" : {
+            "items" : {
+              "$ref" : "#/components/schemas/announcementSummaryDto"
+            },
+            "type" : "array"
+          },
+          "code" : {
+            "$ref" : "#/components/schemas/getPostedAnnouncementListResponses"
+          }
+        },
+        "title" : "getPostedAnnouncementListOk",
+        "type" : "object"
+      },
+      "getPostedAnnouncementListForbidden" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/getPostedAnnouncementListResponses"
+          }
+        },
+        "title" : "getPostedAnnouncementListForbidden",
+        "type" : "object"
+      },
+      "hidePostedAnnouncementOk" : {
+        "example" : {
+          "code" : null
+        },
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/hidePostedAnnouncementResponses"
+          }
+        },
+        "title" : "hidePostedAnnouncementOk",
+        "type" : "object"
+      },
+      "hidePostedAnnouncementBadRequest" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/hidePostedAnnouncementResponses"
+          }
+        },
+        "title" : "hidePostedAnnouncementBadRequest",
+        "type" : "object"
+      },
+      "hidePostedAnnouncementForbidden" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/hidePostedAnnouncementResponses"
+          }
+        },
+        "title" : "hidePostedAnnouncementForbidden",
+        "type" : "object"
+      },
+      "hidePostedAnnouncementNotFound" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/hidePostedAnnouncementResponses"
+          }
+        },
+        "title" : "hidePostedAnnouncementNotFound",
+        "type" : "object"
+      },
+      "hidePostedAnnouncementConflict" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/hidePostedAnnouncementResponses"
+          }
+        },
+        "title" : "hidePostedAnnouncementConflict",
+        "type" : "object"
+      },
+      "getHiddenAnnouncementListOk" : {
+        "example" : {
+          "code" : null,
+          "content" : [ {
+            "audienceSize" : 0,
+            "publishedAt" : "2000-01-23T04:56:07.000+00:00",
+            "authorName" : "authorName",
+            "viewsCount" : 0,
+            "files" : [ {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            }, {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            } ],
+            "survey" : {
+              "isAnonymous" : false,
+              "isOpen" : true,
+              "questions" : [ {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+            },
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "content" : "content"
+          }, {
+            "audienceSize" : 0,
+            "publishedAt" : "2000-01-23T04:56:07.000+00:00",
+            "authorName" : "authorName",
+            "viewsCount" : 0,
+            "files" : [ {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            }, {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            } ],
+            "survey" : {
+              "isAnonymous" : false,
+              "isOpen" : true,
+              "questions" : [ {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+            },
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "content" : "content"
+          } ]
+        },
+        "properties" : {
+          "content" : {
+            "items" : {
+              "$ref" : "#/components/schemas/announcementSummaryDto"
+            },
+            "type" : "array"
+          },
+          "code" : {
+            "$ref" : "#/components/schemas/getHiddenAnnouncementListResponses"
+          }
+        },
+        "title" : "getHiddenAnnouncementListOk",
+        "type" : "object"
+      },
+      "getHiddenAnnouncementListForbidden" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/getHiddenAnnouncementListResponses"
+          }
+        },
+        "title" : "getHiddenAnnouncementListForbidden",
+        "type" : "object"
+      },
+      "restoreHiddenAnnouncementOk" : {
+        "example" : {
+          "code" : null
+        },
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/restoreHiddenAnnouncementResponses"
+          }
+        },
+        "title" : "restoreHiddenAnnouncementOk",
+        "type" : "object"
+      },
+      "restoreHiddenAnnouncementBadRequest" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/restoreHiddenAnnouncementResponses"
+          }
+        },
+        "title" : "restoreHiddenAnnouncementBadRequest",
+        "type" : "object"
+      },
+      "restoreHiddenAnnouncementForbidden" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/restoreHiddenAnnouncementResponses"
+          }
+        },
+        "title" : "restoreHiddenAnnouncementForbidden",
+        "type" : "object"
+      },
+      "restoreHiddenAnnouncementNotFound" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/restoreHiddenAnnouncementResponses"
+          }
+        },
+        "title" : "restoreHiddenAnnouncementNotFound",
+        "type" : "object"
+      },
+      "restoreHiddenAnnouncementConflict" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/restoreHiddenAnnouncementResponses"
+          }
+        },
+        "title" : "restoreHiddenAnnouncementConflict",
+        "type" : "object"
+      },
+      "getDelayedPublishingAnnouncementListOk" : {
+        "example" : {
+          "code" : null,
+          "content" : [ {
+            "audienceSize" : 0,
+            "publishedAt" : "2000-01-23T04:56:07.000+00:00",
+            "authorName" : "authorName",
+            "viewsCount" : 0,
+            "files" : [ {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            }, {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            } ],
+            "survey" : {
+              "isAnonymous" : false,
+              "isOpen" : true,
+              "questions" : [ {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+            },
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "content" : "content"
+          }, {
+            "audienceSize" : 0,
+            "publishedAt" : "2000-01-23T04:56:07.000+00:00",
+            "authorName" : "authorName",
+            "viewsCount" : 0,
+            "files" : [ {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            }, {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            } ],
+            "survey" : {
+              "isAnonymous" : false,
+              "isOpen" : true,
+              "questions" : [ {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+            },
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "content" : "content"
+          } ]
+        },
+        "properties" : {
+          "content" : {
+            "items" : {
+              "$ref" : "#/components/schemas/announcementSummaryDto"
+            },
+            "type" : "array"
+          },
+          "code" : {
+            "$ref" : "#/components/schemas/getDelayedPublishingAnnouncementListResponses"
+          }
+        },
+        "title" : "getDelayedPublishingAnnouncementListOk",
+        "type" : "object"
+      },
+      "getDelayedPublishingAnnouncementListForbidden" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/getDelayedPublishingAnnouncementListResponses"
+          }
+        },
+        "title" : "getDelayedPublishingAnnouncementListForbidden",
+        "type" : "object"
+      },
+      "publishImmediatelyDelayedPublishingAnnouncementOk" : {
+        "example" : {
+          "code" : null
+        },
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/publishImmediatelyDelayedAnnouncementResponses"
+          }
+        },
+        "title" : "publishImmediatelyDelayedPublishingAnnouncementOk",
+        "type" : "object"
+      },
+      "publishImmediatelyDelayedPublishingAnnouncementBadRequest" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/publishImmediatelyDelayedAnnouncementResponses"
+          }
+        },
+        "title" : "publishImmediatelyDelayedPublishingAnnouncementBadRequest",
+        "type" : "object"
+      },
+      "publishImmediatelyDelayedPublishingAnnouncementForbidden" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/publishImmediatelyDelayedAnnouncementResponses"
+          }
+        },
+        "title" : "publishImmediatelyDelayedPublishingAnnouncementForbidden",
+        "type" : "object"
+      },
+      "publishImmediatelyDelayedPublishingAnnouncementNotFound" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/publishImmediatelyDelayedAnnouncementResponses"
+          }
+        },
+        "title" : "publishImmediatelyDelayedPublishingAnnouncementNotFound",
+        "type" : "object"
+      },
+      "publishImmediatelyDelayedPublishingAnnouncementConflict" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/publishImmediatelyDelayedAnnouncementResponses"
+          }
+        },
+        "title" : "publishImmediatelyDelayedPublishingAnnouncementConflict",
+        "type" : "object"
+      },
+      "getDelayedHiddenAnnouncementListOk" : {
+        "example" : {
+          "code" : null,
+          "content" : [ {
+            "audienceSize" : 0,
+            "publishedAt" : "2000-01-23T04:56:07.000+00:00",
+            "authorName" : "authorName",
+            "viewsCount" : 0,
+            "files" : [ {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            }, {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            } ],
+            "survey" : {
+              "isAnonymous" : false,
+              "isOpen" : true,
+              "questions" : [ {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+            },
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "content" : "content"
+          }, {
+            "audienceSize" : 0,
+            "publishedAt" : "2000-01-23T04:56:07.000+00:00",
+            "authorName" : "authorName",
+            "viewsCount" : 0,
+            "files" : [ {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            }, {
+              "name" : "name",
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "type" : "mediafile"
+            } ],
+            "survey" : {
+              "isAnonymous" : false,
+              "isOpen" : true,
+              "questions" : [ {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              }, {
+                "votersAmount" : 0,
+                "answers" : [ {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                }, {
+                  "votersAmount" : 0,
+                  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "content" : "content"
+                } ],
+                "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "isMultipleChoiceAllowed" : false,
+                "content" : "content"
+              } ],
+              "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "voteFinishedAt" : "2000-01-23T04:56:07.000+00:00"
+            },
+            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "content" : "content"
+          } ]
+        },
+        "properties" : {
+          "content" : {
+            "items" : {
+              "$ref" : "#/components/schemas/announcementSummaryDto"
+            },
+            "type" : "array"
+          },
+          "code" : {
+            "$ref" : "#/components/schemas/getDelayedHiddenAnnouncementListResponses"
+          }
+        },
+        "title" : "getDelayedHiddenAnnouncementListOk",
+        "type" : "object"
+      },
+      "getDelayedHiddenAnnouncementListForbidden" : {
+        "properties" : {
+          "code" : {
+            "$ref" : "#/components/schemas/getDelayedHiddenAnnouncementListResponses"
+          }
+        },
+        "title" : "getDelayedHiddenAnnouncementListForbidden",
+        "type" : "object"
+      }
+    }
+  }
+}

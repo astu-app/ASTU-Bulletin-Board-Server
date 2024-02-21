@@ -1,0 +1,33 @@
+﻿@startuml
+'https://plantuml.com/component-diagram
+
+left to right direction
+
+[BulletInBoardServer] as main
+[BulletInBoardServer.Services] as services
+[BulletInBoardServer.Domain] as domain
+[BulletInBoardServer.Domain.TestDbFiller] as testDbFiller
+
+package "BulletInBoardServer.Controllers" as controllers {
+    [BulletInBoardServer.Controllers.AnnouncementsController] as announcementsController
+    [BulletInBoardServer.Controllers.PingController] as pingController
+}
+
+package "Test" as test {
+    [Test.Infrastructure] as testInfrastructure
+    [BulletInBoardServer.Domain.Test] as domainTest
+    [BulletInBoardServer.Services.Test] as servicesTest
+} 
+
+main                    -> controllers
+main                    -> services
+main                    -> domain
+announcementsController -> services
+services                --> domain
+testDbFiller            -left-> domain
+
+testInfrastructure      --> testDbFiller
+domainTest              -left-> testInfrastructure
+servicesTest            -right-> testInfrastructure
+
+@enduml

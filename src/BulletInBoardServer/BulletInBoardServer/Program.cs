@@ -1,19 +1,55 @@
-using BulletInBoardServer.DataAccess;
-using BulletInBoardServer.Services.Announcements;
-using BulletInBoardServer.Services.Announcements.DelayedOperations;
-using BulletInBoardServer.Services.Announcements.ServiceCore;
-using BulletInBoardServer.Services.Surveys;
-using BulletInBoardServer.Services.Surveys.DelayedOperations;
+using System.Reflection;
+using BulletInBoardServer.Domain;
+using BulletInBoardServer.Services.Services.Announcements;
+using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
+using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
+using BulletInBoardServer.Services.Services.Surveys;
+using BulletInBoardServer.Services.Services.Surveys.DelayedOperations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using AnnouncementsInputFormatterStream =
+    BulletInBoardServer.Controllers.AnnouncementsController.Formatters.InputFormatterStream;
+using AnnouncementsBasePathFilter = BulletInBoardServer.Controllers.AnnouncementsController.Filters.BasePathFilter;
+using AnnouncementsGeneratePathParamsValidationFilter =
+    BulletInBoardServer.Controllers.AnnouncementsController.Filters.GeneratePathParamsValidationFilter;
+using PingInputFormatterStream = BulletInBoardServer.Controllers.PingController.Formatters.InputFormatterStream;
+using PingBasePathFilter = BulletInBoardServer.Controllers.PingController.Filters.BasePathFilter;
+using PingGeneratePathParamsValidationFilter =
+    BulletInBoardServer.Controllers.PingController.Filters.GeneratePathParamsValidationFilter;
+
+const string apiVersion = "0.0.2";
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers(options =>
+{
+    options.InputFormatters.Insert(0, new AnnouncementsInputFormatterStream());
+    options.InputFormatters.Insert(1, new PingInputFormatterStream());
+});
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
+
+    options.SwaggerDoc(apiVersion, new OpenApiInfo
+    {
+        Title = "API Шлюз. Система информирования",
+        Description = "API Шлюз системы информирования (ASP.NET Core 8.0)"
+    });
+    options.IncludeXmlComments(
+        $"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{Assembly.GetEntryAssembly()!.GetName().Name}.xml");
+
+    // Sets the basePath property in the OpenAPI document generated
+    options.DocumentFilter<AnnouncementsBasePathFilter>("/api");
+    options.DocumentFilter<PingBasePathFilter>("/api");
+
+    // Include DataAnnotation attributes on Controller Action parameters as OpenAPI validation rules (e.g required, pattern, ..)
+    options.OperationFilter<AnnouncementsGeneratePathParamsValidationFilter>();
+    options.OperationFilter<PingGeneratePathParamsValidationFilter>();
+});
 
 var connectionString = builder.Configuration.GetConnectionString("MainDatabase") ??
                        throw new ApplicationException("Не удалось подключить строку подключения к базу данных");
@@ -27,8 +63,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwagger(options => options.RouteTemplate = "openapi/{documentName}/openapi.json");
+    app.UseSwaggerUI(c =>
+    {
+        c.RoutePrefix = "openapi";
+        c.SwaggerEndpoint($"/openapi/{apiVersion}/openapi.json", "API Шлюз. Система информирования");
+    });
 }
 
 InitDelayedAnnouncementOperationsDispatcher();
@@ -42,7 +82,6 @@ app.MapControllers();
 
 app.Run();
 return;
-
 
 
 void RegisterAnnouncementService()
@@ -71,12 +110,16 @@ void InitDelayedAnnouncementOperationsDispatcher()
 {
     var serviceScopeFactory = GetServiceFactory();
     using var scope = serviceScopeFactory.CreateScope();
-    
+
     var services = scope.ServiceProvider;
-    
+
     var dbContext = GetDbContext(services);
-    var publicationService = services.GetService<DelayedPublicationAnnouncementService>() ?? throw new ApplicationException("Сервис работы с объявлениями, ожидающими отложенной публикации, не зарегистрирован");
-    var hidingService = services.GetService<DelayedHidingAnnouncementService>() ?? throw new ApplicationException("Сервис работы с объявлениями, ожидающими отложенного сокрытия, не зарегистрирован");
+    var publicationService = services.GetService<DelayedPublicationAnnouncementService>() ??
+                             throw new ApplicationException(
+                                 "Сервис работы с объявлениями, ожидающими отложенной публикации, не зарегистрирован");
+    var hidingService = services.GetService<DelayedHidingAnnouncementService>() ??
+                        throw new ApplicationException(
+                            "Сервис работы с объявлениями, ожидающими отложенного сокрытия, не зарегистрирован");
     DelayedAnnouncementOperationsDispatcher.Init(dbContext, publicationService, hidingService);
 }
 
@@ -84,17 +127,20 @@ void InitAutomaticSurveyOperationsDispatcher()
 {
     var serviceScopeFactory = GetServiceFactory();
     using var scope = serviceScopeFactory.CreateScope();
-    
+
     var services = scope.ServiceProvider;
 
     var dbContext = GetDbContext(services);
-    var closingService = services.GetService<AutoClosingSurveyService>() ?? throw new ApplicationException("Сервис работы с опросами, ожидающими автоматического закрытия, не зарегистрирован");
+    var closingService = services.GetService<AutoClosingSurveyService>() ??
+                         throw new ApplicationException(
+                             "Сервис работы с опросами, ожидающими автоматического закрытия, не зарегистрирован");
     AutomaticSurveyOperationsDispatcher.Init(dbContext, closingService);
 }
 
 IServiceScopeFactory GetServiceFactory() =>
-    app.Services.GetService<IServiceScopeFactory>() ?? throw new ApplicationException($"Не удалось получить экземпляр {nameof(IServiceScopeFactory)}");
-    
+    app.Services.GetService<IServiceScopeFactory>() ??
+    throw new ApplicationException($"Не удалось получить экземпляр {nameof(IServiceScopeFactory)}");
+
 ApplicationDbContext GetDbContext(IServiceProvider services) =>
-    services.GetService<ApplicationDbContext>() ?? throw new ApplicationException("Контекст базы данных не зарегистрирован");
-    
+    services.GetService<ApplicationDbContext>() ??
+    throw new ApplicationException("Контекст базы данных не зарегистрирован");

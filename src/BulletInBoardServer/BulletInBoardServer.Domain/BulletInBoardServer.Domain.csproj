@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="..\initdb\1101_create_public_schema.sql">
+            <Link>initdb\1101_create_public_schema.sql</Link>
+        </Content>
+        <Content Include="..\initdb\1111_create_indices.sql">
+            <Link>initdb\1111_create_indices.sql</Link>
+        </Content>
+        <Content Include="..\initdb\1121_create_triggers.sql">
+            <Link>initdb\1121_create_triggers.sql</Link>
+        </Content>
+        <Content Include="..\initdb\1201_create_archive_schema.sql">
+            <Link>initdb\1201_create_archive_schema.sql</Link>
+        </Content>
+        <Content Include="..\initdb\1301_create_logs_schema.sql">
+            <Link>initdb\1301_create_logs_schema.sql</Link>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2"/>
+    </ItemGroup>
+
+</Project>

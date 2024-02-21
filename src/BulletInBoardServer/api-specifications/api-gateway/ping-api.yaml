@@ -8,6 +8,8 @@ servers:
 paths:
   /ping:
     get:
+      tags: [ Ping ]
+      operationId: ping
       responses:
         200:
           description: Ok

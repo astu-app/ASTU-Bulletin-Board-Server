@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentAssertions" Version="6.12.0" />
+      <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
+      <PackageReference Include="Testcontainers.PostgreSql" Version="3.7.0" />
+      <PackageReference Include="xunit.extensibility.core" Version="2.7.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\BulletInBoardServer\BulletInBoardServer.Domain.TestDbFiller\BulletInBoardServer.Domain.TestDbFiller.csproj" />
+    </ItemGroup>
+
+</Project>
