@@ -1,5 +1,4 @@
-﻿using BulletInBoardServer.Domain;
-using BulletInBoardServer.Domain.Models.AnnouncementCategories;
+﻿using BulletInBoardServer.Domain.Models.AnnouncementCategories;
 using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
@@ -11,7 +10,7 @@ using File = BulletInBoardServer.Domain.Models.Attachments.File;
 
 // ReSharper disable InconsistentNaming
 
-namespace TestDbFiller;
+namespace BulletInBoardServer.Domain.TestDbFiller;
 
 public class DatabaseFiller(ApplicationDbContext dbContext)
 {

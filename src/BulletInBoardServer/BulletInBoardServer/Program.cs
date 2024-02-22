@@ -7,6 +7,7 @@ using BulletInBoardServer.Services.Services.Surveys;
 using BulletInBoardServer.Services.Services.Surveys.DelayedOperations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using AnnouncementsInputFormatterStream =
     BulletInBoardServer.Controllers.AnnouncementsController.Formatters.InputFormatterStream;
 using AnnouncementsBasePathFilter = BulletInBoardServer.Controllers.AnnouncementsController.Filters.BasePathFilter;
@@ -18,6 +19,10 @@ using PingGeneratePathParamsValidationFilter =
     BulletInBoardServer.Controllers.PingController.Filters.GeneratePathParamsValidationFilter;
 
 const string apiVersion = "0.0.2";
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -16,42 +16,30 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
         /// <summary>
-        /// Ответы:   ok - Ок   incorrectIdentifierFormat - Некорректный формат идентификатора   unauthorized - Пользователь не авторизован для выполнения операции   unhideForbidden - Пользователь не имеет права скрыть объявление   announcementDoesNotExist - Объявление не существует   announcementNotHidden - Объявление не является скрытым 
+        /// Ответы:   restoreForbidden - Пользователь не имеет права восстановить скрытое объявление   announcementDoesNotExist - Объявление не существует   announcementNotHidden - Объявление не является скрытым 
         /// </summary>
-        /// <value>Ответы:   ok - Ок   incorrectIdentifierFormat - Некорректный формат идентификатора   unauthorized - Пользователь не авторизован для выполнения операции   unhideForbidden - Пользователь не имеет права скрыть объявление   announcementDoesNotExist - Объявление не существует   announcementNotHidden - Объявление не является скрытым </value>
+        /// <value>Ответы:   restoreForbidden - Пользователь не имеет права восстановить скрытое объявление   announcementDoesNotExist - Объявление не существует   announcementNotHidden - Объявление не является скрытым </value>
         [TypeConverter(typeof(CustomEnumConverter<RestoreHiddenAnnouncementResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum RestoreHiddenAnnouncementResponses
         {
             
             /// <summary>
-            /// Enum Ok for ok
+            /// Enum RestoreForbidden for restoreForbidden
             /// </summary>
-            [EnumMember(Value = "ok")]
-            Ok = 1,
-            
-            /// <summary>
-            /// Enum IncorrectIdentifierFormat for incorrectIdentifierFormat
-            /// </summary>
-            [EnumMember(Value = "incorrectIdentifierFormat")]
-            IncorrectIdentifierFormat = 2,
-            
-            /// <summary>
-            /// Enum UnhideForbidden for unhideForbidden
-            /// </summary>
-            [EnumMember(Value = "unhideForbidden")]
-            UnhideForbidden = 3,
+            [EnumMember(Value = "restoreForbidden")]
+            RestoreForbidden = 1,
             
             /// <summary>
             /// Enum AnnouncementDoesNotExist for announcementDoesNotExist
             /// </summary>
             [EnumMember(Value = "announcementDoesNotExist")]
-            AnnouncementDoesNotExist = 4,
+            AnnouncementDoesNotExist = 2,
             
             /// <summary>
             /// Enum AnnouncementNotHidden for announcementNotHidden
             /// </summary>
             [EnumMember(Value = "announcementNotHidden")]
-            AnnouncementNotHidden = 5
+            AnnouncementNotHidden = 3
         }
 }

@@ -16,90 +16,78 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
         /// <summary>
-        /// Ответы:   ok - Ок   usergroupListNullOrEmpty - Список групп пользователей null или пустой   incorrectIdentifierFormat - Некорректный формат идентификатора   unauthorized - Пользователь не авторизован для выполнения операции   announcementEditingForbidden - Пользователь не имеет права изменить объявление   announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id   announcementCategoryDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id   fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id   surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id   attachingFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос   automaticPublishMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   automaticHideMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом   autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто   autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым 
+        /// Ответы:   contentEmpty - Текстовое содержимое объявления пустое или состоит только из пробельных символов   audienceEmpty - Аудитория пользователей пуста   announcementEditingForbidden - Пользователь не имеет права изменить объявление   announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id   announcementCategoriesDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id   attachmentDoesNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент отложенного сокрытия уже наступил в прошлом   autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто   autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым   cannotDetachSurvey - Открепление опросов запрещено 
         /// </summary>
-        /// <value>Ответы:   ok - Ок   usergroupListNullOrEmpty - Список групп пользователей null или пустой   incorrectIdentifierFormat - Некорректный формат идентификатора   unauthorized - Пользователь не авторизован для выполнения операции   announcementEditingForbidden - Пользователь не имеет права изменить объявление   announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id   announcementCategoryDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id   fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id   surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id   attachingFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос   automaticPublishMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   automaticHideMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом   autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто   autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым </value>
+        /// <value>Ответы:   contentEmpty - Текстовое содержимое объявления пустое или состоит только из пробельных символов   audienceEmpty - Аудитория пользователей пуста   announcementEditingForbidden - Пользователь не имеет права изменить объявление   announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id   announcementCategoriesDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id   attachmentDoesNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент отложенного сокрытия уже наступил в прошлом   autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто   autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым   cannotDetachSurvey - Открепление опросов запрещено </value>
         [TypeConverter(typeof(CustomEnumConverter<UpdateAnnouncementResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum UpdateAnnouncementResponses
         {
             
             /// <summary>
-            /// Enum Ok for ok
+            /// Enum ContentEmpty for contentEmpty
             /// </summary>
-            [EnumMember(Value = "ok")]
-            Ok = 1,
+            [EnumMember(Value = "contentEmpty")]
+            ContentEmpty = 1,
             
             /// <summary>
-            /// Enum UsergroupListNullOrEmpty for usergroupListNullOrEmpty
+            /// Enum AudienceEmpty for audienceEmpty
             /// </summary>
-            [EnumMember(Value = "usergroupListNullOrEmpty")]
-            UsergroupListNullOrEmpty = 2,
-            
-            /// <summary>
-            /// Enum IncorrectIdentifierFormat for incorrectIdentifierFormat
-            /// </summary>
-            [EnumMember(Value = "incorrectIdentifierFormat")]
-            IncorrectIdentifierFormat = 3,
+            [EnumMember(Value = "audienceEmpty")]
+            AudienceEmpty = 2,
             
             /// <summary>
             /// Enum AnnouncementEditingForbidden for announcementEditingForbidden
             /// </summary>
             [EnumMember(Value = "announcementEditingForbidden")]
-            AnnouncementEditingForbidden = 4,
+            AnnouncementEditingForbidden = 3,
             
             /// <summary>
             /// Enum AnnouncementDoesNotExist for announcementDoesNotExist
             /// </summary>
             [EnumMember(Value = "announcementDoesNotExist")]
-            AnnouncementDoesNotExist = 5,
+            AnnouncementDoesNotExist = 4,
             
             /// <summary>
-            /// Enum AnnouncementCategoryDoesNotExist for announcementCategoryDoesNotExist
+            /// Enum AnnouncementCategoriesDoesNotExist for announcementCategoriesDoesNotExist
             /// </summary>
-            [EnumMember(Value = "announcementCategoryDoesNotExist")]
-            AnnouncementCategoryDoesNotExist = 6,
+            [EnumMember(Value = "announcementCategoriesDoesNotExist")]
+            AnnouncementCategoriesDoesNotExist = 5,
             
             /// <summary>
-            /// Enum FileDoesNotExist for fileDoesNotExist
+            /// Enum AttachmentsDoNotExist for attachmentsDoNotExist
             /// </summary>
-            [EnumMember(Value = "fileDoesNotExist")]
-            FileDoesNotExist = 7,
+            [EnumMember(Value = "attachmentsDoNotExist")]
+            AttachmentsDoNotExist = 6,
             
             /// <summary>
-            /// Enum SurveyDoesNotExist for surveyDoesNotExist
+            /// Enum DelayedPublishingMomentIsInPast for delayedPublishingMomentIsInPast
             /// </summary>
-            [EnumMember(Value = "surveyDoesNotExist")]
-            SurveyDoesNotExist = 8,
+            [EnumMember(Value = "delayedPublishingMomentIsInPast")]
+            DelayedPublishingMomentIsInPast = 7,
             
             /// <summary>
-            /// Enum AttachingFilesAndSurveyTogether for attachingFilesAndSurveyTogether
+            /// Enum DelayedHidingMomentIsInPast for delayedHidingMomentIsInPast
             /// </summary>
-            [EnumMember(Value = "attachingFilesAndSurveyTogether")]
-            AttachingFilesAndSurveyTogether = 9,
-            
-            /// <summary>
-            /// Enum AutomaticPublishMomentIsInPast for automaticPublishMomentIsInPast
-            /// </summary>
-            [EnumMember(Value = "automaticPublishMomentIsInPast")]
-            AutomaticPublishMomentIsInPast = 10,
-            
-            /// <summary>
-            /// Enum AutomaticHideMomentIsInPast for automaticHideMomentIsInPast
-            /// </summary>
-            [EnumMember(Value = "automaticHideMomentIsInPast")]
-            AutomaticHideMomentIsInPast = 11,
+            [EnumMember(Value = "delayedHidingMomentIsInPast")]
+            DelayedHidingMomentIsInPast = 8,
             
             /// <summary>
             /// Enum AutoHidingAnAlreadyHiddenAnnouncement for autoHidingAnAlreadyHiddenAnnouncement
             /// </summary>
             [EnumMember(Value = "autoHidingAnAlreadyHiddenAnnouncement")]
-            AutoHidingAnAlreadyHiddenAnnouncement = 12,
+            AutoHidingAnAlreadyHiddenAnnouncement = 9,
             
             /// <summary>
             /// Enum AutoPublishingPublishedAndNonHiddenAnnouncement for autoPublishingPublishedAndNonHiddenAnnouncement
             /// </summary>
             [EnumMember(Value = "autoPublishingPublishedAndNonHiddenAnnouncement")]
-            AutoPublishingPublishedAndNonHiddenAnnouncement = 13
+            AutoPublishingPublishedAndNonHiddenAnnouncement = 10,
+            
+            /// <summary>
+            /// Enum CannotDetachSurvey for cannotDetachSurvey
+            /// </summary>
+            [EnumMember(Value = "cannotDetachSurvey")]
+            CannotDetachSurvey = 11
         }
 }

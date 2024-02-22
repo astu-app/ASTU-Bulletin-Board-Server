@@ -21,12 +21,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
     public class CreateAnnouncementCreated : IEquatable<CreateAnnouncementCreated>
     {
         /// <summary>
-        /// Gets or Sets Code
-        /// </summary>
-        [DataMember(Name="code", EmitDefaultValue=true)]
-        public CreateAnnouncementResponses Code { get; set; }
-
-        /// <summary>
         /// Идентификатор объявления
         /// </summary>
         /// <value>Идентификатор объявления</value>
@@ -41,7 +35,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         {
             var sb = new StringBuilder();
             sb.Append("class CreateAnnouncementCreated {\n");
-            sb.Append("  Code: ").Append(Code).Append("\n");
             sb.Append("  Content: ").Append(Content).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -80,11 +73,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 
             return 
                 (
-                    Code == other.Code ||
-                    
-                    Code.Equals(other.Code)
-                ) && 
-                (
                     Content == other.Content ||
                     Content != null &&
                     Content.Equals(other.Content)
@@ -101,8 +89,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    
-                    hashCode = hashCode * 59 + Code.GetHashCode();
                     if (Content != null)
                     hashCode = hashCode * 59 + Content.GetHashCode();
                 return hashCode;

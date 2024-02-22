@@ -13,7 +13,7 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
 
-        var setContent = () => announcement.Content = null!;
+        var setContent = () => announcement.SetContent(null!);
         setContent.Should().Throw<ArgumentException>();
     }
 
@@ -22,7 +22,7 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
 
-        var setContent = () => announcement.Content = string.Empty;
+        var setContent = () => announcement.SetContent(string.Empty);
         setContent.Should().Throw<ArgumentException>();
     }
 
@@ -34,7 +34,7 @@ public class AnnouncementTest
         var whitespaces = new[] { " ", "\t", "\n", "\r", "\v", "\f" };
         foreach (var whitespace in whitespaces)
         {
-            var setContent = () => announcement.Content = whitespace;
+            var setContent = () => announcement.SetContent(whitespace);
             setContent.Should().Throw<ArgumentException>();
         }
     }
@@ -42,77 +42,77 @@ public class AnnouncementTest
 
 
     [Fact]
-    public void SetPublishedAt_CurrentMoment_Passes()
+    public void SetPublishedMoment_CurrentMoment_Passes()
     {
         var announcement = CreateValidAnnouncement();
 
-        var setPublishedAt = () => announcement.PublishedAt = DateTime.Now;
-        setPublishedAt.Should().NotThrow();
+        var setPublishedMoment = () => announcement.SetPublishedMoment(DateTime.Now, DateTime.Now);
+        setPublishedMoment.Should().NotThrow();
     }
 
     [Fact]
-    public void SetPublishedAt_MomentFromFuture_Throws()
+    public void SetPublishedMoment_MomentFromFuture_Throws()
     {
         var announcement = CreateValidAnnouncement();
 
-        var setPublishedAt = () => announcement.PublishedAt = DateTime.Now.AddHours(1);
-        setPublishedAt.Should()
+        var setPublishedMoment = () => announcement.SetPublishedMoment(DateTime.Now, DateTime.Now.AddHours(1));
+        setPublishedMoment.Should()
             .Throw<InvalidOperationException>()
             .WithMessage("Момент публикации уже опубликованного объявления не может наступить в будущем");
     }
 
     [Fact]
-    public void SetPublishedAt_MomentFromPast_Passes()
+    public void SetPublishedMoment_MomentFromPast_Passes()
     {
         var announcement = CreateValidAnnouncement();
 
-        var setPublishedAt = () =>
-            announcement.PublishedAt = DateTime.Now.Subtract(TimeSpan.FromHours(1));
-        setPublishedAt.Should().NotThrow();
+        var setPublishedMoment = () =>
+            announcement.SetPublishedMoment(DateTime.Now, DateTime.Now.Subtract(TimeSpan.FromHours(1)));
+        setPublishedMoment.Should().NotThrow();
     }
 
     [Fact]
-    public void SetPublishedAt_ChangeValueFromNotNull_Throws()
+    public void SetPublishedMoment_ChangeValueFromNotNull_Throws()
     {
         var announcement = CreateValidAnnouncement();
-        announcement.PublishedAt = DateTime.MinValue;
+        announcement.SetPublishedMoment(DateTime.Now, DateTime.MinValue);
 
-        var changePublishedAt = () => announcement.PublishedAt = DateTime.Today;
+        var changePublishedAt = () => announcement.SetPublishedMoment(DateTime.Now, DateTime.Today);
         changePublishedAt.Should()
             .Throw<InvalidOperationException>()
             .WithMessage("Время публикации уже опубликованного объявления не может быть изменено");
     }
 
     [Fact]
-    public void SetPublishedAt_ChangeValueFromNull_Passes()
+    public void SetPublishedMoment_ChangeValueFromNull_Passes()
     {
         var announcement = CreateValidAnnouncement();
 
         var twoHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(2));
-        var changePublishedAt = () => announcement.PublishedAt = twoHoursAgo;
+        var changePublishedAt = () => announcement.SetPublishedMoment(DateTime.Now, twoHoursAgo);
         changePublishedAt.Should().NotThrow();
     }
 
     [Fact]
-    public void SetPublishedAt_BeforeHidingMoment_Passes()
+    public void SetPublishedMoment_BeforeHidingMoment_Passes()
     {
         var announcement = CreateValidAnnouncement();
         var fiveHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(5));
-        announcement.HiddenAt = fiveHoursAgo;
+        announcement.SetHiddenMoment(DateTime.Now, fiveHoursAgo);
 
         var sixHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(6));
-        var changePublishedAt = () => announcement.PublishedAt = sixHoursAgo;
+        var changePublishedAt = () => announcement.SetPublishedMoment(DateTime.Now, sixHoursAgo);
         changePublishedAt.Should().NotThrow();
     }
 
     [Fact]
-    public void SetPublishedAt_EqualToHidingMoment_Throws()
+    public void SetPublishedMoment_EqualToHidingMoment_Throws()
     {
         var announcement = CreateValidAnnouncement();
         var fiveHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(5));
-        announcement.HiddenAt = fiveHoursAgo;
+        announcement.SetHiddenMoment(DateTime.Now, fiveHoursAgo);
 
-        var changePublishedAt = () => announcement.PublishedAt = fiveHoursAgo;
+        var changePublishedAt = () => announcement.SetPublishedMoment(DateTime.Now, fiveHoursAgo);
         changePublishedAt.Should()
             .Throw<InvalidOperationException>()
             .WithMessage(
@@ -120,14 +120,14 @@ public class AnnouncementTest
     }
 
     [Fact]
-    public void SetPublishedAt_AfterHidingMoment_Throws()
+    public void SetPublishedMoment_AfterHidingMoment_Throws()
     {
         var announcement = CreateValidAnnouncement();
         var fiveHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(5));
-        announcement.HiddenAt = fiveHoursAgo;
+        announcement.SetHiddenMoment(DateTime.Now, fiveHoursAgo);
 
         var twoHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(2));
-        var changePublishedAt = () => announcement.PublishedAt = twoHoursAgo;
+        var changePublishedAt = () => announcement.SetPublishedMoment(DateTime.Now, twoHoursAgo);
         changePublishedAt.Should().Throw<InvalidOperationException>();
     }
 
@@ -138,7 +138,7 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
 
-        var setHiddenAt = () => announcement.PublishedAt = DateTime.Now;
+        var setHiddenAt = () => announcement.SetPublishedMoment(DateTime.Now, DateTime.Now);
         setHiddenAt.Should().NotThrow();
     }
 
@@ -147,7 +147,7 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
 
-        var setHiddenAt = () => announcement.HiddenAt = DateTime.Now.AddHours(1);
+        var setHiddenAt = () => announcement.SetHiddenMoment(DateTime.Now, DateTime.Now.AddHours(1));
         setHiddenAt.Should().Throw<InvalidOperationException>();
     }
 
@@ -157,7 +157,7 @@ public class AnnouncementTest
         var announcement = CreateValidAnnouncement();
 
         var setHiddenAt = () =>
-            announcement.HiddenAt = DateTime.Now.Subtract(TimeSpan.FromHours(1));
+            announcement.SetHiddenMoment(DateTime.Now, DateTime.Now.Subtract(TimeSpan.FromHours(1)));
         setHiddenAt.Should().NotThrow();
     }
 
@@ -166,10 +166,10 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
         var fiveHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(5));
-        announcement.PublishedAt = fiveHoursAgo;
+        announcement.SetPublishedMoment(DateTime.Now, fiveHoursAgo);
 
         var twoHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(2));
-        var changePublishedAt = () => announcement.HiddenAt = twoHoursAgo;
+        var changePublishedAt = () => announcement.SetHiddenMoment(DateTime.Now, twoHoursAgo);
         changePublishedAt.Should().NotThrow();
     }
 
@@ -178,9 +178,9 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
         var fiveHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(5));
-        announcement.PublishedAt = fiveHoursAgo;
+        announcement.SetPublishedMoment(DateTime.Now, fiveHoursAgo);
 
-        var changePublishedAt = () => announcement.HiddenAt = fiveHoursAgo;
+        var changePublishedAt = () => announcement.SetHiddenMoment(DateTime.Now, fiveHoursAgo);
         changePublishedAt.Should().Throw<InvalidOperationException>();
     }
 
@@ -189,10 +189,10 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
         var fiveHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(5));
-        announcement.PublishedAt = fiveHoursAgo;
+        announcement.SetPublishedMoment(DateTime.Now, fiveHoursAgo);
 
         var sixHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(6));
-        var changePublishedAt = () => announcement.HiddenAt = sixHoursAgo;
+        var changePublishedAt = () => announcement.SetHiddenMoment(DateTime.Now, sixHoursAgo);
         changePublishedAt.Should().Throw<InvalidOperationException>();
     }
 
@@ -201,10 +201,10 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
         var fiveHoursLater = DateTime.Now.AddHours(5);
-        announcement.DelayedPublishingAt = fiveHoursLater;
+        announcement.SetDelayedPublishingMoment(DateTime.Now, fiveHoursLater);
 
         var threeHoursLater = DateTime.Now.AddHours(3);
-        var changePublishedAt = () => announcement.HiddenAt = threeHoursLater;
+        var changePublishedAt = () => announcement.SetHiddenMoment(DateTime.Now, threeHoursLater);
         changePublishedAt.Should().Throw<InvalidOperationException>();
     }
 
@@ -215,7 +215,7 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
 
-        var setAutoPublishingMoment = () => announcement.DelayedPublishingAt = null;
+        var setAutoPublishingMoment = () => announcement.SetDelayedPublishingMoment(DateTime.Now, null);
         setAutoPublishingMoment.Should().NotThrow();
     }
 
@@ -223,10 +223,10 @@ public class AnnouncementTest
     public void SetAutoPublishingAt_ForAlreadyPublishedAnnouncement_Throws()
     {
         var announcement = CreateValidAnnouncement();
-        announcement.PublishedAt = DateTime.Now;
+        announcement.SetPublishedMoment(DateTime.Now, DateTime.Now);
 
         var threeHoursLater = DateTime.Now.AddHours(3);
-        var setAutoPublishingMoment = () => announcement.DelayedPublishingAt = threeHoursLater;
+        var setAutoPublishingMoment = () => announcement.SetDelayedPublishingMoment(DateTime.Now, threeHoursLater);
         setAutoPublishingMoment.Should()
             .Throw<InvalidOperationException>()
             .WithMessage("Нельзя задать момент автоматической публикации уже опубликованному объявлению");
@@ -238,7 +238,7 @@ public class AnnouncementTest
         var announcement = CreateValidAnnouncement();
 
         var threeHoursAgo = DateTime.Now.Subtract(TimeSpan.FromHours(3));
-        var setAutoPublishingMoment = () => announcement.DelayedPublishingAt = threeHoursAgo;
+        var setAutoPublishingMoment = () => announcement.SetDelayedPublishingMoment(DateTime.Now, threeHoursAgo);
         setAutoPublishingMoment.Should().Throw<InvalidOperationException>();
     }
 
@@ -249,7 +249,7 @@ public class AnnouncementTest
     {
         var announcement = CreateValidAnnouncement();
 
-        var setAutoHidingMoment = () => announcement.DelayedHidingAt = null;
+        var setAutoHidingMoment = () => announcement.SetDelayedHidingMoment(DateTime.Now, null);
         setAutoHidingMoment.Should().NotThrow();
     }
 
@@ -257,10 +257,10 @@ public class AnnouncementTest
     public void SetAutoHidingAt_ForAlreadyHiddenAnnouncement_Throws()
     {
         var announcement = CreateValidAnnouncement();
-        announcement.HiddenAt = DateTime.Now;
+        announcement.SetHiddenMoment(DateTime.Now, DateTime.Now);
 
         var threeHoursLater = DateTime.Now.AddHours(3);
-        var setAutoHidingMoment = () => announcement.DelayedHidingAt = threeHoursLater;
+        var setAutoHidingMoment = () => announcement.SetDelayedHidingMoment(DateTime.Now, threeHoursLater);
         setAutoHidingMoment.Should().Throw<InvalidOperationException>();
     }
 

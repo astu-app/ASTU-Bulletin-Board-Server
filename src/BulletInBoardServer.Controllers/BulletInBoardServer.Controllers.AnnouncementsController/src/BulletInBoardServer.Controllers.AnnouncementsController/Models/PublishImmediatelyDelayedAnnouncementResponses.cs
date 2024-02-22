@@ -16,42 +16,24 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
         /// <summary>
-        /// Ответы:    ok - Ок   incorrectIdentifierFormat - Некорректный формат идентификатора   unauthorized - Пользователь не авторизован для выполнения операции   immediatePublishingForbidden - Пользователь не имеет права незамедлительно опубликовать отложенное объявление   announcementDoesNotExist - Объявление не существует   announcementNotDelayed - Объявление не является отложенным 
+        /// Ответы:    immediatePublishingForbidden - Пользователь не имеет права незамедлительно опубликовать отложенное объявление   announcementDoesNotExist - Объявление не существует 
         /// </summary>
-        /// <value>Ответы:    ok - Ок   incorrectIdentifierFormat - Некорректный формат идентификатора   unauthorized - Пользователь не авторизован для выполнения операции   immediatePublishingForbidden - Пользователь не имеет права незамедлительно опубликовать отложенное объявление   announcementDoesNotExist - Объявление не существует   announcementNotDelayed - Объявление не является отложенным </value>
+        /// <value>Ответы:    immediatePublishingForbidden - Пользователь не имеет права незамедлительно опубликовать отложенное объявление   announcementDoesNotExist - Объявление не существует </value>
         [TypeConverter(typeof(CustomEnumConverter<PublishImmediatelyDelayedAnnouncementResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum PublishImmediatelyDelayedAnnouncementResponses
         {
             
             /// <summary>
-            /// Enum Ok for ok
-            /// </summary>
-            [EnumMember(Value = "ok")]
-            Ok = 1,
-            
-            /// <summary>
-            /// Enum IncorrectIdentifierFormat for incorrectIdentifierFormat
-            /// </summary>
-            [EnumMember(Value = "incorrectIdentifierFormat")]
-            IncorrectIdentifierFormat = 2,
-            
-            /// <summary>
             /// Enum ImmediatePublishingForbidden for immediatePublishingForbidden
             /// </summary>
             [EnumMember(Value = "immediatePublishingForbidden")]
-            ImmediatePublishingForbidden = 3,
+            ImmediatePublishingForbidden = 1,
             
             /// <summary>
             /// Enum AnnouncementDoesNotExist for announcementDoesNotExist
             /// </summary>
             [EnumMember(Value = "announcementDoesNotExist")]
-            AnnouncementDoesNotExist = 4,
-            
-            /// <summary>
-            /// Enum AnnouncementNotDelayed for announcementNotDelayed
-            /// </summary>
-            [EnumMember(Value = "announcementNotDelayed")]
-            AnnouncementNotDelayed = 5
+            AnnouncementDoesNotExist = 2
         }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using BulletInBoardServer.Domain;
+using BulletInBoardServer.Domain.TestDbFiller;
 using Microsoft.EntityFrameworkCore;
-using TestDbFiller;
 
 Console.WriteLine("Hello, World!");
 
@@ -25,4 +25,7 @@ Console.Out.WriteLine($"\n\n\nБаза данных успешно заполн�
 
 
 
-internal record ConnectionStringContainer(string ConnectionString);
+namespace BulletInBoardServer.Domain.TestDbFiller
+{
+    internal record ConnectionStringContainer(string ConnectionString);
+}

@@ -34,7 +34,7 @@ public class DelayedPublicationAnnouncementService(ApplicationDbContext dbContex
     {
         // Отключение отложенной публикации происходит при вызове диспетчером этого метода
         var announcement = GetAnnouncementSummary(announcementId);
-        announcement.Publish(publishedAt);
+        announcement.Publish(DateTime.Now, publishedAt);
         DbContext.SaveChanges();
 
         // todo уведомление о публикации

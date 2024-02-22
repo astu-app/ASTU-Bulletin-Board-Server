@@ -41,7 +41,7 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/createAnnouncementBadRequest"
+                  "$ref" : "#/components/schemas/createAnnouncement_400_response"
                 }
               }
             },
@@ -79,6 +79,9 @@
               }
             },
             "description" : "Conflict"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "summary" : "Создать объявление",
@@ -110,13 +113,6 @@
             "description" : "Ok"
           },
           "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/getAnnouncementDetailsBadRequest"
-                }
-              }
-            },
             "description" : "Bad Request"
           },
           "401" : {
@@ -141,6 +137,9 @@
               }
             },
             "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "summary" : "Получить подробности о выбранном объявлении",
@@ -162,13 +161,6 @@
         },
         "responses" : {
           "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/updateAnnouncementOk"
-                }
-              }
-            },
             "description" : "Ok"
           },
           "400" : {
@@ -213,6 +205,9 @@
               }
             },
             "description" : "Conflict"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "summary" : "Редактировать объявление",
@@ -234,23 +229,9 @@
         },
         "responses" : {
           "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/deleteAnnouncementOk"
-                }
-              }
-            },
             "description" : "Ok"
           },
           "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/deleteAnnouncementBadRequest"
-                }
-              }
-            },
             "description" : "Bad Request"
           },
           "401" : {
@@ -275,6 +256,9 @@
               }
             },
             "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "summary" : "Удалить объявление",
@@ -307,6 +291,9 @@
               }
             },
             "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "summary" : "Получить список опубликованных объявлений",
@@ -328,23 +315,9 @@
         },
         "responses" : {
           "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/hidePostedAnnouncementOk"
-                }
-              }
-            },
             "description" : "Ok"
           },
           "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/hidePostedAnnouncementBadRequest"
-                }
-              }
-            },
             "description" : "Bad Request"
           },
           "401" : {
@@ -379,6 +352,9 @@
               }
             },
             "description" : "Conflict"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "summary" : "Скрыть опубликованное объявление",
@@ -411,6 +387,9 @@
               }
             },
             "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "summary" : "Получить список скрытых объявлений",
@@ -432,23 +411,9 @@
         },
         "responses" : {
           "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/restoreHiddenAnnouncementOk"
-                }
-              }
-            },
             "description" : "Ok"
           },
           "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/restoreHiddenAnnouncementBadRequest"
-                }
-              }
-            },
             "description" : "Bad Request"
           },
           "401" : {
@@ -483,6 +448,9 @@
               }
             },
             "description" : "Conflict"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "summary" : "Восстановить скрытое объявление",
@@ -515,6 +483,9 @@
               }
             },
             "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "summary" : "Получить список объявлений, ожидающих отложенную публикацию",
@@ -536,23 +507,9 @@
         },
         "responses" : {
           "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/publishImmediatelyDelayedPublishingAnnouncementOk"
-                }
-              }
-            },
             "description" : "Ok"
           },
           "400" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/publishImmediatelyDelayedPublishingAnnouncementBadRequest"
-                }
-              }
-            },
             "description" : "Bad Request"
           },
           "401" : {
@@ -578,15 +535,8 @@
             },
             "description" : "Not Found"
           },
-          "409" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/publishImmediatelyDelayedPublishingAnnouncementConflict"
-                }
-              }
-            },
-            "description" : "Conflict"
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "summary" : "Сразу опубликовать отложенное объявление",
@@ -619,6 +569,9 @@
               }
             },
             "description" : "Forbidden"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "summary" : "Получить список объявлений, ожидающих отложенное сокрытие",
@@ -1014,58 +967,58 @@
         "type" : "object"
       },
       "createAnnouncementResponses" : {
-        "description" : "Ответы:\n  created - Объявление создано\n  audience - Список аудитории null или пустой\n  announcementCreationForbidden - Пользователь не имеет права создать объявление\n  announcementCategoriesDoNotExist - В качестве одного или нескольких из id категорий объявлений прикреплен несуществующий в базе id\n  filesDoNotExist - В качестве одного или нескольких из id файлов прикреплен несуществующий в базе id\n  surveysDoNotExist - В качестве одного или нескольких из id опросов прикреплен несуществующий в базе id\n  delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом\n  delayedHidingMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом\n",
-        "enum" : [ "created", "usergroupListNullOrEmpty", "announcementCreationForbidden", "announcementCategoriesDoNotExist", "filesDoNotExist", "surveysDoNotExist", "delayedPublishingMomentIsInPast", "delayedHidingMomentIsInPast" ],
+        "description" : "Ответы:\n  audienceNullOrEmpty - Список аудитории null или пустой\n  contentNullOrEmpty - Текстовое содержимое объявления является null, пустым или состоит только из пробельных символов\n  announcementCreationForbidden - Пользователь не имеет права создать объявление\n  announcementCategoriesDoNotExist - В качестве одного или нескольких из id категорий объявлений прикреплен несуществующий в базе id\n  attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id\n  pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id\n  delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом\n  delayedHidingMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом\n  delayedPublishingMomentAfterDelayedHidingMoment - Момент отложенной публикации наступит после момента отложенного сокрытия\n",
+        "enum" : [ "audienceNullOrEmpty", "contentNullOrEmpty", "announcementCreationForbidden", "announcementCategoriesDoNotExist", "attachmentsDoNotExist", "pieceOfAudienceDoesNotExist", "delayedPublishingMomentIsInPast", "delayedHidingMomentIsInPast", "delayedPublishingMomentAfterDelayedHidingMoment" ],
         "type" : "string"
       },
       "getAnnouncementDetailsResponses" : {
-        "description" : "Ответы:\n  ok - Ок\n  incorrectIdentifierFormat - Некорректный формат идентификатора \n  unauthorized - Пользователь не авторизован для выполнения операции\n  detailsAccessForbidden - Пользователь не имеет права просмотреть подробности объявления\n  announcementDoesNotExist - Объявление не существует\n",
-        "enum" : [ "ok", "incorrectIdentifierFormat", "detailsAccessForbidden", "announcementDoesNotExist" ],
+        "description" : "Ответы:\n  detailsAccessForbidden - Пользователь не имеет права просмотреть подробности объявления\n  announcementDoesNotExist - Объявление не существует\n",
+        "enum" : [ "detailsAccessForbidden", "announcementDoesNotExist" ],
         "type" : "string"
       },
       "updateAnnouncementResponses" : {
-        "description" : "Ответы:\n  ok - Ок\n  usergroupListNullOrEmpty - Список групп пользователей null или пустой\n  incorrectIdentifierFormat - Некорректный формат идентификатора\n  unauthorized - Пользователь не авторизован для выполнения операции\n  announcementEditingForbidden - Пользователь не имеет права изменить объявление\n  announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id\n  announcementCategoryDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id\n  fileDoesNotExist - В качестве одного из id файлов прикреплен несуществующий в базе id\n  surveyDoesNotExist - В качестве id опроса прикреплен несуществующий в базе id\n  attachingFilesAndSurveyTogether - Нельзя прикрепить к объявлению и файлы, и опрос\n  automaticPublishMomentIsInPast - Момент отложенной публикации уже наступил в прошлом\n  automaticHideMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом\n  autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто\n  autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым\n",
-        "enum" : [ "ok", "usergroupListNullOrEmpty", "incorrectIdentifierFormat", "announcementEditingForbidden", "announcementDoesNotExist", "announcementCategoryDoesNotExist", "fileDoesNotExist", "surveyDoesNotExist", "attachingFilesAndSurveyTogether", "automaticPublishMomentIsInPast", "automaticHideMomentIsInPast", "autoHidingAnAlreadyHiddenAnnouncement", "autoPublishingPublishedAndNonHiddenAnnouncement" ],
+        "description" : "Ответы:\n  contentEmpty - Текстовое содержимое объявления пустое или состоит только из пробельных символов\n  audienceEmpty - Аудитория пользователей пуста\n  announcementEditingForbidden - Пользователь не имеет права изменить объявление\n  announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id\n  announcementCategoriesDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id\n  attachmentDoesNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id\n  delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом\n  delayedHidingMomentIsInPast - Момент отложенного сокрытия уже наступил в прошлом\n  autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто\n  autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым\n  cannotDetachSurvey - Открепление опросов запрещено\n",
+        "enum" : [ "contentEmpty", "audienceEmpty", "announcementEditingForbidden", "announcementDoesNotExist", "announcementCategoriesDoesNotExist", "attachmentsDoNotExist", "delayedPublishingMomentIsInPast", "delayedHidingMomentIsInPast", "autoHidingAnAlreadyHiddenAnnouncement", "autoPublishingPublishedAndNonHiddenAnnouncement", "cannotDetachSurvey" ],
         "type" : "string"
       },
       "deleteAnnouncementResponses" : {
-        "description" : "Ответы:\n  ok - Ок\n  incorrectIdentifierFormat - Некорректный формат идентификатора\n  unauthorized - Пользователь не авторизован для выполнения операции\n  announcementDeletionForbidden - Пользователь не имеет права удалить объявление\n  announcementDoesNotExist - Объявление не существует\n",
-        "enum" : [ "ok", "incorrectIdentifierFormat", "announcementDeletionForbidden", "announcementDoesNotExist" ],
+        "description" : "Ответы:\n  announcementDeletionForbidden - Пользователь не имеет права удалить объявление\n  announcementDoesNotExist - Объявление не существует\n",
+        "enum" : [ "announcementDeletionForbidden", "announcementDoesNotExist" ],
         "type" : "string"
       },
       "getPostedAnnouncementListResponses" : {
-        "description" : "Ответы:\n  ok - Ок\n  unauthorized - Пользователь не авторизован для выполнения операции\n  postedAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки опубликованных объявлений\n",
-        "enum" : [ "ok", "postedAnnouncementsListAccessForbidden" ],
+        "description" : "Ответы:\n  postedAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки опубликованных объявлений\n",
+        "enum" : [ "postedAnnouncementsListAccessForbidden" ],
         "type" : "string"
       },
       "hidePostedAnnouncementResponses" : {
-        "description" : "Ответы:\n  ok - Ок\n  incorrectIdentifierFormat - Некорректный формат идентификатора \n  unauthorized - Пользователь не авторизован для выполнения операции\n  announcementHidingForbidden - Пользователь не имеет права скрыть объявление\n  announcementDoesNotExist - Объявление не существует\n  announcementAlreadyHidden - Объявление уже скрыто\n  announcementNotYetPublished - Объявление еще не опубликовано\n",
-        "enum" : [ "ok", "incorrectIdentifierFormat", "announcementHidingForbidden", "announcementDoesNotExist", "announcementAlreadyHidden", "announcementNotYetPublished" ],
+        "description" : "Ответы:\n  announcementHidingForbidden - Пользователь не имеет права скрыть объявление\n  announcementDoesNotExist - Объявление не существует\n  announcementAlreadyHidden - Объявление уже скрыто\n  announcementNotYetPublished - Объявление еще не опубликовано\n",
+        "enum" : [ "announcementHidingForbidden", "announcementDoesNotExist", "announcementAlreadyHidden", "announcementNotYetPublished" ],
         "type" : "string"
       },
       "getHiddenAnnouncementListResponses" : {
-        "description" : "Ответы:\n  ok - Ок\n  unauthorized - Пользователь не авторизован для выполнения операции\n  hiddenAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки скрытых объявлений\n",
-        "enum" : [ "ok", "hiddenAnnouncementsListAccessForbidden" ],
+        "description" : "Ответы:\n  hiddenAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки скрытых объявлений\n",
+        "enum" : [ "hiddenAnnouncementsListAccessForbidden" ],
         "type" : "string"
       },
       "restoreHiddenAnnouncementResponses" : {
-        "description" : "Ответы:\n  ok - Ок\n  incorrectIdentifierFormat - Некорректный формат идентификатора\n  unauthorized - Пользователь не авторизован для выполнения операции\n  unhideForbidden - Пользователь не имеет права скрыть объявление\n  announcementDoesNotExist - Объявление не существует\n  announcementNotHidden - Объявление не является скрытым\n",
-        "enum" : [ "ok", "incorrectIdentifierFormat", "unhideForbidden", "announcementDoesNotExist", "announcementNotHidden" ],
+        "description" : "Ответы:\n  restoreForbidden - Пользователь не имеет права восстановить скрытое объявление\n  announcementDoesNotExist - Объявление не существует\n  announcementNotHidden - Объявление не является скрытым\n",
+        "enum" : [ "restoreForbidden", "announcementDoesNotExist", "announcementNotHidden" ],
         "type" : "string"
       },
       "getDelayedPublishingAnnouncementListResponses" : {
-        "description" : "Ответы: \n  ok - Ок\n  unauthorized - Пользователь не авторизован для выполнения операции\n  getDelayedPublishingAnnouncementListResponsesAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие\n",
-        "enum" : [ "ok", "getDelayedPublishingAnnouncementListResponsesAccessForbidden" ],
+        "description" : "Ответы: \n  getDelayedPublishingAnnouncementListResponsesAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие\n",
+        "enum" : [ "getDelayedPublishingAnnouncementListResponsesAccessForbidden" ],
         "type" : "string"
       },
       "publishImmediatelyDelayedAnnouncementResponses" : {
-        "description" : "Ответы: \n  ok - Ок\n  incorrectIdentifierFormat - Некорректный формат идентификатора\n  unauthorized - Пользователь не авторизован для выполнения операции\n  immediatePublishingForbidden - Пользователь не имеет права незамедлительно опубликовать отложенное объявление\n  announcementDoesNotExist - Объявление не существует\n  announcementNotDelayed - Объявление не является отложенным\n",
-        "enum" : [ "ok", "incorrectIdentifierFormat", "immediatePublishingForbidden", "announcementDoesNotExist", "announcementNotDelayed" ],
+        "description" : "Ответы: \n  immediatePublishingForbidden - Пользователь не имеет права незамедлительно опубликовать отложенное объявление\n  announcementDoesNotExist - Объявление не существует\n",
+        "enum" : [ "immediatePublishingForbidden", "announcementDoesNotExist" ],
         "type" : "string"
       },
       "getDelayedHiddenAnnouncementListResponses" : {
-        "description" : "Ответы: \n  ok - Ок\n  unauthorized - Пользователь не авторизован для выполнения операции\n  getDelayedHiddenAnnouncementListAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие",
-        "enum" : [ "ok", "getDelayedHiddenAnnouncementListAccessForbidden" ],
+        "description" : "Ответы: \n  getDelayedHiddenAnnouncementListAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие",
+        "enum" : [ "getDelayedHiddenAnnouncementListAccessForbidden" ],
         "type" : "string"
       },
       "fileSummaryDto" : {
@@ -1254,13 +1207,9 @@
       },
       "createAnnouncementCreated" : {
         "example" : {
-          "code" : null,
           "content" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
         },
         "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/createAnnouncementResponses"
-          },
           "content" : {
             "description" : "Идентификатор объявления",
             "format" : "uuid",
@@ -1270,13 +1219,12 @@
         "title" : "createAnnouncementCreated",
         "type" : "object"
       },
-      "createAnnouncementBadRequest" : {
+      "createAnnouncement_400_response" : {
         "properties" : {
           "code" : {
             "$ref" : "#/components/schemas/createAnnouncementResponses"
           }
         },
-        "title" : "createAnnouncementBadRequest",
         "type" : "object"
       },
       "createAnnouncementForbidden" : {
@@ -1308,7 +1256,6 @@
       },
       "getAnnouncementDetailsOk" : {
         "example" : {
-          "code" : null,
           "content" : {
             "hiddenAt" : "2000-01-23T04:56:07.000+00:00",
             "audienceSize" : 0,
@@ -1411,21 +1358,9 @@
         "properties" : {
           "content" : {
             "$ref" : "#/components/schemas/announcementDetailsDto"
-          },
-          "code" : {
-            "$ref" : "#/components/schemas/getAnnouncementDetailsResponses"
           }
         },
         "title" : "getAnnouncementDetailsOk",
-        "type" : "object"
-      },
-      "getAnnouncementDetailsBadRequest" : {
-        "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/getAnnouncementDetailsResponses"
-          }
-        },
-        "title" : "getAnnouncementDetailsBadRequest",
         "type" : "object"
       },
       "getAnnouncementDetailsForbidden" : {
@@ -1444,18 +1379,6 @@
           }
         },
         "title" : "getAnnouncementDetailsNotFound",
-        "type" : "object"
-      },
-      "updateAnnouncementOk" : {
-        "example" : {
-          "code" : null
-        },
-        "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/updateAnnouncementResponses"
-          }
-        },
-        "title" : "updateAnnouncementOk",
         "type" : "object"
       },
       "updateAnnouncementBadRequest" : {
@@ -1494,27 +1417,6 @@
         "title" : "updateAnnouncementConflict",
         "type" : "object"
       },
-      "deleteAnnouncementOk" : {
-        "example" : {
-          "code" : null
-        },
-        "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/deleteAnnouncementResponses"
-          }
-        },
-        "title" : "deleteAnnouncementOk",
-        "type" : "object"
-      },
-      "deleteAnnouncementBadRequest" : {
-        "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/deleteAnnouncementResponses"
-          }
-        },
-        "title" : "deleteAnnouncementBadRequest",
-        "type" : "object"
-      },
       "deleteAnnouncementForbidden" : {
         "properties" : {
           "code" : {
@@ -1535,7 +1437,6 @@
       },
       "getPostedAnnouncementListOk" : {
         "example" : {
-          "code" : null,
           "content" : [ {
             "audienceSize" : 0,
             "publishedAt" : "2000-01-23T04:56:07.000+00:00",
@@ -1646,9 +1547,6 @@
               "$ref" : "#/components/schemas/announcementSummaryDto"
             },
             "type" : "array"
-          },
-          "code" : {
-            "$ref" : "#/components/schemas/getPostedAnnouncementListResponses"
           }
         },
         "title" : "getPostedAnnouncementListOk",
@@ -1661,27 +1559,6 @@
           }
         },
         "title" : "getPostedAnnouncementListForbidden",
-        "type" : "object"
-      },
-      "hidePostedAnnouncementOk" : {
-        "example" : {
-          "code" : null
-        },
-        "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/hidePostedAnnouncementResponses"
-          }
-        },
-        "title" : "hidePostedAnnouncementOk",
-        "type" : "object"
-      },
-      "hidePostedAnnouncementBadRequest" : {
-        "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/hidePostedAnnouncementResponses"
-          }
-        },
-        "title" : "hidePostedAnnouncementBadRequest",
         "type" : "object"
       },
       "hidePostedAnnouncementForbidden" : {
@@ -1713,7 +1590,6 @@
       },
       "getHiddenAnnouncementListOk" : {
         "example" : {
-          "code" : null,
           "content" : [ {
             "audienceSize" : 0,
             "publishedAt" : "2000-01-23T04:56:07.000+00:00",
@@ -1824,9 +1700,6 @@
               "$ref" : "#/components/schemas/announcementSummaryDto"
             },
             "type" : "array"
-          },
-          "code" : {
-            "$ref" : "#/components/schemas/getHiddenAnnouncementListResponses"
           }
         },
         "title" : "getHiddenAnnouncementListOk",
@@ -1839,27 +1712,6 @@
           }
         },
         "title" : "getHiddenAnnouncementListForbidden",
-        "type" : "object"
-      },
-      "restoreHiddenAnnouncementOk" : {
-        "example" : {
-          "code" : null
-        },
-        "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/restoreHiddenAnnouncementResponses"
-          }
-        },
-        "title" : "restoreHiddenAnnouncementOk",
-        "type" : "object"
-      },
-      "restoreHiddenAnnouncementBadRequest" : {
-        "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/restoreHiddenAnnouncementResponses"
-          }
-        },
-        "title" : "restoreHiddenAnnouncementBadRequest",
         "type" : "object"
       },
       "restoreHiddenAnnouncementForbidden" : {
@@ -1891,7 +1743,6 @@
       },
       "getDelayedPublishingAnnouncementListOk" : {
         "example" : {
-          "code" : null,
           "content" : [ {
             "audienceSize" : 0,
             "publishedAt" : "2000-01-23T04:56:07.000+00:00",
@@ -2002,9 +1853,6 @@
               "$ref" : "#/components/schemas/announcementSummaryDto"
             },
             "type" : "array"
-          },
-          "code" : {
-            "$ref" : "#/components/schemas/getDelayedPublishingAnnouncementListResponses"
           }
         },
         "title" : "getDelayedPublishingAnnouncementListOk",
@@ -2017,27 +1865,6 @@
           }
         },
         "title" : "getDelayedPublishingAnnouncementListForbidden",
-        "type" : "object"
-      },
-      "publishImmediatelyDelayedPublishingAnnouncementOk" : {
-        "example" : {
-          "code" : null
-        },
-        "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/publishImmediatelyDelayedAnnouncementResponses"
-          }
-        },
-        "title" : "publishImmediatelyDelayedPublishingAnnouncementOk",
-        "type" : "object"
-      },
-      "publishImmediatelyDelayedPublishingAnnouncementBadRequest" : {
-        "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/publishImmediatelyDelayedAnnouncementResponses"
-          }
-        },
-        "title" : "publishImmediatelyDelayedPublishingAnnouncementBadRequest",
         "type" : "object"
       },
       "publishImmediatelyDelayedPublishingAnnouncementForbidden" : {
@@ -2058,18 +1885,8 @@
         "title" : "publishImmediatelyDelayedPublishingAnnouncementNotFound",
         "type" : "object"
       },
-      "publishImmediatelyDelayedPublishingAnnouncementConflict" : {
-        "properties" : {
-          "code" : {
-            "$ref" : "#/components/schemas/publishImmediatelyDelayedAnnouncementResponses"
-          }
-        },
-        "title" : "publishImmediatelyDelayedPublishingAnnouncementConflict",
-        "type" : "object"
-      },
       "getDelayedHiddenAnnouncementListOk" : {
         "example" : {
-          "code" : null,
           "content" : [ {
             "audienceSize" : 0,
             "publishedAt" : "2000-01-23T04:56:07.000+00:00",
@@ -2180,9 +1997,6 @@
               "$ref" : "#/components/schemas/announcementSummaryDto"
             },
             "type" : "array"
-          },
-          "code" : {
-            "$ref" : "#/components/schemas/getDelayedHiddenAnnouncementListResponses"
           }
         },
         "title" : "getDelayedHiddenAnnouncementListOk",

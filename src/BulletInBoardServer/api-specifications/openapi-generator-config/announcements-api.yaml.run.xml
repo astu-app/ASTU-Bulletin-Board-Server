@@ -13,8 +13,8 @@
           <option name="value" value="" />
         </CliArgumentViewModel>
         <CliArgumentViewModel>
-          <option name="name" value="operationIsAsync" />
-          <option name="value" value="false" />
+          <option name="name" value="packageDescription" />
+          <option name="value" value="A library generated from a OpenAPI doc" />
         </CliArgumentViewModel>
         <CliArgumentViewModel>
           <option name="name" value="packageTitle" />

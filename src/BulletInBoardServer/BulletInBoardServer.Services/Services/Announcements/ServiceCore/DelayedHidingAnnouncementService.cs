@@ -34,7 +34,7 @@ public class DelayedHidingAnnouncementService(ApplicationDbContext dbContext)
     {
         // Отключение отложенного сокрытия происходит при вызове диспетчером этого метода
         var announcement = GetAnnouncementSummary(announcementId);
-        announcement.Hide(hiddenAt);
+        announcement.Hide(DateTime.Now, hiddenAt);
         DbContext.SaveChanges();
     }
 }

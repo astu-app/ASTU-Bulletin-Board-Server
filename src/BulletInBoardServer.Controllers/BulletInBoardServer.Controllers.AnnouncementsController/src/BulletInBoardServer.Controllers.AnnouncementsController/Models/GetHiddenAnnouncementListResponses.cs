@@ -16,24 +16,18 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
         /// <summary>
-        /// Ответы:   ok - Ок   unauthorized - Пользователь не авторизован для выполнения операции   hiddenAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки скрытых объявлений 
+        /// Ответы:   hiddenAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки скрытых объявлений 
         /// </summary>
-        /// <value>Ответы:   ok - Ок   unauthorized - Пользователь не авторизован для выполнения операции   hiddenAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки скрытых объявлений </value>
+        /// <value>Ответы:   hiddenAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки скрытых объявлений </value>
         [TypeConverter(typeof(CustomEnumConverter<GetHiddenAnnouncementListResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum GetHiddenAnnouncementListResponses
         {
             
             /// <summary>
-            /// Enum Ok for ok
-            /// </summary>
-            [EnumMember(Value = "ok")]
-            Ok = 1,
-            
-            /// <summary>
             /// Enum HiddenAnnouncementsListAccessForbidden for hiddenAnnouncementsListAccessForbidden
             /// </summary>
             [EnumMember(Value = "hiddenAnnouncementsListAccessForbidden")]
-            HiddenAnnouncementsListAccessForbidden = 2
+            HiddenAnnouncementsListAccessForbidden = 1
         }
 }

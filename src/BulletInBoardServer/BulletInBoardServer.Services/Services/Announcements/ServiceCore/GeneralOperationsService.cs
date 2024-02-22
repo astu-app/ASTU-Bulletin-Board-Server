@@ -1,10 +1,15 @@
 ﻿using BulletInBoardServer.Domain;
 using BulletInBoardServer.Domain.Models.Announcements;
+using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Domain.Models.Attachments;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.JoinEntities;
+using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
+using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+using BulletInBoardServer.Services.Services.Attachments.Exceptions;
+using BulletInBoardServer.Services.Services.Audience.Exceptions;
 using BulletInBoardServer.Services.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using AnnouncementAudience = BulletInBoardServer.Domain.Models.JoinEntities.AnnouncementAudience;
@@ -18,6 +23,7 @@ public class GeneralOperationsService(
 {
     public Announcement Create(Guid requesterId, CreateAnnouncement create)
     {
+        AudienceValidOrThrow(create);
         DelayedMomentsCorrectOrThrow(create);
 
         var announcement = InitAnnouncement(create, authorId: requesterId);
@@ -86,20 +92,26 @@ public class GeneralOperationsService(
     {
         var announcement = GetAnnouncementSummary(edit.Id);
         if (requesterId != announcement.AuthorId)
-            throw new InvalidOperationException("Редактировать объявление может только его автор");
+            throw new OperationNotAllowedException("Редактировать объявление может только его автор");
 
         if (edit.Content is not null)
-            announcement.Content = edit.Content;
+        {
+            NewContentValidOrThrow(edit);
+            announcement.SetContent(edit.Content);
+        }
         if (edit.AudienceIds is not null)
+        {
+            NewAudienceValidOrThrow(edit);
             ApplyAudienceChanging(announcement.Id, edit.AudienceIds);
+        }
         if (edit.CategoryIds is not null)
             ApplyCategoriesChanging(announcement.Id, edit.CategoryIds);
         if (edit.AttachmentIds is not null)
             ApplyAttachmentsChanging(announcement.Id, edit.AttachmentIds);
         if (edit.DelayedPublishingAtChanged)
-            announcement.DelayedPublishingAt = edit.DelayedPublishingAt;
+            announcement.SetDelayedPublishingMoment(DateTime.Now, edit.DelayedPublishingAt);
         if (edit.DelayedHidingAtChanged)
-            announcement.DelayedHidingAt = edit.DelayedHidingAt;
+            announcement.SetDelayedHidingMoment(DateTime.Now, edit.DelayedHidingAt);
 
         DbContext.SaveChanges();
 
@@ -120,7 +132,7 @@ public class GeneralOperationsService(
     {
         var announcement = GetAnnouncementSummary(announcementId);
         if (requesterId != announcement.AuthorId)
-            throw new InvalidOperationException("Удалить объявление может только его автор");
+            throw new OperationNotAllowedException("Удалить объявление может только его автор");
 
         if (announcement.ExpectsDelayedPublishing)
             Dispatcher.DisableDelayedPublishing(announcementId);
@@ -144,12 +156,12 @@ public class GeneralOperationsService(
     {
         var announcement = GetAnnouncementSummary(announcementId);
         if (announcement.AuthorId != requesterId)
-            throw new InvalidOperationException("Опубликовать объявление может только его автор");
+            throw new OperationNotAllowedException("Опубликовать объявление может только его автор");
 
         if (announcement.ExpectsDelayedPublishing)
             Dispatcher.DisableDelayedPublishing(announcementId);
 
-        announcement.Publish(publishedAt);
+        announcement.Publish(DateTime.Now, publishedAt);
         DbContext.SaveChanges();
 
         // todo уведомление о публикации
@@ -157,6 +169,12 @@ public class GeneralOperationsService(
 
 
 
+    private static void AudienceValidOrThrow(CreateAnnouncement create)
+    {
+        if (create.UserIds is null || !create.UserIds.Any())
+            throw new AnnouncementAudienceNullOrEmptyException();
+    }
+    
     private static void DelayedMomentsCorrectOrThrow(CreateAnnouncement create)
     {
         var now = DateTime.Now;
@@ -168,38 +186,52 @@ public class GeneralOperationsService(
 
         if (publishAt is not null && hideAt is null)
         {
-            MomentWillComeBeforeOrThrow(now, publishAt.Value,
-                "Момент отложенной публикации не может наступить в прошлом");
+            DelayedPublishingMomentComesInFutureOrThrow(now, publishAt.Value);
             return;
         }
 
         if (publishAt is null && hideAt is not null)
         {
-            MomentWillComeBeforeOrThrow(now, hideAt.Value,
-                "Момент отложенного сокрытия не может наступить в прошлом");
+            DelayedHidingMomentComesInFutureOrThrow(now, hideAt.Value);
             return;
         }
 
-        MomentWillComeBeforeOrThrow(now, publishAt!.Value,
-            "Момент отложенной публикации не может наступить в прошлом");
-        MomentWillComeBeforeOrThrow(now, hideAt!.Value,
-            "Момент отложенного сокрытия не может наступить в прошлом");
-        MomentWillComeBeforeOrThrow(publishAt.Value, hideAt.Value,
-            "Момент отложенной публикации не может наступить после момента отложенного сокрытия");
+        DelayedPublishingMomentComesInFutureOrThrow(now, publishAt!.Value);
+        DelayedHidingMomentComesInFutureOrThrow(now, hideAt!.Value);
+        MomentWillComeBeforeOrThrow<DelayedPublishingAfterDelayedHidingException>(publishAt.Value, hideAt.Value);
     }
+    
+    /// <summary>
+    /// Метод проверяет, что момент отложенной публикации наступит позже текущего, или кидает исключение
+    /// </summary>
+    /// <param name="now">Текущий момент времени</param>
+    /// <param name="moment">Проверяемый момент отложенной публикации</param>
+    /// <exception cref="DelayedPublishingMomentComesInPastException">Генерируемое исключение</exception>
+    private static void DelayedPublishingMomentComesInFutureOrThrow(DateTime now, DateTime moment) => 
+        MomentWillComeBeforeOrThrow<DelayedPublishingMomentComesInPastException>(now, moment);
+
+    /// <summary>
+    /// Метод проверяет, что момент отложенного сокрытия наступит позже текущего, или кидает исключение
+    /// </summary>
+    /// <param name="now">Текущий момент времени</param>
+    /// <param name="moment">Проверяемый момент отложенного сокрытия</param>
+    /// <exception cref="DelayedHidingMomentComesInPastException">Генерируемое исключение</exception>
+    private static void DelayedHidingMomentComesInFutureOrThrow(DateTime now, DateTime moment) => 
+        MomentWillComeBeforeOrThrow<DelayedHidingMomentComesInPastException>(now, moment);
 
     /// <summary>
     /// Метод проверяет, что первый момент наступит до второго, и генерирует исключение в противном случае
     /// </summary>
     /// <param name="first">Первый момент</param>
     /// <param name="second">Второй момент</param>
-    /// <param name="errMessage">Сообщение об ошибке</param>
-    /// <exception cref="InvalidOperationException">Генерируется в случае, если первый момент наступит не раньше второго</exception>
-    private static void MomentWillComeBeforeOrThrow(DateTime first, DateTime second, string errMessage)
+    /// <typeparam name="TException">Тип генерируемого исключения</typeparam>
+    private static void MomentWillComeBeforeOrThrow<TException>(DateTime first, DateTime second) 
+        where TException : InvalidOperationException
     {
         if (first >= second)
-            throw new InvalidOperationException(errMessage);
+            throw Activator.CreateInstance<TException>();
     }
+
 
     private static Announcement InitAnnouncement(CreateAnnouncement createAnnouncement, Guid authorId) =>
         new(
@@ -215,13 +247,49 @@ public class GeneralOperationsService(
     private void AddRelatedEntitiesToDb(CreateAnnouncement create, Announcement announcement)
     {
         var audience = InitUserAudience(announcement.Id, create.UserIds);
-        DbContext.AnnouncementAudience.AddRange(audience);
+        TryAddAnnouncementAudienceOrThrow(audience);
 
         var attachmentJoins = InitAttachmentJoins(announcement.Id, create.AttachmentIds);
-        DbContext.AnnouncementAttachmentJoins.AddRange(attachmentJoins);
+        TryAddAttachmentsOrThrow(attachmentJoins);
 
         var categoryJoins = InitCategoryJoins(announcement.Id, create.CategoryIds);
-        DbContext.AnnouncementCategoryJoins.AddRange(categoryJoins);
+        TryAddAnnouncementCategoriesOrThrow(categoryJoins);
+    }
+
+    private void TryAddAttachmentsOrThrow(IEnumerable<AnnouncementAttachment> attachment)
+    {
+        try
+        {
+            DbContext.AnnouncementAttachmentJoins.AddRange(attachment);
+        }
+        catch (InvalidOperationException err)
+        {
+            throw new AttachmentDoesNotExist(err);
+        }
+    }
+    
+    private void TryAddAnnouncementAudienceOrThrow(IEnumerable<AnnouncementAudience> audience)
+    {
+        try
+        {
+            DbContext.AnnouncementAudience.AddRange(audience);
+        }
+        catch (InvalidOperationException err)
+        {
+            throw new PieceOfAudienceDoesNotExist(err);
+        }
+    }
+    
+    private void TryAddAnnouncementCategoriesOrThrow(IEnumerable<AnnouncementAnnouncementCategory> audience)
+    {
+        try
+        {
+            DbContext.AnnouncementCategoryJoins.AddRange(audience);
+        }
+        catch (InvalidOperationException err)
+        {
+            throw new AnnouncementCategoriesDoNotExist(err);
+        }
     }
 
     private static IEnumerable<AnnouncementAudience> InitUserAudience(Guid announcementId,
@@ -254,6 +322,18 @@ public class GeneralOperationsService(
         return joins;
     }
 
+    private static void NewContentValidOrThrow(EditAnnouncement edit)
+    {
+        if (!string.IsNullOrWhiteSpace(edit.Content))
+            throw new AnnouncementContentEmptyException();
+    }
+    
+    private static void NewAudienceValidOrThrow(EditAnnouncement edit)
+    {
+        if (edit.AudienceIds is not null && !edit.AudienceIds.Any())
+            throw new AnnouncementAudienceEmptyException();
+    }
+    
     private void ApplyAudienceChanging(Guid announcementId, IEnumerable<Guid> changedIds)
     {
         var changedIdList = changedIds.ToList();
@@ -293,6 +373,7 @@ public class GeneralOperationsService(
 
     private void ApplyAttachmentsChanging(Guid announcementId, IEnumerable<Guid> changedIds)
     {
+        // todo нельзя откреплять опросы
         var changedIdList = changedIds.ToList();
 
         // удаляем связки с пользователями, id которых нет в новом списке

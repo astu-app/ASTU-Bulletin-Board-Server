@@ -1,6 +1,7 @@
 ﻿using BulletInBoardServer.Domain;
 using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+using BulletInBoardServer.Services.Services.Exceptions;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 
@@ -35,12 +36,12 @@ public class PublishedAnnouncementService(
     {
         var announcement = GetAnnouncementSummary(announcementId);
         if (announcement.AuthorId != requesterId)
-            throw new InvalidOperationException("Объявление может скрыть только его автор");
+            throw new OperationNotAllowedException("Объявление может скрыть только его автор");
 
         if (announcement.ExpectsDelayedHiding)
             Dispatcher.DisableDelayedHiding(announcementId);
 
-        announcement.Hide(hiddenAt);
+        announcement.Hide(DateTime.Now, hiddenAt);
         DbContext.SaveChanges();
     }
 }

@@ -16,24 +16,18 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
         /// <summary>
-        /// Ответы:    ok - Ок   unauthorized - Пользователь не авторизован для выполнения операции   getDelayedHiddenAnnouncementListAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие
+        /// Ответы:    getDelayedHiddenAnnouncementListAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие
         /// </summary>
-        /// <value>Ответы:    ok - Ок   unauthorized - Пользователь не авторизован для выполнения операции   getDelayedHiddenAnnouncementListAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие</value>
+        /// <value>Ответы:    getDelayedHiddenAnnouncementListAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие</value>
         [TypeConverter(typeof(CustomEnumConverter<GetDelayedHiddenAnnouncementListResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum GetDelayedHiddenAnnouncementListResponses
         {
             
             /// <summary>
-            /// Enum Ok for ok
-            /// </summary>
-            [EnumMember(Value = "ok")]
-            Ok = 1,
-            
-            /// <summary>
             /// Enum GetDelayedHiddenAnnouncementListAccessForbidden for getDelayedHiddenAnnouncementListAccessForbidden
             /// </summary>
             [EnumMember(Value = "getDelayedHiddenAnnouncementListAccessForbidden")]
-            GetDelayedHiddenAnnouncementListAccessForbidden = 2
+            GetDelayedHiddenAnnouncementListAccessForbidden = 1
         }
 }

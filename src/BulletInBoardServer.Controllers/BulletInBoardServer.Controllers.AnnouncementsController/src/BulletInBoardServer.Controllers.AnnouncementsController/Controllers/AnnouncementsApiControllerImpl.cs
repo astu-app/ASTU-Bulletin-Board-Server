@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using BulletInBoardServer.Controllers.AnnouncementsController.Models;
+using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
+using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements;
+using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+using BulletInBoardServer.Services.Services.Attachments.Exceptions;
+using BulletInBoardServer.Services.Services.Audience.Exceptions;
+using BulletInBoardServer.Services.Services.Exceptions;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Serilog;
+
+// ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
 
@@ -12,365 +21,605 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
 public class AnnouncementsApiControllerImpl(AnnouncementService service)
     : AnnouncementsApiController
 {
+    private readonly ILogger _logger = Log.ForContext<AnnouncementService>();
+
+
+
     /// <inheritdoc />
     public override IActionResult CreateAnnouncement([FromBody] CreateAnnouncementDto dto)
     {
+        /*
+         * 201 +
+         * 400:
+         *   audienceNullOrEmpty +
+         *   contentNullOrEmpty +
+         * 403:
+         *     announcementCreationForbidden
+         * 404:
+         *   announcementCategoriesDoNotExist +
+         *   attachmentsDoNotExist +
+         *   pieceOfAudienceDoesNotExist +
+         * 409:
+         *   delayedPublishingMomentIsInPast +
+         *   delayedHidingMomentIsInPast +
+         *   delayedPublishingMomentAfterDelayedHidingMoment +
+         * 500 +
+         */
+
+        var requesterId = Guid.Empty; // todo id пользователя
+
         var validationResult = ValidateModel(dto);
         if (validationResult is not null)
             return validationResult;
 
         var createAnnouncement = dto.Adapt<CreateAnnouncement>();
-        // try
-        // {
-        var announcement = service.Create(Guid.Empty, createAnnouncement); // todo id пользователя
-
-        var response = new
+        try
         {
-            Code = CreateAnnouncementResponses.Created,
-            Content = announcement.Id
-        };
-        return Created(new Uri("/api/announcements/get-details"), response);
-        // }
-        // catch()
+            var announcement = service.Create(requesterId, createAnnouncement);
 
+            _logger.Information(
+                "Пользователь {UserId} создал объявление {AnnouncementId}",
+                requesterId,
+                announcement.Id);
 
-        //TODO: Uncomment the next line to return response 201 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(201, default(CreateAnnouncementCreated));
-
-        //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(400, default(CreateAnnouncementBadRequest));
-
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401, default(CreateAnnouncementUnauthorized));
-
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(CreateAnnouncementForbidden));
-
-        //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(404, default(CreateAnnouncementNotFound));
-
-        //TODO: Uncomment the next line to return response 409 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(409, default(CreateAnnouncementConflict));
-        string exampleJson = null;
-        exampleJson = "{\r\n  \"content\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\r\n}";
-
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<CreateAnnouncementCreated>(exampleJson)
-            : default(CreateAnnouncementCreated);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+            return Created(new Uri("/api/announcements/get-details"), announcement.Id);
+        }
+        catch (AnnouncementAudienceNullOrEmptyException err)
+        {
+            LogWarning(400, "Создание объявления", nameof(CreateAnnouncementResponses.AudienceNullOrEmpty),
+                requesterId, err.Message);
+            return BadRequest(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.AudienceNullOrEmpty));
+        }
+        catch (AnnouncementContentNullOrEmptyException err)
+        {
+            LogWarning(400, "Создание объявления", nameof(CreateAnnouncementResponses.ContentNullOrEmpty),
+                requesterId, err.Message);
+            return BadRequest(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.ContentNullOrEmpty));
+        }
+        catch (AttachmentDoesNotExist err)
+        {
+            LogWarning(404, "Создание объявления", nameof(CreateAnnouncementResponses.AttachmentsDoNotExist),
+                requesterId, err.Message);
+            return NotFound(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.AttachmentsDoNotExist));
+        }
+        catch (PieceOfAudienceDoesNotExist err)
+        {
+            LogWarning(404, "Создание объявления", nameof(CreateAnnouncementResponses.PieceOfAudienceDoesNotExist),
+                requesterId, err.Message);
+            return NotFound(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.PieceOfAudienceDoesNotExist));
+        }
+        catch (AnnouncementCategoriesDoNotExist err)
+        {
+            LogWarning(404, "Создание объявления",
+                nameof(CreateAnnouncementResponses.AnnouncementCategoriesDoNotExist), requesterId, err.Message);
+            return NotFound(
+                ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.AnnouncementCategoriesDoNotExist));
+        }
+        catch (DelayedPublishingMomentComesInPastException err)
+        {
+            LogWarning(409, "Создание объявления",
+                nameof(CreateAnnouncementResponses.DelayedPublishingMomentIsInPast), requesterId, err.Message);
+            return Conflict(
+                ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.DelayedPublishingMomentIsInPast));
+        }
+        catch (DelayedHidingMomentComesInPastException err)
+        {
+            LogWarning(409, "Создание объявления", nameof(CreateAnnouncementResponses.DelayedHidingMomentIsInPast),
+                requesterId, err.Message);
+            return Conflict(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.DelayedHidingMomentIsInPast));
+        }
+        catch (DelayedPublishingAfterDelayedHidingException err)
+        {
+            LogWarning(409, "Создание объявления",
+                nameof(CreateAnnouncementResponses.DelayedPublishingMomentAfterDelayedHidingMoment), requesterId,
+                err.Message);
+            return Conflict(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses
+                .DelayedPublishingMomentAfterDelayedHidingMoment));
+        }
+        catch (Exception err)
+        {
+            LogError(err, 500, "Создание объявления", requesterId);
+            return Problem();
+        }
 
 
         IActionResult? ValidateModel(CreateAnnouncementDto dto_)
         {
             if (dto_.UserIds is null || dto_.UserIds.Count == 0)
-                return BadRequest(new { code = CreateAnnouncementResponses.UsergroupListNullOrEmpty });
+                return BadRequest(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.AudienceNullOrEmpty));
 
             return null;
         }
     }
 
     /// <inheritdoc />
-    public override IActionResult DeleteAnnouncement([FromBody] Guid id)
+    public override IActionResult DeleteAnnouncement([FromBody] Guid announcementId)
     {
-        // service.Delete(Guid.Empty, id); // todo id пользователя
-        //
-        // var response = new DeleteAnnouncementOk { Code = DeleteAnnouncementResponses.Ok };
-        // return Ok(response);
+        /*
+         * 200 +
+         * 403:
+         *   announcementDeletionForbidden +
+         * 409:
+         *   announcementDoesNotExist +
+         * 500 +
+         */
 
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(DeleteAnnouncementOk));
-        //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(400, default(DeleteAnnouncementBadRequest));
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401, default(DeleteAnnouncementUnauthorized));
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(DeleteAnnouncementForbidden));
-        //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(404, default(DeleteAnnouncementNotFound));
-        string exampleJson = null;
-        exampleJson = "{ }";
+        var requesterId = Guid.Empty; // todo id пользователя
 
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<DeleteAnnouncementOk>(exampleJson)
-            : default(DeleteAnnouncementOk);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+        try
+        {
+            service.Delete(requesterId, announcementId);
+
+            _logger.Information("Пользователь {RequesterId} удалил объявление {AnnouncementId}",
+                requesterId, announcementId);
+
+            return Ok();
+        }
+        catch (OperationNotAllowedException err)
+        {
+            LogWarning(403, "Удаление объявления",
+                nameof(DeleteAnnouncementResponses.AnnouncementDeletionForbidden), requesterId, err.Message);
+            return StatusCode(403,
+                ConstructAnswerWithOnlyCode(DeleteAnnouncementResponses.AnnouncementDeletionForbidden));
+        }
+        catch (AnnouncementDoesNotExist err)
+        {
+            LogWarning(404, "Удаление объявления", nameof(DeleteAnnouncementResponses.AnnouncementDoesNotExist),
+                requesterId, err.Message);
+            return NotFound(ConstructAnswerWithOnlyCode(DeleteAnnouncementResponses.AnnouncementDoesNotExist));
+        }
+        catch (Exception err)
+        {
+            LogError(err, 500, "Удаление объявления", requesterId);
+            return Problem();
+        }
     }
 
     /// <inheritdoc />
-    public override IActionResult GetAnnouncementDetails([FromBody] Guid id)
+    public override IActionResult GetAnnouncementDetails([FromBody] Guid announcementId)
     {
-        // var announcement = service.GetDetails(Guid.Empty, id); // todo id пользователя
-        var announcement = service.GetDetails(Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"), id); // todo id пользователя
-        
-        var response = MakeOkResult();
-        return Ok(response);
+        /*
+         * 200 +
+         * 403:
+         *   detailsAccessForbidden +
+         * 409:
+         *   announcementDoesNotExist +
+         * 500 +
+         */
 
+        // var requesterId = Guid.Empty; // todo id пользователя
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
-        GetAnnouncementDetailsOk MakeOkResult()
-            => new ()
-            {
-                Code = GetAnnouncementDetailsResponses.Ok,
-                Content = announcement.Adapt<AnnouncementDetailsDto>()
-            };
+        try
+        {
+            var announcement = service.GetDetails(requesterId, announcementId);
 
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(GetAnnouncementDetailsOk));
-        //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(400, default(GetAnnouncementDetailsBadRequest));
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401, default(GetAnnouncementDetailsUnauthorized));
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(GetAnnouncementDetailsForbidden));
-        //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(404, default(GetAnnouncementDetailsNotFound));
-        string exampleJson = null;
-        exampleJson =
-            "{\r\n  \"content\" : {\r\n    \"hiddenAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"audienceSize\" : 0,\r\n    \"publishedAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"authorName\" : \"authorName\",\r\n    \"viewsCount\" : 0,\r\n    \"surveys\" : [ {\r\n      \"isAnonymous\" : false,\r\n      \"isOpen\" : true,\r\n      \"questions\" : [ {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      }, {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      } ],\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"voteFinishedAt\" : \"2000-01-23T04:56:07.000+00:00\"\r\n    }, {\r\n      \"isAnonymous\" : false,\r\n      \"isOpen\" : true,\r\n      \"questions\" : [ {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      }, {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      } ],\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"voteFinishedAt\" : \"2000-01-23T04:56:07.000+00:00\"\r\n    } ],\r\n    \"delayedHidingAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"delayedPublishingAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"files\" : [ {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    }, {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    } ],\r\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n    \"categories\" : [ {\r\n      \"color\" : \"color\",\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\r\n    }, {\r\n      \"color\" : \"color\",\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\"\r\n    } ],\r\n    \"content\" : \"content\"\r\n  }\r\n}";
+            _logger.Information(
+                "Пользователь {RequesterId} получил подробности объявления {AnnouncementId}",
+                requesterId, announcementId);
 
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<GetAnnouncementDetailsOk>(exampleJson)
-            : default(GetAnnouncementDetailsOk);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+            return Ok(announcement.Adapt<AnnouncementDetailsDto>());
+        }
+        catch (OperationNotAllowedException err)
+        {
+            LogWarning(403, "Получение деталей объявления",
+                nameof(GetAnnouncementDetailsResponses.DetailsAccessForbidden), requesterId, err.Message);
+            return StatusCode(403,
+                ConstructAnswerWithOnlyCode(GetAnnouncementDetailsResponses.DetailsAccessForbidden));
+        }
+        catch (AnnouncementDoesNotExist err)
+        {
+            LogWarning(404, "Получение деталей объявления",
+                nameof(GetAnnouncementDetailsResponses.AnnouncementDoesNotExist), requesterId, err.Message);
+            return NotFound(ConstructAnswerWithOnlyCode(GetAnnouncementDetailsResponses.AnnouncementDoesNotExist));
+        }
+        catch (Exception err)
+        {
+            LogError(err, 500, "Получение деталей объявления", requesterId);
+            return Problem();
+        }
     }
 
     /// <inheritdoc />
     public override IActionResult GetDelayedHiddenAnnouncementList()
     {
-        // var announcements = service.GetDelayedHidingAnnouncementsForUser(Guid.Empty); // todo id пользователя
-        //
-        // var response = new GetDelayedHiddenAnnouncementListOk
-        // {
-        //     Code = GetDelayedHiddenAnnouncementListResponses.Ok,
-        //     Content = announcements.Adapt<List<AnnouncementSummaryDto>>()
-        // };
-        // return Task.FromResult(response);
+        /*
+         * 200 +
+         * 403:
+         *     getDelayedHiddenAnnouncementListAccessForbidden
+         * 500 +
+         */
 
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(GetDelayedHiddenAnnouncementListOk));
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401, default(GetDelayedHiddenAnnouncementListUnauthorized));
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(GetDelayedHiddenAnnouncementListForbidden));
-        string exampleJson = null;
-        exampleJson =
-            "{\r\n  \"content\" : [ {\r\n    \"audienceSize\" : 0,\r\n    \"publishedAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"authorName\" : \"authorName\",\r\n    \"viewsCount\" : 0,\r\n    \"files\" : [ {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    }, {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    } ],\r\n    \"survey\" : {\r\n      \"isAnonymous\" : false,\r\n      \"isOpen\" : true,\r\n      \"questions\" : [ {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      }, {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      } ],\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"voteFinishedAt\" : \"2000-01-23T04:56:07.000+00:00\"\r\n    },\r\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n    \"content\" : \"content\"\r\n  }, {\r\n    \"audienceSize\" : 0,\r\n    \"publishedAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"authorName\" : \"authorName\",\r\n    \"viewsCount\" : 0,\r\n    \"files\" : [ {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    }, {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    } ],\r\n    \"survey\" : {\r\n      \"isAnonymous\" : false,\r\n      \"isOpen\" : true,\r\n      \"questions\" : [ {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      }, {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      } ],\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"voteFinishedAt\" : \"2000-01-23T04:56:07.000+00:00\"\r\n    },\r\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n    \"content\" : \"content\"\r\n  } ]\r\n}";
+        var requesterId = Guid.Empty; // todo id пользователя;
 
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<GetDelayedHiddenAnnouncementListOk>(exampleJson)
-            : default(GetDelayedHiddenAnnouncementListOk);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+        try
+        {
+            var announcements = service.GetDelayedHidingAnnouncementsForUser(requesterId);
+
+            _logger.Information("Пользователь {RequesterId} запросил список объявлений с отложенным сокрытием",
+                requesterId);
+
+            return Ok(announcements.Adapt<IEnumerable<AnnouncementSummaryDto>>());
+        }
+        catch (Exception err)
+        {
+            LogError(err, 500, "Получение списка объявлений с отложенным сокрытием", requesterId);
+            return Problem();
+        }
     }
 
     /// <inheritdoc />
     public override IActionResult GetDelayedPublishingAnnouncementList()
     {
-        // var announcements = service.GetDelayedPublicationAnnouncements(Guid.Empty); // todo id пользователя
-        //
-        // var response = new GetDelayedPublishingAnnouncementListOk
-        // {
-        //     Code = GetDelayedPublishingAnnouncementListResponses.Ok,
-        //     Content = announcements.Adapt<List<AnnouncementSummaryDto>>() 
-        // };
-        // return Task.FromResult(response);
+        /*
+         * 200 +
+         * 403:
+         *     getDelayedPublishingAnnouncementListResponses
+         * 500 +
+         */
 
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(GetDelayedPublishingAnnouncementListOk));
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401, default(GetDelayedPublishingAnnouncementListUnauthorized));
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(GetDelayedPublishingAnnouncementListForbidden));
-        string exampleJson = null;
-        exampleJson =
-            "{\r\n  \"content\" : [ {\r\n    \"audienceSize\" : 0,\r\n    \"publishedAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"authorName\" : \"authorName\",\r\n    \"viewsCount\" : 0,\r\n    \"files\" : [ {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    }, {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    } ],\r\n    \"survey\" : {\r\n      \"isAnonymous\" : false,\r\n      \"isOpen\" : true,\r\n      \"questions\" : [ {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      }, {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      } ],\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"voteFinishedAt\" : \"2000-01-23T04:56:07.000+00:00\"\r\n    },\r\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n    \"content\" : \"content\"\r\n  }, {\r\n    \"audienceSize\" : 0,\r\n    \"publishedAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"authorName\" : \"authorName\",\r\n    \"viewsCount\" : 0,\r\n    \"files\" : [ {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    }, {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    } ],\r\n    \"survey\" : {\r\n      \"isAnonymous\" : false,\r\n      \"isOpen\" : true,\r\n      \"questions\" : [ {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      }, {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      } ],\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"voteFinishedAt\" : \"2000-01-23T04:56:07.000+00:00\"\r\n    },\r\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n    \"content\" : \"content\"\r\n  } ]\r\n}";
+        var requesterId = Guid.Empty; // todo id пользователя;
 
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<GetDelayedPublishingAnnouncementListOk>(exampleJson)
-            : default(GetDelayedPublishingAnnouncementListOk);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+        try
+        {
+            var announcements = service.GetDelayedPublicationAnnouncements(requesterId);
+
+            _logger.Information("Пользователь {RequesterId} запросил список объявлений с отложенной публикацией",
+                requesterId);
+
+            return Ok(announcements.Adapt<IEnumerable<AnnouncementSummaryDto>>());
+        }
+        catch (Exception err)
+        {
+            LogError(err, 500, "Получение списка объявлений с отложенной публикацией", requesterId);
+            return Problem();
+        }
     }
 
     /// <inheritdoc />
     public override IActionResult GetHiddenAnnouncementList()
     {
-        // var announcements = service.GetHiddenAnnouncements(Guid.Empty); // todo id пользователя
-        //
-        // var response = new GetHiddenAnnouncementListOk
-        // {
-        //     Code = GetHiddenAnnouncementListResponses.Ok,
-        //     Content = announcements.Adapt<List<AnnouncementSummaryDto>>() 
-        // };
-        // return Task.FromResult(response);
+        /*
+         * 200 +
+         * 403:
+         *     hiddenAnnouncementsListAccessForbidden
+         * 500 +
+         */
 
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(GetHiddenAnnouncementListOk));
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401, default(GetHiddenAnnouncementListUnauthorized));
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(GetHiddenAnnouncementListForbidden));
-        string exampleJson = null;
-        exampleJson =
-            "{\r\n  \"content\" : [ {\r\n    \"audienceSize\" : 0,\r\n    \"publishedAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"authorName\" : \"authorName\",\r\n    \"viewsCount\" : 0,\r\n    \"files\" : [ {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    }, {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    } ],\r\n    \"survey\" : {\r\n      \"isAnonymous\" : false,\r\n      \"isOpen\" : true,\r\n      \"questions\" : [ {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      }, {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      } ],\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"voteFinishedAt\" : \"2000-01-23T04:56:07.000+00:00\"\r\n    },\r\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n    \"content\" : \"content\"\r\n  }, {\r\n    \"audienceSize\" : 0,\r\n    \"publishedAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"authorName\" : \"authorName\",\r\n    \"viewsCount\" : 0,\r\n    \"files\" : [ {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    }, {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    } ],\r\n    \"survey\" : {\r\n      \"isAnonymous\" : false,\r\n      \"isOpen\" : true,\r\n      \"questions\" : [ {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      }, {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      } ],\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"voteFinishedAt\" : \"2000-01-23T04:56:07.000+00:00\"\r\n    },\r\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n    \"content\" : \"content\"\r\n  } ]\r\n}";
+        var requesterId = Guid.Empty; // todo id пользователя;
 
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<GetHiddenAnnouncementListOk>(exampleJson)
-            : default(GetHiddenAnnouncementListOk);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+        try
+        {
+            var announcements = service.GetHiddenAnnouncements(requesterId);
+
+            _logger.Information("Пользователь {RequesterId} запросил список скрытых объявлений", requesterId);
+
+            return Ok(announcements.Adapt<IEnumerable<AnnouncementSummaryDto>>());
+        }
+        catch (Exception err)
+        {
+            LogError(err, 500, "Получение списка скрытых объявлений", requesterId);
+            return Problem();
+        }
     }
 
     /// <inheritdoc />
     public override IActionResult GetPostedAnnouncementList()
     {
-        // var announcements = service.GetPublishedAnnouncements(Guid.Empty); // todo id пользователя
-        //
-        // var response = new GetPostedAnnouncementListOk
-        // {
-        //     Code = GetPostedAnnouncementListResponses.Ok,
-        //     Content = announcements.Adapt<List<AnnouncementSummaryDto>>() 
-        // };
-        // return Task.FromResult(response);
+        /*
+         * 200 +
+         * 403:
+         *     postedAnnouncementsListAccessForbidden
+         * 500 +
+         */
 
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(GetPostedAnnouncementListOk));
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401, default(GetPostedAnnouncementListUnauthorized));
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(GetPostedAnnouncementListForbidden));
-        string exampleJson = null;
-        exampleJson =
-            "{\r\n  \"content\" : [ {\r\n    \"audienceSize\" : 0,\r\n    \"publishedAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"authorName\" : \"authorName\",\r\n    \"viewsCount\" : 0,\r\n    \"files\" : [ {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    }, {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    } ],\r\n    \"survey\" : {\r\n      \"isAnonymous\" : false,\r\n      \"isOpen\" : true,\r\n      \"questions\" : [ {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      }, {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      } ],\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"voteFinishedAt\" : \"2000-01-23T04:56:07.000+00:00\"\r\n    },\r\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n    \"content\" : \"content\"\r\n  }, {\r\n    \"audienceSize\" : 0,\r\n    \"publishedAt\" : \"2000-01-23T04:56:07.000+00:00\",\r\n    \"authorName\" : \"authorName\",\r\n    \"viewsCount\" : 0,\r\n    \"files\" : [ {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    }, {\r\n      \"name\" : \"name\",\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"type\" : \"mediafile\"\r\n    } ],\r\n    \"survey\" : {\r\n      \"isAnonymous\" : false,\r\n      \"isOpen\" : true,\r\n      \"questions\" : [ {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      }, {\r\n        \"votersAmount\" : 0,\r\n        \"answers\" : [ {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        }, {\r\n          \"votersAmount\" : 0,\r\n          \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n          \"content\" : \"content\"\r\n        } ],\r\n        \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n        \"isMultipleChoiceAllowed\" : false,\r\n        \"content\" : \"content\"\r\n      } ],\r\n      \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n      \"voteFinishedAt\" : \"2000-01-23T04:56:07.000+00:00\"\r\n    },\r\n    \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\",\r\n    \"content\" : \"content\"\r\n  } ]\r\n}";
+        var requesterId = Guid.Empty; // todo id пользователя;
 
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<GetPostedAnnouncementListOk>(exampleJson)
-            : default(GetPostedAnnouncementListOk);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+        try
+        {
+            var announcements = service.GetPublishedAnnouncements(requesterId);
+
+            _logger.Information("Пользователь {RequesterId} запросил список опубликованных объявлений",
+                requesterId);
+
+            return Ok(announcements.Adapt<IEnumerable<AnnouncementSummaryDto>>());
+        }
+        catch (Exception err)
+        {
+            LogError(err, 500, "Получение списка опубликованных объявлений", requesterId);
+            return Problem();
+        }
     }
 
     /// <inheritdoc />
-    public override IActionResult HidePostedAnnouncement([FromBody] Guid body)
+    public override IActionResult HidePostedAnnouncement([FromBody] Guid announcementId)
     {
-        // service.Hide(Guid.Empty, id, DateTime.Now); // todo id пользователя
-        //
-        // var response = new HidePostedAnnouncementOk { Code = HidePostedAnnouncementResponses.Ok };
-        // return Task.FromResult(response);
+        /*
+         * 200 +
+         * 403:
+         *   announcementHidingForbidden +
+         * 404:
+         *   announcementDoesNotExist +
+         * 409:
+         *   announcementAlreadyHidden +
+         *   announcementNotYetPublished +
+         * 500 +
+         */
 
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(HidePostedAnnouncementOk));
-        //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(400, default(HidePostedAnnouncementBadRequest));
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401, default(HidePostedAnnouncementUnauthorized));
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(HidePostedAnnouncementForbidden));
-        //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(404, default(HidePostedAnnouncementNotFound));
-        //TODO: Uncomment the next line to return response 409 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(409, default(HidePostedAnnouncementConflict));
-        string exampleJson = null;
-        exampleJson = "{ }";
+        var requesterId = Guid.Empty; // todo id пользователя
 
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<HidePostedAnnouncementOk>(exampleJson)
-            : default(HidePostedAnnouncementOk);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+        try
+        {
+            service.Hide(requesterId, announcementId, DateTime.Now);
+
+            _logger.Information("Пользователь {RequesterId} скрыл объявление {AnnouncementId}",
+                requesterId, announcementId);
+
+            return Ok();
+        }
+        catch (OperationNotAllowedException err)
+        {
+            LogWarning(403, "Сокрытие объявления",
+                nameof(HidePostedAnnouncementResponses.AnnouncementHidingForbidden), requesterId, err.Message);
+            return StatusCode(403,
+                ConstructAnswerWithOnlyCode(HidePostedAnnouncementResponses.AnnouncementHidingForbidden));
+        }
+        catch (AnnouncementDoesNotExist err)
+        {
+            LogWarning(404, "Сокрытие объявления",
+                nameof(HidePostedAnnouncementResponses.AnnouncementDoesNotExist), requesterId, err.Message);
+            return NotFound(ConstructAnswerWithOnlyCode(HidePostedAnnouncementResponses.AnnouncementDoesNotExist));
+        }
+        catch (AnnouncementAlreadyHiddenException err)
+        {
+            LogWarning(409, "Сокрытие объявления",
+                nameof(HidePostedAnnouncementResponses.AnnouncementAlreadyHidden), requesterId, err.Message);
+            return Conflict(
+                ConstructAnswerWithOnlyCode(HidePostedAnnouncementResponses.AnnouncementAlreadyHidden));
+        }
+        catch (AnnouncementNotYetPublishedException err)
+        {
+            LogWarning(409, "Сокрытие объявления",
+                nameof(HidePostedAnnouncementResponses.AnnouncementNotYetPublished), requesterId, err.Message);
+            return Conflict(
+                ConstructAnswerWithOnlyCode(HidePostedAnnouncementResponses.AnnouncementNotYetPublished));
+        }
+        catch (Exception err)
+        {
+            LogError(err, 500, "Сокрытие объявления", requesterId);
+            return Problem();
+        }
     }
 
     /// <inheritdoc />
-    public override IActionResult PublishImmediatelyDelayedPublishingAnnouncement([FromBody] Guid body)
+    public override IActionResult PublishImmediatelyDelayedPublishingAnnouncement([FromBody] Guid announcementId)
     {
-        // service.Publish(Guid.Empty, id, DateTime.Now); // todo id пользователя
-        //
-        // var response = new PublishImmediatelyDelayedPublishingAnnouncementOk
-        //     { Code = PublishImmediatelyDelayedAnnouncementResponses.Ok };
-        // return Task.FromResult(response);
+        /*
+         * 200 +
+         * 403:
+         *   immediatePublishingForbidden +
+         * 404:
+         *   announcementDoesNotExist +
+         * 500 +
+         */
 
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(PublishImmediatelyDelayedPublishingAnnouncementOk));
-        //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(400, default(PublishImmediatelyDelayedPublishingAnnouncementBadRequest));
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401, default(PublishImmediatelyDelayedPublishingAnnouncementUnauthorized));
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(PublishImmediatelyDelayedPublishingAnnouncementForbidden));
-        //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(404, default(PublishImmediatelyDelayedPublishingAnnouncementNotFound));
-        //TODO: Uncomment the next line to return response 409 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(409, default(PublishImmediatelyDelayedPublishingAnnouncementConflict));
-        string exampleJson = null;
-        exampleJson = "{ }";
+        var requesterId = Guid.Empty; // todo id пользователя
 
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<PublishImmediatelyDelayedPublishingAnnouncementOk>(exampleJson)
-            : default(PublishImmediatelyDelayedPublishingAnnouncementOk);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+        try
+        {
+            service.Publish(requesterId, announcementId, DateTime.Now); // todo id пользователя
+
+            _logger.Information(
+                "Пользователь {RequesterId} немедленно опубликовал объявление {AnnouncementId}, ожидающее отложенную публикацию",
+                requesterId, announcementId);
+
+            return Ok();
+        }
+        catch (OperationNotAllowedException err)
+        {
+            LogWarning(403, "Немедленная публикация объявления, ожидающего отложенной публикации",
+                nameof(PublishImmediatelyDelayedAnnouncementResponses.ImmediatePublishingForbidden), requesterId,
+                err.Message);
+            return StatusCode(403,
+                ConstructAnswerWithOnlyCode(PublishImmediatelyDelayedAnnouncementResponses
+                    .ImmediatePublishingForbidden));
+        }
+        catch (AnnouncementDoesNotExist err)
+        {
+            LogWarning(404, "Немедленная публикация объявления, ожидающего отложенной публикации",
+                nameof(PublishImmediatelyDelayedAnnouncementResponses.AnnouncementDoesNotExist), requesterId,
+                err.Message);
+            return NotFound(ConstructAnswerWithOnlyCode(PublishImmediatelyDelayedAnnouncementResponses
+                .AnnouncementDoesNotExist));
+        }
+        catch (Exception err)
+        {
+            LogError(err, 500, "Немедленная публикация объявления, ожидающего отложенной публикации", requesterId);
+            return Problem();
+        }
     }
 
     /// <inheritdoc />
-    public override IActionResult RestoreHiddenAnnouncement([FromBody] Guid body)
+    public override IActionResult RestoreHiddenAnnouncement([FromBody] Guid announcementId)
     {
-        // service.Restore(Guid.Empty, id, DateTime.Now); // todo id пользователя
-        //
-        // var response = new RestoreHiddenAnnouncementOk { Code = UnhideHiddenAnnouncementResponses.Ok };
-        // return Task.FromResult(response);
+        /*
+         * 200 +
+         * 403:
+         *   restoreForbidden +
+         * 404:
+         *   announcementDoesNotExist +
+         * 409:
+         *   announcementNotHidden +
+         * 500 +
+         */
 
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(RestoreHiddenAnnouncementOk));
-        //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(400, default(RestoreHiddenAnnouncementBadRequest));
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401, default(RestoreHiddenAnnouncementUnauthorized));
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(RestoreHiddenAnnouncementForbidden));
-        //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(404, default(RestoreHiddenAnnouncementNotFound));
-        //TODO: Uncomment the next line to return response 409 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(409, default(RestoreHiddenAnnouncementConflict));
-        string exampleJson = null;
-        exampleJson = "{ }";
+        var requesterId = Guid.Empty; // todo id пользователя
 
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<RestoreHiddenAnnouncementOk>(exampleJson)
-            : default(RestoreHiddenAnnouncementOk);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+        try
+        {
+            service.Restore(requesterId, announcementId, DateTime.Now);
+
+            _logger.Information("Пользователь {RequesterId} восстановил скрытое объявление {AnnouncementId}",
+                requesterId, announcementId);
+
+            return Ok();
+        }
+        catch (OperationNotAllowedException err)
+        {
+            LogWarning(403, "Восстановление скрытого объявления",
+                nameof(RestoreHiddenAnnouncementResponses.RestoreForbidden), requesterId, err.Message);
+            return StatusCode(403,
+                ConstructAnswerWithOnlyCode(RestoreHiddenAnnouncementResponses.RestoreForbidden));
+        }
+        catch (AnnouncementDoesNotExist err)
+        {
+            LogWarning(404, "Восстановление скрытого объявления",
+                nameof(RestoreHiddenAnnouncementResponses.AnnouncementDoesNotExist), requesterId, err.Message);
+            return NotFound(
+                ConstructAnswerWithOnlyCode(RestoreHiddenAnnouncementResponses.AnnouncementDoesNotExist));
+        }
+        catch (AnnouncementNotHiddenException err)
+        {
+            LogWarning(404, "Восстановление скрытого объявления",
+                nameof(RestoreHiddenAnnouncementResponses.AnnouncementNotHidden), requesterId, err.Message);
+            return NotFound(ConstructAnswerWithOnlyCode(RestoreHiddenAnnouncementResponses.AnnouncementNotHidden));
+        }
+        catch (Exception err)
+        {
+            LogError(err, 500, "Восстановление скрытого объявления", requesterId);
+            return Problem();
+        }
     }
 
     /// <inheritdoc />
     public override IActionResult UpdateAnnouncement([FromBody] UpdateAnnouncementDto updateAnnouncementDto)
     {
-        // var editAnnouncement = dto.Adapt<EditAnnouncement>(); 
-        // service.Edit(Guid.Empty, editAnnouncement); // todo id пользователя
-        //
-        // var response = new UpdateAnnouncementOk { Code = UpdateAnnouncementResponses.Ok };
-        // return Task.FromResult(response);
+        /*
+         * 200 +
+         * 400:
+         *   contentEmpty +
+         *   audienceEmpty +
+         * 403:
+         *   announcementEditingForbidden +
+         * 404:
+         *   announcementDoesNotExist +
+         *   announcementCategoriesDoNotExist +
+         *   attachmentsDoNotExist +
+         * 409:
+         *   delayedPublishingMomentIsInPast +
+         *   delayedHidingMomentIsInPast +
+         *   autoHidingAnAlreadyHiddenAnnouncement +
+         *   autoPublishingPublishedAndNonHiddenAnnouncement +
+         *   cannotDetachSurvey +
+         * 500 +
+         */
 
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(UpdateAnnouncementOk));
-        //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(400, default(UpdateAnnouncementBadRequest));
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401, default(UpdateAnnouncementUnauthorized));
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(UpdateAnnouncementForbidden));
-        //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(404, default(UpdateAnnouncementNotFound));
-        //TODO: Uncomment the next line to return response 409 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(409, default(UpdateAnnouncementConflict));
-        string exampleJson = null;
-        exampleJson = "{ }";
+        var requesterId = Guid.Empty; // todo id пользователя
 
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<UpdateAnnouncementOk>(exampleJson)
-            : default(UpdateAnnouncementOk);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+        try
+        {
+            var editAnnouncement = updateAnnouncementDto.Adapt<EditAnnouncement>();
+            service.Edit(requesterId, editAnnouncement);
+
+            _logger.Information("Пользователь {RequesterId} отредактировал объявление {AnnouncementId}",
+                requesterId, updateAnnouncementDto.Id);
+
+            return Ok();
+        }
+        catch (AnnouncementContentEmptyException err)
+        {
+            LogWarning(400, "Редактирование объявления", nameof(UpdateAnnouncementResponses.ContentEmpty),
+                requesterId, err.Message);
+            return BadRequest(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.ContentEmpty));
+        }
+        catch (AnnouncementAudienceEmptyException err)
+        {
+            LogWarning(400, "Редактирование объявления", nameof(UpdateAnnouncementResponses.AudienceEmpty),
+                requesterId, err.Message);
+            return BadRequest(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AudienceEmpty));
+        }
+        catch (OperationNotAllowedException err)
+        {
+            LogWarning(403, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.AnnouncementEditingForbidden), requesterId, err.Message);
+            return StatusCode(403,
+                ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AnnouncementEditingForbidden));
+        }
+        catch (AnnouncementDoesNotExist err)
+        {
+            LogWarning(404, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.AnnouncementDoesNotExist), requesterId, err.Message);
+            return NotFound(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AnnouncementDoesNotExist));
+        }
+        catch (AnnouncementCategoriesDoNotExist err)
+        {
+            LogWarning(404, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.AnnouncementCategoriesDoesNotExist), requesterId, err.Message);
+            return NotFound(
+                ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AnnouncementCategoriesDoesNotExist));
+        }
+        catch (AttachmentDoesNotExist err)
+        {
+            LogWarning(404, "Редактирование объявления", nameof(UpdateAnnouncementResponses.AttachmentsDoNotExist),
+                requesterId, err.Message);
+            return NotFound(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AttachmentsDoNotExist));
+        }
+        catch (DelayedPublishingMomentComesInPastException err)
+        {
+            LogWarning(409, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.DelayedPublishingMomentIsInPast), requesterId, err.Message);
+            return Conflict(
+                ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.DelayedPublishingMomentIsInPast));
+        }
+        catch (DelayedHidingMomentComesInPastException err)
+        {
+            LogWarning(409, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.DelayedHidingMomentIsInPast), requesterId, err.Message);
+            return Conflict(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.DelayedHidingMomentIsInPast));
+        }
+        catch (AutoPublishAnAlreadyPublishedAnnouncementException err)
+        {
+            LogWarning(409, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.AutoPublishingPublishedAndNonHiddenAnnouncement), requesterId,
+                err.Message);
+            return Conflict(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses
+                .AutoPublishingPublishedAndNonHiddenAnnouncement));
+        }
+        catch (AutoHidingAnAlreadyHiddenAnnouncementException err)
+        {
+            LogWarning(409, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.AutoHidingAnAlreadyHiddenAnnouncement), requesterId,
+                err.Message);
+            return Conflict(
+                ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AutoHidingAnAlreadyHiddenAnnouncement));
+        }
+        catch (CannotDetachSurveyException err)
+        {
+            LogWarning(409, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.CannotDetachSurvey), requesterId, err.Message);
+            return Conflict(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.CannotDetachSurvey));
+        }
+        catch (Exception err)
+        {
+            LogError(err, 500, "Редактирование объявления", requesterId);
+            return Problem();
+        }
     }
+
+
+
+    private void LogWarning(int httpStatusCode, string operation, string reasonCode, Guid requesterId,
+        string? additionalMessage = null) =>
+        _logger.Warning(
+            "HTTP-код: {HttpStatusCode}; Операция: {Operation}; Код причины: {ReasonCode}; ID пользователя: {RequesterId}; Дополнительная информация: {AdditionalMessage}",
+            httpStatusCode, operation, reasonCode, requesterId, additionalMessage);
+
+    private void LogError(Exception err, int httpStatusCode, string operation, Guid requesterId) =>
+        _logger.Error(
+            err, "HTTP-код: {HttpStatusCode}; Операция: {Operation}; ID пользователя: {RequesterId}",
+            httpStatusCode, operation, requesterId);
+
+    private static object ConstructAnswerWithOnlyCode<TEnum>(TEnum code)
+        where TEnum : Enum =>
+        new { Code = code };
 }

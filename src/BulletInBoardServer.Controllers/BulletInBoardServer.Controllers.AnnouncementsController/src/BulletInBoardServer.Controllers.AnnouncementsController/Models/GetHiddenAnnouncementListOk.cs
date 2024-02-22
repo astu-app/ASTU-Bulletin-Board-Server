@@ -29,12 +29,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public List<AnnouncementSummaryDto> Content { get; set; }
 
         /// <summary>
-        /// Gets or Sets Code
-        /// </summary>
-        [DataMember(Name="code", EmitDefaultValue=true)]
-        public GetHiddenAnnouncementListResponses Code { get; set; }
-
-        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -43,7 +37,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             var sb = new StringBuilder();
             sb.Append("class GetHiddenAnnouncementListOk {\n");
             sb.Append("  Content: ").Append(Content).Append("\n");
-            sb.Append("  Code: ").Append(Code).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -85,11 +78,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Content != null &&
                     other.Content != null &&
                     Content.SequenceEqual(other.Content)
-                ) && 
-                (
-                    Code == other.Code ||
-                    
-                    Code.Equals(other.Code)
                 );
         }
 
@@ -105,8 +93,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                 // Suitable nullity checks etc, of course :)
                     if (Content != null)
                     hashCode = hashCode * 59 + Content.GetHashCode();
-                    
-                    hashCode = hashCode * 59 + Code.GetHashCode();
                 return hashCode;
             }
         }

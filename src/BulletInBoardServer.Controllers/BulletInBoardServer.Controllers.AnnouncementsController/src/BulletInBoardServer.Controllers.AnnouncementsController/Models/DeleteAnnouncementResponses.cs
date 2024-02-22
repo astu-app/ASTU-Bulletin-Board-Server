@@ -16,36 +16,24 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
         /// <summary>
-        /// Ответы:   ok - Ок   incorrectIdentifierFormat - Некорректный формат идентификатора   unauthorized - Пользователь не авторизован для выполнения операции   announcementDeletionForbidden - Пользователь не имеет права удалить объявление   announcementDoesNotExist - Объявление не существует 
+        /// Ответы:   announcementDeletionForbidden - Пользователь не имеет права удалить объявление   announcementDoesNotExist - Объявление не существует 
         /// </summary>
-        /// <value>Ответы:   ok - Ок   incorrectIdentifierFormat - Некорректный формат идентификатора   unauthorized - Пользователь не авторизован для выполнения операции   announcementDeletionForbidden - Пользователь не имеет права удалить объявление   announcementDoesNotExist - Объявление не существует </value>
+        /// <value>Ответы:   announcementDeletionForbidden - Пользователь не имеет права удалить объявление   announcementDoesNotExist - Объявление не существует </value>
         [TypeConverter(typeof(CustomEnumConverter<DeleteAnnouncementResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum DeleteAnnouncementResponses
         {
             
             /// <summary>
-            /// Enum Ok for ok
-            /// </summary>
-            [EnumMember(Value = "ok")]
-            Ok = 1,
-            
-            /// <summary>
-            /// Enum IncorrectIdentifierFormat for incorrectIdentifierFormat
-            /// </summary>
-            [EnumMember(Value = "incorrectIdentifierFormat")]
-            IncorrectIdentifierFormat = 2,
-            
-            /// <summary>
             /// Enum AnnouncementDeletionForbidden for announcementDeletionForbidden
             /// </summary>
             [EnumMember(Value = "announcementDeletionForbidden")]
-            AnnouncementDeletionForbidden = 3,
+            AnnouncementDeletionForbidden = 1,
             
             /// <summary>
             /// Enum AnnouncementDoesNotExist for announcementDoesNotExist
             /// </summary>
             [EnumMember(Value = "announcementDoesNotExist")]
-            AnnouncementDoesNotExist = 4
+            AnnouncementDoesNotExist = 2
         }
 }

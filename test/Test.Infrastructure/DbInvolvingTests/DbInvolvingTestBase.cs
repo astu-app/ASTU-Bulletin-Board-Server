@@ -1,5 +1,5 @@
 ﻿using BulletInBoardServer.Domain;
-using TestDbFiller;
+using BulletInBoardServer.Domain.TestDbFiller;
 
 namespace Test.Infrastructure.DbInvolvingTests;
 
