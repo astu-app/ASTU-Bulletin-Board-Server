@@ -26,9 +26,6 @@ paths:
                 type: object
                 title: createAnnouncementCategoryCreated
                 properties:
-                  code:
-                    # created
-                    $ref: '#/components/schemas/createAnnouncementCategoryResponses'
                   content:
                     $ref: '#/components/schemas/announcementCategoryIdentifierDto'
         400:
@@ -55,6 +52,8 @@ paths:
                   code:
                     # announcementCategoryCreationForbidden
                     $ref: '#/components/schemas/createAnnouncementCategoryResponses'
+        500:
+          description: Internal Server Error
 
   /announcement-categories/get-list:
     get:
@@ -70,9 +69,6 @@ paths:
                 type: object
                 title: getAllAnnouncementCategoriesOk
                 properties:
-                  code:
-                    # ok
-                    $ref: '#/components/schemas/getAllAnnouncementCategoriesResponses'
                   content:
                     $ref: '#/components/schemas/announcementCategoriesListDto'
         401:
@@ -88,6 +84,8 @@ paths:
                   code:
                     # announcementCategoryListAccessForbidden
                     $ref: '#/components/schemas/getAllAnnouncementCategoriesResponses'
+        500:
+          description: Internal Server Error
   
   /announcement-categories/update:
     put:
@@ -103,26 +101,9 @@ paths:
       responses:
         200:
           description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                title: updateAnnouncementCategoryOk
-                properties:
-                  code:
-                    # ok
-                    $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
         400:
+          # Некорректный формат идентификатора
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                title: updateAnnouncementCategoryBadRequest
-                properties:
-                  code:
-                    # incorrectIdentifierFormat
-                    $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
         401:
           description: Unauthorized
         403:
@@ -147,6 +128,8 @@ paths:
                   code:
                     # announcementCategoryDoesNotExist
                     $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
+        500:
+          description: Internal Server Error
 
   /announcement-categories/delete:
     delete:
@@ -162,26 +145,9 @@ paths:
       responses:
         200:
           description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                title: deleteAnnouncementCategoryOk
-                properties:
-                  code:
-                    # ok
-                    $ref: '#/components/schemas/deleteAnnouncementCategoryResponses'
         400:
+          # Некорректный формат идентификатора
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                title: deleteAnnouncementCategoryBadRequest
-                properties:
-                  code:
-                    # incorrectIdentifierFormat
-                    $ref: '#/components/schemas/deleteAnnouncementCategoryResponses'
         401:
           description: Unauthorized
         403:
@@ -206,6 +172,8 @@ paths:
                   code:
                     # announcementCategoryDoesNotExist
                     $ref: '#/components/schemas/deleteAnnouncementCategoryResponses'
+        500:
+          description: Internal Server Error
 
   /announcement-categories/get-subscribtions:
     get:
@@ -221,15 +189,6 @@ paths:
       responses:
         200:
           description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getAnnouncementCategoriesSubscriptionsOk
-                properties:
-                  code:
-                    # ok
-                    $ref: '#/components/schemas/getAnnouncementCategoriesSubscriptionsResponses'
         401:
           description: Unauthorized
         403:
@@ -243,6 +202,8 @@ paths:
                   code:
                     # getSubscriptionsListForbidden
                     $ref: '#/components/schemas/getAnnouncementCategoriesSubscriptionsResponses'
+        500:
+          description: Internal Server Error
 
   /announcement-categories/update-subscribtions:
     post:
@@ -258,29 +219,10 @@ paths:
       responses:
         200:
           description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                title: updateAnnouncementCategoriesSubscriptionsOk
-                properties:
-                  code:
-                    # ok
-                    $ref: '#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
         400:
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                title: updateAnnouncementCategoriesSubscriptionsBadRequest
-                properties:
-                  code:
-                    # incorrectIdentifierFormat
-                    $ref: '#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
-                  content:
-                    $ref: './common-schemas.yaml#/components/schemas/identifiers'
         401:
+          # Некорректный формат идентификатора
           description: Unauthorized
         403:
           description: Forbidden
@@ -304,6 +246,8 @@ paths:
                   code:
                     # categoriesDoNotExist
                     $ref: '#/components/schemas/updateAnnouncementCategoriesSubscriptionsResponses'
+        500:
+          description: Internal Server Error
 
 components:
   schemas:
@@ -356,98 +300,65 @@ components:
     createAnnouncementCategoryResponses:
       type: string
       enum:
-        # 201
-        - created
         # 400
         - colorIsIncorrectHex
         # 403
         - announcementCategoryCreationForbidden
       description: >
         Ответы:
-          created - Категория объявлений создана
           colorIsIncorrectHex - Код цвета передан не в HEX формате 
-          unauthorized - Пользователь не авторизован для выполнения операции
           announcementCategoryCreationForbidden - Пользователь не имеет права создать категорию объявлений
 
     getAllAnnouncementCategoriesResponses:
       type: string
       enum:
-        # 200
-        - ok
         # 403
         - announcementCategoryListAccessForbidden
       description: >
         Ответы:
-          ok - Ок
-          unauthorized - Пользователь не авторизован для выполнения операции
           announcementCategoryListAccessForbidden - Пользователь не имеет права получить список категорий объявлений
 
     updateAnnouncementCategoryResponses:
       type: string
       enum:
-        # 200
-        - ok
-        # 400
-        - incorrectIdentifierFormat
         # 403
         - announcementCategoryUpdatingForbidden
         # 404
         - announcementCategoryDoesNotExist
       description: >
         Ответы:
-          ok - Ок
-          incorrectIdentifierFormat - Некорректный формат идентификатора
-          unauthorized - Пользователь не авторизован для выполнения операции
           announcementCategoryUpdatingForbidden - Пользователь не имеет права редактировать категорию объявлений
           announcementCategoryDoesNotExist - Категория объявлений с указанным id не существует  
 
     deleteAnnouncementCategoryResponses:
       type: string
       enum:
-        # 200
-        - ok
-        # 400
-        - incorrectIdentifierFormat
         # 403
         - announcementCategoryDeletionForbidden
         # 404
         - announcementCategoryDoesNotExist
       description: >
         Ответы:
-          ok - Ок
-          incorrectIdentifierFormat - Некорректный формат идентификатора
-          unauthorized - Пользователь не авторизован для выполнения операции
           announcementCategoryDeletionForbidden - Пользователь не имеет права удалить категорию объявлений
           announcementCategoryDoesNotExist - Категория объявлений с указанным id не существует
 
     getAnnouncementCategoriesSubscriptionsResponses:
       type: string
       enum:
-        # 200
-        - ok
         # 403
         - getSubscriptionsListForbidden
       description: >
         Ответы:
-          ok - Ок
-          unauthorized - Пользователь не авторизован для выполнения операции
           getSubscriptionsListForbidden - Пользователь не имеет права получить список категорий объявлений, на которые подписан
 
     updateAnnouncementCategoriesSubscriptionsResponses:
       type: string
       enum:
-        # 200
-        - ok
-        # 400
-        - incorrectIdentifierFormat
         # 403
         - updateSubscriptionsForbidden
         # 404
         - categoriesDoNotExist
       description: >
         Ответы:
-          ok - Ок
-          incorrectIdentifierFormat - Некорректный формат идентификатора
-          unauthorized - Пользователь не авторизован для выполнения операции
           updateSubscriptionsForbidden - Пользователь не имеет права получить список категорий объявлений, на которые подписан
           categoriesDoNotExist - В качестве одного или нескольких id категорий объявлений прикреплен несуществующий в базе id

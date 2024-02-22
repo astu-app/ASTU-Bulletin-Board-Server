@@ -26,9 +26,6 @@ paths:
                 type: object
                 title: createUsergroupCreated
                 properties:
-                  code:
-                    # created
-                    $ref: '#/components/schemas/createUsergroupResponses'
                   content:
                     $ref: '#/components/schemas/usergroupIdentifierDto'
         400:
@@ -79,6 +76,8 @@ paths:
                     # adminCannotBeOrdinaryMember
                     # cyclicDependency
                     $ref: '#/components/schemas/createUsergroupResponses'
+        500:
+          description: Internal Server Error
 
   /usergroups/get-all:
     get:
@@ -94,9 +93,6 @@ paths:
                 type: object
                 title: getAllUsergroupsOk
                 properties:
-                  code:
-                    # ok
-                    $ref: '#/components/schemas/getAllUsergroupsResponses'
                   content:
                     $ref: '#/components/schemas/usergroupListDto'
         401:
@@ -112,6 +108,8 @@ paths:
                   code:
                     # getAllUsergroupsForbidden
                     $ref: '#/components/schemas/getAllUsergroupsResponses'
+        500:
+          description: Internal Server Error
 
   /usergroups/get-details:
     get:
@@ -133,22 +131,11 @@ paths:
                 type: object
                 title: getUsergroupDetailsOk
                 properties:
-                  code:
-                    # ok
-                    $ref: '#/components/schemas/getUsergroupDetailsResponses'
                   content:
                     $ref: '#/components/schemas/usergroupDetailsDto'
         400:
+          # Некорректный формат идентификатора
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getUsergroupDetailsBadRequest
-                properties:
-                  code:
-                    # incorrectIdentifierFormat
-                    $ref: '#/components/schemas/getUsergroupDetailsResponses'
         401:
           description: Unauthorized
         403:
@@ -173,6 +160,8 @@ paths:
                   code:
                     # usergroupDoesNotExist
                     $ref: '#/components/schemas/getUsergroupDetailsResponses'
+        500:
+          description: Internal Server Error
 
   /usergroups/update:
     put:
@@ -188,17 +177,9 @@ paths:
       responses:
         200:
           description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                title: updateUsergroupOk
-                properties:
-                  code:
-                    # ok
-                    $ref: '#/components/schemas/updateUsergroupResponses'
         400:
           description: Bad Request
+          # Описанные ниже коды + некорректный формат идентификатора
           content:
             application/json:
               schema:
@@ -206,7 +187,6 @@ paths:
                 title: updateUsergroupBadRequest
                 properties:
                   code:
-                    # incorrectIdentifierFormat
                     # nameIsEmptyOrWhitespace
                     $ref: '#/components/schemas/updateUsergroupResponses'
         401:
@@ -244,6 +224,8 @@ paths:
                   code:
                     # adminCannotBeOrdinaryMember
                     $ref: '#/components/schemas/updateUsergroupResponses'
+        500:
+          description: Internal Server Error
 
   /usergroups/delete:
     delete:
@@ -259,15 +241,6 @@ paths:
       responses:
         200:
           description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                title: deleteUsergroupOk
-                properties:
-                  code:
-                    # ok
-                    $ref: '#/components/schemas/deleteUsergroupResponses'
         400:
           description: Bad Request
           content:
@@ -282,16 +255,8 @@ paths:
         401:
           description: Unauthorized
         403:
+          # Некорректный формат идентификатора
           description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                title: deleteUsergroupForbidden
-                properties:
-                  code:
-                    # usergroupDeletionForbidden
-                    $ref: '#/components/schemas/deleteUsergroupResponses'
         404:
           description: Not Found
           content:
@@ -303,6 +268,8 @@ paths:
                   code:
                     # usergroupDoesNotExist
                     $ref: '#/components/schemas/deleteUsergroupResponses'
+        500:
+          description: Internal Server Error
 
   /usergroups/add-users:
     post:
@@ -318,26 +285,9 @@ paths:
       responses:
         200:
           description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                title: addUsersToUsergroupOk
-                properties:
-                  code:
-                    # ok
-                    $ref: '#/components/schemas/addUsersToUsergroupResponses'
         400:
+          # Некорректный формат идентификатора
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                title: addUsersToUsergroupBadRequest
-                properties:
-                  code:
-                    # incorrectIdentifierFormat
-                    $ref: '#/components/schemas/addUsersToUsergroupResponses'
         401:
           description: Unauthorized
         403:
@@ -375,6 +325,8 @@ paths:
                     # userAlreadyMember
                     # userIsAdmin
                     $ref: '#/components/schemas/addUsersToUsergroupResponses'
+        500:
+          description: Internal Server Error
 
   /usergroups/delete-users:
     post:
@@ -390,26 +342,9 @@ paths:
       responses:
         200:
           description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                title: deleteUsersFromUsergroupOK
-                properties:
-                  code:
-                    # ok
-                    $ref: '#/components/schemas/deleteUsersFromUsergroupResponses'
         400:
+          # Некорректный формат идентификатора
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                title: deleteUsersFromUsergroupBadRequest
-                properties:
-                  code:
-                    # incorrectIdentifierFormat
-                    $ref: '#/components/schemas/deleteUsersFromUsergroupResponses'
         401:
           description: Unauthorized
         403:
@@ -447,6 +382,8 @@ paths:
                     # userIsNotAMember
                     # userIsAdmin
                     $ref: '#/components/schemas/deleteUsersFromUsergroupResponses'
+        500:
+          description: Internal Server Error
 
 components:
   schemas:
@@ -588,8 +525,6 @@ components:
     createUsergroupResponses:
       type: string
       enum:
-        # 201
-        - created
         # 400
         - nameNullOrWhitespace
         # 403
@@ -602,9 +537,7 @@ components:
         - cyclicDependency
       description: >
         Ответы:
-          created - Группа пользователей создана
           nameNullOrWhitespace - Название группы пользователей null или состоит исключительно из пробельных символов
-          unauthorized - Пользователь не авторизован для выполнения операции
           usergroupCreationForbidden - Пользователь не имеет права создать группу пользователей
           usersDoNotExist - В качестве одного или нескольких id пользователей прикреплен несуществующий в базе id
           usergroupsDoNotExist - В качестве одного или нескольких id групп пользователей прикреплен несуществующий в базе id
@@ -614,36 +547,28 @@ components:
     getAllUsergroupsResponses:
       type: string
       enum:
-        # 200
-        - ok
         # 403
         - getAllUsergroupsForbidden
+      description: >
+        Ответы:
+          getAllUsergroupsForbidden - Пользователь не имеет права получать список всех групп пользователей
 
     getUsergroupDetailsResponses:
       type: string
       enum:
-        # 200
-        - ok
-        # 400
-        - incorrectIdentifierFormat
         # 403
         - getUsergroupDetailsForbidden
         # 404
         - usergroupDoesNotExist
       description: >
         Ответы:
-          ok - Ок
-          incorrectIdentifierFormat - Некорректный формат идентификатора 
-          unauthorized - Пользователь не авторизован для выполнения операции
           getUsergroupDetailsForbidden - Пользователь не имеет права запрашивать детали группы пользователей
+          usergroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id 
 
     updateUsergroupResponses:
       type: string
       enum:
-        # 200
-        - ok
         # 400
-        - incorrectIdentifierFormat
         - nameIsEmptyOrWhitespace
         # 403
         - updateUsergroupForbidden
@@ -653,10 +578,7 @@ components:
         - adminCannotBeOrdinaryMember
       description: >
         Ответы:
-          ok - Ок
-          incorrectIdentifierFormat - Некорректный формат идентификатора
           nameIsEmptyOrWhitespace - Имя не содержит символов или содержит исключительно пробельные
-          unauthorized - Пользователь не авторизован для выполнения операции 
           updateUsergroupForbidden - Пользователь не имеет права редактировать группу пользователей
           usersDoNotExist - В качестве одного или нескольких id пользователей прикреплен несуществующий в базе id
           adminCannotBeOrdinaryMember - Идентификатор администратора передан в массиве идентификаторов участников
@@ -664,29 +586,18 @@ components:
     deleteUsergroupResponses:
       type: string
       enum:
-        # 200
-        - ok
-        # 400
-        - incorrectIdentifierFormat
         # 403
         - usergroupDeletionForbidden
         # 404
         - usergroupDoesNotExist
       description: >
         Ответы:
-          ok - Ок
-          incorrectIdentifierFormat - Некорректный формат идентификатора
-          unauthorized - Пользователь не авторизован для выполнения операции 
           usergroupDeletionForbidden - Пользователь не имеет права удалить группу пользователей
           usergroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
 
     addUsersToUsergroupResponses:
       type: string
       enum:
-        # 200
-        - ok
-        # 400
-        - incorrectIdentifierFormat
         # 403
         - addUsersToUsergroupForbidden
         # 404
@@ -697,9 +608,6 @@ components:
         - userIsAdmin
       description: >
         Ответы:
-          ok - Ок
-          incorrectIdentifierFormat - Некорректный формат идентификатора
-          unauthorized - Пользователь не авторизован для выполнения операции 
           addUsersToUsergroupForbidden - Пользователь не имеет права добавить пользователя в группу пользователей
           usergroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
           usersDoNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id
@@ -709,10 +617,6 @@ components:
     deleteUsersFromUsergroupResponses:
       type: string
       enum:
-        # 200
-        - ok
-        # 400
-        - incorrectIdentifierFormat
         # 403
         - removeUsersFromUsergroupForbidden
         # 404
@@ -723,9 +627,6 @@ components:
         - userIsAdmin
       description: >
         Ответы:
-          ok - Ок
-          incorrectIdentifierFormat - Некорректный формат идентификатора
-          unauthorized - Пользователь не авторизован для выполнения операции 
           addUsersToUsergroupForbidden - Пользователь не имеет права удалить пользователя из группы пользователей
           usergroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
           usersDoNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id
