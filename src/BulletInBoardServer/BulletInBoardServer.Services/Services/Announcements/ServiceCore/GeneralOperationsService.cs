@@ -23,6 +23,7 @@ public class GeneralOperationsService(
 {
     public Announcement Create(Guid requesterId, CreateAnnouncement create)
     {
+        ContentValidOrThrow(create);
         AudienceValidOrThrow(create);
         DelayedMomentsCorrectOrThrow(create);
 
@@ -169,6 +170,12 @@ public class GeneralOperationsService(
 
 
 
+    private static void ContentValidOrThrow(CreateAnnouncement create)
+    {
+        if (string.IsNullOrWhiteSpace(create.Content))
+            throw new AnnouncementContentNullOrEmptyException();
+    }
+    
     private static void AudienceValidOrThrow(CreateAnnouncement create)
     {
         if (create.UserIds is null || !create.UserIds.Any())

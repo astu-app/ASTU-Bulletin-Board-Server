@@ -45,8 +45,9 @@ public class AnnouncementTest
     public void SetPublishedMoment_CurrentMoment_Passes()
     {
         var announcement = CreateValidAnnouncement();
-
-        var setPublishedMoment = () => announcement.SetPublishedMoment(DateTime.Now, DateTime.Now);
+        var now = DateTime.Now;
+        
+        var setPublishedMoment = () => announcement.SetPublishedMoment(now: now, publishedAt: now);
         setPublishedMoment.Should().NotThrow();
     }
 
@@ -137,8 +138,9 @@ public class AnnouncementTest
     public void SetHiddenAt_CurrentMoment_Passes()
     {
         var announcement = CreateValidAnnouncement();
-
-        var setHiddenAt = () => announcement.SetPublishedMoment(DateTime.Now, DateTime.Now);
+        var now = DateTime.Now;
+        
+        var setHiddenAt = () => announcement.SetPublishedMoment(now: now, publishedAt: now);
         setHiddenAt.Should().NotThrow();
     }
 
@@ -223,7 +225,8 @@ public class AnnouncementTest
     public void SetAutoPublishingAt_ForAlreadyPublishedAnnouncement_Throws()
     {
         var announcement = CreateValidAnnouncement();
-        announcement.SetPublishedMoment(DateTime.Now, DateTime.Now);
+        var now = DateTime.Now;
+        announcement.SetPublishedMoment(now: now, publishedAt: now);
 
         var threeHoursLater = DateTime.Now.AddHours(3);
         var setAutoPublishingMoment = () => announcement.SetDelayedPublishingMoment(DateTime.Now, threeHoursLater);
@@ -257,7 +260,8 @@ public class AnnouncementTest
     public void SetAutoHidingAt_ForAlreadyHiddenAnnouncement_Throws()
     {
         var announcement = CreateValidAnnouncement();
-        announcement.SetHiddenMoment(DateTime.Now, DateTime.Now);
+        var now = DateTime.Now;
+        announcement.SetHiddenMoment(now: now, hiddenAt: now);
 
         var threeHoursLater = DateTime.Now.AddHours(3);
         var setAutoHidingMoment = () => announcement.SetDelayedHidingMoment(DateTime.Now, threeHoursLater);

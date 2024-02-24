@@ -1,5 +1,7 @@
 ﻿using BulletInBoardServer.Domain.Models.Announcements;
+using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements;
+using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
 using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 using BulletInBoardServer.Services.Test.Services.Announcements.DelayedOperations;
@@ -45,9 +47,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
 
-        create.Should()
-            .Throw<ArgumentException>()
-            .WithMessage("Контент не может быть null или состоять только из пробельных символов");
+        create.Should().ThrowExactly<AnnouncementContentNullOrEmptyException>();
     }
 
     [Fact]
@@ -64,9 +64,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
 
-        create.Should()
-            .Throw<ArgumentException>()
-            .WithMessage("Контент не может быть null или состоять только из пробельных символов");
+        create.Should().ThrowExactly<AnnouncementContentNullOrEmptyException>();
     }
 
     [Fact]
@@ -84,7 +82,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(authorId, createAnnouncement);
 
-        create.Should().Throw<DbUpdateException>();
+        create.Should().ThrowExactly<DbUpdateException>();
     }
 
     [Fact]
@@ -118,9 +116,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
 
-        create.Should()
-            .Throw<InvalidOperationException>()
-            .WithMessage("Момент отложенной публикации не может наступить в прошлом");
+        create.Should().ThrowExactly<DelayedPublishingMomentComesInPastException>();
     }
 
     [Fact]
@@ -137,9 +133,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
 
-        create.Should()
-            .Throw<InvalidOperationException>()
-            .WithMessage("Момент отложенного сокрытия не может наступить в прошлом");
+        create.Should().ThrowExactly<DelayedHidingMomentComesInPastException>();
     }
 
     [Fact]
@@ -156,9 +150,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
 
-        create.Should()
-            .Throw<InvalidOperationException>()
-            .WithMessage("Момент отложенной публикации не может наступить после момента отложенного сокрытия");
+        create.Should().ThrowExactly<DelayedPublishingAfterDelayedHidingException>();
     }
 
     [Fact]
@@ -175,7 +167,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
 
-        create.Should().Throw<DbUpdateException>();
+        create.Should().ThrowExactly<DbUpdateException>();
     }
 
     [Fact]
@@ -192,7 +184,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
 
-        create.Should().Throw<DbUpdateException>();
+        create.Should().ThrowExactly<DbUpdateException>();
     }
 
     [Fact]
@@ -209,7 +201,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
 
-        create.Should().Throw<DbUpdateException>();
+        create.Should().ThrowExactly<DbUpdateException>();
     }
 
     [Fact]
@@ -445,9 +437,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var editAction = () => _announcementService.Edit(MainUsergroupAdminId, edit);
 
-        editAction.Should()
-            .Throw<InvalidOperationException>()
-            .WithMessage("Нельзя задать срок автоматического сокрытия уже скрытому объявлению");
+        editAction.Should().ThrowExactly<AutoHidingAnAlreadyHiddenAnnouncementException>();
     }
 
     [Fact]
@@ -539,9 +529,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var publish = () => _announcementService.Publish(MainUsergroupAdminId, announcementId, DateTime.Now);
 
-        publish.Should()
-            .Throw<InvalidOperationException>()
-            .WithMessage("Нельзя опубликовать уже опубликованное объявление");
+        publish.Should().ThrowExactly<InvalidOperationException>();
     }
 
     [Fact]
@@ -595,9 +583,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var hide = () => _announcementService.Hide(MainUsergroupAdminId, announcementId, DateTime.Now);
 
-        hide.Should()
-            .Throw<InvalidOperationException>()
-            .WithMessage("Нельзя скрыть уже скрытое объявление");
+        hide.Should().ThrowExactly<AnnouncementNotYetPublishedException>();
     }
 
     [Fact]
@@ -660,9 +646,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var restore = () => _announcementService.Restore(MainUsergroupAdminId, announcementId, DateTime.Now);
 
-        restore.Should()
-            .Throw<InvalidOperationException>()
-            .WithMessage("Нельзя опубликовать уже опубликованное объявление");
+        restore.Should().ThrowExactly<AnnouncementNotHiddenException>();
     }
 
     [Fact]

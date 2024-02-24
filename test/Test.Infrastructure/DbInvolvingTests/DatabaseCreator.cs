@@ -10,7 +10,7 @@ public class DatabaseCreator : IAsyncLifetime
     private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
         .WithImage("postgres:16-alpine")
         .WithResourceMapping(
-            new DirectoryInfo("../../../../../../src/BulletInBoardServer/initdb"),
+            new DirectoryInfo("../../../../../src/BulletInBoardServer/initdb"),
             "/docker-entrypoint-initdb.d")
         .Build();
 

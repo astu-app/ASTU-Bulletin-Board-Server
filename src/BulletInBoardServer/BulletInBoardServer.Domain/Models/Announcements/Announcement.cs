@@ -231,8 +231,7 @@ public class Announcement
                 "Время публикации уже опубликованного объявления не может быть изменено");
 
         if (now < publishedAt)
-            throw new InvalidOperationException(
-                "Момент публикации уже опубликованного объявления не может наступить в будущем");
+            throw new InvalidOperationException("Момент публикации объявления не может наступить в будущем");
 
         if (IsHidden && HiddenAt <= publishedAt)
             throw new InvalidOperationException(
@@ -262,8 +261,7 @@ public class Announcement
             throw new InvalidOperationException("Время сокрытия уже скрытого объявления не может быть изменено");
 
         if (now < hiddenAt)
-            throw new InvalidOperationException(
-                "Момент сокрытия уже скрытого объявления не может наступить в будущем");
+            throw new InvalidOperationException("Момент сокрытия объявления не может наступить в будущем");
 
         if (IsPublished && hiddenAt <= PublishedAt ||
             ExpectsDelayedPublishing && hiddenAt < DelayedPublishingAt)
