@@ -10,6 +10,7 @@ left to right direction
 
 package "BulletInBoardServer.Controllers" as controllers {
     [BulletInBoardServer.Controllers.AnnouncementsController] as announcementsController
+    [BulletInBoardServer.Controllers.SurveysController] as surveysController
     [BulletInBoardServer.Controllers.PingController] as pingController
 }
 
@@ -23,6 +24,7 @@ main                    -> controllers
 main                    -> services
 main                    -> domain
 announcementsController -> services
+surveysController       -> services
 services                --> domain
 testDbFiller            -left-> domain
 

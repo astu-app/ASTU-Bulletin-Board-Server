@@ -13,10 +13,13 @@ using AnnouncementsInputFormatterStream =
 using AnnouncementsBasePathFilter = BulletInBoardServer.Controllers.AnnouncementsController.Filters.BasePathFilter;
 using AnnouncementsGeneratePathParamsValidationFilter =
     BulletInBoardServer.Controllers.AnnouncementsController.Filters.GeneratePathParamsValidationFilter;
+
 using PingInputFormatterStream = BulletInBoardServer.Controllers.PingController.Formatters.InputFormatterStream;
 using PingBasePathFilter = BulletInBoardServer.Controllers.PingController.Filters.BasePathFilter;
 using PingGeneratePathParamsValidationFilter =
     BulletInBoardServer.Controllers.PingController.Filters.GeneratePathParamsValidationFilter;
+
+using SurveysInputFormatterStream = BulletInBoardServer.Controllers.SurveysController.Formatters.InputFormatterStream;
 
 const string apiVersion = "0.0.2";
 
@@ -31,6 +34,7 @@ builder.Services.AddControllers(options =>
 {
     options.InputFormatters.Insert(0, new AnnouncementsInputFormatterStream());
     options.InputFormatters.Insert(1, new PingInputFormatterStream());
+    options.InputFormatters.Insert(2, new SurveysInputFormatterStream());
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

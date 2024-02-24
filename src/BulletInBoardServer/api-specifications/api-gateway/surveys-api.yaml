@@ -5,13 +5,16 @@ info:
   version: 0.0.2
 servers:
   - url: '/api'
+tags:
+  - name: Surveys
+    description: API управления опросами
 paths:
   # survey
   /surveys/create:
     post:
       operationId: createSurvey
       summary: Создать опрос
-      tags: [ Опрос ]
+      tags: [ Surveys ]
       requestBody:
         required: true
         content:
@@ -56,11 +59,11 @@ paths:
         500:
           description: Internal Server Error
   
-  /survey/get-details:
+  /surveys/get-details:
     get:
       operationId: getSurveyDetails
       summary: Получить детали выбранного опроса
-      tags: [ Опрос ]
+      tags: [ Surveys ]
       requestBody:
         content:
           application/json:
@@ -117,11 +120,11 @@ paths:
         500:
           description: Internal Server Error
   
-  /survey/close-survey:
+  /surveys/close-survey:
     post:
       operationId: closeSurvey
       summary: Закрыть опрос
-      tags: [ Опрос ]
+      tags: [ Surveys ]
       requestBody:
         required: true
         content:
@@ -173,11 +176,11 @@ paths:
         500:
           description: Internal Server Error
   
-  /survey/get-results:
+  /surveys/get-results:
     get:
       operationId: getSurveysResults
       summary: Получить результаты опроса
-      tags: [ Опрос ]
+      tags: [ Surveys ]
       requestBody:
         required: true
         content:
@@ -236,11 +239,11 @@ paths:
         500:
           description: Internal Server Error
   
-  /survey/download-results:
+  /surveys/download-results:
     get:
       operationId: downloadSurveyResults
       summary: Скачать результаты опроса
-      tags: [ Опрос ]
+      tags: [ Surveys ]
       requestBody:
         required: true
         content:
@@ -300,12 +303,11 @@ paths:
         500:
           description: Internal Server Error
   
-  # question
-  /question/vote:
+  /surveys/vote:
     post:
       operationId: voteInQuestion
       summary: Проголосовать в вопросе
-      tags: [ Вопрос ]
+      tags: [ Surveys ]
       requestBody:
         required: true
         content:

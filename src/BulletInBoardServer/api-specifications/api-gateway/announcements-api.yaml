@@ -7,7 +7,7 @@ servers:
   - url: '/api'
 tags:
   - name: Announcements
-    description: Технический тэг, добавляемый к каждому описанному в файле эндпоинту. Нужен для генерации правильного имени соответствующего контроллера
+    description: API управления объявлениями
 paths:
   # общие операции
   /announcements/create:

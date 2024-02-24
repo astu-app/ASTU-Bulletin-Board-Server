@@ -48,11 +48,15 @@
       <Content Include="..\api-specifications\openapi-generator-config\ping-api.yaml.run.xml">
         <Link>api-specifications\openapi-generator-config\ping-api.yaml.run.xml</Link>
       </Content>
+      <Content Include="..\api-specifications\openapi-generator-config\surveys-api.yaml.run.xml">
+        <Link>api-specifications\openapi-generator-config\surveys-api.yaml.run.xml</Link>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.AnnouncementsController\src\BulletInBoardServer.Controllers.AnnouncementsController\BulletInBoardServer.Controllers.AnnouncementsController.csproj" />
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.PingController\src\BulletInBoardServer.Controllers.PingController\BulletInBoardServer.Controllers.PingController.csproj" />
+        <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.SurveysController\src\BulletInBoardServer.Controllers.SurveysController\BulletInBoardServer.Controllers.SurveysController.csproj" />
         <ProjectReference Include="..\BulletInBoardServer.Domain\BulletInBoardServer.Domain.csproj"/>
         <ProjectReference Include="..\BulletInBoardServer.Services\BulletInBoardServer.Services.csproj"/>
     </ItemGroup>
