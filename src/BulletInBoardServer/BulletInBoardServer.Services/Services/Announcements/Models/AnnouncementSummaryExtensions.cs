@@ -1,6 +1,6 @@
 ﻿using BulletInBoardServer.Domain.Models.Announcements;
 
-namespace BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+namespace BulletInBoardServer.Services.Services.Announcements.Models;
 
 public static class AnnouncementSummaryExtensions
 {

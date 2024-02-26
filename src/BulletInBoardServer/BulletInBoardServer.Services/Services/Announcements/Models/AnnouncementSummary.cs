@@ -1,6 +1,6 @@
 ﻿using BulletInBoardServer.Domain.Models.Users;
 
-namespace BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+namespace BulletInBoardServer.Services.Services.Announcements.Models;
 
 /// <summary>
 /// Краткая информация об объявлении

@@ -2,7 +2,7 @@
 using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
-using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 using BulletInBoardServer.Services.Test.Services.Announcements.DelayedOperations;
 using FluentAssertions;

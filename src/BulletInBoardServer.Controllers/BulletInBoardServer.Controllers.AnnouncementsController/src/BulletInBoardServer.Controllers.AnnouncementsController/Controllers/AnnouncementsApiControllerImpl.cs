@@ -7,7 +7,7 @@ using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
-using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Attachments.Exceptions;
 using BulletInBoardServer.Services.Services.Audience.Exceptions;
 using BulletInBoardServer.Services.Services.Exceptions;

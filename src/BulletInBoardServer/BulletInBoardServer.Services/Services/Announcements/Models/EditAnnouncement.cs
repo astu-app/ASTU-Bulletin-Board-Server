@@ -1,4 +1,4 @@
-﻿namespace BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+﻿namespace BulletInBoardServer.Services.Services.Announcements.Models;
 
 /// <summary>
 /// Класс с данными для редактирования объявления

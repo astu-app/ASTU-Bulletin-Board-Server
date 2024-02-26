@@ -6,7 +6,7 @@ using BulletInBoardServer.Domain.Models.JoinEntities;
 using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
-using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Attachments.Exceptions;
 using BulletInBoardServer.Services.Services.Audience.Exceptions;
 using BulletInBoardServer.Services.Services.Exceptions;

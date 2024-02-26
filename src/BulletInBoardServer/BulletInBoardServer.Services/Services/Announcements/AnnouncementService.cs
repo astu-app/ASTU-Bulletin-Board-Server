@@ -1,5 +1,5 @@
 ﻿using BulletInBoardServer.Domain.Models.Announcements;
-using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 
 namespace BulletInBoardServer.Services.Services.Announcements;

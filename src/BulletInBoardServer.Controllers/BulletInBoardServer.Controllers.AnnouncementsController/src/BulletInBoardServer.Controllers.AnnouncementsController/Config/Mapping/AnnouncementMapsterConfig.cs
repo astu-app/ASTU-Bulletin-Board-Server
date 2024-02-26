@@ -2,7 +2,7 @@
 using BulletInBoardServer.Controllers.AnnouncementsController.Models;
 using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Attachments;
-using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+using BulletInBoardServer.Services.Services.Announcements.Models;
 using Mapster;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Config.Mapping;

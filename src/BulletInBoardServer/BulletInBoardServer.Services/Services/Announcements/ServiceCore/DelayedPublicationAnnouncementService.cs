@@ -1,4 +1,4 @@
-﻿using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+﻿using BulletInBoardServer.Services.Services.Announcements.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
