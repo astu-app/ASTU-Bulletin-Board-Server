@@ -41,10 +41,3 @@ Windows:
 ```
 build.bat
 ```
-## Run in Docker
-
-```
-cd src/BulletInBoardServer.Controllers.AnnouncementsController
-docker build -t bulletinboardserver.controllers.announcementscontroller .
-docker run -p 5000:8080 bulletinboardserver.controllers.announcementscontroller
-```

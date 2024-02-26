@@ -14,7 +14,9 @@ using Serilog;
 
 namespace BulletInBoardServer.Controllers.SurveysController.Controllers;
 
-/// <inheritdoc />
+/// <summary>
+/// Контроллер опросов
+/// </summary>
 public class SurveysApiControllerImpl : SurveysApiController
 {
     private readonly SurveyService _service;
@@ -24,7 +26,9 @@ public class SurveysApiControllerImpl : SurveysApiController
 
 
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Контроллер опросов
+    /// </summary>
     public SurveysApiControllerImpl(SurveyService service)
     {
         _service = service;
@@ -33,7 +37,17 @@ public class SurveysApiControllerImpl : SurveysApiController
 
 
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Закрыть опрос
+    /// </summary>
+    /// <param name="surveyId"></param>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="409">Conflict</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult CloseSurvey(Guid surveyId)
     {
         /*
@@ -72,7 +86,14 @@ public class SurveysApiControllerImpl : SurveysApiController
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Создать опрос
+    /// </summary>
+    /// <param name="createSurveyDto"></param>
+    /// <response code="201">Created</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult CreateSurvey(CreateSurveyDto createSurveyDto)
     {
         /*
@@ -91,7 +112,17 @@ public class SurveysApiControllerImpl : SurveysApiController
         return Created("/api/announcements/get-details", survey.Id);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Скачать результаты опроса
+    /// </summary>
+    /// <param name="downloadSurveyResultsRequestDto"></param>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="409">Conflict</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult DownloadSurveyResults(DownloadSurveyResultsRequestDto downloadSurveyResultsRequestDto)
     {
         //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
@@ -119,7 +150,17 @@ public class SurveysApiControllerImpl : SurveysApiController
         return new ObjectResult(example);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Проголосовать в опросе
+    /// </summary>
+    /// <param name="voteInSurveyDto"></param>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="409">Conflict</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult VoteInSurvey(VoteInSurveyDto voteInSurveyDto)
     {
         /*

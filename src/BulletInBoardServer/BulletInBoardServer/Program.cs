@@ -1,4 +1,6 @@
-using System.Reflection;
+using BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
+using BulletInBoardServer.Controllers.PingController.Controllers;
+using BulletInBoardServer.Controllers.SurveysController.Controllers;
 using BulletInBoardServer.Domain;
 using BulletInBoardServer.Infrastructure;
 using BulletInBoardServer.Services.Services.Announcements;
@@ -9,18 +11,17 @@ using BulletInBoardServer.Services.Services.Surveys.DelayedOperations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using AnnouncementsInputFormatterStream =
-    BulletInBoardServer.Controllers.AnnouncementsController.Formatters.InputFormatterStream;
-// remove
-// remove
-
+using AnnouncementsInputFormatterStream = BulletInBoardServer.Controllers.AnnouncementsController.Formatters.InputFormatterStream;
 using PingInputFormatterStream = BulletInBoardServer.Controllers.PingController.Formatters.InputFormatterStream;
-// remove
-// remove
-
 using SurveysInputFormatterStream = BulletInBoardServer.Controllers.SurveysController.Formatters.InputFormatterStream;
 
 const string apiVersion = "0.0.2";
+var controllerClasses = new[]
+{
+    typeof(AnnouncementsApiController), 
+    typeof(SurveysApiController), 
+    typeof(PingApiController)
+};
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -40,23 +41,21 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.EnableAnnotations(enableAnnotationsForInheritance: true, enableAnnotationsForPolymorphism: true);
-
     options.SwaggerDoc(apiVersion, new OpenApiInfo
     {
         Title = "API Шлюз. Система информирования",
         Description = "API Шлюз системы информирования (ASP.NET Core 8.0)",
     });
-    options.IncludeXmlComments(
-        $"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{Assembly.GetEntryAssembly()!.GetName().Name}.xml");
+    
+    foreach (var controller in controllerClasses)
+    {
+        var assembly = controller.Assembly;
+        var assemblyDirectory = new FileInfo(assembly.Location).Directory!.FullName;
+        var assemblyName = assembly.GetName().Name;
+        var docFile = Path.Join(assemblyDirectory, $"{assemblyName}.xml");
 
-    // Sets the basePath property in the OpenAPI document generated
-    // options.DocumentFilter<AnnouncementsBasePathFilter>("/api"); // remove
-    // options.DocumentFilter<PingBasePathFilter>("/api"); // remove
-
-    // Include DataAnnotation attributes on Controller Action parameters as OpenAPI validation rules (e.g required, pattern, ..)
-    // options.OperationFilter<AnnouncementsGeneratePathParamsValidationFilter>(); // remove
-    // options.OperationFilter<PingGeneratePathParamsValidationFilter>(); // remove
+        options.IncludeXmlComments(docFile);
+    }
 });
 
 var connectionString = builder.Configuration.GetConnectionString("MainDatabase") ??
@@ -73,17 +72,7 @@ app.RegisterMapsterConfiguration();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(options =>
-    {
-        options.RouteTemplate = "openapi/{documentName}/openapi.json";
-        // options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
-        // {
-        //     swaggerDoc.Servers = new List<OpenApiServer> { new()
-        //     {
-        //         Url = $"{httpReq.Scheme}://{httpReq.Host.Value}/api"
-        //     } };
-        // });
-    });
+    app.UseSwagger(options => options.RouteTemplate = "openapi/{documentName}/openapi.json");
     app.UseSwaggerUI(options =>
     {
         options.RoutePrefix = "openapi";
@@ -134,7 +123,7 @@ Task InitDelayedAnnouncementOperationsDispatcherAsync()
     var services = scope.ServiceProvider;
 
     var dbContext = GetDbContext(services);
-    var publicationService = GetPublicationService(); // todo
+    var publicationService = GetPublicationService();
     var hidingService = GetHidingService();
     DelayedAnnouncementOperationsDispatcher.Init(dbContext, publicationService, hidingService);
     

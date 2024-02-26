@@ -41,10 +41,3 @@ Windows:
 ```
 build.bat
 ```
-## Run in Docker
-
-```
-cd src/BulletInBoardServer.Controllers.PingController
-docker build -t bulletinboardserver.controllers.pingcontroller .
-docker run -p 5000:8080 bulletinboardserver.controllers.pingcontroller
-```

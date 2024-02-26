@@ -49,8 +49,8 @@
           <option name="value" value="A library generated from a OpenAPI doc" />
         </CliArgumentViewModel>
         <CliArgumentViewModel>
-          <option name="name" value="buildTarget" />
-          <option name="value" value="library" />
+          <option name="name" value="packageDescription" />
+          <option name="value" value="A library generated from a OpenAPI doc" />
         </CliArgumentViewModel>
       </list>
     </option>

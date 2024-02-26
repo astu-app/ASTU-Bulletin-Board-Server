@@ -19,7 +19,9 @@ using Serilog;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
 
-/// <inheritdoc />
+/// <summary>
+/// Контроллер объявлений
+/// </summary>
 public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 {
     private readonly AnnouncementService _service;
@@ -29,7 +31,9 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 
 
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Контроллер объявлений
+    /// </summary>
     public AnnouncementsApiControllerImpl(AnnouncementService service)
     {
         _service = service;
@@ -38,7 +42,17 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 
 
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Создать объявление
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <response code="201">Created</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="409">Conflict</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult CreateAnnouncement([FromBody] CreateAnnouncementDto dto)
     {
         /*
@@ -147,7 +161,16 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Удалить объявление
+    /// </summary>
+    /// <param name="announcementId"></param>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult DeleteAnnouncement([FromBody] Guid announcementId)
     {
         /*
@@ -194,7 +217,16 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Получить подробности о выбранном объявлении
+    /// </summary>
+    /// <param name="announcementId"></param>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult GetAnnouncementDetails([FromBody] Guid announcementId)
     {
         /*
@@ -242,7 +274,13 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Получить список объявлений, ожидающих отложенное сокрытие
+    /// </summary>
+    /// <response code="200">Ok</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult GetDelayedHiddenAnnouncementList()
     {
         /*
@@ -270,7 +308,13 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Получить список объявлений, ожидающих отложенную публикацию
+    /// </summary>
+    /// <response code="200">Ok</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult GetDelayedPublishingAnnouncementList()
     {
         /*
@@ -298,7 +342,13 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Получить список скрытых объявлений
+    /// </summary>
+    /// <response code="200">Ok</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult GetHiddenAnnouncementList()
     {
         /*
@@ -325,7 +375,13 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Получить список опубликованных объявлений
+    /// </summary>
+    /// <response code="200">Ok</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult GetPostedAnnouncementList()
     {
         /*
@@ -353,7 +409,17 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Скрыть опубликованное объявление
+    /// </summary>
+    /// <param name="announcementId"></param>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="409">Conflict</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult HidePostedAnnouncement([FromBody] Guid announcementId)
     {
         /*
@@ -418,7 +484,16 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Сразу опубликовать отложенное объявление
+    /// </summary>
+    /// <param name="announcementId"></param>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult PublishImmediatelyDelayedPublishingAnnouncement([FromBody] Guid announcementId)
     {
         /*
@@ -468,7 +543,17 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Восстановить скрытое объявление
+    /// </summary>
+    /// <param name="announcementId"></param>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="409">Conflict</response>
+    /// <response code="500">Internal Server Error</response>>
     public override IActionResult RestoreHiddenAnnouncement([FromBody] Guid announcementId)
     {
         /*
@@ -524,7 +609,17 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Редактировать объявление
+    /// </summary>
+    /// <param name="updateAnnouncementDto"></param>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="409">Conflict</response>
+    /// <response code="500">Internal Server Error</response>
     public override IActionResult UpdateAnnouncement([FromBody] UpdateAnnouncementDto updateAnnouncementDto)
     {
         /*

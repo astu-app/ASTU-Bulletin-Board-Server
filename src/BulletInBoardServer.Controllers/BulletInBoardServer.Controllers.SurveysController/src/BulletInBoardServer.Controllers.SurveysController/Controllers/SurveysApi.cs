@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BulletInBoardServer.Controllers.SurveysController.Controllers
 { 
     /// <summary>
-    /// 
+    /// Базовый класс контроллера опросов
     /// </summary>
     [ApiController]
     public abstract class SurveysApiController : ControllerBase

@@ -44,6 +44,10 @@
           <option name="name" value="nullableReferenceTypes" />
           <option name="value" value="true" />
         </CliArgumentViewModel>
+        <CliArgumentViewModel>
+          <option name="name" value="buildTarget" />
+          <option name="value" value="library" />
+        </CliArgumentViewModel>
       </list>
     </option>
     <option name="generatorType" value="OPENAPI_GENERATOR_V6" />

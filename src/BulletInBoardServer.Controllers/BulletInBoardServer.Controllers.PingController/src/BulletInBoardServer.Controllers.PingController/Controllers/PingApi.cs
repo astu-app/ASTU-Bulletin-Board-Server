@@ -10,25 +10,23 @@
 
 using BulletInBoardServer.Controllers.PingController.Attributes;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace BulletInBoardServer.Controllers.PingController.Controllers
 { 
     /// <summary>
-    /// 
+    /// Контроллер проверки работоспособности сервера
     /// </summary>
     [ApiController]
     public abstract class PingApiController : ControllerBase
     { 
         /// <summary>
-        /// 
+        /// Проверка работоспособности сервера
         /// </summary>
         /// <response code="200">Ok</response>
         [HttpGet]
         [Route("/api/ping")]
         [ValidateModelState]
-        [SwaggerOperation("Ping")]
-        [SwaggerResponse(statusCode: 200, type: typeof(string), description: "Ok")]
+        [ProducesResponseType(statusCode: 200, type: typeof(string))]
         public abstract IActionResult Ping();
     }
 }

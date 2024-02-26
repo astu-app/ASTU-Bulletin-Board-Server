@@ -10,6 +10,7 @@ paths:
     get:
       tags: [ Ping ]
       operationId: ping
+      description: Проверка работоспособности сервера
       responses:
         200:
           description: Ok

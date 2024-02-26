@@ -12,12 +12,11 @@ using System;
 using BulletInBoardServer.Controllers.AnnouncementsController.Attributes;
 using BulletInBoardServer.Controllers.AnnouncementsController.Models;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
 { 
     /// <summary>
-    /// 
+    /// Базовый класс контроллера объявлений
     /// </summary>
     [ApiController]
     public abstract class AnnouncementsApiController : ControllerBase
@@ -37,12 +36,11 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [Route("/api/announcements/create")]
         [Consumes("application/json")]
         [ValidateModelState]
-        [SwaggerOperation("CreateAnnouncement")]
-        [SwaggerResponse(statusCode: 201, type: typeof(CreateAnnouncementCreated), description: "Created")]
-        [SwaggerResponse(statusCode: 400, type: typeof(CreateAnnouncement400Response), description: "Bad Request")]
-        [SwaggerResponse(statusCode: 403, type: typeof(CreateAnnouncementForbidden), description: "Forbidden")]
-        [SwaggerResponse(statusCode: 404, type: typeof(CreateAnnouncementNotFound), description: "Not Found")]
-        [SwaggerResponse(statusCode: 409, type: typeof(CreateAnnouncementConflict), description: "Conflict")]
+        [ProducesResponseType(statusCode: 201, type: typeof(CreateAnnouncementCreated))]
+        [ProducesResponseType(statusCode: 400, type: typeof(CreateAnnouncement400Response))]
+        [ProducesResponseType(statusCode: 403, type: typeof(CreateAnnouncementForbidden))]
+        [ProducesResponseType(statusCode: 404, type: typeof(CreateAnnouncementNotFound))]
+        [ProducesResponseType(statusCode: 409, type: typeof(CreateAnnouncementConflict))]
         public abstract IActionResult CreateAnnouncement([FromBody]CreateAnnouncementDto createAnnouncementDto);
 
         /// <summary>
@@ -59,9 +57,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [Route("/api/announcements/delete")]
         [Consumes("application/json")]
         [ValidateModelState]
-        [SwaggerOperation("DeleteAnnouncement")]
-        [SwaggerResponse(statusCode: 403, type: typeof(DeleteAnnouncementForbidden), description: "Forbidden")]
-        [SwaggerResponse(statusCode: 404, type: typeof(DeleteAnnouncementNotFound), description: "Not Found")]
+        [ProducesResponseType(statusCode: 403, type: typeof(DeleteAnnouncementForbidden))]
+        [ProducesResponseType(statusCode: 404, type: typeof(DeleteAnnouncementNotFound))]
         public abstract IActionResult DeleteAnnouncement([FromBody]Guid body);
 
         /// <summary>
@@ -78,10 +75,9 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [Route("/api/announcements/get-details")]
         [Consumes("application/json")]
         [ValidateModelState]
-        [SwaggerOperation("GetAnnouncementDetails")]
-        [SwaggerResponse(statusCode: 200, type: typeof(GetAnnouncementDetailsOk), description: "Ok")]
-        [SwaggerResponse(statusCode: 403, type: typeof(GetAnnouncementDetailsForbidden), description: "Forbidden")]
-        [SwaggerResponse(statusCode: 404, type: typeof(GetAnnouncementDetailsNotFound), description: "Not Found")]
+        [ProducesResponseType(statusCode: 200, type: typeof(GetAnnouncementDetailsOk))]
+        [ProducesResponseType(statusCode: 403, type: typeof(GetAnnouncementDetailsForbidden))]
+        [ProducesResponseType(statusCode: 404, type: typeof(GetAnnouncementDetailsNotFound))]
         public abstract IActionResult GetAnnouncementDetails([FromBody]Guid body);
 
         /// <summary>
@@ -94,9 +90,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [HttpGet]
         [Route("/api/announcements/delayed-hidden/get-list")]
         [ValidateModelState]
-        [SwaggerOperation("GetDelayedHiddenAnnouncementList")]
-        [SwaggerResponse(statusCode: 200, type: typeof(GetDelayedHiddenAnnouncementListOk), description: "Ok")]
-        [SwaggerResponse(statusCode: 403, type: typeof(GetDelayedHiddenAnnouncementListForbidden), description: "Forbidden")]
+        [ProducesResponseType(statusCode: 200, type: typeof(GetDelayedHiddenAnnouncementListOk))]
+        [ProducesResponseType(statusCode: 403, type: typeof(GetDelayedHiddenAnnouncementListForbidden))]
         public abstract IActionResult GetDelayedHiddenAnnouncementList();
 
         /// <summary>
@@ -109,9 +104,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [HttpGet]
         [Route("/api/announcements/delayed-publishing/get-list")]
         [ValidateModelState]
-        [SwaggerOperation("GetDelayedPublishingAnnouncementList")]
-        [SwaggerResponse(statusCode: 200, type: typeof(GetDelayedPublishingAnnouncementListOk), description: "Ok")]
-        [SwaggerResponse(statusCode: 403, type: typeof(GetDelayedPublishingAnnouncementListForbidden), description: "Forbidden")]
+        [ProducesResponseType(statusCode: 200, type: typeof(GetDelayedPublishingAnnouncementListOk))]
+        [ProducesResponseType(statusCode: 403, type: typeof(GetDelayedPublishingAnnouncementListForbidden))]
         public abstract IActionResult GetDelayedPublishingAnnouncementList();
 
         /// <summary>
@@ -124,9 +118,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [HttpGet]
         [Route("/api/announcements/hidden/get-list")]
         [ValidateModelState]
-        [SwaggerOperation("GetHiddenAnnouncementList")]
-        [SwaggerResponse(statusCode: 200, type: typeof(GetHiddenAnnouncementListOk), description: "Ok")]
-        [SwaggerResponse(statusCode: 403, type: typeof(GetHiddenAnnouncementListForbidden), description: "Forbidden")]
+        [ProducesResponseType(statusCode: 200, type: typeof(GetHiddenAnnouncementListOk))]
+        [ProducesResponseType(statusCode: 403, type: typeof(GetHiddenAnnouncementListForbidden))]
         public abstract IActionResult GetHiddenAnnouncementList();
 
         /// <summary>
@@ -139,9 +132,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [HttpGet]
         [Route("/api/announcements/published/get-list")]
         [ValidateModelState]
-        [SwaggerOperation("GetPostedAnnouncementList")]
-        [SwaggerResponse(statusCode: 200, type: typeof(GetPostedAnnouncementListOk), description: "Ok")]
-        [SwaggerResponse(statusCode: 403, type: typeof(GetPostedAnnouncementListForbidden), description: "Forbidden")]
+        [ProducesResponseType(statusCode: 200, type: typeof(GetPostedAnnouncementListOk))]
+        [ProducesResponseType(statusCode: 403, type: typeof(GetPostedAnnouncementListForbidden))]
         public abstract IActionResult GetPostedAnnouncementList();
 
         /// <summary>
@@ -159,10 +151,9 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [Route("/api/announcements/published/hide")]
         [Consumes("application/json")]
         [ValidateModelState]
-        [SwaggerOperation("HidePostedAnnouncement")]
-        [SwaggerResponse(statusCode: 403, type: typeof(HidePostedAnnouncementForbidden), description: "Forbidden")]
-        [SwaggerResponse(statusCode: 404, type: typeof(HidePostedAnnouncementNotFound), description: "Not Found")]
-        [SwaggerResponse(statusCode: 409, type: typeof(HidePostedAnnouncementConflict), description: "Conflict")]
+        [ProducesResponseType(statusCode: 403, type: typeof(HidePostedAnnouncementForbidden))]
+        [ProducesResponseType(statusCode: 404, type: typeof(HidePostedAnnouncementNotFound))]
+        [ProducesResponseType(statusCode: 409, type: typeof(HidePostedAnnouncementConflict))]
         public abstract IActionResult HidePostedAnnouncement([FromBody]Guid body);
 
         /// <summary>
@@ -179,9 +170,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [Route("/api/announcements/delayed-publishing/publish-immediately")]
         [Consumes("application/json")]
         [ValidateModelState]
-        [SwaggerOperation("PublishImmediatelyDelayedPublishingAnnouncement")]
-        [SwaggerResponse(statusCode: 403, type: typeof(PublishImmediatelyDelayedPublishingAnnouncementForbidden), description: "Forbidden")]
-        [SwaggerResponse(statusCode: 404, type: typeof(PublishImmediatelyDelayedPublishingAnnouncementNotFound), description: "Not Found")]
+        [ProducesResponseType(statusCode: 403, type: typeof(PublishImmediatelyDelayedPublishingAnnouncementForbidden))]
+        [ProducesResponseType(statusCode: 404, type: typeof(PublishImmediatelyDelayedPublishingAnnouncementNotFound))]
         public abstract IActionResult PublishImmediatelyDelayedPublishingAnnouncement([FromBody]Guid body);
 
         /// <summary>
@@ -199,10 +189,9 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [Route("/api/announcements/hidden/restore")]
         [Consumes("application/json")]
         [ValidateModelState]
-        [SwaggerOperation("RestoreHiddenAnnouncement")]
-        [SwaggerResponse(statusCode: 403, type: typeof(RestoreHiddenAnnouncementForbidden), description: "Forbidden")]
-        [SwaggerResponse(statusCode: 404, type: typeof(RestoreHiddenAnnouncementNotFound), description: "Not Found")]
-        [SwaggerResponse(statusCode: 409, type: typeof(RestoreHiddenAnnouncementConflict), description: "Conflict")]
+        [ProducesResponseType(statusCode: 403, type: typeof(RestoreHiddenAnnouncementForbidden))]
+        [ProducesResponseType(statusCode: 404, type: typeof(RestoreHiddenAnnouncementNotFound))]
+        [ProducesResponseType(statusCode: 409, type: typeof(RestoreHiddenAnnouncementConflict))]
         public abstract IActionResult RestoreHiddenAnnouncement([FromBody]Guid body);
 
         /// <summary>
@@ -220,11 +209,10 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [Route("/api/announcements/update")]
         [Consumes("application/json")]
         [ValidateModelState]
-        [SwaggerOperation("UpdateAnnouncement")]
-        [SwaggerResponse(statusCode: 400, type: typeof(UpdateAnnouncementBadRequest), description: "Bad Request")]
-        [SwaggerResponse(statusCode: 403, type: typeof(UpdateAnnouncementForbidden), description: "Forbidden")]
-        [SwaggerResponse(statusCode: 404, type: typeof(UpdateAnnouncementNotFound), description: "Not Found")]
-        [SwaggerResponse(statusCode: 409, type: typeof(UpdateAnnouncementConflict), description: "Conflict")]
+        [ProducesResponseType(statusCode: 400, type: typeof(UpdateAnnouncementBadRequest))]
+        [ProducesResponseType(statusCode: 403, type: typeof(UpdateAnnouncementForbidden))]
+        [ProducesResponseType(statusCode: 404, type: typeof(UpdateAnnouncementNotFound))]
+        [ProducesResponseType(statusCode: 409, type: typeof(UpdateAnnouncementConflict))]
         public abstract IActionResult UpdateAnnouncement([FromBody]UpdateAnnouncementDto updateAnnouncementDto);
     }
 }
