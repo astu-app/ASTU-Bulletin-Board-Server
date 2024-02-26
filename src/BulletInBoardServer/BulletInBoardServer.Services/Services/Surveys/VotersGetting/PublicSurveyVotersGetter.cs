@@ -1,6 +1,7 @@
 ﻿using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Voters;
+using BulletInBoardServer.Services.Services.Surveys.VotersGetting.Models;
 
 namespace BulletInBoardServer.Services.Services.Surveys.VotersGetting;
 

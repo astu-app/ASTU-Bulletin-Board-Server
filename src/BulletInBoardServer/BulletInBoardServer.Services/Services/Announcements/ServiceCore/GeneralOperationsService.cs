@@ -21,6 +21,15 @@ public class GeneralOperationsService(
     IDelayedAnnouncementOperationsDispatcher dispatcher)
     : DispatcherDependentAnnouncementServiceBase(scopeFactory, dispatcher)
 {
+    /// <summary>
+    /// Создание объявления
+    /// </summary>
+    /// <param name="requesterId">Id пользователя, запросившего операцию</param>
+    /// <param name="create">Объект с необходимыми для создания данными</param>
+    /// <returns>Созданное объявление</returns>
+    /// <exception cref="AnnouncementContentNullOrEmptyException">Текстовое содержимое объявления null, пустой или состоит только из пробельных символов</exception>
+    /// <exception cref="AnnouncementAudienceNullOrEmptyException">Аудитория объявления null или пуста</exception>
+    /// <exception cref="InvalidOperationException">Момент отложенной публикации или сокрытия не были перенесены в создаваемое объявление</exception>
     public Announcement Create(Guid requesterId, CreateAnnouncement create)
     {
         using var scope = CreateScope();
@@ -55,6 +64,13 @@ public class GeneralOperationsService(
         return announcement;
     }
 
+    /// <summary>
+    /// Получение деталей объявления
+    /// </summary>
+    /// <param name="requesterId">Id пользователя, запросившего операцию</param>
+    /// <param name="announcementId">Id объявления</param>
+    /// <returns>Объявление со связанными сущностями</returns>
+    /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public Announcement GetDetails(Guid requesterId, Guid announcementId)
     {
         using var scope = CreateScope();
@@ -95,6 +111,14 @@ public class GeneralOperationsService(
         return announcement;
     }
 
+    /// <summary>
+    /// Редактирование объявления
+    /// </summary>
+    /// <param name="requesterId">Id пользователя, запросившего операцию</param>
+    /// <param name="edit">Объект с данными, необходимыми для редактирования объявления</param>
+    /// <exception cref="OperationNotAllowedException">Пользователь не имеет права выполнить операцию</exception>
+    /// <exception cref="AnnouncementContentEmptyException">Нельзя установить текстовое содержимое, которое является null, пустым или состоит только из пробельных символов</exception>
+    /// <exception cref="AnnouncementAudienceEmptyException">Нельзя установить пустую аудиторию объявления</exception>
     public void Edit(Guid requesterId, EditAnnouncement edit)
     {
         using var scope = CreateScope();
@@ -138,6 +162,12 @@ public class GeneralOperationsService(
         // todo отправить уведомление об изменении объявления клиентам
     }
 
+    /// <summary>
+    /// Удаление объявления
+    /// </summary>
+    /// <param name="requesterId">Id пользователя, запросившего операцию </param>
+    /// <param name="announcementId">Id объявления</param>
+    /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void Delete(Guid requesterId, Guid announcementId)
     {
         using var scope = CreateScope();
@@ -165,6 +195,7 @@ public class GeneralOperationsService(
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="announcementId">Id заданного объявления</param>
     /// <param name="publishedAt">Время публикации объявления</param>
+    /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void PublishManually(Guid requesterId, Guid announcementId, DateTime publishedAt)
     {
         using var scope = CreateScope();

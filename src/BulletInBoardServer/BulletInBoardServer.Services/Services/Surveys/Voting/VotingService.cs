@@ -30,6 +30,11 @@ public class VotingService(ApplicationDbContext dbContext)
     /// <param name="voterId">Идентификатор голосующего пользователя</param>
     /// <param name="surveyId">Идентификатор опроса, в котором пользователь голосует</param>
     /// <param name="votes">Голоса пользователя в каждом из вопросов опроса</param>
+    /// <exception cref="SurveyAlreadyVotedException">Пользователь уже проголосовал в указанном опросе</exception>
+    /// <exception cref="SurveyClosedException">Попытка проголосовать в закрытом опросе</exception>
+    /// <exception cref="MultipleSelectionInSingleChoiceQuestionException">Попытка выбрать несколько вариантов ответов в вопросе без множественного выбора</exception>
+    /// <exception cref="PresentedQuestionsDoesntMatchSurveyQuestionsException">Список представленных вопросов не соответствует фактическому списку вопросов опроса</exception>
+    /// <exception cref="PresentedVotesDoesntMatchQuestionAnswersException">Список представленных вариантов ответов не соответствует фактическому списку вариантов ответов соответствующего вопроса</exception>
     public void Vote(Guid voterId, Guid surveyId, SurveyVotes votes)
     {
         SetServiceState(voterId, surveyId, votes);

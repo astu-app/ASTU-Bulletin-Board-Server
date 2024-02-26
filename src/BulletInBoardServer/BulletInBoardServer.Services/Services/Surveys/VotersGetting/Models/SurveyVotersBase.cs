@@ -1,4 +1,6 @@
-namespace BulletInBoardServer.Domain.Models.Attachments.Surveys.Voters;
+using BulletInBoardServer.Domain.Models.Attachments.Surveys.Voters;
+
+namespace BulletInBoardServer.Services.Services.Surveys.VotersGetting.Models;
 
 public class SurveyVotersBase(Guid surveyId, VoterList voters)
 {

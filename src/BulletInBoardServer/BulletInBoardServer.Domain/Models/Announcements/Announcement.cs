@@ -166,7 +166,8 @@ public class Announcement
     /// </summary>
     /// <param name="now">Текущий момент времени</param>
     /// <param name="hidingMoment">Момент сокрытия объявления</param>
-    /// <exception cref="InvalidOperationException">Генерируется, если объявление уже скрыто</exception>
+    /// <exception cref="AnnouncementNotYetPublishedException">Генерируется, если объявление еще не опубликовано</exception>
+    /// <exception cref="AnnouncementAlreadyHiddenException">Генерируется, если объявление уже скрыто</exception>
     public void Hide(DateTime now, DateTime hidingMoment)
     {
         if (!IsPublished)
@@ -186,7 +187,7 @@ public class Announcement
     /// </summary>
     /// <param name="now">Текущий момент времени</param>
     /// <param name="restoringMoment">Момент восстановления</param>
-    /// <exception cref="InvalidOperationException">Генерируется, если объявление не скрыто</exception>
+    /// <exception cref="AnnouncementNotHiddenException">Генерируется, если объявление не скрыто</exception>
     public void Restore(DateTime now, DateTime restoringMoment)
     {
         if (!IsHidden)
@@ -202,7 +203,7 @@ public class Announcement
     /// Установка текстового содержимого объявления
     /// </summary>
     /// <param name="content">Текстовое содержимое объявления</param>
-    /// <exception cref="ArgumentException">Текстовое содержимое null или состоит только из пробельных символов</exception>
+    /// <exception cref="AnnouncementContentNullOrEmptyException">Текстовое содержимое null или состоит только из пробельных символов</exception>
     public void SetContent(string content)
     {
         if (string.IsNullOrWhiteSpace(content))
@@ -277,13 +278,9 @@ public class Announcement
     /// </summary>
     /// <param name="now">Текущий момент времени</param>
     /// <param name="publishingMoment">Момент, в который объявление должно быть опубликовано</param>
-    /// <exception cref="InvalidOperationException">
-    /// Генерируется в следующих случаях:
-    /// <list type="bullet">
-    ///   <item>Нельзя задать момент автоматической публикации уже опубликованному объявлению</item>
-    ///   <item>Отложенная публикация объявления не может произойти в прошлом</item>
-    /// </list>
-    /// </exception>
+    /// <exception cref="DelayedPublishingMomentComesInPastException">Момент отложенной публикации не может наступить в прошлом</exception>
+    /// <exception cref="DelayedPublishingAfterDelayedHidingException">Момент отложенного сокрытия не может раньше момента отложенной публикации</exception>
+    /// <exception cref="AutoPublishAnAlreadyPublishedAnnouncementException">Нельзя установить момент отложенной публикации уже опубликованному объявлению</exception>
     public void SetDelayedPublishingMoment(DateTime now, DateTime? publishingMoment)
     {
         if (publishingMoment is null)
@@ -294,10 +291,12 @@ public class Announcement
 
         if (IsPublished)
             throw new AutoPublishAnAlreadyPublishedAnnouncementException();
+        
+        if (DelayedHidingAt < publishingMoment)
+            throw new DelayedPublishingAfterDelayedHidingException();
 
         if (publishingMoment < now)
-            throw new InvalidOperationException(
-                "Отложенная публикация объявления не может произойти в прошлом");
+            throw new DelayedPublishingMomentComesInPastException();
 
         DelayedPublishingAt = publishingMoment;
     }
@@ -307,13 +306,9 @@ public class Announcement
     /// </summary>
     /// <param name="now">Текущий момент времени</param>
     /// <param name="hidingMoment">Момент, в который объявление должно быть скрыто</param>
-    /// <exception cref="InvalidOperationException">
-    /// Генерируется в следующих случаях:
-    /// <list type="bullet">
-    ///   <item>Отложенное сокрытие объявления не может произойти в прошлом</item>
-    ///   <item>Нельзя задать срок автоматического сокрытия уже скрытому объявлению</item>
-    /// </list>
-    /// </exception>
+    /// <exception cref="DelayedHidingMomentComesInPastException">Момент отложенного сокрытия не может наступить в прошлом</exception>
+    /// <exception cref="DelayedPublishingAfterDelayedHidingException">Момент отложенного сокрытия не может раньше момента отложенной публикации</exception>
+    /// <exception cref="AutoHidingAnAlreadyHiddenAnnouncementException">Нельзя установить момент отложенного сокрытия уже скрытому объявлению</exception>
     public void SetDelayedHidingMoment(DateTime now, DateTime? hidingMoment)
     {
         if (hidingMoment is null) 
@@ -323,8 +318,10 @@ public class Announcement
         }
 
         if (hidingMoment < now)
-            throw new InvalidOperationException(
-                "Отложенное сокрытие объявления не может произойти в прошлом");
+            throw new DelayedHidingMomentComesInPastException();
+
+        if (hidingMoment < DelayedPublishingAt)
+            throw new DelayedPublishingAfterDelayedHidingException();
 
         if (IsHidden)
             throw new AutoHidingAnAlreadyHiddenAnnouncementException();

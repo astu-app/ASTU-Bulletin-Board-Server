@@ -2,11 +2,11 @@
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions;
-using BulletInBoardServer.Domain.Models.Attachments.Surveys.Voters;
 using BulletInBoardServer.Services.Services.Surveys.DelayedOperations;
 using BulletInBoardServer.Services.Services.Surveys.Exceptions;
 using BulletInBoardServer.Services.Services.Surveys.Models;
 using BulletInBoardServer.Services.Services.Surveys.VotersGetting;
+using BulletInBoardServer.Services.Services.Surveys.VotersGetting.Models;
 using BulletInBoardServer.Services.Services.Surveys.Voting;
 using Microsoft.EntityFrameworkCore;
 

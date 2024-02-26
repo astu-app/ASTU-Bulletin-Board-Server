@@ -36,6 +36,7 @@ public class HiddenAnnouncementService(
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <param name="announcementId">Id восстанавливаемого объявления</param>
     /// <param name="restoredAt">Время восстановления объявления</param>
+    /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void Restore(Guid requesterId, Guid announcementId, DateTime restoredAt)
     {
         using var scope = CreateScope();

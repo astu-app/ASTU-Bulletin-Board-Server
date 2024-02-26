@@ -3,6 +3,7 @@ using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Voters;
 using BulletInBoardServer.Services.Services.Surveys;
 using BulletInBoardServer.Services.Services.Surveys.Models;
+using BulletInBoardServer.Services.Services.Surveys.VotersGetting.Models;
 using BulletInBoardServer.Services.Test.Services.Surveys.DelayedOperations;
 using FluentAssertions;
 using JetBrains.Annotations;
