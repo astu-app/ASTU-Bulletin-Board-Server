@@ -1,5 +1,6 @@
 using System.Reflection;
 using BulletInBoardServer.Domain;
+using BulletInBoardServer.Infrastructure;
 using BulletInBoardServer.Services.Services.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
@@ -10,14 +11,12 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using AnnouncementsInputFormatterStream =
     BulletInBoardServer.Controllers.AnnouncementsController.Formatters.InputFormatterStream;
-using AnnouncementsBasePathFilter = BulletInBoardServer.Controllers.AnnouncementsController.Filters.BasePathFilter;
-using AnnouncementsGeneratePathParamsValidationFilter =
-    BulletInBoardServer.Controllers.AnnouncementsController.Filters.GeneratePathParamsValidationFilter;
+// remove
+// remove
 
 using PingInputFormatterStream = BulletInBoardServer.Controllers.PingController.Formatters.InputFormatterStream;
-using PingBasePathFilter = BulletInBoardServer.Controllers.PingController.Filters.BasePathFilter;
-using PingGeneratePathParamsValidationFilter =
-    BulletInBoardServer.Controllers.PingController.Filters.GeneratePathParamsValidationFilter;
+// remove
+// remove
 
 using SurveysInputFormatterStream = BulletInBoardServer.Controllers.SurveysController.Formatters.InputFormatterStream;
 
@@ -46,18 +45,18 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc(apiVersion, new OpenApiInfo
     {
         Title = "API Шлюз. Система информирования",
-        Description = "API Шлюз системы информирования (ASP.NET Core 8.0)"
+        Description = "API Шлюз системы информирования (ASP.NET Core 8.0)",
     });
     options.IncludeXmlComments(
         $"{AppContext.BaseDirectory}{Path.DirectorySeparatorChar}{Assembly.GetEntryAssembly()!.GetName().Name}.xml");
 
     // Sets the basePath property in the OpenAPI document generated
-    options.DocumentFilter<AnnouncementsBasePathFilter>("/api");
-    options.DocumentFilter<PingBasePathFilter>("/api");
+    // options.DocumentFilter<AnnouncementsBasePathFilter>("/api"); // remove
+    // options.DocumentFilter<PingBasePathFilter>("/api"); // remove
 
     // Include DataAnnotation attributes on Controller Action parameters as OpenAPI validation rules (e.g required, pattern, ..)
-    options.OperationFilter<AnnouncementsGeneratePathParamsValidationFilter>();
-    options.OperationFilter<PingGeneratePathParamsValidationFilter>();
+    // options.OperationFilter<AnnouncementsGeneratePathParamsValidationFilter>(); // remove
+    // options.OperationFilter<PingGeneratePathParamsValidationFilter>(); // remove
 });
 
 var connectionString = builder.Configuration.GetConnectionString("MainDatabase") ??
@@ -69,25 +68,37 @@ RegisterSurveyService();
 
 var app = builder.Build();
 
+app.RegisterMapsterConfiguration();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(options => options.RouteTemplate = "openapi/{documentName}/openapi.json");
-    app.UseSwaggerUI(c =>
+    app.UseSwagger(options =>
     {
-        c.RoutePrefix = "openapi";
-        c.SwaggerEndpoint($"/openapi/{apiVersion}/openapi.json", "API Шлюз. Система информирования");
+        options.RouteTemplate = "openapi/{documentName}/openapi.json";
+        // options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+        // {
+        //     swaggerDoc.Servers = new List<OpenApiServer> { new()
+        //     {
+        //         Url = $"{httpReq.Scheme}://{httpReq.Host.Value}/api"
+        //     } };
+        // });
+    });
+    app.UseSwaggerUI(options =>
+    {
+        options.RoutePrefix = "openapi";
+        options.SwaggerEndpoint($"/openapi/{apiVersion}/openapi.json", "API Шлюз. Система информирования");
     });
 }
-
-InitDelayedAnnouncementOperationsDispatcher();
-InitAutomaticSurveyOperationsDispatcher();
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+Task.Run(InitDelayedAnnouncementOperationsDispatcherAsync);
+Task.Run(InitAutomaticSurveyOperationsDispatcherAsync);
 
 app.Run();
 return;
@@ -115,7 +126,7 @@ void RegisterSurveyService()
         .AddScoped<AutoClosingSurveyService>();
 }
 
-void InitDelayedAnnouncementOperationsDispatcher()
+Task InitDelayedAnnouncementOperationsDispatcherAsync()
 {
     var serviceScopeFactory = GetServiceFactory();
     using var scope = serviceScopeFactory.CreateScope();
@@ -123,16 +134,26 @@ void InitDelayedAnnouncementOperationsDispatcher()
     var services = scope.ServiceProvider;
 
     var dbContext = GetDbContext(services);
-    var publicationService = services.GetService<DelayedPublicationAnnouncementService>() ??
-                             throw new ApplicationException(
-                                 "Сервис работы с объявлениями, ожидающими отложенной публикации, не зарегистрирован");
-    var hidingService = services.GetService<DelayedHidingAnnouncementService>() ??
-                        throw new ApplicationException(
-                            "Сервис работы с объявлениями, ожидающими отложенного сокрытия, не зарегистрирован");
+    var publicationService = GetPublicationService(); // todo
+    var hidingService = GetHidingService();
     DelayedAnnouncementOperationsDispatcher.Init(dbContext, publicationService, hidingService);
+    
+    return Task.CompletedTask;
+
+
+
+    DelayedPublicationAnnouncementService GetPublicationService() =>
+        services.GetService<DelayedPublicationAnnouncementService>() ??
+        throw new ApplicationException(
+            "Сервис работы с объявлениями, ожидающими отложенной публикации, не зарегистрирован");
+
+    DelayedHidingAnnouncementService GetHidingService() =>
+        services.GetService<DelayedHidingAnnouncementService>() ??
+        throw new ApplicationException(
+            "Сервис работы с объявлениями, ожидающими отложенного сокрытия, не зарегистрирован");
 }
 
-void InitAutomaticSurveyOperationsDispatcher()
+Task InitAutomaticSurveyOperationsDispatcherAsync()
 {
     var serviceScopeFactory = GetServiceFactory();
     using var scope = serviceScopeFactory.CreateScope();
@@ -140,10 +161,17 @@ void InitAutomaticSurveyOperationsDispatcher()
     var services = scope.ServiceProvider;
 
     var dbContext = GetDbContext(services);
-    var closingService = services.GetService<AutoClosingSurveyService>() ??
-                         throw new ApplicationException(
-                             "Сервис работы с опросами, ожидающими автоматического закрытия, не зарегистрирован");
+    var closingService = GetClosingService();
     AutomaticSurveyOperationsDispatcher.Init(dbContext, closingService);
+
+    return Task.CompletedTask;
+
+
+
+    AutoClosingSurveyService GetClosingService() =>
+        services.GetService<AutoClosingSurveyService>() ??
+        throw new ApplicationException(
+            "Сервис работы с опросами, ожидающими автоматического закрытия, не зарегистрирован");
 }
 
 IServiceScopeFactory GetServiceFactory() =>

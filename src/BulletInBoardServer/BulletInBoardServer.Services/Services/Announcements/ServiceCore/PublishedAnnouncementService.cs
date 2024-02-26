@@ -1,23 +1,27 @@
-﻿using BulletInBoardServer.Domain;
-using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
+﻿using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
 using BulletInBoardServer.Services.Services.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 
 public class PublishedAnnouncementService(
-    ApplicationDbContext dbContext,
+    IServiceScopeFactory scopeFactory,
     IDelayedAnnouncementOperationsDispatcher dispatcher)
-    : DispatcherDependentAnnouncementServiceBase(dbContext, dispatcher)
+    : DispatcherDependentAnnouncementServiceBase(scopeFactory, dispatcher)
 {
     /// <summary>
     /// Метод возвращает список опубликованных для пользователя объявлений
     /// </summary>
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <returns>Список с краткой информацией об объявлениях</returns>
-    public IEnumerable<AnnouncementSummary> GetListForUser(Guid requesterId) =>
-        DbContext.Announcements
-            .Join(DbContext.AnnouncementAudience,
+    public IEnumerable<AnnouncementSummary> GetListForUser(Guid requesterId)
+    {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
+        return dbContext.Announcements
+            .Join(dbContext.AnnouncementAudience,
                 a => a.Id, au => au.AnnouncementId,
                 (a, au) => new { Announcement = a, Audience = au })
             .Where(res => res.Announcement.IsPublished && res.Audience.UserId == requesterId)
@@ -25,6 +29,7 @@ public class PublishedAnnouncementService(
             // так как группируем по Id объявления и все объявления группы будут содержать одно и то же объявление,
             // из группы выбираем объявление первого элемента
             .Select(group => group.First().Announcement.GetSummary(group.Count()));
+    }
 
     /// <summary>
     /// Метод скрывает объявление указанным пользователем
@@ -34,7 +39,10 @@ public class PublishedAnnouncementService(
     /// <param name="hiddenAt">Момент сокрытия объявления</param>
     public void HideManually(Guid requesterId, Guid announcementId, DateTime hiddenAt)
     {
-        var announcement = GetAnnouncementSummary(announcementId);
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
+        var announcement = GetAnnouncementSummary(announcementId, dbContext);
         if (announcement.AuthorId != requesterId)
             throw new OperationNotAllowedException("Объявление может скрыть только его автор");
 
@@ -42,6 +50,6 @@ public class PublishedAnnouncementService(
             Dispatcher.DisableDelayedHiding(announcementId);
 
         announcement.Hide(DateTime.Now, hiddenAt);
-        DbContext.SaveChanges();
+        dbContext.SaveChanges();
     }
 }

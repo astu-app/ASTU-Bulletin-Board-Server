@@ -48,7 +48,6 @@ namespace BulletInBoardServer.Controllers.SurveysController.Controllers
         /// <response code="201">Created</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
-        /// <response code="409">Conflict</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Route("/api/surveys/create")]
@@ -56,13 +55,12 @@ namespace BulletInBoardServer.Controllers.SurveysController.Controllers
         [ValidateModelState]
         [ProducesResponseType(statusCode: 201, type: typeof(CreateSurveyCreated))]
         [ProducesResponseType(statusCode: 403, type: typeof(CreateSurveyForbidden))]
-        [ProducesResponseType(statusCode: 409, type: typeof(CreateSurveyConflict))]
         public abstract IActionResult CreateSurvey([FromBody]CreateSurveyDto createSurveyDto);
 
         /// <summary>
         /// Скачать результаты опроса
         /// </summary>
-        /// <param name="body"></param>
+        /// <param name="downloadSurveyResultsRequestDto"></param>
         /// <response code="200">Ok</response>
         /// <response code="400">Bad Request</response>
         /// <response code="401">Unauthorized</response>
@@ -75,55 +73,14 @@ namespace BulletInBoardServer.Controllers.SurveysController.Controllers
         [Consumes("application/json")]
         [ValidateModelState]
         [ProducesResponseType(statusCode: 200, type: typeof(DownloadSurveyResultsOk))]
+        [ProducesResponseType(statusCode: 400, type: typeof(DownloadSurveyResultsForbidden))]
         [ProducesResponseType(statusCode: 403, type: typeof(DownloadSurveyResultsForbidden))]
         [ProducesResponseType(statusCode: 404, type: typeof(DownloadSurveyResultsNotFound))]
         [ProducesResponseType(statusCode: 409, type: typeof(DownloadSurveyResultsConflict))]
-        public abstract IActionResult DownloadSurveyResults([FromBody]Guid body);
+        public abstract IActionResult DownloadSurveyResults([FromBody]DownloadSurveyResultsRequestDto downloadSurveyResultsRequestDto);
 
         /// <summary>
-        /// Получить детали выбранного опроса
-        /// </summary>
-        /// <param name="body"></param>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="404">Not Found</response>
-        /// <response code="409">Conflict</response>
-        /// <response code="500">Internal Server Error</response>
-        [HttpGet]
-        [Route("/api/surveys/get-details")]
-        [Consumes("application/json")]
-        [ValidateModelState]
-        [ProducesResponseType(statusCode: 200, type: typeof(GetSurveyDetails200Response))]
-        [ProducesResponseType(statusCode: 403, type: typeof(GetSurveyDetailsForbidden))]
-        [ProducesResponseType(statusCode: 404, type: typeof(GetSurveyDetailsNotFound))]
-        [ProducesResponseType(statusCode: 409, type: typeof(GetSurveyDetailsConflict))]
-        public abstract IActionResult GetSurveyDetails([FromBody]Guid? body);
-
-        /// <summary>
-        /// Получить результаты опроса
-        /// </summary>
-        /// <param name="body"></param>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="404">Not Found</response>
-        /// <response code="409">Conflict</response>
-        /// <response code="500">Internal Server Error</response>
-        [HttpGet]
-        [Route("/api/surveys/get-results")]
-        [Consumes("application/json")]
-        [ValidateModelState]
-        [ProducesResponseType(statusCode: 200, type: typeof(GetSurveysResultsOk))]
-        [ProducesResponseType(statusCode: 403, type: typeof(GetSurveysResultsForbidden))]
-        [ProducesResponseType(statusCode: 404, type: typeof(GetSurveysResultsNotFound))]
-        [ProducesResponseType(statusCode: 409, type: typeof(GetSurveysResultsConflict))]
-        public abstract IActionResult GetSurveysResults([FromBody]Guid body);
-
-        /// <summary>
-        /// Проголосовать в вопросе
+        /// Проголосовать в опросе
         /// </summary>
         /// <param name="voteInSurveyDto"></param>
         /// <response code="200">Ok</response>
@@ -140,6 +97,6 @@ namespace BulletInBoardServer.Controllers.SurveysController.Controllers
         [ProducesResponseType(statusCode: 403, type: typeof(VoteInQuestionForbidden))]
         [ProducesResponseType(statusCode: 404, type: typeof(VoteInQuestionNotFound))]
         [ProducesResponseType(statusCode: 409, type: typeof(VoteInQuestionConflict))]
-        public abstract IActionResult VoteInQuestion([FromBody]VoteInSurveyDto voteInSurveyDto);
+        public abstract IActionResult VoteInSurvey([FromBody]VoteInSurveyDto voteInSurveyDto);
     }
 }

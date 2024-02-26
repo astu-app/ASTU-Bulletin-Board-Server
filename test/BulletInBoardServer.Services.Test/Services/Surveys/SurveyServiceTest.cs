@@ -2,7 +2,7 @@
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Voters;
 using BulletInBoardServer.Services.Services.Surveys;
-using BulletInBoardServer.Services.Services.Surveys.Infrastructure;
+using BulletInBoardServer.Services.Services.Surveys.Models;
 using BulletInBoardServer.Services.Test.Services.Surveys.DelayedOperations;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -32,7 +32,7 @@ public class SurveyServiceTest : DbInvolvingTestBase
     {
         var newAnswers = new List<CreateAnswer> { new("answer 1"), new("answer 2") };
         var newQuestions = new List<CreateQuestion> { new("question 1", true, newAnswers) };
-        var newSurvey = new CreateSurvey(true, true, DateTime.Now.AddHours(12), newQuestions);
+        var newSurvey = new CreateSurvey(true, DateTime.Now.AddHours(12), newQuestions);
 
         _service.Create(newSurvey);
 

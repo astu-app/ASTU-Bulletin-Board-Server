@@ -3,6 +3,7 @@ using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.SurveyParticipation;
+using BulletInBoardServer.Services.Services.Surveys.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BulletInBoardServer.Services.Services.Surveys.Voting;
@@ -33,6 +34,8 @@ public class VotingService(ApplicationDbContext dbContext)
     {
         SetServiceState(voterId, surveyId, votes);
 
+        ParticipantVotesForFirstTimeOrThrow();
+
         _survey = LoadSurveyOrThrow();
         SurveyOpenOrThrow();
 
@@ -54,6 +57,13 @@ public class VotingService(ApplicationDbContext dbContext)
         _votes = votes;
     }
 
+    private void ParticipantVotesForFirstTimeOrThrow()
+    {
+        var voted = dbContext.Participation.Any(p => p.SurveyId == _surveyId && p.UserId == _voterId);
+        if (voted)
+            throw new SurveyAlreadyVotedException();
+    }
+
     private Survey LoadSurveyOrThrow()
     {
         try
@@ -72,8 +82,7 @@ public class VotingService(ApplicationDbContext dbContext)
 
     private void SurveyOpenOrThrow()
     {
-        if (!_survey.IsOpen)
-            throw new InvalidOperationException("Нельзя проголосовать в закрытом опросе");
+        if (!_survey.IsOpen) throw new SurveyClosedException();
     }
 
     private void AllQuestionsReferToSurveyOrThrow()
@@ -81,9 +90,7 @@ public class VotingService(ApplicationDbContext dbContext)
         var votesQuestionIds = _votes.GetQuestionsIds();
         var surveyQuestionIds = _survey.Questions.Select(q => q.Id);
         var allRefer = surveyQuestionIds.SequenceEqual(votesQuestionIds);
-        if (!allRefer)
-            throw new InvalidOperationException(
-                "Список предоставленных вопросов не соответствует списку вопросов опроса");
+        if (!allRefer) throw new PresentedQuestionsDoesntMatchSurveyQuestionsException();
     }
 
     private void VotesValidOrThrow()
@@ -100,12 +107,10 @@ public class VotingService(ApplicationDbContext dbContext)
             throw new ArgumentException("Список вариантов ответов не может быть пустым");
 
         if (!question.IsMultipleChoiceAllowed && answerIdsList.Count > 1)
-            throw new InvalidOperationException(
-                "В вопросе без множественного выбора нельзя выбрать несколько вариантов ответов");
+            throw new MultipleSelectionInSingleChoiceQuestionException();
 
         if (!AllVotesReferToQuestion(question, answerIdsList))
-            throw new InvalidOperationException(
-                "В списке представленных ответов присутствуют не относящиеся к вопросу");
+            throw new PresentedVotesDoesntMatchQuestionAnswersException();
     }
 
     private static bool AllVotesReferToQuestion(Question question, IEnumerable<Guid> answerIds)

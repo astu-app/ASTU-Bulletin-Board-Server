@@ -4,7 +4,8 @@ using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Voters;
 using BulletInBoardServer.Services.Services.Surveys.DelayedOperations;
-using BulletInBoardServer.Services.Services.Surveys.Infrastructure;
+using BulletInBoardServer.Services.Services.Surveys.Exceptions;
+using BulletInBoardServer.Services.Services.Surveys.Models;
 using BulletInBoardServer.Services.Services.Surveys.VotersGetting;
 using BulletInBoardServer.Services.Services.Surveys.Voting;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +42,7 @@ public class SurveyService(
         var survey = new Survey(
             id: surveyId,
             announcements: [],
-            isOpen: newSurvey.IsOpen,
+            isOpen: true,
             isAnonymous: newSurvey.IsAnonymous,
             autoClosingAt: newSurvey.AutoClosingAt,
             questions: questions
@@ -71,15 +72,46 @@ public class SurveyService(
         var votingService = new VotingService(dbContext);
         votingService.Vote(voterId, surveyId, votes);
     }
+    
+    /// <summary>
+    /// Метод предоставляет опрос со всеми его вопросами, вариантами ответов и проголосовавшими пользователями
+    /// </summary>
+    /// <param name="surveyId">Идентификатор опроса</param>
+    /// <returns>Загруженный опрос со связанными сущностями</returns>
+    /// <exception cref="SurveyDoesNotExistException">Опрос с заданным id не существует в БД</exception>
+    /// <exception cref="InvalidOperationException">Не удалось загрузить опрос из БД</exception>
+    public Survey GetDetails(Guid surveyId)
+    {
+        try
+        {
+            var survey = dbContext.Surveys
+                .Where(s => s.Id == surveyId)
+                .Include(s => s.Voters)
+                .Include(s => s.Questions)
+                .ThenInclude(q => q.Answers)
+                .ThenInclude(a => a.Participation)
+                .ThenInclude(p => p.User)
+                .Single();
+            
+            if (survey is null)
+                throw new SurveyDoesNotExistException();
+
+            return survey;
+        }
+        catch (InvalidOperationException err)
+        {
+            throw new InvalidOperationException("Не удалось загрузить опрос из БД", err);
+        }
+    }
 
     /// <summary>
     /// Получить структурированный список проголосовавших в опросе пользователей
     /// </summary>
     /// <param name="surveyId">Идентификатор опроса</param>
     /// <returns>Структурированный список проголосовавших в опросе пользователей</returns>
-    public SurveyVotersBase GetSurveyVoters(Guid surveyId)
+    public SurveyVotersBase GetSurveyVoters(Guid surveyId) // todo использовать для выгрузки результатов
     {
-        var survey = LoadFullSurvey(surveyId);
+        var survey = GetDetails(surveyId);
         var getter = SurveyVotersGetterBase.ResolveVotersGetter(survey);
         return getter.GetVoters();
     }
@@ -121,41 +153,21 @@ public class SurveyService(
     }
 
     /// <summary>
-    /// Метод загружает опрос полностью, включая все его вопросы, варианты ответов и проголосовавших пользователей
-    /// </summary>
-    /// <param name="surveyId">Идентификатор опроса</param>
-    /// <returns>Загруженный опрос со связанными сущностями</returns>
-    /// <exception cref="InvalidOperationException">Не удалось загрузить опрос из БД</exception>
-    private Survey LoadFullSurvey(Guid surveyId)
-    {
-        try
-        {
-            return dbContext.Surveys
-                .Where(s => s.Id == surveyId)
-                .Include(s => s.Voters)
-                .Include(s => s.Questions)
-                .ThenInclude(q => q.Answers)
-                .ThenInclude(a => a.Participation)
-                .ThenInclude(p => p.User)
-                .Single();
-        }
-        catch (InvalidOperationException err)
-        {
-            throw new InvalidOperationException("Не удалось загрузить опрос из БД", err);
-        }
-    }
-
-    /// <summary>
     /// Метод загружает только класс опроса, не включая связанные сущности
     /// </summary>
     /// <param name="surveyId">Идентификатор опроса</param>
     /// <returns>Загруженный опрос без связанных сущностей</returns>
+    /// <exception cref="SurveyDoesNotExistException">Опрос с заданным id не существует в БД</exception>
     /// <exception cref="InvalidOperationException">Не удалось загрузить опрос из БД</exception>
     private Survey LoadSurveySummary(Guid surveyId)
     {
         try
         {
-            return dbContext.Surveys.Single(s => s.Id == surveyId);
+            var survey = dbContext.Surveys.SingleOrDefault(s => s.Id == surveyId);
+            if (survey is null)
+                throw new SurveyDoesNotExistException();
+
+            return survey;
         }
         catch (InvalidOperationException err)
         {

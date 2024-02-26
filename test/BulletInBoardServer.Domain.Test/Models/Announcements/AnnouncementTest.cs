@@ -59,7 +59,7 @@ public class AnnouncementTest
         var setPublishedMoment = () => announcement.SetPublishedMoment(DateTime.Now, DateTime.Now.AddHours(1));
         setPublishedMoment.Should()
             .Throw<InvalidOperationException>()
-            .WithMessage("Момент публикации уже опубликованного объявления не может наступить в будущем");
+            .WithMessage("Момент публикации объявления не может наступить в будущем");
     }
 
     [Fact]

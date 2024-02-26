@@ -1,12 +1,12 @@
-﻿using BulletInBoardServer.Domain;
-using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
+﻿using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 
 public class DispatcherDependentAnnouncementServiceBase(
-    ApplicationDbContext dbContext,
+    IServiceScopeFactory scopeFactory,
     IDelayedAnnouncementOperationsDispatcher dispatcher)
-    : CoreAnnouncementServiceBase(dbContext)
+    : CoreAnnouncementServiceBase(scopeFactory)
 {
     protected readonly IDelayedAnnouncementOperationsDispatcher Dispatcher = dispatcher;
 }

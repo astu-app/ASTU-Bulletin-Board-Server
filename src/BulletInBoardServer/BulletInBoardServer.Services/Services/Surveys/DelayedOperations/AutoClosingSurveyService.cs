@@ -1,21 +1,28 @@
 ﻿using BulletInBoardServer.Domain;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Surveys.DelayedOperations;
 
-public class AutoClosingSurveyService(ApplicationDbContext dbContext)
+public class AutoClosingSurveyService(IServiceScopeFactory scopeFactory)
 {
     public void CloseAutomatically(Guid surveyId)
     {
         // Автоматическое сокрытие отменяется в диспетчере, вызывающем этот метод
-        var survey = GetSurveySummary(surveyId);
+
+        using var scope = scopeFactory.CreateScope();
+        var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>() ??
+                        throw new ApplicationException(
+                            $"{nameof(ApplicationDbContext)} не зарегистрирован в качестве сервиса");
+        
+        var survey = GetSurveySummary(surveyId, dbContext);
         survey.Close();
         dbContext.SaveChanges();
     }
 
 
 
-    private Survey GetSurveySummary(Guid surveyId)
+    private static Survey GetSurveySummary(Guid surveyId, ApplicationDbContext dbContext)
     {
         try
         {

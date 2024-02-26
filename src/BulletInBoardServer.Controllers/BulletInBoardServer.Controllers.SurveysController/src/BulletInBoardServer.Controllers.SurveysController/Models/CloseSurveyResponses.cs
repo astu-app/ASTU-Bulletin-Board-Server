@@ -16,9 +16,9 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.SurveysController.Models
 { 
         /// <summary>
-        /// Ответы:   surveyClosingForbidden - Пользователь не имеет права закрыть этот опрос   surveyDoesNotExist - Опрос не существует   surveyAlreadyClosed - Опрос уже закрыт   announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано 
+        /// Ответы:   surveyClosingForbidden - Пользователь не имеет права закрыть этот опрос   surveyDoesNotExist - Опрос не существует   surveyAlreadyClosed - Опрос уже закрыт 
         /// </summary>
-        /// <value>Ответы:   surveyClosingForbidden - Пользователь не имеет права закрыть этот опрос   surveyDoesNotExist - Опрос не существует   surveyAlreadyClosed - Опрос уже закрыт   announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано </value>
+        /// <value>Ответы:   surveyClosingForbidden - Пользователь не имеет права закрыть этот опрос   surveyDoesNotExist - Опрос не существует   surveyAlreadyClosed - Опрос уже закрыт </value>
         [TypeConverter(typeof(CustomEnumConverter<CloseSurveyResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum CloseSurveyResponses
@@ -40,12 +40,6 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
             /// Enum SurveyAlreadyClosed for surveyAlreadyClosed
             /// </summary>
             [EnumMember(Value = "surveyAlreadyClosed")]
-            SurveyAlreadyClosed = 3,
-            
-            /// <summary>
-            /// Enum AnnouncementWithSurveyNotYetPublished for announcementWithSurveyNotYetPublished
-            /// </summary>
-            [EnumMember(Value = "announcementWithSurveyNotYetPublished")]
-            AnnouncementWithSurveyNotYetPublished = 4
+            SurveyAlreadyClosed = 3
         }
 }

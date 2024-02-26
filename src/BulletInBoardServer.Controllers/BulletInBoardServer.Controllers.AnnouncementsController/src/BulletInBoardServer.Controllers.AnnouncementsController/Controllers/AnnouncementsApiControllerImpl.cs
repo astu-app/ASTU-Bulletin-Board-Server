@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using BulletInBoardServer.Controllers.AnnouncementsController.Models;
+using BulletInBoardServer.Controllers.Core.Logging;
+using BulletInBoardServer.Controllers.Core.Responding;
 using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements;
@@ -18,10 +20,21 @@ using Serilog;
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
 
 /// <inheritdoc />
-public class AnnouncementsApiControllerImpl(AnnouncementService service)
-    : AnnouncementsApiController
+public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 {
+    private readonly AnnouncementService _service;
+
     private readonly ILogger _logger = Log.ForContext<AnnouncementService>();
+    private readonly LoggingHelper _loggingHelper;
+
+
+
+    /// <inheritdoc />
+    public AnnouncementsApiControllerImpl(AnnouncementService service)
+    {
+        _service = service;
+        _loggingHelper = new LoggingHelper(_logger);
+    }
 
 
 
@@ -48,87 +61,89 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
 
         var requesterId = Guid.Empty; // todo id пользователя
 
-        var validationResult = ValidateModel(dto);
-        if (validationResult is not null)
-            return validationResult;
-
         var createAnnouncement = dto.Adapt<CreateAnnouncement>();
         try
         {
-            var announcement = service.Create(requesterId, createAnnouncement);
+            var announcement = _service.Create(requesterId, createAnnouncement);
 
             _logger.Information(
                 "Пользователь {UserId} создал объявление {AnnouncementId}",
                 requesterId,
                 announcement.Id);
 
-            return Created(new Uri("/api/announcements/get-details"), announcement.Id);
+            return Created("/api/announcements/get-details", announcement.Id);
         }
         catch (AnnouncementAudienceNullOrEmptyException err)
         {
-            LogWarning(400, "Создание объявления", nameof(CreateAnnouncementResponses.AudienceNullOrEmpty),
+            _loggingHelper.LogWarning(400, "Создание объявления",
+                nameof(CreateAnnouncementResponses.AudienceNullOrEmpty),
                 requesterId, err.Message);
-            return BadRequest(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.AudienceNullOrEmpty));
+            return BadRequest(
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses.AudienceNullOrEmpty));
         }
         catch (AnnouncementContentNullOrEmptyException err)
         {
-            LogWarning(400, "Создание объявления", nameof(CreateAnnouncementResponses.ContentNullOrEmpty),
+            _loggingHelper.LogWarning(400, "Создание объявления",
+                nameof(CreateAnnouncementResponses.ContentNullOrEmpty),
                 requesterId, err.Message);
-            return BadRequest(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.ContentNullOrEmpty));
+            return BadRequest(
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses.ContentNullOrEmpty));
         }
         catch (AttachmentDoesNotExist err)
         {
-            LogWarning(404, "Создание объявления", nameof(CreateAnnouncementResponses.AttachmentsDoNotExist),
+            _loggingHelper.LogWarning(404, "Создание объявления",
+                nameof(CreateAnnouncementResponses.AttachmentsDoNotExist),
                 requesterId, err.Message);
-            return NotFound(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.AttachmentsDoNotExist));
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses
+                    .AttachmentsDoNotExist));
         }
         catch (PieceOfAudienceDoesNotExist err)
         {
-            LogWarning(404, "Создание объявления", nameof(CreateAnnouncementResponses.PieceOfAudienceDoesNotExist),
+            _loggingHelper.LogWarning(404, "Создание объявления",
+                nameof(CreateAnnouncementResponses.PieceOfAudienceDoesNotExist),
                 requesterId, err.Message);
-            return NotFound(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.PieceOfAudienceDoesNotExist));
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses
+                    .PieceOfAudienceDoesNotExist));
         }
         catch (AnnouncementCategoriesDoNotExist err)
         {
-            LogWarning(404, "Создание объявления",
+            _loggingHelper.LogWarning(404, "Создание объявления",
                 nameof(CreateAnnouncementResponses.AnnouncementCategoriesDoNotExist), requesterId, err.Message);
             return NotFound(
-                ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.AnnouncementCategoriesDoNotExist));
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses
+                    .AnnouncementCategoriesDoNotExist));
         }
         catch (DelayedPublishingMomentComesInPastException err)
         {
-            LogWarning(409, "Создание объявления",
+            _loggingHelper.LogWarning(409, "Создание объявления",
                 nameof(CreateAnnouncementResponses.DelayedPublishingMomentIsInPast), requesterId, err.Message);
             return Conflict(
-                ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.DelayedPublishingMomentIsInPast));
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses
+                    .DelayedPublishingMomentIsInPast));
         }
         catch (DelayedHidingMomentComesInPastException err)
         {
-            LogWarning(409, "Создание объявления", nameof(CreateAnnouncementResponses.DelayedHidingMomentIsInPast),
+            _loggingHelper.LogWarning(409, "Создание объявления",
+                nameof(CreateAnnouncementResponses.DelayedHidingMomentIsInPast),
                 requesterId, err.Message);
-            return Conflict(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.DelayedHidingMomentIsInPast));
+            return Conflict(
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses
+                    .DelayedHidingMomentIsInPast));
         }
         catch (DelayedPublishingAfterDelayedHidingException err)
         {
-            LogWarning(409, "Создание объявления",
+            _loggingHelper.LogWarning(409, "Создание объявления",
                 nameof(CreateAnnouncementResponses.DelayedPublishingMomentAfterDelayedHidingMoment), requesterId,
                 err.Message);
-            return Conflict(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses
+            return Conflict(ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses
                 .DelayedPublishingMomentAfterDelayedHidingMoment));
         }
         catch (Exception err)
         {
-            LogError(err, 500, "Создание объявления", requesterId);
+            _loggingHelper.LogError(err, 500, "Создание объявления", requesterId);
             return Problem();
-        }
-
-
-        IActionResult? ValidateModel(CreateAnnouncementDto dto_)
-        {
-            if (dto_.UserIds is null || dto_.UserIds.Count == 0)
-                return BadRequest(ConstructAnswerWithOnlyCode(CreateAnnouncementResponses.AudienceNullOrEmpty));
-
-            return null;
         }
     }
 
@@ -148,7 +163,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
 
         try
         {
-            service.Delete(requesterId, announcementId);
+            _service.Delete(requesterId, announcementId);
 
             _logger.Information("Пользователь {RequesterId} удалил объявление {AnnouncementId}",
                 requesterId, announcementId);
@@ -157,20 +172,24 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
         }
         catch (OperationNotAllowedException err)
         {
-            LogWarning(403, "Удаление объявления",
+            _loggingHelper.LogWarning(403, "Удаление объявления",
                 nameof(DeleteAnnouncementResponses.AnnouncementDeletionForbidden), requesterId, err.Message);
             return StatusCode(403,
-                ConstructAnswerWithOnlyCode(DeleteAnnouncementResponses.AnnouncementDeletionForbidden));
+                ResponseConstructor.ConstructResponseWithOnlyCode(DeleteAnnouncementResponses
+                    .AnnouncementDeletionForbidden));
         }
         catch (AnnouncementDoesNotExist err)
         {
-            LogWarning(404, "Удаление объявления", nameof(DeleteAnnouncementResponses.AnnouncementDoesNotExist),
+            _loggingHelper.LogWarning(404, "Удаление объявления",
+                nameof(DeleteAnnouncementResponses.AnnouncementDoesNotExist),
                 requesterId, err.Message);
-            return NotFound(ConstructAnswerWithOnlyCode(DeleteAnnouncementResponses.AnnouncementDoesNotExist));
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(DeleteAnnouncementResponses
+                    .AnnouncementDoesNotExist));
         }
         catch (Exception err)
         {
-            LogError(err, 500, "Удаление объявления", requesterId);
+            _loggingHelper.LogError(err, 500, "Удаление объявления", requesterId);
             return Problem();
         }
     }
@@ -192,7 +211,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
 
         try
         {
-            var announcement = service.GetDetails(requesterId, announcementId);
+            var announcement = _service.GetDetails(requesterId, announcementId);
 
             _logger.Information(
                 "Пользователь {RequesterId} получил подробности объявления {AnnouncementId}",
@@ -202,20 +221,23 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
         }
         catch (OperationNotAllowedException err)
         {
-            LogWarning(403, "Получение деталей объявления",
+            _loggingHelper.LogWarning(403, "Получение деталей объявления",
                 nameof(GetAnnouncementDetailsResponses.DetailsAccessForbidden), requesterId, err.Message);
             return StatusCode(403,
-                ConstructAnswerWithOnlyCode(GetAnnouncementDetailsResponses.DetailsAccessForbidden));
+                ResponseConstructor.ConstructResponseWithOnlyCode(GetAnnouncementDetailsResponses
+                    .DetailsAccessForbidden));
         }
         catch (AnnouncementDoesNotExist err)
         {
-            LogWarning(404, "Получение деталей объявления",
+            _loggingHelper.LogWarning(404, "Получение деталей объявления",
                 nameof(GetAnnouncementDetailsResponses.AnnouncementDoesNotExist), requesterId, err.Message);
-            return NotFound(ConstructAnswerWithOnlyCode(GetAnnouncementDetailsResponses.AnnouncementDoesNotExist));
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(GetAnnouncementDetailsResponses
+                    .AnnouncementDoesNotExist));
         }
         catch (Exception err)
         {
-            LogError(err, 500, "Получение деталей объявления", requesterId);
+            _loggingHelper.LogError(err, 500, "Получение деталей объявления", requesterId);
             return Problem();
         }
     }
@@ -234,7 +256,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
 
         try
         {
-            var announcements = service.GetDelayedHidingAnnouncementsForUser(requesterId);
+            var announcements = _service.GetDelayedHidingAnnouncementsForUser(requesterId);
 
             _logger.Information("Пользователь {RequesterId} запросил список объявлений с отложенным сокрытием",
                 requesterId);
@@ -243,7 +265,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
         }
         catch (Exception err)
         {
-            LogError(err, 500, "Получение списка объявлений с отложенным сокрытием", requesterId);
+            _loggingHelper.LogError(err, 500, "Получение списка объявлений с отложенным сокрытием", requesterId);
             return Problem();
         }
     }
@@ -262,7 +284,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
 
         try
         {
-            var announcements = service.GetDelayedPublicationAnnouncements(requesterId);
+            var announcements = _service.GetDelayedPublicationAnnouncements(requesterId);
 
             _logger.Information("Пользователь {RequesterId} запросил список объявлений с отложенной публикацией",
                 requesterId);
@@ -271,7 +293,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
         }
         catch (Exception err)
         {
-            LogError(err, 500, "Получение списка объявлений с отложенной публикацией", requesterId);
+            _loggingHelper.LogError(err, 500, "Получение списка объявлений с отложенной публикацией", requesterId);
             return Problem();
         }
     }
@@ -290,7 +312,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
 
         try
         {
-            var announcements = service.GetHiddenAnnouncements(requesterId);
+            var announcements = _service.GetHiddenAnnouncements(requesterId);
 
             _logger.Information("Пользователь {RequesterId} запросил список скрытых объявлений", requesterId);
 
@@ -298,7 +320,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
         }
         catch (Exception err)
         {
-            LogError(err, 500, "Получение списка скрытых объявлений", requesterId);
+            _loggingHelper.LogError(err, 500, "Получение списка скрытых объявлений", requesterId);
             return Problem();
         }
     }
@@ -317,7 +339,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
 
         try
         {
-            var announcements = service.GetPublishedAnnouncements(requesterId);
+            var announcements = _service.GetPublishedAnnouncements(requesterId);
 
             _logger.Information("Пользователь {RequesterId} запросил список опубликованных объявлений",
                 requesterId);
@@ -326,7 +348,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
         }
         catch (Exception err)
         {
-            LogError(err, 500, "Получение списка опубликованных объявлений", requesterId);
+            _loggingHelper.LogError(err, 500, "Получение списка опубликованных объявлений", requesterId);
             return Problem();
         }
     }
@@ -350,7 +372,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
 
         try
         {
-            service.Hide(requesterId, announcementId, DateTime.Now);
+            _service.Hide(requesterId, announcementId, DateTime.Now);
 
             _logger.Information("Пользователь {RequesterId} скрыл объявление {AnnouncementId}",
                 requesterId, announcementId);
@@ -359,34 +381,39 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
         }
         catch (OperationNotAllowedException err)
         {
-            LogWarning(403, "Сокрытие объявления",
+            _loggingHelper.LogWarning(403, "Сокрытие объявления",
                 nameof(HidePostedAnnouncementResponses.AnnouncementHidingForbidden), requesterId, err.Message);
             return StatusCode(403,
-                ConstructAnswerWithOnlyCode(HidePostedAnnouncementResponses.AnnouncementHidingForbidden));
+                ResponseConstructor.ConstructResponseWithOnlyCode(HidePostedAnnouncementResponses
+                    .AnnouncementHidingForbidden));
         }
         catch (AnnouncementDoesNotExist err)
         {
-            LogWarning(404, "Сокрытие объявления",
+            _loggingHelper.LogWarning(404, "Сокрытие объявления",
                 nameof(HidePostedAnnouncementResponses.AnnouncementDoesNotExist), requesterId, err.Message);
-            return NotFound(ConstructAnswerWithOnlyCode(HidePostedAnnouncementResponses.AnnouncementDoesNotExist));
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(HidePostedAnnouncementResponses
+                    .AnnouncementDoesNotExist));
         }
         catch (AnnouncementAlreadyHiddenException err)
         {
-            LogWarning(409, "Сокрытие объявления",
+            _loggingHelper.LogWarning(409, "Сокрытие объявления",
                 nameof(HidePostedAnnouncementResponses.AnnouncementAlreadyHidden), requesterId, err.Message);
             return Conflict(
-                ConstructAnswerWithOnlyCode(HidePostedAnnouncementResponses.AnnouncementAlreadyHidden));
+                ResponseConstructor.ConstructResponseWithOnlyCode(HidePostedAnnouncementResponses
+                    .AnnouncementAlreadyHidden));
         }
         catch (AnnouncementNotYetPublishedException err)
         {
-            LogWarning(409, "Сокрытие объявления",
+            _loggingHelper.LogWarning(409, "Сокрытие объявления",
                 nameof(HidePostedAnnouncementResponses.AnnouncementNotYetPublished), requesterId, err.Message);
             return Conflict(
-                ConstructAnswerWithOnlyCode(HidePostedAnnouncementResponses.AnnouncementNotYetPublished));
+                ResponseConstructor.ConstructResponseWithOnlyCode(HidePostedAnnouncementResponses
+                    .AnnouncementNotYetPublished));
         }
         catch (Exception err)
         {
-            LogError(err, 500, "Сокрытие объявления", requesterId);
+            _loggingHelper.LogError(err, 500, "Сокрытие объявления", requesterId);
             return Problem();
         }
     }
@@ -407,7 +434,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
 
         try
         {
-            service.Publish(requesterId, announcementId, DateTime.Now); // todo id пользователя
+            _service.Publish(requesterId, announcementId, DateTime.Now); // todo id пользователя
 
             _logger.Information(
                 "Пользователь {RequesterId} немедленно опубликовал объявление {AnnouncementId}, ожидающее отложенную публикацию",
@@ -417,24 +444,26 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
         }
         catch (OperationNotAllowedException err)
         {
-            LogWarning(403, "Немедленная публикация объявления, ожидающего отложенной публикации",
+            _loggingHelper.LogWarning(403, "Немедленная публикация объявления, ожидающего отложенной публикации",
                 nameof(PublishImmediatelyDelayedAnnouncementResponses.ImmediatePublishingForbidden), requesterId,
                 err.Message);
             return StatusCode(403,
-                ConstructAnswerWithOnlyCode(PublishImmediatelyDelayedAnnouncementResponses
+                ResponseConstructor.ConstructResponseWithOnlyCode(PublishImmediatelyDelayedAnnouncementResponses
                     .ImmediatePublishingForbidden));
         }
         catch (AnnouncementDoesNotExist err)
         {
-            LogWarning(404, "Немедленная публикация объявления, ожидающего отложенной публикации",
+            _loggingHelper.LogWarning(404, "Немедленная публикация объявления, ожидающего отложенной публикации",
                 nameof(PublishImmediatelyDelayedAnnouncementResponses.AnnouncementDoesNotExist), requesterId,
                 err.Message);
-            return NotFound(ConstructAnswerWithOnlyCode(PublishImmediatelyDelayedAnnouncementResponses
-                .AnnouncementDoesNotExist));
+            return NotFound(ResponseConstructor.ConstructResponseWithOnlyCode(
+                PublishImmediatelyDelayedAnnouncementResponses
+                    .AnnouncementDoesNotExist));
         }
         catch (Exception err)
         {
-            LogError(err, 500, "Немедленная публикация объявления, ожидающего отложенной публикации", requesterId);
+            _loggingHelper.LogError(err, 500,
+                "Немедленная публикация объявления, ожидающего отложенной публикации", requesterId);
             return Problem();
         }
     }
@@ -457,7 +486,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
 
         try
         {
-            service.Restore(requesterId, announcementId, DateTime.Now);
+            _service.Restore(requesterId, announcementId, DateTime.Now);
 
             _logger.Information("Пользователь {RequesterId} восстановил скрытое объявление {AnnouncementId}",
                 requesterId, announcementId);
@@ -466,27 +495,31 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
         }
         catch (OperationNotAllowedException err)
         {
-            LogWarning(403, "Восстановление скрытого объявления",
+            _loggingHelper.LogWarning(403, "Восстановление скрытого объявления",
                 nameof(RestoreHiddenAnnouncementResponses.RestoreForbidden), requesterId, err.Message);
             return StatusCode(403,
-                ConstructAnswerWithOnlyCode(RestoreHiddenAnnouncementResponses.RestoreForbidden));
+                ResponseConstructor.ConstructResponseWithOnlyCode(
+                    RestoreHiddenAnnouncementResponses.RestoreForbidden));
         }
         catch (AnnouncementDoesNotExist err)
         {
-            LogWarning(404, "Восстановление скрытого объявления",
+            _loggingHelper.LogWarning(404, "Восстановление скрытого объявления",
                 nameof(RestoreHiddenAnnouncementResponses.AnnouncementDoesNotExist), requesterId, err.Message);
             return NotFound(
-                ConstructAnswerWithOnlyCode(RestoreHiddenAnnouncementResponses.AnnouncementDoesNotExist));
+                ResponseConstructor.ConstructResponseWithOnlyCode(RestoreHiddenAnnouncementResponses
+                    .AnnouncementDoesNotExist));
         }
         catch (AnnouncementNotHiddenException err)
         {
-            LogWarning(404, "Восстановление скрытого объявления",
+            _loggingHelper.LogWarning(404, "Восстановление скрытого объявления",
                 nameof(RestoreHiddenAnnouncementResponses.AnnouncementNotHidden), requesterId, err.Message);
-            return NotFound(ConstructAnswerWithOnlyCode(RestoreHiddenAnnouncementResponses.AnnouncementNotHidden));
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(RestoreHiddenAnnouncementResponses
+                    .AnnouncementNotHidden));
         }
         catch (Exception err)
         {
-            LogError(err, 500, "Восстановление скрытого объявления", requesterId);
+            _loggingHelper.LogError(err, 500, "Восстановление скрытого объявления", requesterId);
             return Problem();
         }
     }
@@ -519,7 +552,7 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
         try
         {
             var editAnnouncement = updateAnnouncementDto.Adapt<EditAnnouncement>();
-            service.Edit(requesterId, editAnnouncement);
+            _service.Edit(requesterId, editAnnouncement);
 
             _logger.Information("Пользователь {RequesterId} отредактировал объявление {AnnouncementId}",
                 requesterId, updateAnnouncementDto.Id);
@@ -528,98 +561,97 @@ public class AnnouncementsApiControllerImpl(AnnouncementService service)
         }
         catch (AnnouncementContentEmptyException err)
         {
-            LogWarning(400, "Редактирование объявления", nameof(UpdateAnnouncementResponses.ContentEmpty),
+            _loggingHelper.LogWarning(400, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.ContentEmpty),
                 requesterId, err.Message);
-            return BadRequest(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.ContentEmpty));
+            return BadRequest(
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses.ContentEmpty));
         }
         catch (AnnouncementAudienceEmptyException err)
         {
-            LogWarning(400, "Редактирование объявления", nameof(UpdateAnnouncementResponses.AudienceEmpty),
+            _loggingHelper.LogWarning(400, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.AudienceEmpty),
                 requesterId, err.Message);
-            return BadRequest(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AudienceEmpty));
+            return BadRequest(
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses.AudienceEmpty));
         }
         catch (OperationNotAllowedException err)
         {
-            LogWarning(403, "Редактирование объявления",
+            _loggingHelper.LogWarning(403, "Редактирование объявления",
                 nameof(UpdateAnnouncementResponses.AnnouncementEditingForbidden), requesterId, err.Message);
             return StatusCode(403,
-                ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AnnouncementEditingForbidden));
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
+                    .AnnouncementEditingForbidden));
         }
         catch (AnnouncementDoesNotExist err)
         {
-            LogWarning(404, "Редактирование объявления",
+            _loggingHelper.LogWarning(404, "Редактирование объявления",
                 nameof(UpdateAnnouncementResponses.AnnouncementDoesNotExist), requesterId, err.Message);
-            return NotFound(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AnnouncementDoesNotExist));
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
+                    .AnnouncementDoesNotExist));
         }
         catch (AnnouncementCategoriesDoNotExist err)
         {
-            LogWarning(404, "Редактирование объявления",
+            _loggingHelper.LogWarning(404, "Редактирование объявления",
                 nameof(UpdateAnnouncementResponses.AnnouncementCategoriesDoesNotExist), requesterId, err.Message);
             return NotFound(
-                ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AnnouncementCategoriesDoesNotExist));
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
+                    .AnnouncementCategoriesDoesNotExist));
         }
         catch (AttachmentDoesNotExist err)
         {
-            LogWarning(404, "Редактирование объявления", nameof(UpdateAnnouncementResponses.AttachmentsDoNotExist),
+            _loggingHelper.LogWarning(404, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.AttachmentsDoNotExist),
                 requesterId, err.Message);
-            return NotFound(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AttachmentsDoNotExist));
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
+                    .AttachmentsDoNotExist));
         }
         catch (DelayedPublishingMomentComesInPastException err)
         {
-            LogWarning(409, "Редактирование объявления",
+            _loggingHelper.LogWarning(409, "Редактирование объявления",
                 nameof(UpdateAnnouncementResponses.DelayedPublishingMomentIsInPast), requesterId, err.Message);
             return Conflict(
-                ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.DelayedPublishingMomentIsInPast));
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
+                    .DelayedPublishingMomentIsInPast));
         }
         catch (DelayedHidingMomentComesInPastException err)
         {
-            LogWarning(409, "Редактирование объявления",
+            _loggingHelper.LogWarning(409, "Редактирование объявления",
                 nameof(UpdateAnnouncementResponses.DelayedHidingMomentIsInPast), requesterId, err.Message);
-            return Conflict(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.DelayedHidingMomentIsInPast));
+            return Conflict(
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
+                    .DelayedHidingMomentIsInPast));
         }
         catch (AutoPublishAnAlreadyPublishedAnnouncementException err)
         {
-            LogWarning(409, "Редактирование объявления",
+            _loggingHelper.LogWarning(409, "Редактирование объявления",
                 nameof(UpdateAnnouncementResponses.AutoPublishingPublishedAndNonHiddenAnnouncement), requesterId,
                 err.Message);
-            return Conflict(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses
+            return Conflict(ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
                 .AutoPublishingPublishedAndNonHiddenAnnouncement));
         }
         catch (AutoHidingAnAlreadyHiddenAnnouncementException err)
         {
-            LogWarning(409, "Редактирование объявления",
+            _loggingHelper.LogWarning(409, "Редактирование объявления",
                 nameof(UpdateAnnouncementResponses.AutoHidingAnAlreadyHiddenAnnouncement), requesterId,
                 err.Message);
             return Conflict(
-                ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.AutoHidingAnAlreadyHiddenAnnouncement));
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
+                    .AutoHidingAnAlreadyHiddenAnnouncement));
         }
         catch (CannotDetachSurveyException err)
         {
-            LogWarning(409, "Редактирование объявления",
+            _loggingHelper.LogWarning(409, "Редактирование объявления",
                 nameof(UpdateAnnouncementResponses.CannotDetachSurvey), requesterId, err.Message);
-            return Conflict(ConstructAnswerWithOnlyCode(UpdateAnnouncementResponses.CannotDetachSurvey));
+            return Conflict(
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses.CannotDetachSurvey));
         }
         catch (Exception err)
         {
-            LogError(err, 500, "Редактирование объявления", requesterId);
+            _loggingHelper.LogError(err, 500, "Редактирование объявления", requesterId);
             return Problem();
         }
     }
-
-
-
-    private void LogWarning(int httpStatusCode, string operation, string reasonCode, Guid requesterId,
-        string? additionalMessage = null) =>
-        _logger.Warning(
-            "HTTP-код: {HttpStatusCode}; Операция: {Operation}; Код причины: {ReasonCode}; ID пользователя: {RequesterId}; Дополнительная информация: {AdditionalMessage}",
-            httpStatusCode, operation, reasonCode, requesterId, additionalMessage);
-
-    private void LogError(Exception err, int httpStatusCode, string operation, Guid requesterId) =>
-        _logger.Error(
-            err, "HTTP-код: {HttpStatusCode}; Операция: {Operation}; ID пользователя: {RequesterId}",
-            httpStatusCode, operation, requesterId);
-
-    private static object ConstructAnswerWithOnlyCode<TEnum>(TEnum code)
-        where TEnum : Enum =>
-        new { Code = code };
 }

@@ -8,6 +8,7 @@ using BulletInBoardServer.Services.Test.Services.Announcements.DelayedOperations
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Test.Infrastructure;
 using Test.Infrastructure.DbInvolvingTests;
 using static BulletInBoardServer.Domain.TestDbFiller.TestDataIds;
 
@@ -21,13 +22,15 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
     public AnnouncementServiceTest()
     {
+        var scopeFactory = ServiceScopeFactoryConfigurator.Configure(DbContext);
+        
         _dispatcher = new DelayedAnnouncementOperationsDispatcherMock();
         _announcementService = new AnnouncementService(
-            new GeneralOperationsService(DbContext, _dispatcher),
-            new PublishedAnnouncementService(DbContext, _dispatcher),
-            new HiddenAnnouncementService(DbContext, _dispatcher),
-            new DelayedPublicationAnnouncementService(DbContext),
-            new DelayedHidingAnnouncementService(DbContext));
+            new GeneralOperationsService(scopeFactory, _dispatcher),
+            new PublishedAnnouncementService(scopeFactory, _dispatcher),
+            new HiddenAnnouncementService(scopeFactory, _dispatcher),
+            new DelayedPublicationAnnouncementService(scopeFactory),
+            new DelayedHidingAnnouncementService(scopeFactory));
     }
 
     /* ********************************** Общие операции *********************************** */

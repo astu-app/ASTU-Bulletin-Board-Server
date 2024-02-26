@@ -16,30 +16,36 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.SurveysController.Models
 { 
         /// <summary>
-        /// Ответы:   surveyResultsDownloadingForbidden - Пользователь не имеет права выгрузить результаты этого опроса   surveyDoesNotExist - Опрос не существует   announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано 
+        /// Ответы:   fileTypeNotSupported - Тип файла с результатами опроса не поддерживается   surveyResultsDownloadingForbidden - Пользователь не имеет права выгрузить результаты этого опроса   surveyDoesNotExist - Опрос не существует   announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано 
         /// </summary>
-        /// <value>Ответы:   surveyResultsDownloadingForbidden - Пользователь не имеет права выгрузить результаты этого опроса   surveyDoesNotExist - Опрос не существует   announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано </value>
+        /// <value>Ответы:   fileTypeNotSupported - Тип файла с результатами опроса не поддерживается   surveyResultsDownloadingForbidden - Пользователь не имеет права выгрузить результаты этого опроса   surveyDoesNotExist - Опрос не существует   announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано </value>
         [TypeConverter(typeof(CustomEnumConverter<DownloadSurveyResultsResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum DownloadSurveyResultsResponses
         {
             
             /// <summary>
+            /// Enum FileTypeNotSupported for fileTypeNotSupported
+            /// </summary>
+            [EnumMember(Value = "fileTypeNotSupported")]
+            FileTypeNotSupported = 1,
+            
+            /// <summary>
             /// Enum SurveyResultsDownloadingForbidden for surveyResultsDownloadingForbidden
             /// </summary>
             [EnumMember(Value = "surveyResultsDownloadingForbidden")]
-            SurveyResultsDownloadingForbidden = 1,
+            SurveyResultsDownloadingForbidden = 2,
             
             /// <summary>
             /// Enum SurveyDoesNotExist for surveyDoesNotExist
             /// </summary>
             [EnumMember(Value = "surveyDoesNotExist")]
-            SurveyDoesNotExist = 2,
+            SurveyDoesNotExist = 3,
             
             /// <summary>
             /// Enum AnnouncementWithSurveyNotYetPublished for announcementWithSurveyNotYetPublished
             /// </summary>
             [EnumMember(Value = "announcementWithSurveyNotYetPublished")]
-            AnnouncementWithSurveyNotYetPublished = 3
+            AnnouncementWithSurveyNotYetPublished = 4
         }
 }

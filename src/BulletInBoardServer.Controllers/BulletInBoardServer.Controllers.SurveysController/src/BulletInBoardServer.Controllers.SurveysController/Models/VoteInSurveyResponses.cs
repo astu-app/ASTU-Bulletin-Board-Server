@@ -16,9 +16,9 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.SurveysController.Models
 { 
         /// <summary>
-        /// Ответы:    votingForbidden - Пользователь не имеет права голосовать в опросе   surveyDoesNotExist - Опрос не существует   questionDoesNotExist - Вопрос не существует   answerDoesNotExist - Вариант ответа не существует   surveyClosed - Опрос закрыт   announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано   surveyAlreadyVoted - Голос в опросе уже отдан   cannotSelectMultipleAnswersInSingleChoiceQuestion - В вопросе с единственным выбором нельзя выбрать несколько вариантов ответов   selectedQuestionsBelongToDifferentSurveys - Перечисленные вопросы относятся к разным опросам   selectedAnswersBelongToDifferentQuestions - Перечисленные варианты ответов относятся к разным вопросам 
+        /// Ответы:   votingForbidden - Пользователь не имеет права голосовать в опросе   surveyDoesNotExist - Опрос не существует   surveyClosed - Опрос закрыт   surveyAlreadyVoted - Голос в опросе уже отдан   cannotSelectMultipleAnswersInSingleChoiceQuestion - В вопросе с единственным выбором нельзя выбрать несколько вариантов ответов   presentedQuestionsDoesntMatchSurveyQuestions - Список представленных вопросов не соответствует фактическому списку вопросов опроса   presentedVotesDoesntMatchQuestionAnswers - Список выбранных вариантов ответов для одного или нескольких вопросов не включается в список вариантов ответов вопроса 
         /// </summary>
-        /// <value>Ответы:    votingForbidden - Пользователь не имеет права голосовать в опросе   surveyDoesNotExist - Опрос не существует   questionDoesNotExist - Вопрос не существует   answerDoesNotExist - Вариант ответа не существует   surveyClosed - Опрос закрыт   announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано   surveyAlreadyVoted - Голос в опросе уже отдан   cannotSelectMultipleAnswersInSingleChoiceQuestion - В вопросе с единственным выбором нельзя выбрать несколько вариантов ответов   selectedQuestionsBelongToDifferentSurveys - Перечисленные вопросы относятся к разным опросам   selectedAnswersBelongToDifferentQuestions - Перечисленные варианты ответов относятся к разным вопросам </value>
+        /// <value>Ответы:   votingForbidden - Пользователь не имеет права голосовать в опросе   surveyDoesNotExist - Опрос не существует   surveyClosed - Опрос закрыт   surveyAlreadyVoted - Голос в опросе уже отдан   cannotSelectMultipleAnswersInSingleChoiceQuestion - В вопросе с единственным выбором нельзя выбрать несколько вариантов ответов   presentedQuestionsDoesntMatchSurveyQuestions - Список представленных вопросов не соответствует фактическому списку вопросов опроса   presentedVotesDoesntMatchQuestionAnswers - Список выбранных вариантов ответов для одного или нескольких вопросов не включается в список вариантов ответов вопроса </value>
         [TypeConverter(typeof(CustomEnumConverter<VoteInSurveyResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum VoteInSurveyResponses
@@ -37,51 +37,33 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
             SurveyDoesNotExist = 2,
             
             /// <summary>
-            /// Enum QuestionDoesNotExist for questionDoesNotExist
-            /// </summary>
-            [EnumMember(Value = "questionDoesNotExist")]
-            QuestionDoesNotExist = 3,
-            
-            /// <summary>
-            /// Enum AnswerDoesNotExist for answerDoesNotExist
-            /// </summary>
-            [EnumMember(Value = "answerDoesNotExist")]
-            AnswerDoesNotExist = 4,
-            
-            /// <summary>
             /// Enum SurveyClosed for surveyClosed
             /// </summary>
             [EnumMember(Value = "surveyClosed")]
-            SurveyClosed = 5,
+            SurveyClosed = 3,
             
             /// <summary>
-            /// Enum AnnouncementWithSurveyNotYetPublished for announcementWithSurveyNotYetPublished
+            /// Enum SurveyAlreadyVoted for surveyAlreadyVoted
             /// </summary>
-            [EnumMember(Value = "announcementWithSurveyNotYetPublished")]
-            AnnouncementWithSurveyNotYetPublished = 6,
-            
-            /// <summary>
-            /// Enum AnswerAlreadyVoted for answerAlreadyVoted
-            /// </summary>
-            [EnumMember(Value = "answerAlreadyVoted")]
-            AnswerAlreadyVoted = 7,
+            [EnumMember(Value = "surveyAlreadyVoted")]
+            SurveyAlreadyVoted = 4,
             
             /// <summary>
             /// Enum CannotSelectMultipleAnswersInSingleChoiceQuestion for cannotSelectMultipleAnswersInSingleChoiceQuestion
             /// </summary>
             [EnumMember(Value = "cannotSelectMultipleAnswersInSingleChoiceQuestion")]
-            CannotSelectMultipleAnswersInSingleChoiceQuestion = 8,
+            CannotSelectMultipleAnswersInSingleChoiceQuestion = 5,
             
             /// <summary>
-            /// Enum SelectedQuestionsBelongToDifferentSurveys for selectedQuestionsBelongToDifferentSurveys
+            /// Enum PresentedQuestionsDoesntMatchSurveyQuestions for presentedQuestionsDoesntMatchSurveyQuestions
             /// </summary>
-            [EnumMember(Value = "selectedQuestionsBelongToDifferentSurveys")]
-            SelectedQuestionsBelongToDifferentSurveys = 9,
+            [EnumMember(Value = "presentedQuestionsDoesntMatchSurveyQuestions")]
+            PresentedQuestionsDoesntMatchSurveyQuestions = 6,
             
             /// <summary>
-            /// Enum SelectedAnswersBelongToDifferentQuestions for selectedAnswersBelongToDifferentQuestions
+            /// Enum PresentedVotesDoesntMatchQuestionAnswers for presentedVotesDoesntMatchQuestionAnswers
             /// </summary>
-            [EnumMember(Value = "selectedAnswersBelongToDifferentQuestions")]
-            SelectedAnswersBelongToDifferentQuestions = 10
+            [EnumMember(Value = "presentedVotesDoesntMatchQuestionAnswers")]
+            PresentedVotesDoesntMatchQuestionAnswers = 7
         }
 }

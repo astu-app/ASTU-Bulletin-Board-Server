@@ -45,78 +45,6 @@ paths:
                   code:
                     # createSurveyForbidden
                     $ref: '#/components/schemas/createSurveyResponses'
-        409:
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                type: object
-                title: createSurveyConflict
-                properties:
-                  code:
-                    # votingClosesBeforeAnnouncementPublication
-                    $ref: '#/components/schemas/createSurveyResponses'
-        500:
-          description: Internal Server Error
-  
-  /surveys/get-details:
-    get:
-      operationId: getSurveyDetails
-      summary: Получить детали выбранного опроса
-      tags: [ Surveys ]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/surveyIdentifierDto'
-      responses:
-        200:
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  content:
-                    $ref: '#/components/schemas/surveyDetailsDto'
-        400:
-          # Некорректный формат идентификатора
-          description: Bad Request
-        401:
-          description: Unauthorized
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getSurveyDetailsForbidden
-                properties:
-                  code:
-                    # detailsAccessForbidden
-                    $ref: '#/components/schemas/getSurveyDetailsResponses'
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getSurveyDetailsNotFound
-                properties:
-                  code:
-                    # surveyDoesNotExist
-                    $ref: '#/components/schemas/getSurveyDetailsResponses'
-        409:
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getSurveyDetailsConflict
-                properties:
-                  code:
-                    # announcementWithSurveyNotYetPublished
-                    $ref: '#/components/schemas/getSurveyDetailsResponses'
         500:
           description: Internal Server Error
   
@@ -171,71 +99,7 @@ paths:
                 properties:
                   code:
                     # surveyAlreadyClosed
-                    # announcementWithSurveyNotYetPublished
                     $ref: '#/components/schemas/closeSurveyResponses'
-        500:
-          description: Internal Server Error
-  
-  /surveys/get-results:
-    get:
-      operationId: getSurveysResults
-      summary: Получить результаты опроса
-      tags: [ Surveys ]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/surveyIdentifierDto'
-      responses:
-        200:
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getSurveysResultsOk
-                properties:
-                  content:
-                    $ref: '#/components/schemas/surveyResultsDto'
-        400:
-          # Некорректный формат идентификатора
-          description: Bad Request
-        401:
-          description: Unauthorized
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getSurveysResultsForbidden
-                properties:
-                  code:
-                    # surveyResultsAccessForbidden
-                    $ref: '#/components/schemas/getSurveysResultsResponses'
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getSurveysResultsNotFound
-                properties:
-                  code:
-                    # surveyDoesNotExist
-                    $ref: '#/components/schemas/getSurveysResultsResponses'
-        409:
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                type: object
-                title: getSurveysResultsConflict
-                properties:
-                  code:
-                    # announcementWithSurveyNotYetPublished
-                    $ref: '#/components/schemas/getSurveysResultsResponses'
         500:
           description: Internal Server Error
   
@@ -249,7 +113,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/surveyIdentifierDto'
+              $ref: '#/components/schemas/downloadSurveyResultsRequestDto'
       responses:
         200:
           description: Ok
@@ -263,8 +127,17 @@ paths:
                     type: string
                     format: binary
         400:
-          # Некорректный формат идентификатора
+          # Нижеописанные коды + некорректный формат идентификатора
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                title: downloadSurveyResultsForbidden
+                properties:
+                  code:
+                    # fileTypeNotSupported
+                    $ref: '#/components/schemas/downloadSurveyResultsResponses'
         401:
           description: Unauthorized
         403:
@@ -305,8 +178,8 @@ paths:
   
   /surveys/vote:
     post:
-      operationId: voteInQuestion
-      summary: Проголосовать в вопросе
+      operationId: voteInSurvey
+      summary: Проголосовать в опросе
       tags: [ Surveys ]
       requestBody:
         required: true
@@ -343,8 +216,6 @@ paths:
                 properties:
                   code:
                     # surveyDoesNotExist
-                    # questionsDoesNotExist
-                    # answerDoesNotExist
                     $ref: '#/components/schemas/voteInSurveyResponses'
         409:
           description: Conflict
@@ -356,12 +227,10 @@ paths:
                 properties:
                   code:
                     # surveyClosed
-                    # announcementWithSurveyNotYetPublished
                     # answerAlreadyVoted
                     # cannotSelectMultipleAnswersInSingleChoiceQuestion
-                    # selectedQuestionsBelongToDifferentSurveys
-                    # selectedQuestionsBelongToDifferentSurveys
-                    # selectedAnswersBelongToDifferentQuestions
+                    # presentedQuestionsDoesntMatchSurveyQuestions
+                    # presentedVotesDoesntMatchQuestionAnswers
                     $ref: '#/components/schemas/voteInSurveyResponses'
         500:
           description: Internal Server Error
@@ -419,6 +288,19 @@ components:
       description: Идентификатор опроса
       type: string
       format: uuid
+    
+    downloadSurveyResultsRequestDto:
+      description: DTO для запроса выгрузки результатов опроса
+      type: object
+      required:
+        - surveyId
+        - fileType
+      properties:
+        surveyId:
+          $ref: '#/components/schemas/surveyIdentifierDto'
+        fileType:
+          description: Тип файла с результатами опроса
+          type: string
     
     voteInSurveyDto:
       description: DTO для голосования в опросе
@@ -569,12 +451,9 @@ components:
       enum:
         # 403
         - createSurveyForbidden
-        # 409
-        - votingClosesBeforeAnnouncementPublication
       description: >
         Ответы:
           createSurveyForbidden - Пользователь не имеет права создать опрос
-          votingClosesBeforeAnnouncementPublication - Срок окончания голосования наступит до момента публикации объявления
 
     getSurveyDetailsResponses:
       type: string
@@ -583,13 +462,10 @@ components:
         - detailsAccessForbidden
         # 404
         - surveyDoesNotExist
-        # 409
-        - announcementWithSurveyNotYetPublished
       description: >
         Ответы:
           detailsAccessForbidden - Пользователь не имеет права просмотреть подробности этого опроса
           surveyDoesNotExist - Опрос не существует
-          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
 
     closeSurveyResponses:
       type: string
@@ -600,13 +476,11 @@ components:
         - surveyDoesNotExist
         # 409
         - surveyAlreadyClosed
-        - announcementWithSurveyNotYetPublished
       description: >
         Ответы:
           surveyClosingForbidden - Пользователь не имеет права закрыть этот опрос
           surveyDoesNotExist - Опрос не существует
           surveyAlreadyClosed - Опрос уже закрыт
-          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
 
     getSurveysResultsResponses:
       type: string
@@ -626,6 +500,8 @@ components:
     downloadSurveyResultsResponses:
       type: string
       enum:
+        # 400
+        - fileTypeNotSupported
         # 403
         - surveyResultsDownloadingForbidden
         # 404
@@ -634,6 +510,7 @@ components:
         - announcementWithSurveyNotYetPublished
       description: >
         Ответы:
+          fileTypeNotSupported - Тип файла с результатами опроса не поддерживается
           surveyResultsDownloadingForbidden - Пользователь не имеет права выгрузить результаты этого опроса
           surveyDoesNotExist - Опрос не существует
           announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
@@ -645,27 +522,21 @@ components:
         - votingForbidden
         # 404
         - surveyDoesNotExist
-        - questionDoesNotExist
-        - answerDoesNotExist
         # 409
         - surveyClosed
-        - announcementWithSurveyNotYetPublished
-        - answerAlreadyVoted
+        - surveyAlreadyVoted
         - cannotSelectMultipleAnswersInSingleChoiceQuestion
-        - selectedQuestionsBelongToDifferentSurveys
-        - selectedAnswersBelongToDifferentQuestions
+        - presentedQuestionsDoesntMatchSurveyQuestions
+        - presentedVotesDoesntMatchQuestionAnswers
       description: >
-        Ответы: 
+        Ответы:
           votingForbidden - Пользователь не имеет права голосовать в опросе
           surveyDoesNotExist - Опрос не существует
-          questionDoesNotExist - Вопрос не существует
-          answerDoesNotExist - Вариант ответа не существует
           surveyClosed - Опрос закрыт
-          announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано
           surveyAlreadyVoted - Голос в опросе уже отдан
           cannotSelectMultipleAnswersInSingleChoiceQuestion - В вопросе с единственным выбором нельзя выбрать несколько вариантов ответов
-          selectedQuestionsBelongToDifferentSurveys - Перечисленные вопросы относятся к разным опросам
-          selectedAnswersBelongToDifferentQuestions - Перечисленные варианты ответов относятся к разным вопросам
+          presentedQuestionsDoesntMatchSurveyQuestions - Список представленных вопросов не соответствует фактическому списку вопросов опроса
+          presentedVotesDoesntMatchQuestionAnswers - Список выбранных вариантов ответов для одного или нескольких вопросов не включается в список вариантов ответов вопроса
 
     cancelVoteInQuestionResponses:
       type: string
@@ -680,6 +551,6 @@ components:
       description: >
         Ответы:
           votingForbidden - Пользователь не имеет права голосовать в этом опросе
-          questionDoesNotExist - Вопрос не существует 
+          questionDoesNotExist - Вопрос не существует
           surveyClosed - Опрос закрыт
           surveyNotVoted - Пользователь не проголосовал в вопросе

@@ -2,10 +2,10 @@
 
 public class SurveyVotes(IDictionary<Guid, List<Guid>> votes)
 {
-    public ICollection<Guid> GetQuestionsIds() =>
+    public IEnumerable<Guid> GetQuestionsIds() =>
         votes.Keys;
 
-    public ICollection<Guid> GetVotes(Guid questionId)
+    public IEnumerable<Guid> GetVotes(Guid questionId)
     {
         var answerExist = votes.TryGetValue(questionId, out var value);
         if (!answerExist)

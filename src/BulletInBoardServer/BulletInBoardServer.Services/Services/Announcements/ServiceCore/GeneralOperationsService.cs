@@ -1,5 +1,4 @@
-﻿using BulletInBoardServer.Domain;
-using BulletInBoardServer.Domain.Models.Announcements;
+﻿using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Domain.Models.Attachments;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
@@ -12,26 +11,30 @@ using BulletInBoardServer.Services.Services.Attachments.Exceptions;
 using BulletInBoardServer.Services.Services.Audience.Exceptions;
 using BulletInBoardServer.Services.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using AnnouncementAudience = BulletInBoardServer.Domain.Models.JoinEntities.AnnouncementAudience;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 
 public class GeneralOperationsService(
-    ApplicationDbContext dbContext,
+    IServiceScopeFactory scopeFactory,
     IDelayedAnnouncementOperationsDispatcher dispatcher)
-    : DispatcherDependentAnnouncementServiceBase(dbContext, dispatcher)
+    : DispatcherDependentAnnouncementServiceBase(scopeFactory, dispatcher)
 {
     public Announcement Create(Guid requesterId, CreateAnnouncement create)
     {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
         ContentValidOrThrow(create);
         AudienceValidOrThrow(create);
         DelayedMomentsCorrectOrThrow(create);
 
         var announcement = InitAnnouncement(create, authorId: requesterId);
-        DbContext.Announcements.Add(announcement);
+        dbContext.Announcements.Add(announcement);
 
         AddRelatedEntitiesToDb(create, announcement);
-        DbContext.SaveChanges();
+        dbContext.SaveChanges();
 
         if (!announcement.ExpectsDelayedPublishing)
             PublishManually(requesterId, announcement.Id, DateTime.Now);
@@ -54,7 +57,10 @@ public class GeneralOperationsService(
 
     public Announcement GetDetails(Guid requesterId, Guid announcementId)
     {
-        var announcement = GetAnnouncementSummary(announcementId);
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
+        var announcement = GetAnnouncementSummary(announcementId, dbContext);
         if (announcement.AuthorId != requesterId)
             throw new OperationNotAllowedException("Получить детали объявления может только его автор");
 
@@ -63,7 +69,7 @@ public class GeneralOperationsService(
         // и на сеть. Для уменьшения нагрузки можно загрузить содержимое коллекций отдельным запросом. В таком 
         // случае будет выполнена повторная загрузка уже загруженных данных, но учитывая небольшой объем этих
         // данных, временные затраты на повторную его загрузку минимальны. 
-        announcement = DbContext.Announcements
+        announcement = dbContext.Announcements
             .Where(a => a.Id == announcementId)
             .Include(a => a.Author)
             .Include(a => a.Audience)
@@ -72,7 +78,7 @@ public class GeneralOperationsService(
             .Single();
         // Так как к объявлению могут быть прикреплены разные типы вложений и присутствует необходимость загрузить
         // связанные с этими вложениями сущности, для каждого из типов вложений используется явная загрузка.
-        DbContext.Entry(announcement).Collection(a => a.Attachments)
+        dbContext.Entry(announcement).Collection(a => a.Attachments)
             .Query()
             .Where(a => a.Type == AttachmentTypes.Survey)
             .Cast<Survey>()
@@ -82,7 +88,7 @@ public class GeneralOperationsService(
             .ThenInclude(q => q.Participation)
             .Load();
 
-        announcement.ViewsCount = DbContext.AnnouncementAudience
+        announcement.ViewsCount = dbContext.AnnouncementAudience
             .AsQueryable()
             .Count(aa => aa.AnnouncementId == announcementId && aa.Viewed);
 
@@ -91,7 +97,10 @@ public class GeneralOperationsService(
 
     public void Edit(Guid requesterId, EditAnnouncement edit)
     {
-        var announcement = GetAnnouncementSummary(edit.Id);
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
+        var announcement = GetAnnouncementSummary(edit.Id, dbContext);
         if (requesterId != announcement.AuthorId)
             throw new OperationNotAllowedException("Редактировать объявление может только его автор");
 
@@ -114,7 +123,7 @@ public class GeneralOperationsService(
         if (edit.DelayedHidingAtChanged)
             announcement.SetDelayedHidingMoment(DateTime.Now, edit.DelayedHidingAt);
 
-        DbContext.SaveChanges();
+        dbContext.SaveChanges();
 
         if (edit is { DelayedPublishingAtChanged: true, DelayedPublishingAt: not null })
             Dispatcher.ReconfigureDelayedPublishing(edit.Id, edit.DelayedPublishingAt.Value);
@@ -131,7 +140,10 @@ public class GeneralOperationsService(
 
     public void Delete(Guid requesterId, Guid announcementId)
     {
-        var announcement = GetAnnouncementSummary(announcementId);
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
+        var announcement = GetAnnouncementSummary(announcementId, dbContext);
         if (requesterId != announcement.AuthorId)
             throw new OperationNotAllowedException("Удалить объявление может только его автор");
 
@@ -140,7 +152,7 @@ public class GeneralOperationsService(
         if (announcement.ExpectsDelayedHiding)
             Dispatcher.DisableDelayedHiding(announcementId);
 
-        DbContext.Announcements
+        dbContext.Announcements
             .Where(a => a.Id == announcementId)
             .ExecuteDelete();
 
@@ -155,7 +167,10 @@ public class GeneralOperationsService(
     /// <param name="publishedAt">Время публикации объявления</param>
     public void PublishManually(Guid requesterId, Guid announcementId, DateTime publishedAt)
     {
-        var announcement = GetAnnouncementSummary(announcementId);
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
+        var announcement = GetAnnouncementSummary(announcementId, dbContext);
         if (announcement.AuthorId != requesterId)
             throw new OperationNotAllowedException("Опубликовать объявление может только его автор");
 
@@ -163,7 +178,7 @@ public class GeneralOperationsService(
             Dispatcher.DisableDelayedPublishing(announcementId);
 
         announcement.Publish(DateTime.Now, publishedAt);
-        DbContext.SaveChanges();
+        dbContext.SaveChanges();
 
         // todo уведомление о публикации
     }
@@ -265,9 +280,12 @@ public class GeneralOperationsService(
 
     private void TryAddAttachmentsOrThrow(IEnumerable<AnnouncementAttachment> attachment)
     {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
         try
         {
-            DbContext.AnnouncementAttachmentJoins.AddRange(attachment);
+            dbContext.AnnouncementAttachmentJoins.AddRange(attachment);
         }
         catch (InvalidOperationException err)
         {
@@ -277,9 +295,12 @@ public class GeneralOperationsService(
     
     private void TryAddAnnouncementAudienceOrThrow(IEnumerable<AnnouncementAudience> audience)
     {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
         try
         {
-            DbContext.AnnouncementAudience.AddRange(audience);
+            dbContext.AnnouncementAudience.AddRange(audience);
         }
         catch (InvalidOperationException err)
         {
@@ -289,9 +310,12 @@ public class GeneralOperationsService(
     
     private void TryAddAnnouncementCategoriesOrThrow(IEnumerable<AnnouncementAnnouncementCategory> audience)
     {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
         try
         {
-            DbContext.AnnouncementCategoryJoins.AddRange(audience);
+            dbContext.AnnouncementCategoryJoins.AddRange(audience);
         }
         catch (InvalidOperationException err)
         {
@@ -343,57 +367,66 @@ public class GeneralOperationsService(
     
     private void ApplyAudienceChanging(Guid announcementId, IEnumerable<Guid> changedIds)
     {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
         var changedIdList = changedIds.ToList();
 
         // удаляем связки с пользователями, id которых нет в новом списке 
-        DbContext.AnnouncementAudience
+        dbContext.AnnouncementAudience
             .Where(aa => aa.AnnouncementId == announcementId && !changedIdList.Contains(aa.UserId))
             .ExecuteDelete();
 
         // добавляем связки с пользователями, id которых присутствуют в новом списке, но отсутствуют в бд
         var newIds = changedIdList.Except(
-            DbContext.AnnouncementAudience
+            dbContext.AnnouncementAudience
                 .Where(aa => aa.AnnouncementId == announcementId)
                 .Select(aa => aa.UserId));
         foreach (var newId in newIds)
-            DbContext.AnnouncementAudience.Add(new AnnouncementAudience(announcementId, newId));
+            dbContext.AnnouncementAudience.Add(new AnnouncementAudience(announcementId, newId));
     }
 
     private void ApplyCategoriesChanging(Guid announcementId, IEnumerable<Guid> changedIds)
     {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
         var changedIdList = changedIds.ToList();
 
         // удаляем связки с пользователями, id которых нет в новом списке
-        DbContext.AnnouncementCategoryJoins
+        dbContext.AnnouncementCategoryJoins
             .Where(aa =>
                 aa.AnnouncementId == announcementId && !changedIdList.Contains(aa.AnnouncementCategoryId))
             .ExecuteDelete();
 
         // добавляем связки с пользователями, id которых присутствуют в новом списке, но отсутствуют в бд
         var newIds = changedIdList.Except(
-            DbContext.AnnouncementCategoryJoins
+            dbContext.AnnouncementCategoryJoins
                 .Where(aa => aa.AnnouncementId == announcementId)
                 .Select(aa => aa.AnnouncementCategoryId));
         foreach (var newId in newIds)
-            DbContext.AnnouncementCategoryJoins.Add(new AnnouncementAnnouncementCategory(announcementId, newId));
+            dbContext.AnnouncementCategoryJoins.Add(new AnnouncementAnnouncementCategory(announcementId, newId));
     }
 
     private void ApplyAttachmentsChanging(Guid announcementId, IEnumerable<Guid> changedIds)
     {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
         // todo нельзя откреплять опросы
         var changedIdList = changedIds.ToList();
 
         // удаляем связки с пользователями, id которых нет в новом списке
-        DbContext.AnnouncementAttachmentJoins
+        dbContext.AnnouncementAttachmentJoins
             .Where(aa => aa.AnnouncementId == announcementId && !changedIdList.Contains(aa.AttachmentId))
             .ExecuteDelete();
 
         // добавляем связки с пользователями, id которых присутствуют в новом списке, но отсутствуют в бд
         var newIds = changedIdList.Except(
-            DbContext.AnnouncementAttachmentJoins
+            dbContext.AnnouncementAttachmentJoins
                 .Where(aa => aa.AnnouncementId == announcementId)
                 .Select(aa => aa.AttachmentId));
         foreach (var newId in newIds)
-            DbContext.AnnouncementAttachmentJoins.Add(new AnnouncementAttachment(announcementId, newId));
+            dbContext.AnnouncementAttachmentJoins.Add(new AnnouncementAttachment(announcementId, newId));
     }
 }

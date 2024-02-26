@@ -9,6 +9,7 @@ left to right direction
 [BulletInBoardServer.Domain.TestDbFiller] as testDbFiller
 
 package "BulletInBoardServer.Controllers" as controllers {
+    [BulletInBoardServer.Controllers.Core] as controllerCore
     [BulletInBoardServer.Controllers.AnnouncementsController] as announcementsController
     [BulletInBoardServer.Controllers.SurveysController] as surveysController
     [BulletInBoardServer.Controllers.PingController] as pingController
@@ -23,8 +24,12 @@ package "Test" as test {
 main                    -> controllers
 main                    -> services
 main                    -> domain
+
 announcementsController -> services
 surveysController       -> services
+announcementsController -down-> controllerCore
+surveysController       -down-> controllerCore
+
 services                --> domain
 testDbFiller            -left-> domain
 

@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 BulletInBoardServer.Controllers.SurveysController.sln
 README.md
 build.bat
@@ -19,7 +18,6 @@ src/BulletInBoardServer.Controllers.SurveysController/Models/CloseSurveyNotFound
 src/BulletInBoardServer.Controllers.SurveysController/Models/CloseSurveyResponses.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/CreateAnswerDto.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/CreateQuestionDto.cs
-src/BulletInBoardServer.Controllers.SurveysController/Models/CreateSurveyConflict.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/CreateSurveyCreated.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/CreateSurveyDto.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/CreateSurveyForbidden.cs
@@ -28,16 +26,9 @@ src/BulletInBoardServer.Controllers.SurveysController/Models/DownloadSurveyResul
 src/BulletInBoardServer.Controllers.SurveysController/Models/DownloadSurveyResultsForbidden.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/DownloadSurveyResultsNotFound.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/DownloadSurveyResultsOk.cs
+src/BulletInBoardServer.Controllers.SurveysController/Models/DownloadSurveyResultsRequestDto.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/DownloadSurveyResultsResponses.cs
-src/BulletInBoardServer.Controllers.SurveysController/Models/GetSurveyDetails200Response.cs
-src/BulletInBoardServer.Controllers.SurveysController/Models/GetSurveyDetailsConflict.cs
-src/BulletInBoardServer.Controllers.SurveysController/Models/GetSurveyDetailsForbidden.cs
-src/BulletInBoardServer.Controllers.SurveysController/Models/GetSurveyDetailsNotFound.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/GetSurveyDetailsResponses.cs
-src/BulletInBoardServer.Controllers.SurveysController/Models/GetSurveysResultsConflict.cs
-src/BulletInBoardServer.Controllers.SurveysController/Models/GetSurveysResultsForbidden.cs
-src/BulletInBoardServer.Controllers.SurveysController/Models/GetSurveysResultsNotFound.cs
-src/BulletInBoardServer.Controllers.SurveysController/Models/GetSurveysResultsOk.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/GetSurveysResultsResponses.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/QuestionAnswerDetailsDto.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/QuestionDetailsDto.cs

@@ -16,9 +16,9 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.SurveysController.Models
 { 
         /// <summary>
-        /// Ответы:   detailsAccessForbidden - Пользователь не имеет права просмотреть подробности этого опроса   surveyDoesNotExist - Опрос не существует   announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано 
+        /// Ответы:   detailsAccessForbidden - Пользователь не имеет права просмотреть подробности этого опроса   surveyDoesNotExist - Опрос не существует 
         /// </summary>
-        /// <value>Ответы:   detailsAccessForbidden - Пользователь не имеет права просмотреть подробности этого опроса   surveyDoesNotExist - Опрос не существует   announcementWithSurveyNotYetPublished - Объявление с опросом еще не опубликовано </value>
+        /// <value>Ответы:   detailsAccessForbidden - Пользователь не имеет права просмотреть подробности этого опроса   surveyDoesNotExist - Опрос не существует </value>
         [TypeConverter(typeof(CustomEnumConverter<GetSurveyDetailsResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum GetSurveyDetailsResponses
@@ -34,12 +34,6 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
             /// Enum SurveyDoesNotExist for surveyDoesNotExist
             /// </summary>
             [EnumMember(Value = "surveyDoesNotExist")]
-            SurveyDoesNotExist = 2,
-            
-            /// <summary>
-            /// Enum AnnouncementWithSurveyNotYetPublished for announcementWithSurveyNotYetPublished
-            /// </summary>
-            [EnumMember(Value = "announcementWithSurveyNotYetPublished")]
-            AnnouncementWithSurveyNotYetPublished = 3
+            SurveyDoesNotExist = 2
         }
 }

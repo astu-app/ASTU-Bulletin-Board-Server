@@ -1,7 +1,10 @@
 ﻿using BulletInBoardServer.Domain.Models.Announcements;
+using BulletInBoardServer.Domain.Models.Attachments.Surveys.Exceptions;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions.Validation;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Voters;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 namespace BulletInBoardServer.Domain.Models.Attachments.Surveys;
 
@@ -28,7 +31,7 @@ public class Survey : AttachmentBase
     /// <summary>
     /// Задано ли автоматическое закрытие опроса. true, если задано, иначе - false
     /// </summary>
-    public bool ExpectsAutoClosing { get; private set; }
+    public bool ExpectsAutoClosing { get; private set; } // private set для EF
 
     /// <summary>
     /// Список вопросов опроса
@@ -90,11 +93,11 @@ public class Survey : AttachmentBase
     /// <summary>
     /// Закрыть опрос
     /// </summary>
-    /// <exception cref="InvalidOperationException">Генерируется в случае, если опрос уже закрыт</exception>
+    /// <exception cref="SurveyAlreadyClosedException">Генерируется в случае, если опрос уже закрыт</exception>
     public void Close()
     {
         if (!IsOpen)
-            throw new InvalidOperationException("Нельзя закрыть уже закрытый опрос");
+            throw new SurveyAlreadyClosedException();
 
         IsOpen = false;
         AutoClosingAt = null;

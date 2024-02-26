@@ -25,7 +25,9 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
   </ItemGroup>
   <ItemGroup><!--<DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />-->
-  
+
     <ProjectReference Include="..\..\..\..\BulletInBoardServer\BulletInBoardServer.Services\BulletInBoardServer.Services.csproj" />
+
+    <ProjectReference Include="..\..\..\BulletInBoardServer.Controllers.Core\BulletInBoardServer.Controllers.Core.csproj" />
   </ItemGroup>
 </Project>

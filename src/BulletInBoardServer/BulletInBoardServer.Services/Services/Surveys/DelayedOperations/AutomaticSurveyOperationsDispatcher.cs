@@ -24,18 +24,13 @@ public class AutomaticSurveyOperationsDispatcher : IAutomaticSurveyOperationsDis
             .Where(a => a.ExpectsAutoClosing)
             .ToDictionary(
                 a => a.Id,
-                a => new AutomaticSurveyClosingService(a.Id, a.AutoClosingAt!.Value, closingService));
+                a => CreateAndRunAutoClosingService(a.Id, a.AutoClosingAt!.Value, closingService)); 
         // AutoClosingAt не null, если ExpectsAutoClosing true
     }
 
     public void ConfigureAutoClosing(Guid surveyId, DateTime closeAt)
     {
-        var service = new AutomaticSurveyClosingService(surveyId, closeAt, _closingService);
-        service.WorkerSupportsCancellation = true;
-        service.RunWorkerCompleted += RemoveDelayedClosingServiceFromCollection;
-
-        service.RunWorkerAsync();
-
+        var service = CreateAndRunAutoClosingService(surveyId, closeAt, _closingService);
         _automaticClosingServices[surveyId] = service;
     }
 
@@ -44,7 +39,19 @@ public class AutomaticSurveyOperationsDispatcher : IAutomaticSurveyOperationsDis
 
 
 
-    private void RemoveDelayedClosingServiceFromCollection(object? sender, RunWorkerCompletedEventArgs e)
+    private static AutomaticSurveyClosingService CreateAndRunAutoClosingService(Guid surveyId, DateTime closeAt,
+        AutoClosingSurveyService closingService)
+    {
+        var service = new AutomaticSurveyClosingService(surveyId, closeAt, closingService);
+        service.WorkerSupportsCancellation = true;
+        service.RunWorkerCompleted += RemoveDelayedClosingServiceFromCollection;
+
+        service.RunWorkerAsync();
+
+        return service;
+    }
+    
+    private static void RemoveDelayedClosingServiceFromCollection(object? sender, RunWorkerCompletedEventArgs e)
     {
         if (e.Result is null)
             throw new ArgumentException(

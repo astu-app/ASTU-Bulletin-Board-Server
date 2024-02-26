@@ -16,9 +16,9 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.SurveysController.Models
 { 
         /// <summary>
-        /// Ответы:   votingForbidden - Пользователь не имеет права голосовать в этом опросе   questionDoesNotExist - Вопрос не существует    surveyClosed - Опрос закрыт   surveyNotVoted - Пользователь не проголосовал в вопросе 
+        /// Ответы:   votingForbidden - Пользователь не имеет права голосовать в этом опросе   questionDoesNotExist - Вопрос не существует   surveyClosed - Опрос закрыт   surveyNotVoted - Пользователь не проголосовал в вопросе 
         /// </summary>
-        /// <value>Ответы:   votingForbidden - Пользователь не имеет права голосовать в этом опросе   questionDoesNotExist - Вопрос не существует    surveyClosed - Опрос закрыт   surveyNotVoted - Пользователь не проголосовал в вопросе </value>
+        /// <value>Ответы:   votingForbidden - Пользователь не имеет права голосовать в этом опросе   questionDoesNotExist - Вопрос не существует   surveyClosed - Опрос закрыт   surveyNotVoted - Пользователь не проголосовал в вопросе </value>
         [TypeConverter(typeof(CustomEnumConverter<CancelVoteInQuestionResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum CancelVoteInQuestionResponses

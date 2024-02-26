@@ -1,13 +1,13 @@
-﻿using BulletInBoardServer.Domain;
-using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+﻿using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 
 /// <summary>
 /// Сервис для управления объявлениями, ожидающими отложенного сокрытия
 /// </summary>
-public class DelayedHidingAnnouncementService(ApplicationDbContext dbContext)
-    : CoreAnnouncementServiceBase(dbContext)
+public class DelayedHidingAnnouncementService(IServiceScopeFactory scopeFactory)
+    : CoreAnnouncementServiceBase(scopeFactory)
 {
     /// <summary>
     /// Метод возвращает список объявлений, ожидающих отложенного автоматического сокрытия,
@@ -15,15 +15,20 @@ public class DelayedHidingAnnouncementService(ApplicationDbContext dbContext)
     /// </summary>
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <returns>Список с краткой информацией об объявлениях</returns>
-    public IEnumerable<AnnouncementSummary> GetDelayedHiddenAnnouncementListForUser(Guid requesterId) =>
-        DbContext.Announcements
+    public IEnumerable<AnnouncementSummary> GetDelayedHiddenAnnouncementListForUser(Guid requesterId)
+    {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
+        return dbContext.Announcements
             .Where(a => a.AuthorId == requesterId && a.ExpectsDelayedHiding)
             .Select(a => new
             {
                 Announcement = a,
-                ViewsCount = DbContext.AnnouncementAudience.Count(au => au.AnnouncementId == a.Id && au.Viewed)
+                ViewsCount = dbContext.AnnouncementAudience.Count(au => au.AnnouncementId == a.Id && au.Viewed)
             })
             .Select(res => res.Announcement.GetSummary(res.ViewsCount));
+    }
 
     /// <summary>
     /// Метод скрывает объявление в автоматическом порядке
@@ -32,9 +37,12 @@ public class DelayedHidingAnnouncementService(ApplicationDbContext dbContext)
     /// <param name="hiddenAt">Момент сокрытия объявления</param>
     public void HideAutomatically(Guid announcementId, DateTime hiddenAt)
     {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
         // Отключение отложенного сокрытия происходит при вызове диспетчером этого метода
-        var announcement = GetAnnouncementSummary(announcementId);
+        var announcement = GetAnnouncementSummary(announcementId, dbContext);
         announcement.Hide(DateTime.Now, hiddenAt);
-        DbContext.SaveChanges();
+        dbContext.SaveChanges();
     }
 }

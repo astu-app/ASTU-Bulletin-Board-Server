@@ -1,20 +1,18 @@
 ﻿using BulletInBoardServer.Domain;
 using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 
-public class CoreAnnouncementServiceBase(ApplicationDbContext dbContext)
+// public class CoreAnnouncementServiceBase(ApplicationDbContext dbContext)
+public class CoreAnnouncementServiceBase(IServiceScopeFactory scopeFactory)
 {
-    protected readonly ApplicationDbContext DbContext = dbContext;
-
-
-
-    protected Announcement GetAnnouncementSummary(Guid announcementId)
+    protected static Announcement GetAnnouncementSummary(Guid announcementId, ApplicationDbContext dbContext)
     {
         try
         {
-            var announcement = DbContext.Announcements.SingleOrDefault(a => a.Id == announcementId);
+            var announcement = dbContext.Announcements.SingleOrDefault(a => a.Id == announcementId);
             if (announcement is null)
                 throw new AnnouncementDoesNotExist($"Объявление с Id = {announcementId} отсутствует в БД");
 
@@ -25,4 +23,12 @@ public class CoreAnnouncementServiceBase(ApplicationDbContext dbContext)
             throw new InvalidOperationException("Не удалось загрузить объявление из БД", err);
         }
     }
+
+    protected IServiceScope CreateScope() =>
+        scopeFactory.CreateScope();
+    
+    protected static ApplicationDbContext GetDbContextForScope(IServiceScope scope) =>
+        scope.ServiceProvider.GetService<ApplicationDbContext>() ??
+        throw new ApplicationException(
+            $"{nameof(ApplicationDbContext)} не зарегистрирован в качестве сервиса");
 }

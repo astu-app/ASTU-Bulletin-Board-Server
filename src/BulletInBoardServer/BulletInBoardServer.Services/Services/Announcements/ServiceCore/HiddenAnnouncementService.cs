@@ -1,29 +1,34 @@
-﻿using BulletInBoardServer.Domain;
-using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
+﻿using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.Infrastructure;
 using BulletInBoardServer.Services.Services.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 
 public class HiddenAnnouncementService(
-    ApplicationDbContext dbContext,
+    IServiceScopeFactory scopeFactory,
     IDelayedAnnouncementOperationsDispatcher dispatcher)
-    : DispatcherDependentAnnouncementServiceBase(dbContext, dispatcher)
+    : DispatcherDependentAnnouncementServiceBase(scopeFactory, dispatcher)
 {
     /// <summary>
     /// Метод возвращает список скрытых объявлений для указанного пользователя
     /// </summary>
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <returns>Список с краткой информацией об объявлениях</returns>
-    public IEnumerable<AnnouncementSummary> GetListForUser(Guid requesterId) =>
-        DbContext.Announcements
+    public IEnumerable<AnnouncementSummary> GetListForUser(Guid requesterId)
+    {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
+        return dbContext.Announcements
             .Where(a => a.AuthorId == requesterId && a.IsHidden)
             .Select(a => new
             {
                 Announcement = a,
-                ViewsCount = DbContext.AnnouncementAudience.Count(au => au.AnnouncementId == a.Id && au.Viewed)
+                ViewsCount = dbContext.AnnouncementAudience.Count(au => au.AnnouncementId == a.Id && au.Viewed)
             })
             .Select(res => res.Announcement.GetSummary(res.ViewsCount));
+    }
 
     /// <summary>
     /// Метод восстанавливает скрытое объявление
@@ -33,7 +38,10 @@ public class HiddenAnnouncementService(
     /// <param name="restoredAt">Время восстановления объявления</param>
     public void Restore(Guid requesterId, Guid announcementId, DateTime restoredAt)
     {
-        var announcement = GetAnnouncementSummary(announcementId);
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
+        var announcement = GetAnnouncementSummary(announcementId, dbContext);
         if (announcement.AuthorId != requesterId)
             throw new OperationNotAllowedException("Восстановить скрытое объявление может только его автор");
 
@@ -41,6 +49,6 @@ public class HiddenAnnouncementService(
             Dispatcher.DisableDelayedPublishing(announcementId);
 
         announcement.Restore(DateTime.Now, restoredAt);
-        DbContext.SaveChanges();
+        dbContext.SaveChanges();
     }
 }
