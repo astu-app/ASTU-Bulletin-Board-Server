@@ -35,7 +35,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
     /* ********************************** Общие операции *********************************** */
 
-    // Create
+    // ///////////////////////// Create
     [Fact]
     public void Create_NullContent_Throws()
     {
@@ -241,7 +241,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         _dispatcher.ConfigureDelayedHidingCalled.Should().Be(1);
     }
 
-    // Edit
+    // /////////////////////////  Edit
     [Fact]
     public void Edit_AddAudience_AudienceAddedCorrectly()
     {
@@ -503,7 +503,21 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         _dispatcher.DisableDelayedHidingCalled.Should().Be(1);
     }
 
-    // Delete
+    [Fact]
+    public void Edit_DetachSurvey_Throws()
+    {
+        var edit = new EditAnnouncement
+        {
+            Id = AnnouncementWithPublicSurvey_1_Id,
+            AttachmentIds = []
+        };
+
+        var action = () => _announcementService.Edit(MainUsergroupAdminId, edit);
+
+        action.Should().Throw<CannotDetachSurveyException>();
+    }
+
+    // /////////////////////////  Delete
     [Fact]
     public void Delete_AnnouncementExpectsDelayedPublishing_CallsDisablingOfDelayedPublishing()
     {
@@ -524,7 +538,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         _dispatcher.DisableDelayedHidingCalled.Should().Be(1);
     }
 
-    // Publish
+    // /////////////////////////  Publish
     [Fact]
     public void Publish_PublishedAnnouncement_Throws()
     {
@@ -548,7 +562,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
     /* ***************************** Опубликованные объявления ***************************** */
 
-    // GetPublishedAnnouncements
+    // /////////////////////////  GetPublishedAnnouncements
     [Fact]
     public void GetPublishedAnnouncements_UserHasRelatedPublishedAnnouncements_AllRelatedPublishedAnnouncements()
     {
@@ -578,7 +592,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         actualAnnouncementIds.Should().BeEmpty();
     }
 
-    // Hide
+    // /////////////////////////  Hide
     [Fact]
     public void Hide_NonPublishedAnnouncement_Throws()
     {
@@ -612,7 +626,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
     /* ******************************** Скрытые объявления ********************************* */
 
-    // GetHiddenAnnouncements
+    // /////////////////////////  GetHiddenAnnouncements
     [Fact]
     public void GetHiddenAnnouncements_UserHasHiddenAnnouncements_AllRelatedHiddenAnnouncements()
     {
@@ -641,7 +655,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         actualAnnouncementIds.Should().BeEmpty();
     }
 
-    // Restore
+    // /////////////////////////  Restore
     [Fact]
     public void Restore_PublishedAnnouncement_Throws()
     {
@@ -675,7 +689,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
     /* ******************************* Отложенные объявления ******************************* */
 
-    // GetDelayedPublicationAnnouncements
+    // /////////////////////////  GetDelayedPublicationAnnouncements
     [Fact]
     public void GetDelayedPublicationAnnouncements_UserHasDelayedPublicationAnnouncements_AllRelatedAnnouncements()
     {
@@ -692,7 +706,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         actualIds.Should().BeEquivalentTo(expectedIds);
     }
 
-    // GetDelayedHidingAnnouncementsForUser
+    // /////////////////////////  GetDelayedHidingAnnouncementsForUser
     [Fact]
     public void GetDelayedHidingAnnouncementsForUser_UserHasDelayedHidingAnnouncements_AllRelatedAnnouncements()
     {

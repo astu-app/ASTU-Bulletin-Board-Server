@@ -8,6 +8,14 @@ namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 // public class CoreAnnouncementServiceBase(ApplicationDbContext dbContext)
 public class CoreAnnouncementServiceBase(IServiceScopeFactory scopeFactory)
 {
+    /// <summary>
+    /// Метод загружает объявление без связанных сущностей
+    /// </summary>
+    /// <param name="announcementId">Id загружаемого объявления</param>
+    /// <param name="dbContext">Контекст базы данных</param>
+    /// <returns></returns>
+    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
+    /// <exception cref="InvalidOperationException">Не удалось загрузить объявление из БД</exception>
     protected static Announcement GetAnnouncementSummary(Guid announcementId, ApplicationDbContext dbContext)
     {
         try

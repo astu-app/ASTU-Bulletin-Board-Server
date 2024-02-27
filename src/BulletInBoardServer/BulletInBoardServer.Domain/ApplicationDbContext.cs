@@ -1,6 +1,5 @@
 using BulletInBoardServer.Domain.Models.AnnouncementCategories;
 using BulletInBoardServer.Domain.Models.Announcements;
-using BulletInBoardServer.Domain.Models.Attachments;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions;
@@ -10,6 +9,7 @@ using BulletInBoardServer.Domain.Models.UserGroups;
 using BulletInBoardServer.Domain.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using AnnouncementAudience = BulletInBoardServer.Domain.Models.JoinEntities.AnnouncementAudience;
+using AttachmentBase = BulletInBoardServer.Domain.Models.Attachments.AttachmentBase;
 using File = BulletInBoardServer.Domain.Models.Attachments.File;
 
 namespace BulletInBoardServer.Domain;
@@ -22,6 +22,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Announcement> Announcements { get; init; } = null!;
     public DbSet<AnnouncementAudience> AnnouncementAudience { get; init; } = null!;
     public DbSet<AnnouncementAttachment> AnnouncementAttachmentJoins { get; init; } = null!;
+    public DbSet<AttachmentBase> Attachments { get; init; } = null!;
     public DbSet<File> Files { get; init; } = null!;
     public DbSet<Survey> Surveys { get; init; } = null!;
     public DbSet<Question> Questions { get; init; } = null!;

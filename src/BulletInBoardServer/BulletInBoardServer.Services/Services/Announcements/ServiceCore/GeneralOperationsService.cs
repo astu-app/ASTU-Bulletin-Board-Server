@@ -119,6 +119,7 @@ public class GeneralOperationsService(
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права выполнить операцию</exception>
     /// <exception cref="AnnouncementContentEmptyException">Нельзя установить текстовое содержимое, которое является null, пустым или состоит только из пробельных символов</exception>
     /// <exception cref="AnnouncementAudienceEmptyException">Нельзя установить пустую аудиторию объявления</exception>
+    /// <exception cref="CannotDetachSurveyException">От объявления нельзя открепить опрос</exception>
     public void Edit(Guid requesterId, EditAnnouncement edit)
     {
         using var scope = CreateScope();
@@ -141,7 +142,10 @@ public class GeneralOperationsService(
         if (edit.CategoryIds is not null)
             ApplyCategoriesChanging(announcement.Id, edit.CategoryIds);
         if (edit.AttachmentIds is not null)
+        {
+            NewAttachmentsValidOrThrow(edit);
             ApplyAttachmentsChanging(announcement.Id, edit.AttachmentIds);
+        }
         if (edit.DelayedPublishingAtChanged)
             announcement.SetDelayedPublishingMoment(DateTime.Now, edit.DelayedPublishingAt);
         if (edit.DelayedHidingAtChanged)
@@ -439,6 +443,29 @@ public class GeneralOperationsService(
             dbContext.AnnouncementCategoryJoins.Add(new AnnouncementAnnouncementCategory(announcementId, newId));
     }
 
+    private void NewAttachmentsValidOrThrow(EditAnnouncement edit)
+    {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+        
+        var announcementId = edit.Id;
+        var changingIdList = edit.AttachmentIds ??
+                             throw new InvalidOperationException(
+                                 "Список новых вложений объявления не может быть null на этом этапе");
+
+        var containsSurvey = dbContext.AnnouncementAttachmentJoins
+            .Join(dbContext.Attachments, 
+                aa => aa.AttachmentId, 
+                a => a.Id,
+                (aa, a) => new { Join = aa, Attachment = a })
+            .Any(join => 
+                join.Join.AnnouncementId == announcementId &&  // рассматриваем вложения только изменяемого объявления.
+                !changingIdList.Contains(join.Attachment.Id) && // отбираем только те вложения, которые присутствуют в бд и не присутствуют в новом списке (они будут откреплены).
+                join.Attachment.Type == AttachmentTypes.Survey); // среди отобранных вложений проверяем наличие опросов
+        if (containsSurvey)
+            throw new CannotDetachSurveyException();
+    }
+    
     private void ApplyAttachmentsChanging(Guid announcementId, IEnumerable<Guid> changedIds)
     {
         using var scope = CreateScope();

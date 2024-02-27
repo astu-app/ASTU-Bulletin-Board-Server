@@ -130,7 +130,7 @@ public class SurveyServiceTest : DbInvolvingTestBase
 
 
 
-    // ///////////////////////// Vote
+    // ///////////////////////// GetSurveyVoters
     [Fact]
     public void GetSurveyVoters_GetPublicSurveyVoters_CorrectResult()
     {
