@@ -26,7 +26,7 @@ public class CoreAnnouncementServiceBase(IServiceScopeFactory scopeFactory)
 
             return announcement;
         }
-        catch (InvalidOperationException err)
+        catch (InvalidOperationException err) when (err is not AnnouncementDoesNotExist)
         {
             throw new InvalidOperationException("Не удалось загрузить объявление из БД", err);
         }

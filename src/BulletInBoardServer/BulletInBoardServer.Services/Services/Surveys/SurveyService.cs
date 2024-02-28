@@ -98,7 +98,7 @@ public class SurveyService(
 
             return survey;
         }
-        catch (InvalidOperationException err)
+        catch (InvalidOperationException err) when (err is not SurveyDoesNotExistException)
         {
             throw new InvalidOperationException("Не удалось загрузить опрос из БД", err);
         }
@@ -169,7 +169,7 @@ public class SurveyService(
 
             return survey;
         }
-        catch (InvalidOperationException err)
+        catch (InvalidOperationException err) when (err is not SurveyDoesNotExistException)
         {
             throw new InvalidOperationException("Не удалось загрузить опрос из БД", err);
         }

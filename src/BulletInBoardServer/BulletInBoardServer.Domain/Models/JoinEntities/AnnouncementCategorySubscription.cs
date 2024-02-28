@@ -4,11 +4,11 @@ using BulletInBoardServer.Domain.Models.Users;
 namespace BulletInBoardServer.Domain.Models.JoinEntities;
 
 /// <summary>
-/// Сущность для настройки связи многие-ко-многим <see cref="AnnouncementCategory"/> & <see cref="User"/>
+/// Сущность для настройки связи многие-ко-многим <see cref="AnnouncementCategory"/> & <see cref="Users.User"/>
 /// </summary>
 /// <param name="announcementCategoryId">Идентификатор категории объявлений</param>
 /// <param name="subscriberId">Идентификатор подписчика</param>
-public class AnnouncementCategorySubscriber(Guid announcementCategoryId, Guid subscriberId)
+public class AnnouncementCategorySubscription(Guid announcementCategoryId, Guid subscriberId)
 {
     /// <summary>
     /// Идентификатор категории объявлений 
@@ -22,7 +22,7 @@ public class AnnouncementCategorySubscriber(Guid announcementCategoryId, Guid su
     /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
-    public AnnouncementCategory AnnouncementCategory { get; set; } = null!;
+    public AnnouncementCategory AnnouncementCategory { get; init; } = null!;
 
     /// <summary>
     /// Идентификатор подписчика
@@ -36,5 +36,5 @@ public class AnnouncementCategorySubscriber(Guid announcementCategoryId, Guid su
     /// Поле должно устанавливаться только при помощи Entity Framework или конструктора.
     /// Перед использование обязательно должно быть установлено
     /// </remarks>
-    public User Subscriber { get; set; } = null!;
+    public User Subscriber { get; init; } = null!;
 }

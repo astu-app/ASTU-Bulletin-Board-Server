@@ -2,13 +2,16 @@
 info:
   title: API Шлюз. Категории объявлений
   description: API Шлюза для управления категориями объявлений
-  version: 0.0.2
+  version: 0.0.3
 servers:
   - url: '/api'
+tags:
+  - name: AnnouncementCategories
+    description: API управления категориями объявлений
 paths:
   /announcement-categories/create:
     post:
-      tags: [ Основные операции ]
+      tags: [ AnnouncementCategories ]
       operationId: createAnnouncementCategory
       summary: Создать категорию объявлений
       requestBody:
@@ -37,7 +40,8 @@ paths:
                 title: createAnnouncementCategoryBadRequest
                 properties:
                   code:
-                    # colorIsIncorrectHex
+                    # colorIsInvalidHex
+                    # nameIsNullOrEmpty
                     $ref: '#/components/schemas/createAnnouncementCategoryResponses'
         401:
           description: Unauthorized
@@ -57,7 +61,7 @@ paths:
 
   /announcement-categories/get-list:
     get:
-      tags: [ Основные операции ]
+      tags: [ AnnouncementCategories ]
       operationId: getAllAnnouncementCategories
       summary: Получить список всех категорий объявлений
       responses:
@@ -89,7 +93,7 @@ paths:
   
   /announcement-categories/update:
     put:
-      tags: [ Основные операции ]
+      tags: [ AnnouncementCategories ]
       operationId: updateAnnouncementCategory
       summary: Редактировать категорию объявлений
       requestBody:
@@ -102,8 +106,18 @@ paths:
         200:
           description: Ok
         400:
-          # Некорректный формат идентификатора
+          # Нижеперечисленные коды + некорректный формат идентификатора
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                title: createAnnouncementCategoryBadRequest
+                properties:
+                  code:
+                    # colorIsInvalidHex
+                    # nameIsNullOrEmpty
+                    $ref: '#/components/schemas/updateAnnouncementCategoryResponses'
         401:
           description: Unauthorized
         403:
@@ -133,7 +147,7 @@ paths:
 
   /announcement-categories/delete:
     delete:
-      tags: [ Основные операции ]
+      tags: [ AnnouncementCategories ]
       operationId: deleteAnnouncementCategory
       summary: Удалить категорию объявлений
       requestBody:
@@ -175,17 +189,11 @@ paths:
         500:
           description: Internal Server Error
 
-  /announcement-categories/get-subscribtions:
+  /announcement-categories/get-subscriptions:
     get:
-      tags: [ Подписки ]
+      tags: [ AnnouncementCategories ]
       operationId: getAnnouncementCategoriesSubscriptions
       summary: Получить список всех категорий объявлений с отмеченными подписками для текущего пользователя
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: './common-schemas.yaml#/components/schemas/identifiers'
       responses:
         200:
           description: Ok
@@ -205,9 +213,9 @@ paths:
         500:
           description: Internal Server Error
 
-  /announcement-categories/update-subscribtions:
+  /announcement-categories/update-subscriptions:
     post:
-      tags: [ Подписки ]
+      tags: [ AnnouncementCategories ]
       operationId: updateAnnouncementCategoriesSubscriptions
       summary: Обновить список подписок текущего пользователя
       requestBody:
@@ -215,7 +223,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: './common-schemas.yaml#/components/schemas/identifiers'
+              $ref: '#/components/schemas/updateAnnouncementCategoriesSubscriptionsDto'
       responses:
         200:
           description: Ok
@@ -270,6 +278,7 @@ components:
         colorHex:
           type: string
           format: hex
+          pattern: "^#[0-9a-fA-F]{6}$"
     
     announcementCategoryIdentifierDto:
       description: Идентификатор категории объявлений
@@ -296,17 +305,33 @@ components:
         colorHex:
           type: string
           nullable: true
+          pattern: "^#[0-9a-fA-F]{6}$"
+    
+    updateAnnouncementCategoriesSubscriptionsDto:
+      type: object
+      required: 
+        - changedIds
+      properties: 
+        changedIds:
+          type: array
+          items: 
+            type: string
+            format: uuid
+            nullable: false
+          nullable: false
     
     createAnnouncementCategoryResponses:
       type: string
       enum:
         # 400
-        - colorIsIncorrectHex
+        - nameIsNullOrEmpty
+        - colorIsInvalidHex
         # 403
         - announcementCategoryCreationForbidden
       description: >
         Ответы:
-          colorIsIncorrectHex - Код цвета передан не в HEX формате 
+          nameIsNullOrEmpty - Название категории объявлений null, пустое или состоит только из пробельных символов
+          colorIsInvalidHex - Код цвета передан не в HEX формате 
           announcementCategoryCreationForbidden - Пользователь не имеет права создать категорию объявлений
 
     getAllAnnouncementCategoriesResponses:
@@ -321,12 +346,17 @@ components:
     updateAnnouncementCategoryResponses:
       type: string
       enum:
+        # 400
+        - colorIsInvalidHex
+        - nameIsNullOrEmpty
         # 403
         - announcementCategoryUpdatingForbidden
         # 404
         - announcementCategoryDoesNotExist
       description: >
         Ответы:
+          nameIsNullOrEmpty - Название категории объявлений null, пустое или состоит только из пробельных символов
+          colorIsInvalidHex - Код цвета передан не в HEX формате 
           announcementCategoryUpdatingForbidden - Пользователь не имеет права редактировать категорию объявлений
           announcementCategoryDoesNotExist - Категория объявлений с указанным id не существует  
 

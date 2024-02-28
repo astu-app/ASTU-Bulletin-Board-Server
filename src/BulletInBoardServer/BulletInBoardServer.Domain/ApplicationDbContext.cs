@@ -31,6 +31,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<UserSelection> UserSelections { get; init; } = null!;
     public DbSet<AnnouncementCategory> AnnouncementCategories { get; init; } = null!;
     public DbSet<AnnouncementAnnouncementCategory> AnnouncementCategoryJoins { get; init; } = null!;
+    public DbSet<AnnouncementCategorySubscription> AnnouncementCategorySubscriptions { get; init; } = null!;
 
 
 
@@ -402,9 +403,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity
                 .HasMany(e => e.Subscribers)
                 .WithMany()
-                .UsingEntity<AnnouncementCategorySubscriber>(
+                .UsingEntity<AnnouncementCategorySubscription>(
                     join => join
-                        .HasOne(e => e.Subscriber)
+                        .HasOne(e => e.Subscriber) 
                         .WithMany()
                         .HasForeignKey(e => e.SubscriberId),
                     join => join

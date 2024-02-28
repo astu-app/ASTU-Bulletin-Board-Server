@@ -42,7 +42,7 @@ public class Participation
     public Survey Survey { get; init; } = null!;
 
     /// <summary>
-    /// Является ли участие анонимным // todo проверить, что будет, если использовать, не загружая Survey
+    /// Является ли участие анонимным 
     /// </summary>
     public bool IsAnonymous => Survey.IsAnonymous;
 

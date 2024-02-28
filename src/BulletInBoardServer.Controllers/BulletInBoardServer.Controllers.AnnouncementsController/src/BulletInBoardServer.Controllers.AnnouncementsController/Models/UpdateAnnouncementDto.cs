@@ -41,22 +41,22 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// Массив идентификаторов категорий объявлений. Null, если значение свойства не изменилось
         /// </summary>
         /// <value>Массив идентификаторов категорий объявлений. Null, если значение свойства не изменилось</value>
-        [DataMember(Name="categoryIds", EmitDefaultValue=false)]
-        public List<Guid> CategoryIds { get; set; }
+        [DataMember(Name="categoryIds", EmitDefaultValue=true)]
+        public List<Guid>? CategoryIds { get; set; }
 
         /// <summary>
         /// Идентификаторы пользователей, для которых создается объявление. Null, если значение свойства не изменилось
         /// </summary>
         /// <value>Идентификаторы пользователей, для которых создается объявление. Null, если значение свойства не изменилось</value>
         [DataMember(Name="audienceIds", EmitDefaultValue=true)]
-        public List<Guid> AudienceIds { get; set; }
+        public List<Guid>? AudienceIds { get; set; }
 
         /// <summary>
         /// Идентификаторы новых вложений объявления. Null, если значение свойства не изменилось
         /// </summary>
         /// <value>Идентификаторы новых вложений объявления. Null, если значение свойства не изменилось</value>
         [DataMember(Name="attachmentIds", EmitDefaultValue=true)]
-        public List<Guid> AttachmentIds { get; set; }
+        public List<Guid>? AttachmentIds { get; set; }
 
         /// <summary>
         /// Было ли изменено значение момента отложенной публикации

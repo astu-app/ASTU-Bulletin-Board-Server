@@ -121,7 +121,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
                 ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses
                     .PieceOfAudienceDoesNotExist));
         }
-        catch (AnnouncementCategoriesDoNotExist err)
+        catch (AnnouncementCategoryDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Создание объявления",
                 nameof(CreateAnnouncementResponses.AnnouncementCategoriesDoNotExist), requesterId, err.Message);
@@ -642,7 +642,8 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Empty; // todo id пользователя
+        // var requesterId = Guid.Empty; // todo id пользователя
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // todo id пользователя
 
         try
         {
@@ -686,7 +687,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
                 ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
                     .AnnouncementDoesNotExist));
         }
-        catch (AnnouncementCategoriesDoNotExist err)
+        catch (AnnouncementCategoryDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Редактирование объявления",
                 nameof(UpdateAnnouncementResponses.AnnouncementCategoriesDoesNotExist), requesterId, err.Message);

@@ -1,4 +1,5 @@
-﻿using BulletInBoardServer.Domain.Models.Announcements;
+﻿using BulletInBoardServer.Domain;
+using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Domain.Models.Attachments;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
@@ -137,14 +138,14 @@ public class GeneralOperationsService(
         if (edit.AudienceIds is not null)
         {
             NewAudienceValidOrThrow(edit);
-            ApplyAudienceChanging(announcement.Id, edit.AudienceIds);
+            ApplyAudienceChanging(announcement.Id, edit.AudienceIds, dbContext);
         }
         if (edit.CategoryIds is not null)
-            ApplyCategoriesChanging(announcement.Id, edit.CategoryIds);
+            ApplyCategoriesChanging(announcement.Id, edit.CategoryIds, dbContext);
         if (edit.AttachmentIds is not null)
         {
             NewAttachmentsValidOrThrow(edit);
-            ApplyAttachmentsChanging(announcement.Id, edit.AttachmentIds);
+            ApplyAttachmentsChanging(announcement.Id, edit.AttachmentIds, dbContext);
         }
         if (edit.DelayedPublishingAtChanged)
             announcement.SetDelayedPublishingMoment(DateTime.Now, edit.DelayedPublishingAt);
@@ -354,7 +355,7 @@ public class GeneralOperationsService(
         }
         catch (InvalidOperationException err)
         {
-            throw new AnnouncementCategoriesDoNotExist(err);
+            throw new AnnouncementCategoryDoesNotExistException(err);
         }
     }
 
@@ -400,11 +401,8 @@ public class GeneralOperationsService(
             throw new AnnouncementAudienceEmptyException();
     }
     
-    private void ApplyAudienceChanging(Guid announcementId, IEnumerable<Guid> changedIds)
+    private void ApplyAudienceChanging(Guid announcementId, IEnumerable<Guid> changedIds, ApplicationDbContext dbContext)
     {
-        using var scope = CreateScope();
-        var dbContext = GetDbContextForScope(scope);
-        
         var changedIdList = changedIds.ToList();
 
         // удаляем связки с пользователями, id которых нет в новом списке 
@@ -417,15 +415,13 @@ public class GeneralOperationsService(
             dbContext.AnnouncementAudience
                 .Where(aa => aa.AnnouncementId == announcementId)
                 .Select(aa => aa.UserId));
-        foreach (var newId in newIds)
-            dbContext.AnnouncementAudience.Add(new AnnouncementAudience(announcementId, newId));
+
+        var newAudience = newIds.Select(id => new AnnouncementAudience(announcementId, id));
+        dbContext.AnnouncementAudience.AddRange(newAudience);
     }
 
-    private void ApplyCategoriesChanging(Guid announcementId, IEnumerable<Guid> changedIds)
+    private void ApplyCategoriesChanging(Guid announcementId, IEnumerable<Guid> changedIds, ApplicationDbContext dbContext)
     {
-        using var scope = CreateScope();
-        var dbContext = GetDbContextForScope(scope);
-        
         var changedIdList = changedIds.ToList();
 
         // удаляем связки с пользователями, id которых нет в новом списке
@@ -439,8 +435,9 @@ public class GeneralOperationsService(
             dbContext.AnnouncementCategoryJoins
                 .Where(aa => aa.AnnouncementId == announcementId)
                 .Select(aa => aa.AnnouncementCategoryId));
-        foreach (var newId in newIds)
-            dbContext.AnnouncementCategoryJoins.Add(new AnnouncementAnnouncementCategory(announcementId, newId));
+        
+        var newAudience = newIds.Select(id => new AnnouncementAnnouncementCategory(announcementId, id));
+        dbContext.AnnouncementCategoryJoins.AddRange(newAudience);
     }
 
     private void NewAttachmentsValidOrThrow(EditAnnouncement edit)
@@ -466,12 +463,8 @@ public class GeneralOperationsService(
             throw new CannotDetachSurveyException();
     }
     
-    private void ApplyAttachmentsChanging(Guid announcementId, IEnumerable<Guid> changedIds)
+    private void ApplyAttachmentsChanging(Guid announcementId, IEnumerable<Guid> changedIds, ApplicationDbContext dbContext)
     {
-        using var scope = CreateScope();
-        var dbContext = GetDbContextForScope(scope);
-        
-        // todo нельзя откреплять опросы
         var changedIdList = changedIds.ToList();
 
         // удаляем связки с пользователями, id которых нет в новом списке
@@ -484,7 +477,8 @@ public class GeneralOperationsService(
             dbContext.AnnouncementAttachmentJoins
                 .Where(aa => aa.AnnouncementId == announcementId)
                 .Select(aa => aa.AttachmentId));
-        foreach (var newId in newIds)
-            dbContext.AnnouncementAttachmentJoins.Add(new AnnouncementAttachment(announcementId, newId));
+        
+        var newAudience = newIds.Select(id => new AnnouncementAttachment(announcementId, id));
+        dbContext.AnnouncementAttachmentJoins.AddRange(newAudience);
     }
 }

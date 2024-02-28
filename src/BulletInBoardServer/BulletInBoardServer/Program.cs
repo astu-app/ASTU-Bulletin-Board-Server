@@ -1,8 +1,10 @@
 using BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
+using BulletInBoardServer.Controllers.CategoriesController.Controllers;
 using BulletInBoardServer.Controllers.PingController.Controllers;
 using BulletInBoardServer.Controllers.SurveysController.Controllers;
 using BulletInBoardServer.Domain;
 using BulletInBoardServer.Infrastructure;
+using BulletInBoardServer.Services.Services.AnnouncementCategories;
 using BulletInBoardServer.Services.Services.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
@@ -13,14 +15,16 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using AnnouncementsInputFormatterStream = BulletInBoardServer.Controllers.AnnouncementsController.Formatters.InputFormatterStream;
 using PingInputFormatterStream = BulletInBoardServer.Controllers.PingController.Formatters.InputFormatterStream;
-using SurveysInputFormatterStream = BulletInBoardServer.Controllers.SurveysController.Formatters.InputFormatterStream;
+using SurveysInputFormatterStream = BulletInBoardServer.Controllers.SurveysController.Formatters.InputFormatterStream; 
+using AnnouncementCategoryInputFormatterStream = BulletInBoardServer.Controllers.CategoriesController.Formatters.InputFormatterStream;
 
-const string apiVersion = "0.0.2";
+const string apiVersion = "0.0.3";
 var controllerClasses = new[]
 {
     typeof(AnnouncementsApiController), 
     typeof(SurveysApiController), 
-    typeof(PingApiController)
+    typeof(PingApiController),
+    typeof(AnnouncementCategoriesApiController),
 };
 
 Log.Logger = new LoggerConfiguration()
@@ -35,12 +39,14 @@ builder.Services.AddControllers(options =>
     options.InputFormatters.Insert(0, new AnnouncementsInputFormatterStream());
     options.InputFormatters.Insert(1, new PingInputFormatterStream());
     options.InputFormatters.Insert(2, new SurveysInputFormatterStream());
+    options.InputFormatters.Insert(3, new AnnouncementCategoryInputFormatterStream());
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.CustomSchemaIds(type => type.ToString());
     options.SwaggerDoc(apiVersion, new OpenApiInfo
     {
         Title = "API Шлюз. Система информирования",
@@ -64,6 +70,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql
 
 RegisterAnnouncementService();
 RegisterSurveyService();
+RegisterAnnouncementCategoryService();
 
 var app = builder.Build();
 
@@ -113,6 +120,12 @@ void RegisterSurveyService()
         .AddScoped<SurveyService>()
         .AddScoped<IAutomaticSurveyOperationsDispatcher, AutomaticSurveyOperationsDispatcher>()
         .AddScoped<AutoClosingSurveyService>();
+}
+
+void RegisterAnnouncementCategoryService()
+{
+    builder.Services
+        .AddScoped<AnnouncementCategoryService>();
 }
 
 Task InitDelayedAnnouncementOperationsDispatcherAsync()

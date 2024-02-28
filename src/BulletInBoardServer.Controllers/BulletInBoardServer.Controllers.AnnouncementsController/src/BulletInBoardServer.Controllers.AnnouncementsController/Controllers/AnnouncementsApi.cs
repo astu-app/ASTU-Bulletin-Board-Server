@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
 { 
     /// <summary>
-    /// Базовый класс контроллера объявлений
+    /// 
     /// </summary>
     [ApiController]
     public abstract class AnnouncementsApiController : ControllerBase

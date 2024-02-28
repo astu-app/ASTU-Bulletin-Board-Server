@@ -710,17 +710,18 @@ components:
         categoryIds:
           description: Массив идентификаторов категорий объявлений. Null, если значение свойства не изменилось
           type: array
+          nullable: true
           items:
             type: string
             format: uuid
         audienceIds:
           description: Идентификаторы пользователей, для которых создается объявление. Null, если значение свойства не изменилось
           type: array
+          nullable: true
+          minItems: 1
           items:
             type: string
             format: uuid
-          minItems: 1
-          nullable: true
         attachmentIds:
           description: Идентификаторы новых вложений объявления. Null, если значение свойства не изменилось
           type: array

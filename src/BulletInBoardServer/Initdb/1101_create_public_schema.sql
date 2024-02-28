@@ -50,7 +50,7 @@ create function is_color_format_correct(color_hex text)
 as
 $$
 begin
-    return color_hex ~* '#[0-9a-f]{6}';
+    return color_hex ~* '#[0-9a-fA-F]{6}';
 end
 $$ language plpgsql;
 

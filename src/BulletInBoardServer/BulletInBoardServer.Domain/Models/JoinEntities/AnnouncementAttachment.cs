@@ -27,8 +27,6 @@ public class AnnouncementAttachment
     /// </summary>
     public Guid AttachmentId { get; init; }
 
-
-
     /// <summary>
     /// Вложение
     /// </summary>
