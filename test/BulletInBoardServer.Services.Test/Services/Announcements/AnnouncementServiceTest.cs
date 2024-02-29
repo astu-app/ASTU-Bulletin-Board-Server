@@ -4,6 +4,7 @@ using BulletInBoardServer.Services.Services.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
+using BulletInBoardServer.Services.Services.Common.Models;
 using BulletInBoardServer.Services.Test.Services.Announcements.DelayedOperations;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -247,25 +248,22 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
     {
         Guid[] newUserIds = [UsualUser_2_Id];
         var beforeChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
+        var newAudienceSize = beforeChanging.Audience.Count + newUserIds.Length; 
         DbContext.ChangeTracker.Clear();
 
-        var newAudience = beforeChanging.Audience
-            .Select(u => u.Id)
-            .Concat(newUserIds)
-            .ToList();
         var edit = new EditAnnouncement
         {
             Id = FullyFilledAnnouncement_1_Id,
-            AudienceIds = newAudience,
+            AudienceIds = new UpdateIdentifierList { ToAdd = newUserIds },
         };
         _announcementService.Edit(MainUsergroupAdminId, edit);
 
         var afterChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
         afterChanging.Audience
             .Should()
-            .HaveCount(newAudience.Count)
+            .HaveCount(newAudienceSize)
             .And
-            .Contain(u => newAudience.Contains(u.Id));
+            .Contain(u => afterChanging.Audience.Select(user => user.Id).Contains(u.Id));
     }
 
     [Fact]
@@ -273,23 +271,20 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
     {
         Guid[] removingUserIds = [UsualUser_1_Id];
         var beforeChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
+        var newAudienceSize = beforeChanging.Attachments.Count - removingUserIds.Length;
         DbContext.ChangeTracker.Clear();
 
-        var newAudience = beforeChanging.Audience
-            .Where(u => !removingUserIds.Contains(u.Id))
-            .Select(u => u.Id)
-            .ToList();
         var edit = new EditAnnouncement
         {
             Id = FullyFilledAnnouncement_1_Id,
-            AudienceIds = newAudience,
+            AudienceIds = new UpdateIdentifierList { ToRemove = removingUserIds },
         };
         _announcementService.Edit(MainUsergroupAdminId, edit);
 
         var afterChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
         afterChanging.Audience
             .Should()
-            .HaveCount(newAudience.Count)
+            .HaveCount(newAudienceSize)
             .And
             .NotContain(u => removingUserIds.Contains(u.Id));
     }
@@ -299,49 +294,43 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
     {
         Guid[] newCategoryIds = [AnnouncementCategory_3_Id];
         var beforeChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
+        var newCategoriesCount = beforeChanging.Categories.Count + newCategoryIds.Length; 
         DbContext.ChangeTracker.Clear();
 
-        var changedCategories = beforeChanging.Categories
-            .Select(ac => ac.Id)
-            .Concat(newCategoryIds)
-            .ToList();
         var edit = new EditAnnouncement
         {
             Id = FullyFilledAnnouncement_1_Id,
-            CategoryIds = changedCategories,
+            CategoryIds = new UpdateIdentifierList { ToAdd = newCategoryIds },
         };
         _announcementService.Edit(MainUsergroupAdminId, edit);
 
         var afterChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
         afterChanging.Categories
             .Should()
-            .HaveCount(changedCategories.Count)
+            .HaveCount(newCategoriesCount)
             .And
-            .Contain(ac => newCategoryIds.Contains(ac.Id));
+            .Contain(ac => afterChanging.Categories.Select(category => category.Id).Contains(ac.Id));
     }
 
     [Fact]
     public void Edit_RemoveCategories_CategoriesRemovedCorrectly()
     {
-        Guid[] removingCategoryIds = [UsualUser_1_Id];
+        Guid[] removingCategoryIds = [AnnouncementCategory_1_Id];
         var beforeChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
+        var newCategoriesCount = beforeChanging.Categories.Count - removingCategoryIds.Length;
         DbContext.ChangeTracker.Clear();
 
-        var changedCategories = beforeChanging.Categories
-            .Where(u => !removingCategoryIds.Contains(u.Id))
-            .Select(u => u.Id)
-            .ToList();
         var edit = new EditAnnouncement
         {
             Id = FullyFilledAnnouncement_1_Id,
-            CategoryIds = changedCategories,
+            CategoryIds = new UpdateIdentifierList { ToRemove = removingCategoryIds },
         };
         _announcementService.Edit(MainUsergroupAdminId, edit);
 
         var afterChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
         afterChanging.Categories
             .Should()
-            .HaveCount(changedCategories.Count)
+            .HaveCount(newCategoriesCount)
             .And
             .NotContain(ac => removingCategoryIds.Contains(ac.Id));
     }
@@ -351,23 +340,20 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
     {
         Guid[] newAttachmentIds = [File_2_Id];
         var beforeChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
+        var newAttachmentsCount = beforeChanging.Attachments.Count + newAttachmentIds.Length; 
         DbContext.ChangeTracker.Clear();
-
-        var changedAttachments = beforeChanging.Attachments
-            .Select(a => a.Id)
-            .Concat(newAttachmentIds)
-            .ToList();
+        
         var edit = new EditAnnouncement
         {
             Id = FullyFilledAnnouncement_1_Id,
-            AttachmentIds = changedAttachments,
+            AttachmentIds = new UpdateIdentifierList { ToAdd = newAttachmentIds },
         };
         _announcementService.Edit(MainUsergroupAdminId, edit);
 
         var afterChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
         afterChanging.Attachments
             .Should()
-            .HaveCount(changedAttachments.Count)
+            .HaveCount(newAttachmentsCount)
             .And
             .Contain(a => newAttachmentIds.Contains(a.Id));
     }
@@ -377,25 +363,22 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
     {
         Guid[] removingAttachmentIds = [File_1_Id];
         var beforeChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
+        var newAttachmentsCount = beforeChanging.Attachments.Count - removingAttachmentIds.Length;
         DbContext.ChangeTracker.Clear();
 
-        var changedAttachments = beforeChanging.Attachments
-            .Where(u => !removingAttachmentIds.Contains(u.Id))
-            .Select(u => u.Id)
-            .ToList();
         var edit = new EditAnnouncement
         {
             Id = FullyFilledAnnouncement_1_Id,
-            AttachmentIds = changedAttachments,
+            AttachmentIds = new UpdateIdentifierList { ToRemove = removingAttachmentIds },
         };
         _announcementService.Edit(MainUsergroupAdminId, edit);
 
         var afterChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
         afterChanging.Attachments
             .Should()
-            .HaveCount(changedAttachments.Count)
+            .HaveCount(newAttachmentsCount)
             .And
-            .NotContain(ac => removingAttachmentIds.Contains(ac.Id));
+            .NotContain(a => removingAttachmentIds.Contains(a.Id));
     }
 
     [Fact]
@@ -506,10 +489,11 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
     [Fact]
     public void Edit_DetachSurvey_Throws()
     {
+        var toRemove = new [] { PublicSurvey_1_Id };
         var edit = new EditAnnouncement
         {
             Id = AnnouncementWithPublicSurvey_1_Id,
-            AttachmentIds = []
+            AttachmentIds = new UpdateIdentifierList { ToRemove = toRemove },
         };
 
         var action = () => _announcementService.Edit(MainUsergroupAdminId, edit);

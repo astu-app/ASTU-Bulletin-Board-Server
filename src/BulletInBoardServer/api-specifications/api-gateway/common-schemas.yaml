@@ -2,17 +2,28 @@
 info:
   title: Общие схемы для API шлюза
   description: Общие схемы для API шлюза
-  version: 0.0.1
+  version: 0.0.2
 servers:
   - url: '/api'
 paths:
 
 components:
   schemas:
-    identifiers:
+    uniqueIdentifiers:
       type: array
       nullable: true
       items:
         type: string
         format: uuid
+        uniqueItems: true
+    
+    updateIdentifierListDto:
+      description: Объект для обновления списка прикрепленных идентификаторов. Null, если список идентификаторов не требуется изменять
+      type: object
+      nullable: true
+      properties: 
+        toAdd:
+          $ref: '#/components/schemas/uniqueIdentifiers'
+        toRemove:
+          $ref: '#/components/schemas/uniqueIdentifiers'
     

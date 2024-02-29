@@ -2,7 +2,7 @@
 info:
   title: API Шлюз. Объявления
   description: API шлюза для управления объявлениями
-  version: 0.0.2
+  version: 0.0.3
 servers:
   - url: '/api'
 tags:
@@ -190,6 +190,7 @@ paths:
                     # announcementDoesNotExist
                     # announcementCategoriesDoNotExist
                     # attachmentDoesNotExist
+                    # pieceOfAudienceDoesNotExist
                     $ref: '#/components/schemas/updateAnnouncementResponses'
         409:
           description: Conflict
@@ -562,6 +563,7 @@ components:
           items:
             type: string
             format: uuid
+            uniqueItems: true
           minItems: 1
         categoryIds:
           description: Идентификаторы категорий объявлений
@@ -569,12 +571,14 @@ components:
           items:
             type: string
             format: uuid
+            uniqueItems: true
         attachmentIds:
           description: Идентификаторы вложений, прикрепляемых к объявлению
           type: array
           items:
             type: string
             format: uuid
+            uniqueItems: true
           minItems: 1
           nullable: true
         delayedPublishingAt:
@@ -708,28 +712,11 @@ components:
           nullable: true
           default: null
         categoryIds:
-          description: Массив идентификаторов категорий объявлений. Null, если значение свойства не изменилось
-          type: array
-          nullable: true
-          items:
-            type: string
-            format: uuid
+          $ref: './common-schemas.yaml#/components/schemas/updateIdentifierListDto'
         audienceIds:
-          description: Идентификаторы пользователей, для которых создается объявление. Null, если значение свойства не изменилось
-          type: array
-          nullable: true
-          minItems: 1
-          items:
-            type: string
-            format: uuid
+          $ref: './common-schemas.yaml#/components/schemas/updateIdentifierListDto'
         attachmentIds:
-          description: Идентификаторы новых вложений объявления. Null, если значение свойства не изменилось
-          type: array
-          items:
-            type: string
-            format: uuid
-          minItems: 1
-          nullable: true
+          $ref: './common-schemas.yaml#/components/schemas/updateIdentifierListDto'
         delayedPublishingAtChanged:
           description: Было ли изменено значение момента отложенной публикации
           type: boolean
@@ -801,6 +788,7 @@ components:
         - announcementDoesNotExist
         - announcementCategoriesDoesNotExist
         - attachmentsDoNotExist
+        - pieceOfAudienceDoesNotExist
         # 409
         - delayedPublishingMomentIsInPast
         - delayedHidingMomentIsInPast
@@ -814,7 +802,8 @@ components:
           announcementEditingForbidden - Пользователь не имеет права изменить объявление
           announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id
           announcementCategoriesDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id
-          attachmentDoesNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id
+          attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id
+          pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id
           delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом
           delayedHidingMomentIsInPast - Момент отложенного сокрытия уже наступил в прошлом
           autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто

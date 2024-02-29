@@ -11,6 +11,7 @@ using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Serilog;
+using ILogger = Serilog.ILogger;
 
 namespace BulletInBoardServer.Controllers.SurveysController.Controllers;
 

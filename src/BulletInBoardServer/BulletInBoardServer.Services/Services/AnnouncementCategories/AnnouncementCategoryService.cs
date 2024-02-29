@@ -84,41 +84,41 @@ public class AnnouncementCategoryService(ApplicationDbContext dbContext)
     /// Метод обновляет список категорий объявлений, на который подписан пользователь
     /// </summary>
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
-    /// <param name="changedIds">Новый список категорий объявлений</param>
+    /// <param name="update">Объект, содержащий данные об обновляемых категориях объявлений</param>
     /// <exception cref="AnnouncementCategoryDoesNotExistException">Среди Id категорий присутствуют Id, отсутствующие в БД</exception>
-    public void UpdateSubscriptions(Guid requesterId, ICollection<Guid> changedIds)
+    // public void UpdateSubscriptions(Guid requesterId, ICollection<Guid> changedIds)
+    public void UpdateSubscriptions(Guid requesterId, UpdateSubscriptions update)
     {
-        // удаляем связки с категориями, id которых нет в новом списке 
-        dbContext.AnnouncementCategorySubscriptions 
-            .Where(aac => aac.SubscriberId == requesterId && !changedIds.Contains(aac.SubscriberId))
-            .ExecuteDelete();
+        var toRemove = update.Update.ToRemove;
+        if (toRemove is not null)
+        {
+            dbContext.AnnouncementCategorySubscriptions
+                .Where(aac => aac.SubscriberId == requesterId && toRemove.Contains(aac.SubscriberId))
+                .ExecuteDelete();
+        }
 
-        // добавляем связки с категориями, id которых присутствуют в новом списке, но отсутствуют в бд
-        var newIds = changedIds
-            .Except(
-                dbContext.AnnouncementCategorySubscriptions
-                    .Where(aac => aac.SubscriberId == requesterId)
-                    .Select(aac => aac.SubscriberId))
-            .ToList();
-        
-        NewIdsValidOrThrow(newIds);
-        
-        /*
-         * Пришлось использовать чистый SQL скрипт, так как по причине, которую я так и не смог выяснить,
-         * добавление объекта AnnouncementCategorySubscription вызывает ошибку:
-         *     The value of 'AnnouncementCategorySubscription.SubscriberId' is unknown when attempting to save changes.
-         *     This is because the property is also part of a foreign key for which the principal entity in the
-         *     relationship is not known.
-         * В других местах, в которых, по моим предположениям, должна возникать такая же ошибка, все работает,
-         * как задумано.
-         */
-         foreach (var newAnnouncementId in newIds)
-             dbContext.Database.ExecuteSql(
-                 $"""
-                 insert into announcement_categories_subscribers (announcement_category_id, subscriber_id)
-                 values ({newAnnouncementId}, {requesterId});
-                 """
-             );
+        var toAdd = update.Update.ToAdd;
+        if (toAdd is not null)
+        {
+            NewIdsValidOrThrow(toAdd);
+
+            /*
+             * Пришлось использовать чистый SQL скрипт, так как по причине, которую я так и не смог выяснить,
+             * добавление объекта AnnouncementCategorySubscription вызывает ошибку:
+             *     The value of 'AnnouncementCategorySubscription.SubscriberId' is unknown when attempting to save changes.
+             *     This is because the property is also part of a foreign key for which the principal entity in the
+             *     relationship is not known.
+             * В других местах, в которых, по моим предположениям, должна возникать такая же ошибка, все работает,
+             * как задумано.
+             */
+            foreach (var newAnnouncementId in toAdd)
+                dbContext.Database.ExecuteSql(
+                    $"""
+                     insert into announcement_categories_subscribers (announcement_category_id, subscriber_id)
+                     values ({newAnnouncementId}, {requesterId});
+                     """
+                );
+        }
         
         dbContext.SaveChanges();
     }

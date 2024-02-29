@@ -1,4 +1,6 @@
-﻿namespace BulletInBoardServer.Services.Services.Announcements.Models;
+﻿using BulletInBoardServer.Services.Services.Common.Models;
+
+namespace BulletInBoardServer.Services.Services.Announcements.Models;
 
 /// <summary>
 /// Класс с данными для редактирования объявления
@@ -24,7 +26,7 @@ public class EditAnnouncement
     /// <remarks>
     /// Null, если категории не были изменены
     /// </remarks>
-    public IEnumerable<Guid>? CategoryIds { get; init; }
+    public UpdateIdentifierList? CategoryIds { get; init; }
 
     /// <summary>
     /// Новый список идентификаторов пользователей-аудитории объявления
@@ -32,7 +34,7 @@ public class EditAnnouncement
     /// <remarks>
     /// Null, если аудитория не была изменена
     /// </remarks>
-    public IEnumerable<Guid>? AudienceIds { get; init; }
+    public UpdateIdentifierList? AudienceIds { get; init; }
 
     /// <summary>
     /// Новый список идентификаторов вложений объявления
@@ -40,7 +42,7 @@ public class EditAnnouncement
     /// <remarks>
     /// Null, если список вложений не был изменен
     /// </remarks>
-    public IEnumerable<Guid>? AttachmentIds { get; init; }
+    public UpdateIdentifierList? AttachmentIds { get; init; }
 
     /// <summary>
     /// Флаг, отображающий изменение момента отложенной публикации <see cref="DelayedPublishingAt"/>

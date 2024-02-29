@@ -511,7 +511,7 @@ components:
           type: string
           format: uuid
         userIds:
-          $ref: './common-schemas.yaml#/components/schemas/identifiers'
+          $ref: './common-schemas.yaml#/components/schemas/uniqueIdentifiers'
     
     removeUsersFromUsergroupDto:
       type: object
@@ -520,7 +520,7 @@ components:
           type: string
           format: uuid
         userIds:
-          $ref: './common-schemas.yaml#/components/schemas/identifiers'
+          $ref: './common-schemas.yaml#/components/schemas/uniqueIdentifiers'
 
     createUsergroupResponses:
       type: string

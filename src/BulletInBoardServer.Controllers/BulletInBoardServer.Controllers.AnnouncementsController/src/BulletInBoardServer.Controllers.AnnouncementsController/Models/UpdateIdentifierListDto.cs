@@ -9,22 +9,30 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
     /// <summary>
-    /// 
+    /// Объект для обновления списка прикрепленных идентификаторов. Null, если список идентификаторов не требуется изменять
     /// </summary>
     [DataContract]
-    public class GetAnnouncementDetailsNotFound : IEquatable<GetAnnouncementDetailsNotFound>
+    public class UpdateIdentifierListDto : IEquatable<UpdateIdentifierListDto>
     {
         /// <summary>
-        /// Gets or Sets Code
+        /// Gets or Sets ToAdd
         /// </summary>
-        [DataMember(Name="code", EmitDefaultValue=true)]
-        public GetAnnouncementDetailsResponses Code { get; set; }
+        [DataMember(Name="toAdd", EmitDefaultValue=true)]
+        public List<Guid> ToAdd { get; set; }
+
+        /// <summary>
+        /// Gets or Sets ToRemove
+        /// </summary>
+        [DataMember(Name="toRemove", EmitDefaultValue=true)]
+        public List<Guid> ToRemove { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -33,8 +41,9 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class GetAnnouncementDetailsNotFound {\n");
-            sb.Append("  Code: ").Append(Code).Append("\n");
+            sb.Append("class UpdateIdentifierListDto {\n");
+            sb.Append("  ToAdd: ").Append(ToAdd).Append("\n");
+            sb.Append("  ToRemove: ").Append(ToRemove).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -57,24 +66,31 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((GetAnnouncementDetailsNotFound)obj);
+            return obj.GetType() == GetType() && Equals((UpdateIdentifierListDto)obj);
         }
 
         /// <summary>
-        /// Returns true if GetAnnouncementDetailsNotFound instances are equal
+        /// Returns true if UpdateIdentifierListDto instances are equal
         /// </summary>
-        /// <param name="other">Instance of GetAnnouncementDetailsNotFound to be compared</param>
+        /// <param name="other">Instance of UpdateIdentifierListDto to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(GetAnnouncementDetailsNotFound other)
+        public bool Equals(UpdateIdentifierListDto other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Code == other.Code ||
-                    
-                    Code.Equals(other.Code)
+                    ToAdd == other.ToAdd ||
+                    ToAdd != null &&
+                    other.ToAdd != null &&
+                    ToAdd.SequenceEqual(other.ToAdd)
+                ) && 
+                (
+                    ToRemove == other.ToRemove ||
+                    ToRemove != null &&
+                    other.ToRemove != null &&
+                    ToRemove.SequenceEqual(other.ToRemove)
                 );
         }
 
@@ -88,8 +104,10 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    
-                    hashCode = hashCode * 59 + Code.GetHashCode();
+                    if (ToAdd != null)
+                    hashCode = hashCode * 59 + ToAdd.GetHashCode();
+                    if (ToRemove != null)
+                    hashCode = hashCode * 59 + ToRemove.GetHashCode();
                 return hashCode;
             }
         }
@@ -97,12 +115,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(GetAnnouncementDetailsNotFound left, GetAnnouncementDetailsNotFound right)
+        public static bool operator ==(UpdateIdentifierListDto left, UpdateIdentifierListDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(GetAnnouncementDetailsNotFound left, GetAnnouncementDetailsNotFound right)
+        public static bool operator !=(UpdateIdentifierListDto left, UpdateIdentifierListDto right)
         {
             return !Equals(left, right);
         }

@@ -2,7 +2,7 @@
 info:
   title: API Шлюз. Категории объявлений
   description: API Шлюза для управления категориями объявлений
-  version: 0.0.3
+  version: 0.0.4
 servers:
   - url: '/api'
 tags:
@@ -313,12 +313,7 @@ components:
         - changedIds
       properties: 
         changedIds:
-          type: array
-          items: 
-            type: string
-            format: uuid
-            nullable: false
-          nullable: false
+          $ref: './common-schemas.yaml#/components/schemas/updateIdentifierListDto'
     
     createAnnouncementCategoryResponses:
       type: string

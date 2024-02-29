@@ -305,7 +305,8 @@ public class AnnouncementCategoriesApiControllerImpl : AnnouncementCategoriesApi
 
         try
         {
-            _service.UpdateSubscriptions(requesterId, dto.ChangedIds);
+            var update = dto.Adapt<UpdateSubscriptions>();
+            _service.UpdateSubscriptions(requesterId, update);
 
             _logger.Information("Пользователь {RequesterId} обновил список своих подписок", requesterId);
 

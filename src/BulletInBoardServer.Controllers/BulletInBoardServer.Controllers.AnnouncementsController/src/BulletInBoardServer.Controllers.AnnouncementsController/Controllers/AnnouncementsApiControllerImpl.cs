@@ -103,7 +103,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
             return BadRequest(
                 ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses.ContentNullOrEmpty));
         }
-        catch (AttachmentDoesNotExist err)
+        catch (AttachmentDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Создание объявления",
                 nameof(CreateAnnouncementResponses.AttachmentsDoNotExist),
@@ -112,7 +112,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
                 ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses
                     .AttachmentsDoNotExist));
         }
-        catch (PieceOfAudienceDoesNotExist err)
+        catch (PieceOfAudienceDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Создание объявления",
                 nameof(CreateAnnouncementResponses.PieceOfAudienceDoesNotExist),
@@ -633,6 +633,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          *   announcementDoesNotExist +
          *   announcementCategoriesDoNotExist +
          *   attachmentsDoNotExist +
+         *   pieceOfAudienceDoesNotExist +
          * 409:
          *   delayedPublishingMomentIsInPast +
          *   delayedHidingMomentIsInPast +
@@ -695,7 +696,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
                 ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
                     .AnnouncementCategoriesDoesNotExist));
         }
-        catch (AttachmentDoesNotExist err)
+        catch (AttachmentDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Редактирование объявления",
                 nameof(UpdateAnnouncementResponses.AttachmentsDoNotExist),
@@ -703,6 +704,15 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
             return NotFound(
                 ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
                     .AttachmentsDoNotExist));
+        }
+        catch (PieceOfAudienceDoesNotExistException err)
+        {
+            _loggingHelper.LogWarning(404, "Редактирование объявления",
+                nameof(UpdateAnnouncementResponses.PieceOfAudienceDoesNotExist),
+                requesterId, err.Message);
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
+                    .PieceOfAudienceDoesNotExist));
         }
         catch (DelayedPublishingMomentComesInPastException err)
         {

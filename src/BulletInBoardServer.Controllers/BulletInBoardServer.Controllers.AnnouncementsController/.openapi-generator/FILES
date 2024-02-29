@@ -60,4 +60,5 @@ src/BulletInBoardServer.Controllers.AnnouncementsController/Models/UpdateAnnounc
 src/BulletInBoardServer.Controllers.AnnouncementsController/Models/UpdateAnnouncementForbidden.cs
 src/BulletInBoardServer.Controllers.AnnouncementsController/Models/UpdateAnnouncementNotFound.cs
 src/BulletInBoardServer.Controllers.AnnouncementsController/Models/UpdateAnnouncementResponses.cs
+src/BulletInBoardServer.Controllers.AnnouncementsController/Models/UpdateIdentifierListDto.cs
 src/BulletInBoardServer.Controllers.AnnouncementsController/OpenApi/TypeExtensions.cs
