@@ -5,7 +5,7 @@ using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
-using BulletInBoardServer.Services.Services.Exceptions;
+using BulletInBoardServer.Services.Services.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

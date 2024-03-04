@@ -1,4 +1,5 @@
-﻿using BulletInBoardServer.Domain.Models.Users;
+﻿using BulletInBoardServer.Domain.Models.UserGroups.Exceptions;
+using BulletInBoardServer.Domain.Models.Users;
 
 namespace BulletInBoardServer.Domain.Models.UserGroups;
 
@@ -15,7 +16,7 @@ public class UserGroup
     /// <summary>
     /// Название группы пользователей
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; private set; }
 
     /// <summary>
     /// Идентификатор администратора группы пользователей
@@ -49,7 +50,7 @@ public class UserGroup
     /// <param name="id">Идентификатор группы пользователей</param>
     /// <param name="name">Название группы пользователей</param>
     /// <param name="adminId">Идентификатор администратора группы пользователей</param>
-    /// <throws>ArgumentException - Название группы пользователей пустое</throws>
+    /// <exception cref="UserGroupNameEmptyException">Название группы пользователей пустое</exception>">
     public UserGroup(Guid id, string name, Guid? adminId)
         : this(id, name, adminId, [], [])
     {
@@ -63,17 +64,32 @@ public class UserGroup
     /// <param name="adminId">Идентификатор администратора группы пользователей</param>
     /// <param name="memberRights">Права участника группы пользователей</param>
     /// <param name="childrenGroups">Дочерние группы пользователей</param>
-    /// <throws>ArgumentException - Название группы пользователей пустое</throws>
+    /// <exception cref="UserGroupNameEmptyException">Название группы пользователей пустое</exception>">
     public UserGroup(Guid id, string name, Guid? adminId, GroupMemberRights memberRights,
         UserGroupList childrenGroups)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Название группы пользователей не может быть пустым");
+        NameValidOrThrow(name);
 
         Id = id;
         Name = name;
         AdminId = adminId;
         MemberRights = memberRights;
         ChildrenGroups = childrenGroups;
+    }
+
+
+
+    public void SetName(string name)
+    {
+        NameValidOrThrow(name);
+        Name = name;
+    }
+
+
+
+    private static void NameValidOrThrow(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new UserGroupNameEmptyException();
     }
 }

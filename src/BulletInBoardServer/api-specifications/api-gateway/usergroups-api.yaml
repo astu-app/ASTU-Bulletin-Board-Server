@@ -2,13 +2,16 @@ openapi: 3.0.3
 info:
   title: API Шлюз. Группы пользователей
   description: API шлюза для управления группами пользователей
-  version: 0.0.2
+  version: 0.0.3
 servers:
   - url: '/api'
+tags:
+  - name: UserGroups
+    description: API управления группами пользователей
 paths:
   /usergroups/create:
     post:
-      tags: [ Группы пользователей ]
+      tags: [ UserGroups ]
       operationId: createUsergroup
       summary: Создать группу пользователей
       requestBody:
@@ -16,7 +19,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/createUsergroupDto'
+              $ref: '#/components/schemas/createUserGroupDto'
       responses:
         201:
           description: Created
@@ -37,7 +40,7 @@ paths:
                 title: createUsergroupBadRequest
                 properties:
                   code:
-                    # nameNullOrWhitespace
+                    # nameIsNullOrWhitespace
                     $ref: '#/components/schemas/createUsergroupResponses'
         401:
           description: Unauthorized
@@ -62,7 +65,7 @@ paths:
                 properties:
                   code:
                     # usersDoNotExist
-                    # usergroupsDoNotExist
+                    # userGroupsDoNotExist
                     $ref: '#/components/schemas/createUsergroupResponses'
         409:
           description: Conflict
@@ -81,7 +84,7 @@ paths:
 
   /usergroups/get-all:
     get:
-      tags: [ Группы пользователей ]
+      tags: [ UserGroups ]
       operationId: getAllUsergroups
       summary: Получение списка всех групп пользователей
       responses:
@@ -110,10 +113,42 @@ paths:
                     $ref: '#/components/schemas/getAllUsergroupsResponses'
         500:
           description: Internal Server Error
+    
+  /usergroups/get-owned-list:
+    get:
+      tags: [ UserGroups ]
+      operationId: getOwnedUsergroups
+      summary: Получение списка групп пользователей, администратором которой является пользователь, запрашивающий операцию
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                title: getOwnedUsergroupsOk
+                properties:
+                  content:
+                    $ref: '#/components/schemas/usergroupListDto'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                title: getOwnedUsergroupsForbidden
+                properties:
+                  code:
+                    # getOwnedUsergroupsForbidden
+                    $ref: '#/components/schemas/getOwnedUsergroupsResponses'
+        500:
+          description: Internal Server Error
 
   /usergroups/get-details:
     get:
-      tags: [ Группы пользователей ]
+      tags: [ UserGroups ]
       operationId: getUsergroupDetails
       summary: Получение подробной информации о группе пользователей
       requestBody:
@@ -132,7 +167,7 @@ paths:
                 title: getUsergroupDetailsOk
                 properties:
                   content:
-                    $ref: '#/components/schemas/usergroupDetailsDto'
+                    $ref: '#/components/schemas/userGroupDetailsDto'
         400:
           # Некорректный формат идентификатора
           description: Bad Request
@@ -158,14 +193,14 @@ paths:
                 title: getUsergroupDetailsNotFound
                 properties:
                   code:
-                    # usergroupDoesNotExist
+                    # userGroupDoesNotExist
                     $ref: '#/components/schemas/getUsergroupDetailsResponses'
         500:
           description: Internal Server Error
 
   /usergroups/update:
     put:
-      tags: [ Группы пользователей ]
+      tags: [ UserGroups ]
       operationId: updateUsergroup
       summary: Редактирование группы пользователей
       requestBody:
@@ -173,7 +208,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/updateUsergroupDto'
+              $ref: '#/components/schemas/updateUserGroupDto'
       responses:
         200:
           description: Ok
@@ -187,7 +222,7 @@ paths:
                 title: updateUsergroupBadRequest
                 properties:
                   code:
-                    # nameIsEmptyOrWhitespace
+                    # nameIsNullOrWhitespace
                     $ref: '#/components/schemas/updateUsergroupResponses'
         401:
           description: Unauthorized
@@ -229,7 +264,7 @@ paths:
 
   /usergroups/delete:
     delete:
-      tags: [ Группы пользователей ]
+      tags: [ UserGroups ]
       operationId: deleteUsergroup
       summary: Удалить группу пользователей
       requestBody:
@@ -266,22 +301,22 @@ paths:
                 title: deleteUsergroupNotFound
                 properties:
                   code:
-                    # usergroupDoesNotExist
+                    # userGroupDoesNotExist
                     $ref: '#/components/schemas/deleteUsergroupResponses'
         500:
           description: Internal Server Error
 
-  /usergroups/add-users:
+  /usergroups/add-members:
     post:
-      tags: [ Группы пользователей ]
-      operationId: addUsersToUsergroup
+      tags: [ UserGroups ]
+      operationId: addMembersToUsergroup
       summary: Добавить пользователей в группу пользователей
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/addUsersToUsergroupDto'
+              $ref: '#/components/schemas/addMembersToUsergroupDto'
       responses:
         200:
           description: Ok
@@ -296,49 +331,49 @@ paths:
             application/json:
               schema:
                 type: object
-                title: addUsersToUsergroupForbidden
+                title: addMembersToUsergroupForbidden
                 properties:
                   code:
-                    # addUsersToUsergroupForbidden
-                    $ref: '#/components/schemas/addUsersToUsergroupResponses'
+                    # addMembersToUsergroupForbidden
+                    $ref: '#/components/schemas/addMembersToUsergroupResponses'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
-                title: addUsersToUsergroupNotFound
+                title: addMembersToUsergroupNotFound
                 properties:
                   code:
-                    # usergroupDoesNotExist
+                    # userGroupDoesNotExist
                     # usersDoNotExist
-                    $ref: '#/components/schemas/addUsersToUsergroupResponses'
+                    $ref: '#/components/schemas/addMembersToUsergroupResponses'
         409:
           description: Conflict
           content:
             application/json:
               schema:
                 type: object
-                title: addUsersToUsergroupConflict
+                title: addMembersToUsergroupConflict
                 properties:
                   code:
                     # userAlreadyMember
                     # userIsAdmin
-                    $ref: '#/components/schemas/addUsersToUsergroupResponses'
+                    $ref: '#/components/schemas/addMembersToUsergroupResponses'
         500:
           description: Internal Server Error
 
-  /usergroups/delete-users:
+  /usergroups/delete-members:
     post:
-      tags: [ Группы пользователей ]
-      operationId: deleteUsersFromUsergroup
+      tags: [ UserGroups ]
+      operationId: deleteMembersFromUsergroup
       summary: Удалить пользователей из группы пользователей
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/addUsersToUsergroupDto'
+              $ref: '#/components/schemas/deleteUsersFromUsergroupDto'
       responses:
         200:
           description: Ok
@@ -357,19 +392,7 @@ paths:
                 properties:
                   code:
                     # addUsersToUsergroupForbidden
-                    $ref: '#/components/schemas/deleteUsersFromUsergroupResponses'
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                title: deleteUsersFromUsergroupNotFound
-                properties:
-                  code:
-                    # usergroupDoesNotExist
-                    # usersDoNotExist
-                    $ref: '#/components/schemas/deleteUsersFromUsergroupResponses'
+                    $ref: '#/components/schemas/deleteMembersFromUsergroupResponses'
         409:
           description: Conflict
           content:
@@ -379,22 +402,19 @@ paths:
                 title: deleteUsersFromUsergroupConflict
                 properties:
                   code:
-                    # userIsNotAMember
                     # userIsAdmin
-                    $ref: '#/components/schemas/deleteUsersFromUsergroupResponses'
+                    $ref: '#/components/schemas/deleteMembersFromUsergroupResponses'
         500:
           description: Internal Server Error
 
 components:
   schemas:
     usergroupIdentifierDto:
-      type: object
-      properties:
-        announcementId:
-          type: string
-          format: uuid
+      description: Идентификатор группы пользователей
+      type: string
+      format: uuid
 
-    createUsergroupDto:
+    createUserGroupDto:
       type: object
       required:
         - name
@@ -426,7 +446,7 @@ components:
             type: string
             format: uuid
 
-    usergroupSummaryDto:
+    userGroupSummaryDto:
       type: object
       description: Краткая информация о группе пользователей
       properties:
@@ -439,23 +459,27 @@ components:
     usergroupListDto:
       type: array
       items:
-        $ref: '#/components/schemas/usergroupHierarchyNodeDto'
+        $ref: '#/components/schemas/userGroupHierarchyNodeDto'
     
-    usergroupHierarchyNodeDto:
+    userGroupHierarchyNodeDto:
       type: object
       description: Объект описывает положение группы пользователей в иерархии групп пользователей
       properties:
         summary:
-          $ref: '#/components/schemas/usergroupSummaryDto'
+          $ref: '#/components/schemas/userGroupSummaryDto'
         childIds:
           type: array
           items:
             type: string
             format: uuid
     
-    usergroupDetailsDto:
+    userGroupDetailsDto:
       type: object
       properties:
+        id: 
+          description: Идентификатор группы пользователей
+          type: string
+          format: uuid
         name:
           description: Название группы пользователей
           type: string
@@ -470,17 +494,19 @@ components:
           description: Родительские группы пользователей
           type: array
           items:
-            $ref: '#/components/schemas/usergroupSummaryDto'
+            $ref: '#/components/schemas/userGroupSummaryDto'
         children:
           description: Дочерние группы пользователей
           type: array
           items:
-            $ref: '#/components/schemas/usergroupSummaryDto'
+            $ref: '#/components/schemas/userGroupSummaryDto'
 
-    updateUsergroupDto:
+    updateUserGroupDto:
       type: object
       required:
         - id
+        - adminChanged
+        - membersChanged
       properties:
         id:
           type: string
@@ -490,33 +516,34 @@ components:
           type: string
           nullable: true
           default: null
+        adminChanged:
+          description: Изменен ли администратор группы. True, если изменен
+          type: boolean
         adminId:
           description: Новый идентификатор администратора. Null отправляется для удаления администратора
           type: string
           format: uuid
           nullable: true
           default: null
+        membersChanged:
+          description: Изменен ли список групп пользователей. True, если изменен
+          type: boolean
         memberIds:
-          description: Идентификаторы участников группы пользователей
-          type: array
-          items:
-            type: string
-            format: uuid
-          nullable: true
+          $ref: './common-schemas.yaml#/components/schemas/updateIdentifierListDto'
 
-    addUsersToUsergroupDto:
+    addMembersToUsergroupDto:
       type: object
       properties:
-        usergroupId:
+        userGroupId:
           type: string
           format: uuid
         userIds:
           $ref: './common-schemas.yaml#/components/schemas/uniqueIdentifiers'
     
-    removeUsersFromUsergroupDto:
+    deleteUsersFromUsergroupDto:
       type: object
       properties:
-        usergroupId:
+        userGroupId:
           type: string
           format: uuid
         userIds:
@@ -526,21 +553,21 @@ components:
       type: string
       enum:
         # 400
-        - nameNullOrWhitespace
+        - nameIsNullOrWhitespace
         # 403
         - usergroupCreationForbidden
         # 404
         - usersDoNotExist
-        - usergroupsDoNotExist
+        - userGroupsDoNotExist
         # 409
         - adminCannotBeOrdinaryMember
         - cyclicDependency
       description: >
         Ответы:
-          nameNullOrWhitespace - Название группы пользователей null или состоит исключительно из пробельных символов
+          nameIsNullOrWhitespace - Название группы пользователей null или состоит исключительно из пробельных символов
           usergroupCreationForbidden - Пользователь не имеет права создать группу пользователей
           usersDoNotExist - В качестве одного или нескольких id пользователей прикреплен несуществующий в базе id
-          usergroupsDoNotExist - В качестве одного или нескольких id групп пользователей прикреплен несуществующий в базе id
+          userGroupsDoNotExist - В качестве одного или нескольких id групп пользователей прикреплен несуществующий в базе id
           adminCannotBeOrdinaryMember - Идентификатор администратора передан в массиве идентификаторов участников
           cyclicDependency - Группа пользователей не может быть создана, так как порождает цикл на графе групп пользователей
 
@@ -553,32 +580,42 @@ components:
         Ответы:
           getAllUsergroupsForbidden - Пользователь не имеет права получать список всех групп пользователей
 
+    getOwnedUsergroupsResponses:
+      type: string
+      enum:
+        # 403
+        - getOwnedUsergroupsForbidden
+      description: >
+        Ответы:
+          getOwnedUsergroupsForbidden - Пользователь не имеет права получать список групп пользователей, которыми управляет
+
     getUsergroupDetailsResponses:
       type: string
       enum:
         # 403
         - getUsergroupDetailsForbidden
         # 404
-        - usergroupDoesNotExist
+        - userGroupDoesNotExist
       description: >
         Ответы:
           getUsergroupDetailsForbidden - Пользователь не имеет права запрашивать детали группы пользователей
-          usergroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id 
+          userGroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id 
 
     updateUsergroupResponses:
       type: string
       enum:
         # 400
-        - nameIsEmptyOrWhitespace
+        - nameIsNullOrWhitespace
         # 403
         - updateUsergroupForbidden
         # 404
         - usersDoNotExist
+        - userGroupsDoNotExist
         # 409
         - adminCannotBeOrdinaryMember
       description: >
         Ответы:
-          nameIsEmptyOrWhitespace - Имя не содержит символов или содержит исключительно пробельные
+          nameIsNullOrWhitespace - Имя не содержит символов или содержит исключительно пробельные
           updateUsergroupForbidden - Пользователь не имеет права редактировать группу пользователей
           usersDoNotExist - В качестве одного или нескольких id пользователей прикреплен несуществующий в базе id
           adminCannotBeOrdinaryMember - Идентификатор администратора передан в массиве идентификаторов участников
@@ -589,46 +626,39 @@ components:
         # 403
         - usergroupDeletionForbidden
         # 404
-        - usergroupDoesNotExist
+        - userGroupDoesNotExist
       description: >
         Ответы:
           usergroupDeletionForbidden - Пользователь не имеет права удалить группу пользователей
-          usergroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
+          userGroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
 
-    addUsersToUsergroupResponses:
+    addMembersToUsergroupResponses:
       type: string
       enum:
         # 403
-        - addUsersToUsergroupForbidden
+        - addMembersToUsergroupForbidden
         # 404
-        - usergroupDoesNotExist
+        - userGroupDoesNotExist
         - usersDoNotExist
         # 409
         - userAlreadyMember
         - userIsAdmin
       description: >
         Ответы:
-          addUsersToUsergroupForbidden - Пользователь не имеет права добавить пользователя в группу пользователей
-          usergroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
+          addMembersToUsergroupForbidden - Пользователь не имеет права добавить пользователя в группу пользователей
+          userGroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
           usersDoNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id
           userAlreadyMember - В качестве одного или нескольких из id прикреплен id пользователя, уже являющегося участником этой группы пользователей
           userIsAdmin - В качестве одного из id прикреплен id пользователя, уже являющегося администратором этой группы пользователей
 
-    deleteUsersFromUsergroupResponses:
+    deleteMembersFromUsergroupResponses:
       type: string
       enum:
         # 403
         - removeUsersFromUsergroupForbidden
-        # 404
-        - usergroupDoesNotExist
-        - usersDoNotExist
         # 409
-        - userIsNotAMember
         - userIsAdmin
       description: >
         Ответы:
-          addUsersToUsergroupForbidden - Пользователь не имеет права удалить пользователя из группы пользователей
-          usergroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
-          usersDoNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id
-          userIsNotAMember - В качестве одного или нескольких из id прикреплен id пользователя, не являющегося участником этой группы пользователей
+          addMembersToUsergroupForbidden - Пользователь не имеет права удалить пользователя из группы пользователей
           userIsAdmin - В качестве одного из id прикреплен id пользователя, являющегося администратором этой группы пользователей

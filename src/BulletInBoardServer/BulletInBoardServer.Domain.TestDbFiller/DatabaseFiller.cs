@@ -3,6 +3,7 @@ using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions;
+using BulletInBoardServer.Domain.Models.JoinEntities;
 using BulletInBoardServer.Domain.Models.UserGroups;
 using BulletInBoardServer.Domain.Models.Users;
 using static BulletInBoardServer.Domain.TestDbFiller.TestDataIds;
@@ -44,32 +45,170 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
     /// </summary>
     private void AddUsers()
     {
-        var mainUsergroupAdmin = new User(
-            id: MainUsergroupAdminId,
-            firstName: "admin",
-            secondName: "admin",
-            patronymic: "admin"
-        );
-        dbContext.Users.Add(mainUsergroupAdmin);
-        AddDbEntity(mainUsergroupAdmin.Id, mainUsergroupAdmin);
+        AddMainUsergroupAdmin();
+        AddUserGroup_1_Admin();
+        AddUserGroup_2_Admin();
+        AddUserGroup_3_Admin();
+        AddUserGroup_4_Admin();
+        AddUserGroup_5_Admin();
+        AddUserGroup_6_Admin();
+        AddUserGroup_7_Admin();
+        
+        AddUsualUser_1();
+        AddUsualUser_2();
+        return;
+        
+        
+        
+        void AddMainUsergroupAdmin()
+        {
+            var id = MainUsergroupAdminId;
+            const string name = "admin";
+            
+            var user = new User(
+                id: id,
+                firstName: name,
+                secondName: name,
+                patronymic: name
+            );
+            dbContext.Users.Add(user);
+            AddDbEntity(user.Id, user);
+        }
 
-        var usualUser_1 = new User(
-            id: UsualUser_1_Id,
-            firstName: "usual user 1",
-            secondName: "usual user 1",
-            patronymic: "usual user 1"
-        );
-        dbContext.Users.Add(usualUser_1);
-        AddDbEntity(usualUser_1.Id, usualUser_1);
+        void AddUserGroup_1_Admin()
+        {
+            var id = UserGroup_1_AdminId;
+            const string name = "usergroup 1 admin";
+            
+            var user = new User(
+                id: id,
+                firstName: name,
+                secondName: name,
+                patronymic: name
+            );
+            dbContext.Users.Add(user);
+            AddDbEntity(user.Id, user);
+        }
 
-        var usualUser_2 = new User(
-            id: UsualUser_2_Id,
-            firstName: "usual user 2",
-            secondName: "usual user 2",
-            patronymic: "usual user 2"
-        );
-        dbContext.Users.Add(usualUser_2);
-        AddDbEntity(usualUser_2.Id, usualUser_2);
+        void AddUserGroup_2_Admin()
+        {
+            var id = UserGroup_2_AdminId;
+            const string name = "usergroup 2 admin";
+            
+            var user = new User(
+                id: id,
+                firstName: name,
+                secondName: name,
+                patronymic: name
+            );
+            dbContext.Users.Add(user);
+            AddDbEntity(user.Id, user);
+        }
+
+        void AddUserGroup_3_Admin()
+        {
+            var id = UserGroup_3_AdminId;
+            const string name = "usergroup 3 admin";
+            
+            var user = new User(
+                id: id,
+                firstName: name,
+                secondName: name,
+                patronymic: name
+            );
+            dbContext.Users.Add(user);
+            AddDbEntity(user.Id, user);
+        }
+
+        void AddUserGroup_4_Admin()
+        {
+            var id = UserGroup_4_AdminId;
+            const string name = "usergroup 4 admin";
+            
+            var user = new User(
+                id: id,
+                firstName: name,
+                secondName: name,
+                patronymic: name
+            );
+            dbContext.Users.Add(user);
+            AddDbEntity(user.Id, user);
+        }
+
+        void AddUserGroup_5_Admin()
+        {
+            var id = UserGroup_5_AdminId;
+            const string name = "usergroup 5 admin";
+            
+            var user = new User(
+                id: id,
+                firstName: name,
+                secondName: name,
+                patronymic: name
+            );
+            dbContext.Users.Add(user);
+            AddDbEntity(user.Id, user);
+        }
+
+        void AddUserGroup_6_Admin()
+        {
+            var id = UserGroup_6_AdminId;
+            const string name = "usergroup 6 admin";
+            
+            var user = new User(
+                id: id,
+                firstName: name,
+                secondName: name,
+                patronymic: name
+            );
+            dbContext.Users.Add(user);
+            AddDbEntity(user.Id, user);
+        }
+
+        void AddUserGroup_7_Admin()
+        {
+            var id = UserGroup_7_AdminId;
+            const string name = "usergroup 7 admin";
+            
+            var user = new User(
+                id: id,
+                firstName: name,
+                secondName: name,
+                patronymic: name
+            );
+            dbContext.Users.Add(user);
+            AddDbEntity(user.Id, user);
+        }
+
+        void AddUsualUser_1()
+        {
+            var id = UsualUser_1_Id;
+            const string name = "usual user 1";
+            
+            var user = new User(
+                id: id,
+                firstName: name,
+                secondName: name,
+                patronymic: name
+            );
+            dbContext.Users.Add(user);
+            AddDbEntity(user.Id, user);
+        }
+
+        void AddUsualUser_2()
+        {
+            var id = UsualUser_2_Id;
+            const string name = "usual user 2";
+            
+            var user = new User(
+                id: id,
+                firstName: name,
+                secondName: name,
+                patronymic: name
+            );
+            dbContext.Users.Add(user);
+            AddDbEntity(user.Id, user);
+        }
     }
 
     /// <summary>
@@ -77,28 +216,254 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
     /// </summary>
     private void AddUserGroups()
     {
-        // Create member rights
-        var mainUsergroupRights = new GroupMemberRights();
+        AddMainUserGroup();
+        AddUserGroup_1();
+        AddUserGroup_2();
+        AddUserGroup_3();
+        AddUserGroup_4();
+        AddUserGroup_5();
+        AddUserGroup_6();
+        AddUserGroup_7();
 
-        // Create usergroups
-        var mainUsergroup = new UserGroup(
-            id: MainUsergroupId,
-            name: "main usergroup",
-            adminId: MainUsergroupAdminId,
-            memberRights: mainUsergroupRights,
-            childrenGroups: []
-        );
-        dbContext.UserGroups.Add(mainUsergroup);
-        AddDbEntity(mainUsergroup.Id, mainUsergroup);
+        AddUserGroupConnections();
+        return;
 
-        // Add members
-        var mainUserGroupAdminRights =
-            new SingleMemberRights(GetDbEntity<User>(MainUsergroupAdminId), mainUsergroup);
-        var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), mainUsergroup);
-        mainUsergroupRights.Add(mainUserGroupAdminRights);
-        mainUsergroupRights.Add(usualUser_1_Rights);
-        dbContext.MemberRights.Add(mainUserGroupAdminRights);
-        dbContext.MemberRights.Add(usualUser_1_Rights);
+
+        void AddMainUserGroup()
+        {
+            var groupId = MainUsergroupId;
+            var adminId = MainUsergroupAdminId;
+            
+            // Create member rights
+            var rights = new GroupMemberRights();
+
+            // Create usergroup
+            var mainUsergroup = new UserGroup(
+                id: groupId,
+                name: "Main group",
+                adminId: adminId,
+                memberRights: rights,
+                childrenGroups: []
+            );
+            dbContext.UserGroups.Add(mainUsergroup);
+            AddDbEntity(mainUsergroup.Id, mainUsergroup);
+
+            // Add members
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), mainUsergroup);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), mainUsergroup);
+            rights.Add(adminRights);
+            rights.Add(usualUser_1_Rights);
+            dbContext.MemberRights.Add(adminRights);
+            dbContext.MemberRights.Add(usualUser_1_Rights);
+        }
+
+        void AddUserGroup_1()
+        {
+            var groupId = UserGroup_1_Id;
+            var adminId = UserGroup_1_AdminId;
+            
+            // Create member rights
+            var rights = new GroupMemberRights();
+
+            // Create usergroup
+            var usergroup = new UserGroup(
+                id: groupId,
+                name: "Group 1",
+                adminId: adminId,
+                memberRights: rights,
+                childrenGroups: []
+            );
+            dbContext.UserGroups.Add(usergroup);
+            AddDbEntity(usergroup.Id, usergroup);
+
+            // Add members
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            rights.Add(adminRights);
+            rights.Add(usualUser_1_Rights);
+            dbContext.MemberRights.Add(adminRights);
+            dbContext.MemberRights.Add(usualUser_1_Rights);
+        }
+        
+        void AddUserGroup_2()
+        {
+            var groupId = UserGroup_2_Id;
+            var adminId = UserGroup_2_AdminId;
+            
+            // Create member rights
+            var rights = new GroupMemberRights();
+
+            // Create usergroup
+            var usergroup = new UserGroup(
+                id: groupId,
+                name: "Group 2",
+                adminId: adminId,
+                memberRights: rights,
+                childrenGroups: []
+            );
+            dbContext.UserGroups.Add(usergroup);
+            AddDbEntity(usergroup.Id, usergroup);
+
+            // Add members
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            rights.Add(adminRights);
+            rights.Add(usualUser_1_Rights);
+            dbContext.MemberRights.Add(adminRights);
+            dbContext.MemberRights.Add(usualUser_1_Rights);
+        }
+        
+        void AddUserGroup_3()
+        {
+            var groupId = UserGroup_3_Id;
+            var adminId = UserGroup_3_AdminId;
+            
+            // Create member rights
+            var rights = new GroupMemberRights();
+
+            // Create usergroup
+            var usergroup = new UserGroup(
+                id: groupId,
+                name: "Group 3",
+                adminId: adminId,
+                memberRights: rights,
+                childrenGroups: []
+            );
+            dbContext.UserGroups.Add(usergroup);
+            AddDbEntity(usergroup.Id, usergroup);
+
+            // Add members
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            rights.Add(adminRights);
+            rights.Add(usualUser_1_Rights);
+            dbContext.MemberRights.Add(adminRights);
+            dbContext.MemberRights.Add(usualUser_1_Rights);
+        }
+        
+        void AddUserGroup_4()
+        {
+            var groupId = UserGroup_4_Id;
+            var adminId = UserGroup_4_AdminId;
+            
+            // Create member rights
+            var rights = new GroupMemberRights();
+
+            // Create usergroup
+            var usergroup = new UserGroup(
+                id: groupId,
+                name: "Group 4",
+                adminId: adminId,
+                memberRights: rights,
+                childrenGroups: []
+            );
+            dbContext.UserGroups.Add(usergroup);
+            AddDbEntity(usergroup.Id, usergroup);
+
+            // Add members
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            rights.Add(adminRights);
+            rights.Add(usualUser_1_Rights);
+            dbContext.MemberRights.Add(adminRights);
+            dbContext.MemberRights.Add(usualUser_1_Rights);
+        }
+        
+        void AddUserGroup_5()
+        {
+            var groupId = UserGroup_5_Id;
+            var adminId = UserGroup_5_AdminId;
+            
+            // Create member rights
+            var rights = new GroupMemberRights();
+
+            // Create usergroup
+            var usergroup = new UserGroup(
+                id: groupId,
+                name: "Group 5",
+                adminId: adminId,
+                memberRights: rights,
+                childrenGroups: []
+            );
+            dbContext.UserGroups.Add(usergroup);
+            AddDbEntity(usergroup.Id, usergroup);
+
+            // Add members
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            rights.Add(adminRights);
+            rights.Add(usualUser_1_Rights);
+            dbContext.MemberRights.Add(adminRights);
+            dbContext.MemberRights.Add(usualUser_1_Rights);
+        }
+        
+        void AddUserGroup_6()
+        {
+            var groupId = UserGroup_6_Id;
+            var adminId = UserGroup_6_AdminId;
+            
+            // Create member rights
+            var rights = new GroupMemberRights();
+
+            // Create usergroup
+            var usergroup = new UserGroup(
+                id: groupId,
+                name: "Group 6",
+                adminId: adminId,
+                memberRights: rights,
+                childrenGroups: []
+            );
+            dbContext.UserGroups.Add(usergroup);
+            AddDbEntity(usergroup.Id, usergroup);
+
+            // Add members
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            rights.Add(adminRights);
+            rights.Add(usualUser_1_Rights);
+            dbContext.MemberRights.Add(adminRights);
+            dbContext.MemberRights.Add(usualUser_1_Rights);
+        }
+        
+        void AddUserGroup_7()
+        {
+            var groupId = UserGroup_7_Id;
+            var adminId = UserGroup_7_AdminId;
+            
+            // Create member rights
+            var rights = new GroupMemberRights();
+
+            // Create usergroup
+            var usergroup = new UserGroup(
+                id: groupId,
+                name: "Group 7",
+                adminId: adminId,
+                memberRights: rights,
+                childrenGroups: []
+            );
+            dbContext.UserGroups.Add(usergroup);
+            AddDbEntity(usergroup.Id, usergroup);
+
+            // Add members
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            rights.Add(adminRights);
+            rights.Add(usualUser_1_Rights);
+            dbContext.MemberRights.Add(adminRights);
+            dbContext.MemberRights.Add(usualUser_1_Rights);
+        }
+        
+        void AddUserGroupConnections()
+        {
+            var connections = new ChildUseGroup[]
+            {
+                new(UserGroup_1_Id, UserGroup_3_Id),
+                new(UserGroup_2_Id, UserGroup_3_Id),
+                new(UserGroup_5_Id, UserGroup_7_Id),
+                new(UserGroup_4_Id, UserGroup_2_Id),
+            };
+            dbContext.ChildUseGroups.AddRange(connections);
+        }
     }
 
     /// <summary>

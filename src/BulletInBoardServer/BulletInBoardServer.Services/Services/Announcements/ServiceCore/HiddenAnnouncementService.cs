@@ -1,6 +1,6 @@
 ﻿using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.Models;
-using BulletInBoardServer.Services.Services.Exceptions;
+using BulletInBoardServer.Services.Services.Common.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;

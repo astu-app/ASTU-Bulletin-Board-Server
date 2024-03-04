@@ -10,7 +10,7 @@ using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Attachments.Exceptions;
 using BulletInBoardServer.Services.Services.Audience.Exceptions;
-using BulletInBoardServer.Services.Services.Exceptions;
+using BulletInBoardServer.Services.Services.Common.Exceptions;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;

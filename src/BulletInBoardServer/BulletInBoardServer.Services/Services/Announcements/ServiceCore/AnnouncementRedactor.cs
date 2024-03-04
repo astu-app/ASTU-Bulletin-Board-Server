@@ -7,7 +7,7 @@ using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Attachments.Exceptions;
 using BulletInBoardServer.Services.Services.Audience.Exceptions;
-using BulletInBoardServer.Services.Services.Exceptions;
+using BulletInBoardServer.Services.Services.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using AnnouncementAudience = BulletInBoardServer.Domain.Models.JoinEntities.AnnouncementAudience;
 

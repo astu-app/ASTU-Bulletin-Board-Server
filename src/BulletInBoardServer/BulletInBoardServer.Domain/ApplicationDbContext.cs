@@ -19,6 +19,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<User> Users { get; init; } = null!;
     public DbSet<UserGroup> UserGroups { get; init; } = null!;
     public DbSet<SingleMemberRights> MemberRights { get; init; } = null!;
+    public DbSet<ChildUseGroup> ChildUseGroups { get; init; } = null!;
     public DbSet<Announcement> Announcements { get; init; } = null!;
     public DbSet<AnnouncementAudience> AnnouncementAudience { get; init; } = null!;
     public DbSet<AnnouncementAttachment> AnnouncementAttachmentJoins { get; init; } = null!;

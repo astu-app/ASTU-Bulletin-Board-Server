@@ -13,8 +13,14 @@
         <Content Include="..\initdb\1111_create_indices.sql">
             <Link>initdb\1111_create_indices.sql</Link>
         </Content>
-        <Content Include="..\initdb\1121_create_triggers.sql">
-            <Link>initdb\1121_create_triggers.sql</Link>
+        <Content Include="..\initdb\1121_is_usergroup_included_in_cycle.sql">
+          <Link>initdb\1121_is_usergroup_included_in_cycle.sql</Link>
+        </Content>
+        <Content Include="..\initdb\1122_can_add_usergroup_or_throw.sql">
+          <Link>initdb\1122_can_add_usergroup_or_throw.sql</Link>
+        </Content>
+        <Content Include="..\initdb\1151_create_triggers.sql">
+            <Link>initdb\1151_create_triggers.sql</Link>
         </Content>
         <Content Include="..\initdb\1201_create_archive_schema.sql">
             <Link>initdb\1201_create_archive_schema.sql</Link>

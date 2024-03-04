@@ -5,6 +5,15 @@ public static class TestDataIds
     #region пользователи
 
     public static readonly Guid MainUsergroupAdminId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc");
+    public static readonly Guid UserGroup_1_AdminId = Guid.Parse("64b5d14e-84d2-450f-814e-afa9579752b2");
+    public static readonly Guid UserGroup_2_AdminId = Guid.Parse("c0f3471b-09e7-4bcf-8bb8-d5673251aff7");
+    public static readonly Guid UserGroup_3_AdminId = Guid.Parse("9634c12a-c12b-4b4f-b576-8e203a73b949");
+    public static readonly Guid UserGroup_4_AdminId = Guid.Parse("504f5c5f-f1a9-4662-b18d-289868fbb32d");
+    public static readonly Guid UserGroup_5_AdminId = Guid.Parse("4fbe3acb-3e6a-4617-b9f8-0eb0092197a8");
+    public static readonly Guid UserGroup_6_AdminId = Guid.Parse("df293744-21fe-4dbe-a2bb-0f64a202514a");
+    public static readonly Guid UserGroup_7_AdminId = Guid.Parse("2ddf9134-1fc6-45e1-92ba-c46ae24f9c06");
+    
+    
     public static readonly Guid UsualUser_1_Id = Guid.Parse("0166b8c0-0da2-4ad3-80bd-15f51335f109");
     public static readonly Guid UsualUser_2_Id = Guid.Parse("26ee62dc-6b8c-4001-9a35-79a99a8944f3");
 
@@ -13,6 +22,13 @@ public static class TestDataIds
     #region группы пользователей
 
     public static readonly Guid MainUsergroupId = Guid.Parse("c9a4f026-0632-452f-9d5f-ddb7973db240");
+    public static readonly Guid UserGroup_1_Id = Guid.Parse("3ef77770-7660-4aa8-9525-bc784260fcf9");
+    public static readonly Guid UserGroup_2_Id = Guid.Parse("2eb35d1e-ce66-4d3d-b1d4-50a53f60c110");
+    public static readonly Guid UserGroup_3_Id = Guid.Parse("2278c2c9-adde-40c2-9d68-a22d09dd7ec1");
+    public static readonly Guid UserGroup_4_Id = Guid.Parse("a6eb28f4-09c2-4a3e-b6ed-bfcd46d89da9");
+    public static readonly Guid UserGroup_5_Id = Guid.Parse("a25a6df2-a520-464a-a4a3-91b1b4de5c21");
+    public static readonly Guid UserGroup_6_Id = Guid.Parse("e5dbc353-cd28-4aaa-b7b6-e0cb2e71324f");
+    public static readonly Guid UserGroup_7_Id = Guid.Parse("42bbd96b-ddab-4e85-8ec5-70e1158e18ca");
 
     #endregion
 

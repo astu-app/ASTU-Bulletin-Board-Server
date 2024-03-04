@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using BulletInBoardServer.Domain.Models.Users;
 
 namespace BulletInBoardServer.Domain.Models.UserGroups;
 
@@ -8,7 +7,8 @@ namespace BulletInBoardServer.Domain.Models.UserGroups;
 /// </summary>
 public class GroupMemberRights : ICollection<SingleMemberRights>
 {
-    private readonly Dictionary<User, SingleMemberRights> _rightsMap = new();
+    // private readonly Dictionary<User, SingleMemberRights> _rightsMap = new();
+    private readonly Dictionary<Guid, SingleMemberRights> _rightsMap = new();
 
 
 
@@ -20,7 +20,7 @@ public class GroupMemberRights : ICollection<SingleMemberRights>
     public GroupMemberRights(IEnumerable<SingleMemberRights> rights)
     {
         foreach (var singleMemberRights in rights)
-            _rightsMap[singleMemberRights.User] = singleMemberRights;
+            _rightsMap[singleMemberRights.UserId] = singleMemberRights;
     }
 
     public GroupMemberRights()
@@ -36,17 +36,17 @@ public class GroupMemberRights : ICollection<SingleMemberRights>
         GetEnumerator();
 
     public void Add(SingleMemberRights item) =>
-        _rightsMap[item.User] = item;
+        _rightsMap[item.UserId] = item;
 
     public void Clear() =>
         _rightsMap.Clear();
 
     public bool Contains(SingleMemberRights item) =>
-        _rightsMap.ContainsKey(item.User);
+        _rightsMap.ContainsKey(item.UserId);
 
     public void CopyTo(SingleMemberRights[] array, int arrayIndex) =>
         _rightsMap.Values.CopyTo(array, arrayIndex);
 
     public bool Remove(SingleMemberRights item) =>
-        _rightsMap.Remove(item.User);
+        _rightsMap.Remove(item.UserId);
 }
