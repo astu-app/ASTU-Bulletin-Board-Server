@@ -35,7 +35,7 @@ public class Answer
     /// <summary>
     /// Количество выбравших вариант ответа пользователей
     /// </summary>
-    public int VotersCount { get; private set; }
+    public int VotersCount { get; set; }
 
     /// <summary>
     /// Участия пользователей

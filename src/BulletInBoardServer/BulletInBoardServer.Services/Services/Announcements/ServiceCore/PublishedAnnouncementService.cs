@@ -1,4 +1,5 @@
 ﻿using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
+using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Common.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +38,7 @@ public class PublishedAnnouncementService(
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <param name="announcementId">Id объявления, которое требуется скрыть</param>
     /// <param name="hiddenAt">Момент сокрытия объявления</param>
+    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void HideManually(Guid requesterId, Guid announcementId, DateTime hiddenAt)
     {

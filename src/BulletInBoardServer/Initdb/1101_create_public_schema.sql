@@ -250,7 +250,10 @@ create table participation
     id        uuid primary key,
     
     user_id   uuid not null,
-    survey_id uuid  not null
+    survey_id uuid  not null,
+    
+    constraint user_can_vote_only_once
+        unique (user_id, survey_id)
 );
 
 create table user_selections
@@ -306,10 +309,10 @@ alter table files
             on update cascade on delete cascade;
 
 alter table announcements_attachments
-    add constraint announcements_attachments_attachments_id_fkey
+    add constraint announcements_attachments_attachment_id_fkey
         foreign key (attachment_id) references attachments (id)
             on update cascade on delete cascade,
-    add constraint announcements_attachments_announcements_id_fkey
+    add constraint announcements_attachments_announcement_id_fkey
         foreign key (announcement_id) references announcements (id)
             on update cascade on delete cascade;
 

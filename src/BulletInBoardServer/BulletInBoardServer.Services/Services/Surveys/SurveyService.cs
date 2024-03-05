@@ -67,6 +67,13 @@ public class SurveyService(
     /// <param name="voterId">Идентификатор голосующего пользователя</param>
     /// <param name="surveyId">Идентификатор опроса, в котором пользователь голосует</param>
     /// <param name="votes">Голоса пользователя в каждом из вопросов опроса</param>
+    /// <exception cref="SurveyDoesNotExistException">Опрос не существует в базе данных</exception>
+    /// <exception cref="SurveyAlreadyVotedException">Пользователь уже проголосовал в указанном опросе</exception>
+    /// <exception cref="SurveyClosedException">Попытка проголосовать в закрытом опросе</exception>
+    /// <exception cref="AnswerDoesNotExistException">Вариант ответа не существует в базе данных</exception>
+    /// <exception cref="MultipleSelectionInSingleChoiceQuestionException">Попытка выбрать несколько вариантов ответов в вопросе без множественного выбора</exception>
+    /// <exception cref="PresentedQuestionsDoesntMatchSurveyQuestionsException">Список представленных вопросов не соответствует фактическому списку вопросов опроса</exception>
+    /// <exception cref="PresentedVotesDoesntMatchQuestionAnswersException">Список представленных вариантов ответов не соответствует фактическому списку вариантов ответов соответствующего вопроса</exception>
     public void Vote(Guid voterId, Guid surveyId, SurveyVotes votes)
     {
         var votingService = new VotingService(dbContext);
@@ -120,6 +127,7 @@ public class SurveyService(
     /// Закрыть опрос
     /// </summary>
     /// <param name="surveyId">Идентификатор закрываемого опроса</param>
+    /// <exception cref="SurveyDoesNotExistException">Опрос с заданным id не существует в БД</exception>
     /// <remarks>Закрываемый опрос должен быть открыт</remarks>
     public void CloseSurvey(Guid surveyId)
     {
@@ -139,7 +147,7 @@ public class SurveyService(
     /// </summary>
     /// <param name="newAnswers">Параметры новых вариантов ответов</param>
     /// <param name="questionId">Id вопроса, к которому прикрепляются варианты ответов</param>
-    /// <returns></returns>
+    /// <returns>Список вариантов ответов</returns>
     private static AnswerList CreateAnswers(IEnumerable<CreateAnswer> newAnswers, Guid questionId)
     {
         var answers = new AnswerList();

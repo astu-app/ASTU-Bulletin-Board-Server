@@ -1,9 +1,12 @@
 ﻿using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
+using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
+using BulletInBoardServer.Services.Services.Attachments.Exceptions;
+using BulletInBoardServer.Services.Services.Audience.Exceptions;
 using BulletInBoardServer.Services.Services.Common.Models;
 using BulletInBoardServer.Services.Test.Services.Announcements.DelayedOperations;
 using FluentAssertions;
@@ -171,7 +174,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
 
-        create.Should().ThrowExactly<DbUpdateException>();
+        create.Should().ThrowExactly<PieceOfAudienceDoesNotExistException>();
     }
 
     [Fact]
@@ -188,7 +191,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
 
-        create.Should().ThrowExactly<DbUpdateException>();
+        create.Should().ThrowExactly<AnnouncementCategoryDoesNotExistException>();
     }
 
     [Fact]
@@ -205,7 +208,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
 
         var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
 
-        create.Should().ThrowExactly<DbUpdateException>();
+        create.Should().ThrowExactly<AttachmentDoesNotExistException>();
     }
 
     [Fact]

@@ -9,6 +9,7 @@ using BulletInBoardServer.Services.Services.Attachments.Exceptions;
 using BulletInBoardServer.Services.Services.Audience.Exceptions;
 using BulletInBoardServer.Services.Services.Common.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using AnnouncementAudience = BulletInBoardServer.Domain.Models.JoinEntities.AnnouncementAudience;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
@@ -64,7 +65,6 @@ public class AnnouncementRedactor
 
         if (_edit.CategoryIds is not null)
         {
-            NewCategoriesValidOrThrow();
             ApplyCategoriesChanging();
         }
 
@@ -73,6 +73,8 @@ public class AnnouncementRedactor
             NewAttachmentsValidOrThrow();
             ApplyAttachmentsChanging();
         }
+
+        TrySaveChanges();
     }
 
 
@@ -94,24 +96,12 @@ public class AnnouncementRedactor
         if (toRemove is not null && toAdd is not null)
             if (_announcement.AudienceSize - toRemove.Count + toAdd.Count <= 0)
                 throw new AnnouncementAudienceEmptyException();
-
-        if (toAdd is not null && !NewAudiencePresentedInDb(toAdd, _dbContext))
-            throw new PieceOfAudienceDoesNotExistException();
-    }
-
-    private static bool NewAudiencePresentedInDb(ICollection<Guid> toAdd, ApplicationDbContext dbContext)
-    {
-        var allAudienceContainedInDb = dbContext.Users
-            .Select(u => u.Id)
-            .Intersect(toAdd)
-            .Count() == toAdd.Count;
-        return allAudienceContainedInDb;
     }
 
     private void ApplyAudienceChanging()
     {
         if (_edit.AudienceIds is null)
-            throw new InvalidOperationException($"{nameof(_edit.AudienceIds)} не может быть null на данном этапе");
+            return;
 
         var toRemove = _edit.AudienceIds.ToRemove;
         if (toRemove is not null)
@@ -127,26 +117,6 @@ public class AnnouncementRedactor
             var newAudience = toAdd.Select(id => new AnnouncementAudience(_announcement.Id, id));
             _dbContext.AnnouncementAudience.AddRange(newAudience);
         }
-    }
-
-    private void NewCategoriesValidOrThrow()
-    {
-        var toAdd = _edit.CategoryIds?.ToAdd;
-        if (toAdd is null)
-            return;
-
-        if (!NewCategoriesPresentedInDb(toAdd, _dbContext))
-            throw new AnnouncementCategoryDoesNotExistException();
-    }
-
-    private static bool NewCategoriesPresentedInDb(ICollection<Guid> toAdd, ApplicationDbContext dbContext)
-    {
-        var allIdsNotPresentedInDb = dbContext.AnnouncementCategories
-            .Select(a => a.Id)
-            .Intersect(toAdd)
-            .Count() == toAdd.Count;
-
-        return allIdsNotPresentedInDb;
     }
 
     private void ApplyCategoriesChanging()
@@ -180,10 +150,6 @@ public class AnnouncementRedactor
         var toRemove = _edit.AttachmentIds.ToRemove;
         if (toRemove is not null && ToRemoveContainsSurvey(toRemove))
             throw new CannotDetachSurveyException();
-
-        var toAdd = _edit.AttachmentIds.ToAdd;
-        if (toAdd is not null && !NewAttachmentsPresentedInDb(toAdd))
-            throw new AttachmentDoesNotExistException();
     }
 
     private bool ToRemoveContainsSurvey(IEnumerable<Guid> toRemove)
@@ -201,16 +167,6 @@ public class AnnouncementRedactor
                 AttachmentTypes.Survey); // среди отобранных вложений проверяем наличие опросов
 
         return containsSurvey;
-    }
-
-    private bool NewAttachmentsPresentedInDb(ICollection<Guid> toAdd)
-    {
-        var allIdsPresentedInDb = _dbContext.Attachments
-            .Select(a => a.Id)
-            .Intersect(toAdd)
-            .Count() == toAdd.Count;
-
-        return allIdsPresentedInDb;
     }
 
     private void ApplyAttachmentsChanging()
@@ -232,6 +188,31 @@ public class AnnouncementRedactor
         {
             var newAudience = toAdd.Select(id => new AnnouncementAttachment(_announcement.Id, id));
             _dbContext.AnnouncementAttachmentJoins.AddRange(newAudience);
+        }
+    }
+
+    private void TrySaveChanges()
+    {
+        try
+        {
+            _dbContext.SaveChanges();
+        }
+        catch (DbUpdateException err)
+        {
+            if (err.InnerException is not PostgresException inner)
+                throw;
+
+            switch (inner)
+            {
+                case { SqlState: "23503", ConstraintName: "announcement_audience_announcement_id_fkey" }:
+                    throw new PieceOfAudienceDoesNotExistException(err);
+                case { SqlState: "23503", ConstraintName: "announcements_categories_category_id_fkey" }:
+                    throw new AnnouncementCategoryDoesNotExistException(err);
+                case { SqlState: "23503", ConstraintName: "announcements_attachments_attachment_id_fkey" }:
+                    throw new AttachmentDoesNotExistException(err);
+                default:
+                    throw;
+            }
         }
     }
 }

@@ -34,7 +34,7 @@ public class GeneralOperationsService(
         var announcement = creator.Create();
         
         if (!announcement.ExpectsDelayedPublishing)
-            PublishManually(requesterId, announcement.Id, DateTime.Now);
+            PublishManually(announcement, DateTime.Now, dbContext);
 
         if (announcement.ExpectsDelayedPublishing)
             Dispatcher.ConfigureDelayedPublishing(
@@ -58,6 +58,7 @@ public class GeneralOperationsService(
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="announcementId">Id объявления</param>
     /// <returns>Объявление со связанными сущностями</returns>
+    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public Announcement GetDetails(Guid requesterId, Guid announcementId)
     {
@@ -145,6 +146,7 @@ public class GeneralOperationsService(
     /// </summary>
     /// <param name="requesterId">Id пользователя, запросившего операцию </param>
     /// <param name="announcementId">Id объявления</param>
+    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void Delete(Guid requesterId, Guid announcementId)
     {
@@ -163,6 +165,8 @@ public class GeneralOperationsService(
         dbContext.Announcements
             .Where(a => a.Id == announcementId)
             .ExecuteDelete();
+        
+        dbContext.SaveChanges();
 
         // todo отправить уведомление об удалении объявления пользователям 
     }
@@ -173,6 +177,7 @@ public class GeneralOperationsService(
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="announcementId">Id заданного объявления</param>
     /// <param name="publishedAt">Время публикации объявления</param>
+    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void PublishManually(Guid requesterId, Guid announcementId, DateTime publishedAt)
     {
@@ -182,13 +187,23 @@ public class GeneralOperationsService(
         var announcement = GetAnnouncementSummary(announcementId, dbContext);
         if (announcement.AuthorId != requesterId)
             throw new OperationNotAllowedException("Опубликовать объявление может только его автор");
+        
+        PublishManually(announcement, publishedAt, dbContext);
+    }
 
+
+
+    private void PublishManually(Announcement announcement, DateTime publishedAt,
+        DbContext dbContext)
+    {
         if (announcement.ExpectsDelayedPublishing)
-            Dispatcher.DisableDelayedPublishing(announcementId);
+            Dispatcher.DisableDelayedPublishing(announcement.Id);
 
         announcement.Publish(DateTime.Now, publishedAt);
+        
         dbContext.SaveChanges();
 
         // todo уведомление о публикации
     }
+
 }

@@ -6,6 +6,8 @@ using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Attachments.Exceptions;
 using BulletInBoardServer.Services.Services.Audience.Exceptions;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using AnnouncementAudience = BulletInBoardServer.Domain.Models.JoinEntities.AnnouncementAudience;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
@@ -56,7 +58,7 @@ public class AnnouncementCreator
         _dbContext.Announcements.Add(_announcement);
 
         AddRelatedEntitiesToDb();
-        _dbContext.SaveChanges();
+        TrySaveChanges();
 
         return _announcement;
     }
@@ -144,13 +146,13 @@ public class AnnouncementCreator
     private void AddRelatedEntitiesToDb()
     {
         var audience = InitUserAudience(_create.UserIds);
-        TryAddAnnouncementAudienceOrThrow(audience);
+        _dbContext.AnnouncementAudience.AddRange(audience);
 
         var attachmentJoins = InitAttachmentJoins(_create.AttachmentIds);
-        TryAddAttachmentsOrThrow(attachmentJoins);
+        _dbContext.AnnouncementAttachmentJoins.AddRange(attachmentJoins);
 
         var categoryJoins = InitCategoryJoins(_create.CategoryIds);
-        TryAddAnnouncementCategoriesOrThrow(categoryJoins);
+        _dbContext.AnnouncementCategoryJoins.AddRange(categoryJoins);
     }
 
     private IEnumerable<AnnouncementAudience> InitUserAudience(IEnumerable<Guid> userIds)
@@ -162,18 +164,6 @@ public class AnnouncementCreator
         return joins;
     }
 
-    private void TryAddAnnouncementAudienceOrThrow(IEnumerable<AnnouncementAudience> audience)
-    {
-        try
-        {
-            _dbContext.AnnouncementAudience.AddRange(audience);
-        }
-        catch (InvalidOperationException err)
-        {
-            throw new PieceOfAudienceDoesNotExistException(err);
-        }
-    }
-
     private IEnumerable<AnnouncementAttachment> InitAttachmentJoins(IEnumerable<Guid> attachmentIds)
     {
         var joins = new List<AnnouncementAttachment>();
@@ -181,18 +171,6 @@ public class AnnouncementCreator
             joins.Add(new AnnouncementAttachment(_announcement.Id, attachmentId));
 
         return joins;
-    }
-
-    private void TryAddAttachmentsOrThrow(IEnumerable<AnnouncementAttachment> attachment)
-    {
-        try
-        {
-            _dbContext.AnnouncementAttachmentJoins.AddRange(attachment);
-        }
-        catch (InvalidOperationException err)
-        {
-            throw new AttachmentDoesNotExistException(err);
-        }
     }
 
     private IEnumerable<AnnouncementAnnouncementCategory> InitCategoryJoins(IEnumerable<Guid> categoryIds)
@@ -204,15 +182,28 @@ public class AnnouncementCreator
         return joins;
     }
 
-    private void TryAddAnnouncementCategoriesOrThrow(IEnumerable<AnnouncementAnnouncementCategory> audience)
+    private void TrySaveChanges()
     {
         try
         {
-            _dbContext.AnnouncementCategoryJoins.AddRange(audience);
+            _dbContext.SaveChanges();
         }
-        catch (InvalidOperationException err)
+        catch (DbUpdateException err)
         {
-            throw new AnnouncementCategoryDoesNotExistException(err);
+            if (err.InnerException is not PostgresException inner)
+                throw;
+
+            switch (inner)
+            {
+                case { SqlState: "23503", ConstraintName: "announcement_audience_user_id_fkey" }:
+                    throw new PieceOfAudienceDoesNotExistException(err);
+                case { SqlState: "23503", ConstraintName: "announcements_attachments_attachment_id_fkey" }:
+                    throw new AttachmentDoesNotExistException(err);
+                case { SqlState: "23503", ConstraintName: "announcements_categories_category_id_fkey" }:
+                    throw new AnnouncementCategoryDoesNotExistException(err);
+                default:
+                    throw;
+            }
         }
     }
 }

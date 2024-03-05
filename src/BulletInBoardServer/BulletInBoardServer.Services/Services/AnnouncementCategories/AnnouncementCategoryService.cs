@@ -4,6 +4,7 @@ using BulletInBoardServer.Domain.Models.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.AnnouncementCategories.Models;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace BulletInBoardServer.Services.Services.AnnouncementCategories;
 
@@ -86,7 +87,6 @@ public class AnnouncementCategoryService(ApplicationDbContext dbContext)
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="update">Объект, содержащий данные об обновляемых категориях объявлений</param>
     /// <exception cref="AnnouncementCategoryDoesNotExistException">Среди Id категорий присутствуют Id, отсутствующие в БД</exception>
-    // public void UpdateSubscriptions(Guid requesterId, ICollection<Guid> changedIds)
     public void UpdateSubscriptions(Guid requesterId, UpdateSubscriptions update)
     {
         var toRemove = update.Update.ToRemove;
@@ -98,27 +98,8 @@ public class AnnouncementCategoryService(ApplicationDbContext dbContext)
         }
 
         var toAdd = update.Update.ToAdd;
-        if (toAdd is not null)
-        {
-            NewIdsValidOrThrow(toAdd);
-
-            /*
-             * Пришлось использовать чистый SQL скрипт, так как по причине, которую я так и не смог выяснить,
-             * добавление объекта AnnouncementCategorySubscription вызывает ошибку:
-             *     The value of 'AnnouncementCategorySubscription.SubscriberId' is unknown when attempting to save changes.
-             *     This is because the property is also part of a foreign key for which the principal entity in the
-             *     relationship is not known.
-             * В других местах, в которых, по моим предположениям, должна возникать такая же ошибка, все работает,
-             * как задумано.
-             */
-            foreach (var newAnnouncementId in toAdd)
-                dbContext.Database.ExecuteSql(
-                    $"""
-                     insert into announcement_categories_subscribers (announcement_category_id, subscriber_id)
-                     values ({newAnnouncementId}, {requesterId});
-                     """
-                );
-        }
+        if (toAdd is not null) 
+            TryAddSubscriptions(requesterId, toAdd);
         
         dbContext.SaveChanges();
     }
@@ -141,14 +122,35 @@ public class AnnouncementCategoryService(ApplicationDbContext dbContext)
         }
     }
 
-    private void NewIdsValidOrThrow(ICollection<Guid> newIds)
+    private void TryAddSubscriptions(Guid subscriberId, IEnumerable<Guid> toAdd)
     {
-        var allIdsContainedByDb = dbContext.AnnouncementCategories
-            .Select(ac => ac.Id)
-            .Intersect(newIds)
-            .Count() == newIds.Count;
+        try
+        {
+            AddSubscriptions(subscriberId, toAdd);
+        }
+        catch (PostgresException err) when (err is { SqlState: "23503", ConstraintName: "categories_subscribers_category_id_fkey" })
+        {
+            throw new AnnouncementCategoryDoesNotExistException(err);
+        }
+    }
 
-        if (!allIdsContainedByDb)
-            throw new AnnouncementCategoryDoesNotExistException();
+    private void AddSubscriptions(Guid subscriberId, IEnumerable<Guid> toAdd)
+    {
+        /*
+         * Пришлось использовать чистый SQL скрипт, так как по причине, которую я так и не смог выяснить,
+         * добавление объекта AnnouncementCategorySubscription вызывает ошибку:
+         *     The value of 'AnnouncementCategorySubscription.SubscriberId' is unknown when attempting to save changes.
+         *     This is because the property is also part of a foreign key for which the principal entity in the
+         *     relationship is not known.
+         * В других местах, в которых, по моим предположениям, должна возникать такая же ошибка, все работает,
+         * как задумано.
+         */
+         foreach (var newAnnouncementId in toAdd)
+             dbContext.Database.ExecuteSql(
+                 $"""
+                  insert into announcement_categories_subscribers (announcement_category_id, subscriber_id)
+                  values ({newAnnouncementId}, {subscriberId});
+                  """
+             );
     }
 }

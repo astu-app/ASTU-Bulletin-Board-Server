@@ -30,6 +30,7 @@ public class VotingService(ApplicationDbContext dbContext)
     /// <param name="voterId">Идентификатор голосующего пользователя</param>
     /// <param name="surveyId">Идентификатор опроса, в котором пользователь голосует</param>
     /// <param name="votes">Голоса пользователя в каждом из вопросов опроса</param>
+    /// <exception cref="SurveyDoesNotExistException">Опрос не существует в базе данных</exception>
     /// <exception cref="SurveyAlreadyVotedException">Пользователь уже проголосовал в указанном опросе</exception>
     /// <exception cref="SurveyClosedException">Попытка проголосовать в закрытом опросе</exception>
     /// <exception cref="MultipleSelectionInSingleChoiceQuestionException">Попытка выбрать несколько вариантов ответов в вопросе без множественного выбора</exception>
@@ -39,10 +40,10 @@ public class VotingService(ApplicationDbContext dbContext)
     {
         SetServiceState(voterId, surveyId, votes);
 
-        ParticipantVotesForFirstTimeOrThrow();
+        _survey = LoadSurvey();
 
-        _survey = LoadSurveyOrThrow();
         SurveyOpenOrThrow();
+        ParticipantVotesForFirstTimeOrThrow();
 
         AllQuestionsReferToSurveyOrThrow();
         VotesValidOrThrow();
@@ -64,12 +65,12 @@ public class VotingService(ApplicationDbContext dbContext)
 
     private void ParticipantVotesForFirstTimeOrThrow()
     {
-        var voted = dbContext.Participation.Any(p => p.SurveyId == _surveyId && p.UserId == _voterId);
+        var voted = _survey.Voters.Any(u => u.Id == _voterId);
         if (voted)
             throw new SurveyAlreadyVotedException();
     }
 
-    private Survey LoadSurveyOrThrow()
+    private Survey LoadSurvey()
     {
         try
         {
@@ -137,11 +138,11 @@ public class VotingService(ApplicationDbContext dbContext)
         }
     }
 
-    private void VoteForSingleQuestion(Participation participation, IEnumerable<Guid> answerIds)
+    private void VoteForSingleQuestion(Participation participation, IEnumerable<Guid> answerToVoteIds)
     {
-        foreach (var answerId in answerIds)
+        foreach (var answerId in answerToVoteIds)
         {
-            var answer = GetAnswerOrThrow(answerId);
+            var answer = GetAnswer(answerId);
             answer.IncreaseVotersCount();
 
             if (!participation.IsAnonymous)
@@ -149,16 +150,15 @@ public class VotingService(ApplicationDbContext dbContext)
         }
     }
 
-    private Answer GetAnswerOrThrow(Guid answerId)
+    private Answer GetAnswer(Guid id)
     {
-        try
+        foreach (var question in _survey.Questions)
         {
-            var answer = dbContext.Answers.Single(answer => answer.Id == answerId);
-            return answer;
+            var answer = question.Answers.SingleOrDefault(a => a.Id == id);
+            if (answer is not null)
+                return answer;
         }
-        catch (InvalidOperationException err)
-        {
-            throw new InvalidOperationException("Не удалось загрузить пользователя из БД", err);
-        }
+
+        throw new AnswerDoesNotExistException();
     }
 }
