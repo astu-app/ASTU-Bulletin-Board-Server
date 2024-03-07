@@ -1,3 +1,3 @@
 ﻿{
-  "ConnectionString": "Host = localhost; Port = 5432; Database = bulletin_board; Username = admin; Password = admin; Include Error Detail = true;"
+  "ConnectionString": "Host = localhost; Port = 55432; Database = bulletin_board; Username = admin; Password = admin; Include Error Detail = true;"
 }

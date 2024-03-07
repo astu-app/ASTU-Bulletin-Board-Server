@@ -32,23 +32,6 @@ public class File : AttachmentBase
     /// </summary>
     public string Hash { get; }
 
-    /// <summary>
-    /// Количество объявлений, ссылающихся на файл
-    /// </summary>
-    public int LinksCount { get; private set; }
-
-    /// <summary>
-    /// Увеличение количества ссылок на файл
-    /// </summary>
-    public void AddLink() =>
-        ++LinksCount;
-
-    /// <summary>
-    /// Уменьшение количества ссылок на файл
-    /// </summary>
-    public void RemoveLink() =>
-        --LinksCount;
-
 
 
     /// <summary>
@@ -58,9 +41,8 @@ public class File : AttachmentBase
     /// <param name="uploaderId">Идентификатор загрузившего файл пользователя</param>
     /// <param name="name">Название файла</param>
     /// <param name="hash">Хэш файла в кодировке base64</param>
-    /// <param name="linksCount">Количество объявлений, ссылающихся на файл</param>
-    public File(Guid id, Guid uploaderId, string name, string hash, int linksCount)
-        : this(id, [], uploaderId, name, hash, linksCount)
+    public File(Guid id, Guid uploaderId, string name, string hash)
+        : this(id, [], uploaderId, name, hash)
     {
     }
 
@@ -74,13 +56,11 @@ public class File : AttachmentBase
     /// <param name="uploaderId">Идентификатор загрузившего файл пользователя</param>
     /// <param name="name">Название файла</param>
     /// <param name="hash">Хэш файла в кодировке base64</param>
-    /// <param name="linksCount">Количество объявлений, ссылающихся на файл</param>
-    public File(Guid id, AnnouncementList announcements, Guid uploaderId, string name, string hash, int linksCount)
+    public File(Guid id, AnnouncementList announcements, Guid uploaderId, string name, string hash)
         : base(id, announcements, AttachmentTypes.File)
     {
         UploaderId = uploaderId;
         Name = name;
         Hash = hash;
-        LinksCount = linksCount;
     }
 }

@@ -1,6 +1,5 @@
 using BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
 using BulletInBoardServer.Controllers.CategoriesController.Controllers;
-using BulletInBoardServer.Controllers.PingController.Controllers;
 using BulletInBoardServer.Controllers.SurveysController.Controllers;
 using BulletInBoardServer.Controllers.UserGroupsController.Controllers;
 using BulletInBoardServer.Domain;
@@ -16,7 +15,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using AnnouncementsInputFormatterStream = BulletInBoardServer.Controllers.AnnouncementsController.Formatters.InputFormatterStream;
-using PingInputFormatterStream = BulletInBoardServer.Controllers.PingController.Formatters.InputFormatterStream;
 using SurveysInputFormatterStream = BulletInBoardServer.Controllers.SurveysController.Formatters.InputFormatterStream; 
 using AnnouncementCategoryInputFormatterStream = BulletInBoardServer.Controllers.CategoriesController.Formatters.InputFormatterStream;
 using UserGroupInputFormatterStream = BulletInBoardServer.Controllers.UserGroupsController.Formatters.InputFormatterStream;
@@ -26,7 +24,6 @@ var controllerClasses = new[]
 {
     typeof(AnnouncementsApiController), 
     typeof(SurveysApiController), 
-    typeof(PingApiController),
     typeof(AnnouncementCategoriesApiController),
     typeof(UserGroupsApiController),
 };
@@ -41,10 +38,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(options =>
 {
     options.InputFormatters.Insert(0, new AnnouncementsInputFormatterStream());
-    options.InputFormatters.Insert(1, new PingInputFormatterStream());
-    options.InputFormatters.Insert(2, new SurveysInputFormatterStream());
-    options.InputFormatters.Insert(3, new AnnouncementCategoryInputFormatterStream());
-    options.InputFormatters.Insert(4, new UserGroupInputFormatterStream());
+    options.InputFormatters.Insert(1, new SurveysInputFormatterStream());
+    options.InputFormatters.Insert(2, new AnnouncementCategoryInputFormatterStream());
+    options.InputFormatters.Insert(3, new UserGroupInputFormatterStream());
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -73,6 +69,8 @@ var connectionString = builder.Configuration.GetConnectionString("MainDatabase")
                        throw new ApplicationException("Не удалось подключить строку подключения к базу данных");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
+builder.Services.AddHealthChecks();
+
 RegisterAnnouncementService();
 RegisterSurveyService();
 RegisterAnnouncementCategoryService();
@@ -98,6 +96,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHealthChecks("/ping");
 
 Task.Run(InitDelayedAnnouncementOperationsDispatcherAsync);
 Task.Run(InitAutomaticSurveyOperationsDispatcherAsync);

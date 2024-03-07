@@ -745,11 +745,11 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
     /// </summary>
     private void AddFiles()
     {
-        var file_1 = new File(File_1_Id, MainUsergroupAdminId, "file 1", "file 1 hash", 0);
+        var file_1 = new File(File_1_Id, MainUsergroupAdminId, "file 1", "file 1 hash");
         dbContext.Files.Add(file_1);
         AddDbEntity(file_1.Id, file_1);
 
-        var file_2 = new File(File_2_Id, MainUsergroupAdminId, "file 2", "file 2 hash", 0);
+        var file_2 = new File(File_2_Id, MainUsergroupAdminId, "file 2", "file 2 hash");
         dbContext.Files.Add(file_2);
         AddDbEntity(file_2.Id, file_2);
     }

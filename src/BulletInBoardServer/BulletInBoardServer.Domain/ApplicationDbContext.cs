@@ -237,11 +237,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnName("hash")
                 .HasColumnType("text")
                 .IsRequired();
-
-            entity.Property(e => e.LinksCount)
-                .HasColumnName("links_count")
-                .HasColumnType("integer")
-                .HasDefaultValue(0);
         });
     }
 

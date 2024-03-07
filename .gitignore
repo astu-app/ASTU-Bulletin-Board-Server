@@ -9,7 +9,7 @@ Intellij-based IDE's files
 ###################
 # dev database #
 ###################
-src/BulletInBoardServer/service/pgdata
+src/BulletInBoardServer/infrastructure/pgdata
 ###################
 # compiled source #
 ###################

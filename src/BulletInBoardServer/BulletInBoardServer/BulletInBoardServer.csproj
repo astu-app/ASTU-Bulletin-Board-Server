@@ -27,12 +27,6 @@
       <Content Include="..\api-specifications\api-gateway\common-schemas.yaml">
         <Link>api-specifications\api-gateway\common-schemas.yaml</Link>
       </Content>
-      <Content Include="..\api-specifications\api-gateway\files-api.yaml">
-        <Link>api-specifications\api-gateway\files-api.yaml</Link>
-      </Content>
-      <Content Include="..\api-specifications\api-gateway\ping-api.yaml">
-        <Link>api-specifications\api-gateway\ping-api.yaml</Link>
-      </Content>
       <Content Include="..\api-specifications\api-gateway\surveys-api.yaml">
         <Link>api-specifications\api-gateway\surveys-api.yaml</Link>
       </Content>
@@ -63,7 +57,6 @@
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.AnnouncementCategoriesController\src\BulletInBoardServer.Controllers.CategoriesController\BulletInBoardServer.Controllers.CategoriesController.csproj" />
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.AnnouncementsController\src\BulletInBoardServer.Controllers.AnnouncementsController\BulletInBoardServer.Controllers.AnnouncementsController.csproj" />
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.CategoriesController\src\BulletInBoardServer.Controllers.CategoriesController\BulletInBoardServer.Controllers.CategoriesController.csproj" />
-        <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.PingController\src\BulletInBoardServer.Controllers.PingController\BulletInBoardServer.Controllers.PingController.csproj" />
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.SurveysController\src\BulletInBoardServer.Controllers.SurveysController\BulletInBoardServer.Controllers.SurveysController.csproj" />
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.UserGroupsController\src\BulletInBoardServer.Controllers.UserGroupsController\BulletInBoardServer.Controllers.UserGroupsController.csproj" />
         <ProjectReference Include="..\BulletInBoardServer.Domain\BulletInBoardServer.Domain.csproj"/>

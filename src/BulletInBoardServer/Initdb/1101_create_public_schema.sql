@@ -152,8 +152,6 @@ create table files
     name        text,
     hash        text,
 
-    links_count integer default 0,
-    
     constraint non_empty_name
         check (string_not_empty(name)),
     

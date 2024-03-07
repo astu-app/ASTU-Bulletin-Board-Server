@@ -629,7 +629,7 @@ components:
           type: array
           nullable: true
           items:
-            $ref: './files-api.yaml#/components/schemas/fileSummaryDto'
+            $ref: '#/components/schemas/fileSummaryDto'
         survey:
           $ref: './surveys-api.yaml#/components/schemas/surveyDetailsDto'
 
@@ -664,7 +664,7 @@ components:
           type: array
           nullable: true
           items:
-            $ref: './files-api.yaml#/components/schemas/fileSummaryDto'
+            $ref: '#/components/schemas/fileSummaryDto'
         surveys:
           description: Массив опросов объявления
           type: array
@@ -695,7 +695,24 @@ components:
           format: date-time
           nullable: true
           default: null
-    
+
+    fileSummaryDto:
+      type: object
+      properties:
+        id:
+          description: Идентификатор файла
+          type: string
+          format: uuid
+        name:
+          description: Название файла
+          type: string
+        type:
+          description: Тип файла
+          type: string
+          enum:
+            - mediafile # Медиафайл отображается в объявлении сразу
+            - file # Обычный файл загружается вручную
+
     updateAnnouncementDto:
       type: object
       required:
