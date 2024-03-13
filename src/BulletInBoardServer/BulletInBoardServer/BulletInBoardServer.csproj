@@ -54,7 +54,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.AnnouncementCategoriesController\src\BulletInBoardServer.Controllers.CategoriesController\BulletInBoardServer.Controllers.CategoriesController.csproj" />
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.AnnouncementsController\src\BulletInBoardServer.Controllers.AnnouncementsController\BulletInBoardServer.Controllers.AnnouncementsController.csproj" />
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.CategoriesController\src\BulletInBoardServer.Controllers.CategoriesController\BulletInBoardServer.Controllers.CategoriesController.csproj" />
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.SurveysController\src\BulletInBoardServer.Controllers.SurveysController\BulletInBoardServer.Controllers.SurveysController.csproj" />
