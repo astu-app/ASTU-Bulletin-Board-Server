@@ -103,6 +103,7 @@ rectangle "schema 'public'" as public_schema {
         ..
         name: text
         hash: text
+        sizeInBytes: bigint
         
         links_count: integer
     }
@@ -233,6 +234,7 @@ rectangle "schema 'archive'" as archive_schema {
 
         name: text
         hash: text
+        sizeInBytes: bigint
 
         links_count: integer
     }
