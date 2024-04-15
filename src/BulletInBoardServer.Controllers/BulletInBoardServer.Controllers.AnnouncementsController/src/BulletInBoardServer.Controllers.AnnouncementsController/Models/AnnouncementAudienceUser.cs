@@ -9,46 +9,40 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
     /// <summary>
-    /// 
+    /// Обычный пользователь в дереве аудитории объявления
     /// </summary>
     [DataContract]
-    public class QuestionDetailsDto : IEquatable<QuestionDetailsDto>
+    public class AnnouncementAudienceUser : IEquatable<AnnouncementAudienceUser>
     {
         /// <summary>
-        /// Идентификатор опроса
+        /// Gets or Sets Id
         /// </summary>
-        /// <value>Идентификатор опроса</value>
         [DataMember(Name="id", EmitDefaultValue=false)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Текстовое содержимое вопроса
+        /// Gets or Sets FirstName
         /// </summary>
-        /// <value>Текстовое содержимое вопроса</value>
-        [DataMember(Name="content", EmitDefaultValue=false)]
-        public string Content { get; set; }
+        [DataMember(Name="firstName", EmitDefaultValue=false)]
+        public string FirstName { get; set; }
 
         /// <summary>
-        /// Разрешен ли множественный выбор
+        /// Gets or Sets SecondName
         /// </summary>
-        /// <value>Разрешен ли множественный выбор</value>
-        [DataMember(Name="isMultipleChoiceAllowed", EmitDefaultValue=true)]
-        public bool IsMultipleChoiceAllowed { get; set; } = false;
+        [DataMember(Name="secondName", EmitDefaultValue=false)]
+        public string SecondName { get; set; }
 
         /// <summary>
-        /// Варианты ответов опроса
+        /// Gets or Sets Patronymic
         /// </summary>
-        /// <value>Варианты ответов опроса</value>
-        [DataMember(Name="answers", EmitDefaultValue=false)]
-        public List<QuestionAnswerDetailsDto> Answers { get; set; }
+        [DataMember(Name="patronymic", EmitDefaultValue=false)]
+        public string Patronymic { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -57,11 +51,11 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class QuestionDetailsDto {\n");
+            sb.Append("class AnnouncementAudienceUser {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
-            sb.Append("  Content: ").Append(Content).Append("\n");
-            sb.Append("  IsMultipleChoiceAllowed: ").Append(IsMultipleChoiceAllowed).Append("\n");
-            sb.Append("  Answers: ").Append(Answers).Append("\n");
+            sb.Append("  FirstName: ").Append(FirstName).Append("\n");
+            sb.Append("  SecondName: ").Append(SecondName).Append("\n");
+            sb.Append("  Patronymic: ").Append(Patronymic).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -84,15 +78,15 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((QuestionDetailsDto)obj);
+            return obj.GetType() == GetType() && Equals((AnnouncementAudienceUser)obj);
         }
 
         /// <summary>
-        /// Returns true if QuestionDetailsDto instances are equal
+        /// Returns true if AnnouncementAudienceUser instances are equal
         /// </summary>
-        /// <param name="other">Instance of QuestionDetailsDto to be compared</param>
+        /// <param name="other">Instance of AnnouncementAudienceUser to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(QuestionDetailsDto other)
+        public bool Equals(AnnouncementAudienceUser other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -104,20 +98,19 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Id.Equals(other.Id)
                 ) && 
                 (
-                    Content == other.Content ||
-                    Content != null &&
-                    Content.Equals(other.Content)
+                    FirstName == other.FirstName ||
+                    FirstName != null &&
+                    FirstName.Equals(other.FirstName)
                 ) && 
                 (
-                    IsMultipleChoiceAllowed == other.IsMultipleChoiceAllowed ||
-                    
-                    IsMultipleChoiceAllowed.Equals(other.IsMultipleChoiceAllowed)
+                    SecondName == other.SecondName ||
+                    SecondName != null &&
+                    SecondName.Equals(other.SecondName)
                 ) && 
                 (
-                    Answers == other.Answers ||
-                    Answers != null &&
-                    other.Answers != null &&
-                    Answers.SequenceEqual(other.Answers)
+                    Patronymic == other.Patronymic ||
+                    Patronymic != null &&
+                    Patronymic.Equals(other.Patronymic)
                 );
         }
 
@@ -133,12 +126,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                 // Suitable nullity checks etc, of course :)
                     if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
-                    if (Content != null)
-                    hashCode = hashCode * 59 + Content.GetHashCode();
-                    
-                    hashCode = hashCode * 59 + IsMultipleChoiceAllowed.GetHashCode();
-                    if (Answers != null)
-                    hashCode = hashCode * 59 + Answers.GetHashCode();
+                    if (FirstName != null)
+                    hashCode = hashCode * 59 + FirstName.GetHashCode();
+                    if (SecondName != null)
+                    hashCode = hashCode * 59 + SecondName.GetHashCode();
+                    if (Patronymic != null)
+                    hashCode = hashCode * 59 + Patronymic.GetHashCode();
                 return hashCode;
             }
         }
@@ -146,12 +139,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(QuestionDetailsDto left, QuestionDetailsDto right)
+        public static bool operator ==(AnnouncementAudienceUser left, AnnouncementAudienceUser right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(QuestionDetailsDto left, QuestionDetailsDto right)
+        public static bool operator !=(AnnouncementAudienceUser left, AnnouncementAudienceUser right)
         {
             return !Equals(left, right);
         }

@@ -4,13 +4,14 @@ namespace BulletInBoardServer.Services.Services.Announcements.Models;
 
 public static class AnnouncementSummaryExtensions
 {
-    // public static AnnouncementSummary GetSummary(this Announcement announcement, ApplicationDbContext dbContext) =>
     public static AnnouncementSummary GetSummary(this Announcement announcement, int viewsCount) =>
         new(
             id: announcement.Id,
             author: announcement.Author,
             content: announcement.Content,
             viewsCount: viewsCount,
+            audienceSize: announcement.AudienceSize,
             publishedAt: announcement.PublishedAt,
-            hiddenAt: announcement.HiddenAt);
+            hiddenAt: announcement.HiddenAt, 
+            attachments: announcement.Attachments);
 }

@@ -2,6 +2,7 @@
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Common.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
@@ -22,13 +23,15 @@ public class HiddenAnnouncementService(
         var dbContext = GetDbContextForScope(scope);
         
         return dbContext.Announcements
+            .Include(a => a.Author)
             .Where(a => a.AuthorId == requesterId && a.IsHidden)
             .Select(a => new
             {
                 Announcement = a,
                 ViewsCount = dbContext.AnnouncementAudience.Count(au => au.AnnouncementId == a.Id && au.Viewed)
             })
-            .Select(res => res.Announcement.GetSummary(res.ViewsCount));
+            .Select(res => res.Announcement.GetSummary(res.ViewsCount))
+            .ToList();
     }
 
     /// <summary>

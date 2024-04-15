@@ -630,8 +630,12 @@ components:
           nullable: true
           items:
             $ref: '#/components/schemas/fileSummaryDto'
-        survey:
-          $ref: './surveys-api.yaml#/components/schemas/surveyDetailsDto'
+        surveys:
+          description: Массив опросов, прикрепленных к объявлению
+          type: array
+          nullable: true
+          items:
+            $ref: './surveys-api.yaml#/components/schemas/surveyDetailsDto'
 
     announcementDetailsDto:
       type: object
@@ -695,6 +699,12 @@ components:
           format: date-time
           nullable: true
           default: null
+        audience:
+#          $ref: '#/components/schemas/announcementAudienceDto'
+          description: Аудитория объявления
+          type: array
+          items: 
+            $ref: '#/components/schemas/announcementAudienceUser'
 
     fileSummaryDto:
       type: object
@@ -706,6 +716,10 @@ components:
         name:
           description: Название файла
           type: string
+        sizeInBytes:
+          description: Размер файла в байтах
+          type: integer
+          format: int64
         type:
           description: Тип файла
           type: string
@@ -753,6 +767,45 @@ components:
           nullable: true
           default: null
     
+#    announcementAudienceDto:
+#      description: Аудитория объявления
+#      type: object
+#      properties:
+#        rootNode:
+#          oneOf:
+#            - $ref: '#/components/schemas/announcementAudienceUserGroup'
+#            - $ref: '#/components/schemas/announcementAudienceUser'
+
+#    announcementAudienceUserGroup:
+#      description: Группа пользователей в дереве аудитории объявления
+#      type: object
+#      properties:
+#        id:
+#          type: string
+#          format: uuid
+#        name:
+#          type: string
+#        nodes:
+#          type: array
+#          items:
+#            oneOf:
+#              - $ref: '#/components/schemas/announcementAudienceUserGroup'
+#              - $ref: '#/components/schemas/announcementAudienceUser'
+
+    announcementAudienceUser:
+      description: Обычный пользователь в дереве аудитории объявления
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        secondName:
+          type: string
+        patronymic:
+          type: string
+
     createAnnouncementResponses:
       type: string
       enum:

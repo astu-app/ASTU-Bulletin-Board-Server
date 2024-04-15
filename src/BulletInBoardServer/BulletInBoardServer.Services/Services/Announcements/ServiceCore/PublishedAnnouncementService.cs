@@ -1,7 +1,10 @@
-﻿using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
+﻿using BulletInBoardServer.Domain.Models.Attachments;
+using BulletInBoardServer.Domain.Models.Attachments.Surveys;
+using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Common.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
@@ -20,16 +23,58 @@ public class PublishedAnnouncementService(
     {
         using var scope = CreateScope();
         var dbContext = GetDbContextForScope(scope);
-        
-        return dbContext.Announcements
+
+        var announcementGroups = dbContext.Announcements
+            .Include(a => a.Author)
+            .Include(a => a.Attachments)
             .Join(dbContext.AnnouncementAudience,
                 a => a.Id, au => au.AnnouncementId,
                 (a, au) => new { Announcement = a, Audience = au })
-            .Where(res => res.Announcement.IsPublished && res.Audience.UserId == requesterId)
+            .Where(res =>
+                res.Announcement.IsPublished && (res.Audience.UserId == requesterId ||
+                                                 res.Audience.UserId == res.Announcement.AuthorId))
             .GroupBy(res => res.Announcement.Id)
-            // так как группируем по Id объявления и все объявления группы будут содержать одно и то же объявление,
-            // из группы выбираем объявление первого элемента
-            .Select(group => group.First().Announcement.GetSummary(group.Count()));
+            .ToList();
+        
+       // foreach (var group in announcementGroups)
+       // {
+       //     // так как группируем по Id объявления и все объявления группы будут содержать одно и то же объявление,
+       //     // из группы выбираем объявление первого элемента
+       //     var announcement = group.First().Announcement;
+       //     
+       //     // Так как к объявлению могут быть прикреплены разные типы вложений и присутствует необходимость загрузить
+       //     // связанные с этими вложениями сущности, для каждого из типов вложений используется явная загрузка.
+       //     dbContext.Entry(announcement).Collection(a => a.Attachments)
+       //         .Query()
+       //         .Where(a => a.Type == AttachmentTypes.Survey)
+       //         .Cast<Survey>()
+       //         .Include(s => s.Voters)
+       //         .Include(s => s.Questions)
+       //         .ThenInclude(q => q.Answers)
+       //         .ThenInclude(q => q.Participation)
+       //         .Load();
+       // }
+       
+       // Так как к объявлению могут быть прикреплены разные типы вложений и присутствует необходимость загрузить
+       // связанные с этими вложениями сущности, для каждого из типов вложений используется явная загрузка.
+       foreach (var announcement in announcementGroups.Select(group => group.First().Announcement))
+       {
+           dbContext.Entry(announcement).Collection(a => a.Attachments)
+               .Query()
+               .Where(a => a.Type == AttachmentTypes.Survey)
+               .Cast<Survey>()
+               .Include(s => s.Voters)
+               .Include(s => s.Questions)
+               .ThenInclude(q => q.Answers)
+               .ThenInclude(q => q.Participation)
+               .Load();
+       }
+
+       var summaries = announcementGroups
+           .Select(group => group.First().Announcement.GetSummary( 
+               group.Count(g => g.Audience.Viewed)))
+           .ToList(); 
+       return summaries;
     }
 
     /// <summary>

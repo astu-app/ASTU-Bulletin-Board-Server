@@ -44,9 +44,23 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public bool IsAnonymous { get; set; } = false;
 
         /// <summary>
+        /// Количество проголосовавших в опросе пользователей
+        /// </summary>
+        /// <value>Количество проголосовавших в опросе пользователей</value>
+        [DataMember(Name="votersAmount", EmitDefaultValue=true)]
+        public int VotersAmount { get; set; }
+
+        /// <summary>
         /// Время окончания голосования (если задано)
         /// </summary>
         /// <value>Время окончания голосования (если задано)</value>
+        [DataMember(Name="autoClosingAt", EmitDefaultValue=true)]
+        public DateTime? AutoClosingAt { get; set; }
+
+        /// <summary>
+        /// Фактическое время окончания голосования (если голосование завершено)
+        /// </summary>
+        /// <value>Фактическое время окончания голосования (если голосование завершено)</value>
         [DataMember(Name="voteFinishedAt", EmitDefaultValue=true)]
         public DateTime? VoteFinishedAt { get; set; }
 
@@ -68,6 +82,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  IsOpen: ").Append(IsOpen).Append("\n");
             sb.Append("  IsAnonymous: ").Append(IsAnonymous).Append("\n");
+            sb.Append("  VotersAmount: ").Append(VotersAmount).Append("\n");
+            sb.Append("  AutoClosingAt: ").Append(AutoClosingAt).Append("\n");
             sb.Append("  VoteFinishedAt: ").Append(VoteFinishedAt).Append("\n");
             sb.Append("  Questions: ").Append(Questions).Append("\n");
             sb.Append("}\n");
@@ -122,6 +138,16 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     IsAnonymous.Equals(other.IsAnonymous)
                 ) && 
                 (
+                    VotersAmount == other.VotersAmount ||
+                    
+                    VotersAmount.Equals(other.VotersAmount)
+                ) && 
+                (
+                    AutoClosingAt == other.AutoClosingAt ||
+                    AutoClosingAt != null &&
+                    AutoClosingAt.Equals(other.AutoClosingAt)
+                ) && 
+                (
                     VoteFinishedAt == other.VoteFinishedAt ||
                     VoteFinishedAt != null &&
                     VoteFinishedAt.Equals(other.VoteFinishedAt)
@@ -150,6 +176,10 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + IsOpen.GetHashCode();
                     
                     hashCode = hashCode * 59 + IsAnonymous.GetHashCode();
+                    
+                    hashCode = hashCode * 59 + VotersAmount.GetHashCode();
+                    if (AutoClosingAt != null)
+                    hashCode = hashCode * 59 + AutoClosingAt.GetHashCode();
                     if (VoteFinishedAt != null)
                     hashCode = hashCode * 59 + VoteFinishedAt.GetHashCode();
                     if (Questions != null)

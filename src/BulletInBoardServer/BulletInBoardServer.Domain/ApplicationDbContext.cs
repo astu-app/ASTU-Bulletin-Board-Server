@@ -122,6 +122,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnName("is_hidden")
                 .HasComputedColumnSql(sql: "(hidden_at is not null)", stored: true);
 
+            // entity.Ignore(e => e.AudienceThreeNode); // remove
             entity.Ignore(e => e.ViewsCount);
 
             entity
@@ -236,6 +237,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(e => e.Hash)
                 .HasColumnName("hash")
                 .HasColumnType("text")
+                .IsRequired();
+            
+            entity.Property(e => e.SizeInBytes)
+                .HasColumnName("size_in_bytes")
+                .HasColumnType("bigint")
                 .IsRequired();
         });
     }
@@ -461,6 +467,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(e => e.ExpectsAutoClosing)
                 .HasColumnName("expects_auto_closing")
                 .HasComputedColumnSql(sql: "(auto_closing_at is not null)", true);
+
+            entity.Property(e => e.VoteFinishedAt)
+                .HasColumnName("vote_finished_at")
+                .HasColumnType("timestamp")
+                .IsRequired(false);
 
             entity.HasMany(e => e.Voters)
                 .WithMany()

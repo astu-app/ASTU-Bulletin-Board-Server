@@ -31,7 +31,11 @@ public class File : AttachmentBase
     /// Хэш файла в кодировке base64
     /// </summary>
     public string Hash { get; }
-
+    
+    /// <summary>
+    /// Размер файла в байтах
+    /// </summary>
+    public long SizeInBytes { get; }
 
 
     /// <summary>
@@ -41,8 +45,9 @@ public class File : AttachmentBase
     /// <param name="uploaderId">Идентификатор загрузившего файл пользователя</param>
     /// <param name="name">Название файла</param>
     /// <param name="hash">Хэш файла в кодировке base64</param>
-    public File(Guid id, Guid uploaderId, string name, string hash)
-        : this(id, [], uploaderId, name, hash)
+    /// <param name="sizeInBytes">Размер файла в байтах</param>
+    public File(Guid id, Guid uploaderId, string name, string hash, long sizeInBytes)
+        : this(id, [], uploaderId, name, hash, sizeInBytes)
     {
     }
 
@@ -56,11 +61,13 @@ public class File : AttachmentBase
     /// <param name="uploaderId">Идентификатор загрузившего файл пользователя</param>
     /// <param name="name">Название файла</param>
     /// <param name="hash">Хэш файла в кодировке base64</param>
-    public File(Guid id, AnnouncementList announcements, Guid uploaderId, string name, string hash)
+    /// <param name="sizeInBytes">Размер файла в байтах</param>
+    public File(Guid id, AnnouncementList announcements, Guid uploaderId, string name, string hash, long sizeInBytes)
         : base(id, announcements, AttachmentTypes.File)
     {
         UploaderId = uploaderId;
         Name = name;
         Hash = hash;
+        SizeInBytes = sizeInBytes;
     }
 }

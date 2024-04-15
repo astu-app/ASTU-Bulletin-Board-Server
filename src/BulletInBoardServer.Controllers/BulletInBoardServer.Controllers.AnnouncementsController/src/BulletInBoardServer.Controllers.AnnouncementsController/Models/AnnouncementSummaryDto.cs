@@ -72,10 +72,11 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public List<FileSummaryDto> Files { get; set; }
 
         /// <summary>
-        /// Gets or Sets Survey
+        /// Массив опросов, прикрепленных к объявлению
         /// </summary>
-        [DataMember(Name="survey", EmitDefaultValue=false)]
-        public SurveyDetailsDto Survey { get; set; }
+        /// <value>Массив опросов, прикрепленных к объявлению</value>
+        [DataMember(Name="surveys", EmitDefaultValue=true)]
+        public List<SurveyDetailsDto> Surveys { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -92,7 +93,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             sb.Append("  ViewsCount: ").Append(ViewsCount).Append("\n");
             sb.Append("  AudienceSize: ").Append(AudienceSize).Append("\n");
             sb.Append("  Files: ").Append(Files).Append("\n");
-            sb.Append("  Survey: ").Append(Survey).Append("\n");
+            sb.Append("  Surveys: ").Append(Surveys).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -166,9 +167,10 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Files.SequenceEqual(other.Files)
                 ) && 
                 (
-                    Survey == other.Survey ||
-                    Survey != null &&
-                    Survey.Equals(other.Survey)
+                    Surveys == other.Surveys ||
+                    Surveys != null &&
+                    other.Surveys != null &&
+                    Surveys.SequenceEqual(other.Surveys)
                 );
         }
 
@@ -196,8 +198,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + AudienceSize.GetHashCode();
                     if (Files != null)
                     hashCode = hashCode * 59 + Files.GetHashCode();
-                    if (Survey != null)
-                    hashCode = hashCode * 59 + Survey.GetHashCode();
+                    if (Surveys != null)
+                    hashCode = hashCode * 59 + Surveys.GetHashCode();
                 return hashCode;
             }
         }

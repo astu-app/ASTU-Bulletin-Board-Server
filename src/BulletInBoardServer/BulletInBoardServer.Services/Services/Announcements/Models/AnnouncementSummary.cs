@@ -1,4 +1,5 @@
-﻿using BulletInBoardServer.Domain.Models.Users;
+﻿using BulletInBoardServer.Domain.Models.Attachments;
+using BulletInBoardServer.Domain.Models.Users;
 
 namespace BulletInBoardServer.Services.Services.Announcements.Models;
 
@@ -16,8 +17,10 @@ public class AnnouncementSummary(
     User author,
     string content,
     int viewsCount,
+    int audienceSize,
     DateTime? publishedAt,
-    DateTime? hiddenAt)
+    DateTime? hiddenAt,
+    ICollection<AttachmentBase>? attachments)
 {
     /// <summary>
     /// Идентификатор объявления
@@ -40,6 +43,11 @@ public class AnnouncementSummary(
     public int ViewsCount { get; } = viewsCount;
 
     /// <summary>
+    /// Размер аудитории объявления
+    /// </summary>
+    public int AudienceSize { get; } = audienceSize;
+
+    /// <summary>
     /// Момент публикации объявления
     /// </summary>
     /// <remarks>
@@ -54,4 +62,12 @@ public class AnnouncementSummary(
     /// null, если объявление еще не скрыто
     /// </remarks>
     public DateTime? HiddenAt { get; } = hiddenAt;
+
+    /// <summary>
+    /// Список вложений объявления
+    /// </summary>
+    /// <remarks>
+    /// null, если к объявлению не прикреалены вложения
+    /// </remarks>
+    public ICollection<AttachmentBase>? Attachments { get; } = attachments;
 }

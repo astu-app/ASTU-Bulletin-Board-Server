@@ -5,6 +5,11 @@ set search_path to public;
 
 
 
+-- ------ create extensions
+-- create extension if not exists ltree;
+
+
+
 ------ create auxiliary functions
 ---- common
 create function string_not_empty(str text)
@@ -113,6 +118,7 @@ create table usergroups
     admin_id uuid,
 
     name     text,
+--     paths    ltree[] not null default array[]::ltree[],
     
     constraint non_empty_name
         check (string_not_empty(name))
@@ -145,18 +151,22 @@ create table child_usergroups
 
 create table files
 (
-    id          uuid primary key,
+    id            uuid primary key,
     
-    uploader_id uuid not null,
+    uploader_id   uuid not null,
 
-    name        text,
-    hash        text,
+    name          text,
+    hash          text,
+    size_in_bytes bigint,
 
     constraint non_empty_name
         check (string_not_empty(name)),
     
     constraint non_empty_hash
-        check (string_not_empty(hash))
+        check (string_not_empty(hash)),
+    
+    constraint non_negative_size
+        check (size_in_bytes >= 0)
 );
 
 create table attachments
@@ -214,7 +224,9 @@ create table surveys
     is_anonymous         boolean not null default true,
     
     auto_closing_at      timestamp,
-    expects_auto_closing boolean generated always as ( auto_closing_at is not null ) stored
+    expects_auto_closing boolean generated always as ( auto_closing_at is not null ) stored,
+    
+    vote_finished_at     timestamp        default null
 );
 
 create table questions

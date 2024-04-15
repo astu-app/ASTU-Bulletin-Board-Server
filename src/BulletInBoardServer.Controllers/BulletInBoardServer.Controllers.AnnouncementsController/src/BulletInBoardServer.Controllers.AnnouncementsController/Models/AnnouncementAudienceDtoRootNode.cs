@@ -9,11 +9,10 @@
  */
 
 using System;
-using System.ComponentModel;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using BulletInBoardServer.Controllers.AnnouncementsController.Converters;
-using Newtonsoft.Json;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
@@ -21,58 +20,43 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
     /// 
     /// </summary>
     [DataContract]
-    public class FileSummaryDto : IEquatable<FileSummaryDto>
+    public class AnnouncementAudienceDtoRootNode : IEquatable<AnnouncementAudienceDtoRootNode>
     {
         /// <summary>
-        /// Идентификатор файла
+        /// Gets or Sets Id
         /// </summary>
-        /// <value>Идентификатор файла</value>
         [DataMember(Name="id", EmitDefaultValue=false)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Название файла
+        /// Gets or Sets Name
         /// </summary>
-        /// <value>Название файла</value>
         [DataMember(Name="name", EmitDefaultValue=false)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Размер файла в байтах
+        /// Gets or Sets Nodes
         /// </summary>
-        /// <value>Размер файла в байтах</value>
-        [DataMember(Name="sizeInBytes", EmitDefaultValue=true)]
-        public long SizeInBytes { get; set; }
-
+        [DataMember(Name="nodes", EmitDefaultValue=false)]
+        public List<AnnouncementAudienceDtoRootNode> Nodes { get; set; }
 
         /// <summary>
-        /// Тип файла
+        /// Gets or Sets FirstName
         /// </summary>
-        /// <value>Тип файла</value>
-        [TypeConverter(typeof(CustomEnumConverter<TypeEnum>))]
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        public enum TypeEnum
-        {
-            
-            /// <summary>
-            /// Enum Mediafile for mediafile
-            /// </summary>
-            [EnumMember(Value = "mediafile")]
-            Mediafile = 1,
-            
-            /// <summary>
-            /// Enum File for file
-            /// </summary>
-            [EnumMember(Value = "file")]
-            File = 2
-        }
+        [DataMember(Name="firstName", EmitDefaultValue=false)]
+        public string FirstName { get; set; }
 
         /// <summary>
-        /// Тип файла
+        /// Gets or Sets SecondName
         /// </summary>
-        /// <value>Тип файла</value>
-        [DataMember(Name="type", EmitDefaultValue=true)]
-        public TypeEnum Type { get; set; }
+        [DataMember(Name="secondName", EmitDefaultValue=false)]
+        public string SecondName { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Patronymic
+        /// </summary>
+        [DataMember(Name="patronymic", EmitDefaultValue=false)]
+        public string Patronymic { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -81,11 +65,13 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class FileSummaryDto {\n");
+            sb.Append("class AnnouncementAudienceDtoRootNode {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Name: ").Append(Name).Append("\n");
-            sb.Append("  SizeInBytes: ").Append(SizeInBytes).Append("\n");
-            sb.Append("  Type: ").Append(Type).Append("\n");
+            sb.Append("  Nodes: ").Append(Nodes).Append("\n");
+            sb.Append("  FirstName: ").Append(FirstName).Append("\n");
+            sb.Append("  SecondName: ").Append(SecondName).Append("\n");
+            sb.Append("  Patronymic: ").Append(Patronymic).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -108,15 +94,15 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((FileSummaryDto)obj);
+            return obj.GetType() == GetType() && Equals((AnnouncementAudienceDtoRootNode)obj);
         }
 
         /// <summary>
-        /// Returns true if FileSummaryDto instances are equal
+        /// Returns true if AnnouncementAudienceDtoRootNode instances are equal
         /// </summary>
-        /// <param name="other">Instance of FileSummaryDto to be compared</param>
+        /// <param name="other">Instance of AnnouncementAudienceDtoRootNode to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(FileSummaryDto other)
+        public bool Equals(AnnouncementAudienceDtoRootNode other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -133,14 +119,25 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Name.Equals(other.Name)
                 ) && 
                 (
-                    SizeInBytes == other.SizeInBytes ||
-                    
-                    SizeInBytes.Equals(other.SizeInBytes)
+                    Nodes == other.Nodes ||
+                    Nodes != null &&
+                    other.Nodes != null &&
+                    Nodes.SequenceEqual(other.Nodes)
                 ) && 
                 (
-                    Type == other.Type ||
-                    
-                    Type.Equals(other.Type)
+                    FirstName == other.FirstName ||
+                    FirstName != null &&
+                    FirstName.Equals(other.FirstName)
+                ) && 
+                (
+                    SecondName == other.SecondName ||
+                    SecondName != null &&
+                    SecondName.Equals(other.SecondName)
+                ) && 
+                (
+                    Patronymic == other.Patronymic ||
+                    Patronymic != null &&
+                    Patronymic.Equals(other.Patronymic)
                 );
         }
 
@@ -158,10 +155,14 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + Id.GetHashCode();
                     if (Name != null)
                     hashCode = hashCode * 59 + Name.GetHashCode();
-                    
-                    hashCode = hashCode * 59 + SizeInBytes.GetHashCode();
-                    
-                    hashCode = hashCode * 59 + Type.GetHashCode();
+                    if (Nodes != null)
+                    hashCode = hashCode * 59 + Nodes.GetHashCode();
+                    if (FirstName != null)
+                    hashCode = hashCode * 59 + FirstName.GetHashCode();
+                    if (SecondName != null)
+                    hashCode = hashCode * 59 + SecondName.GetHashCode();
+                    if (Patronymic != null)
+                    hashCode = hashCode * 59 + Patronymic.GetHashCode();
                 return hashCode;
             }
         }
@@ -169,12 +170,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(FileSummaryDto left, FileSummaryDto right)
+        public static bool operator ==(AnnouncementAudienceDtoRootNode left, AnnouncementAudienceDtoRootNode right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(FileSummaryDto left, FileSummaryDto right)
+        public static bool operator !=(AnnouncementAudienceDtoRootNode left, AnnouncementAudienceDtoRootNode right)
         {
             return !Equals(left, right);
         }

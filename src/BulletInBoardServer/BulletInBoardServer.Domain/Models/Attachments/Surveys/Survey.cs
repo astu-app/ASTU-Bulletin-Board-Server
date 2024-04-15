@@ -32,6 +32,11 @@ public class Survey : AttachmentBase
     /// Задано ли автоматическое закрытие опроса. true, если задано, иначе - false
     /// </summary>
     public bool ExpectsAutoClosing { get; private set; } // private set для EF
+    
+    /// <summary>
+    /// Момент фактического закрытия опроса. Null, если голосование еще не завершено
+    /// </summary>
+    public DateTime? VoteFinishedAt { get; private set; }
 
     /// <summary>
     /// Список вопросов опроса
@@ -53,12 +58,13 @@ public class Survey : AttachmentBase
     /// <summary>
     /// Опрос
     /// </summary>
-    public Survey(Guid id, bool isOpen, bool isAnonymous, DateTime? autoClosingAt)
+    public Survey(Guid id, bool isOpen, bool isAnonymous, DateTime? autoClosingAt, DateTime? voteFinishedAt)
         : base(id, [], AttachmentTypes.Survey)
     {
         IsOpen = isOpen;
         IsAnonymous = isAnonymous;
         AutoClosingAt = autoClosingAt;
+        VoteFinishedAt = voteFinishedAt;
     }
 
     /// <summary>
@@ -69,6 +75,7 @@ public class Survey : AttachmentBase
     /// <param name="isOpen">Открыт ли опрос</param>
     /// <param name="isAnonymous">Анонимен ли опрос</param>
     /// <param name="autoClosingAt">Время автоматического закрытия опроса</param>
+    /// <param name="voteFinishedAt">Момент фактического закрытия опроса</param>
     /// <param name="questions">Вопросы опроса</param>
     /// <exception cref="ArgumentNullException">Список вопросов null</exception>
     /// <exception cref="ArgumentException">Список вопросов пустой</exception>
@@ -77,6 +84,7 @@ public class Survey : AttachmentBase
         AnnouncementList announcements,
         bool isOpen, bool isAnonymous,
         DateTime? autoClosingAt,
+        DateTime? voteFinishedAt,
         QuestionList questions)
         : base(id, announcements, AttachmentTypes.Survey)
     {
@@ -86,6 +94,7 @@ public class Survey : AttachmentBase
         IsAnonymous = isAnonymous;
         AutoClosingAt = autoClosingAt;
         Questions = questions;
+        VoteFinishedAt = voteFinishedAt;
     }
 
 

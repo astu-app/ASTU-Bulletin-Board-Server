@@ -16,7 +16,8 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "openapi",
-      "applicationUrl": "https://localhost:7222;http://localhost:5010",
+//      "applicationUrl": "https://localhost:7222;http://localhost:5010",
+      "applicationUrl": "https://192.168.1.11:7222;http://192.168.1.11:5010",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

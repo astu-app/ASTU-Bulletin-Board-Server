@@ -272,8 +272,17 @@ components:
           description: Анонимен ли опрос
           type: boolean
           default: false
-        voteFinishedAt:
+        votersAmount:
+          description: Количество проголосовавших в опросе пользователей
+          type: integer
+          minimum: 0
+        autoClosingAt:
           description: Время окончания голосования (если задано)
+          type: string
+          format: date-time
+          nullable: true
+        voteFinishedAt:
+          description: Фактическое время окончания голосования (если голосование завершено)
           type: string
           format: date-time
           nullable: true
@@ -374,10 +383,6 @@ components:
           description: Разрешен ли множественный выбор
           type: boolean
           default: false
-        votersAmount:
-          description: Количество проголосовавших
-          type: integer
-          minimum: 0
         answers:
           description: Варианты ответов опроса
           type: array

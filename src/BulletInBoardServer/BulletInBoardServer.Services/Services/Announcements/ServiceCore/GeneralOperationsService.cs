@@ -93,6 +93,28 @@ public class GeneralOperationsService(
             .ThenInclude(q => q.Participation)
             .Load();
 
+        // announcement.AudienceThreeNode = dbContext.UserGroups
+        //     .Include(ug => ug.ChildrenGroups)
+        //     // .Include(ug => ug.MemberRights)
+        //     // .ThenInclude(mr => mr.User)
+        //     .Join(dbContext.MemberRights,
+        //         ug => ug.Id,
+        //         mr => mr.UserGroupId,
+        //         (ug, mr) => new { UserGrpup = ug, MemberRights = mr })
+        //     .Join(dbContext.Users,
+        //         join => join.MemberRights.UserId,
+        //         u => u.Id,
+        //         (join, u) => new { UserGroup = join.UserGrpup, User = u })
+        //     .Join(dbContext.AnnouncementAudience,
+        //         join => join.User.Id,
+        //         aa => aa.UserId,
+        //         (join, aa) => new { UserGroup = join.UserGroup, User = join.User, Audience = aa })
+        //     .Where(join => join.Audience.AnnouncementId == announcementId && join.UserGroup.AdminId == requesterId)
+        //     .Select(join => new __AudienceNode(null, join.UserGroup, null))
+        //     .FirstOrDefault();
+        //     // .Select(join => join.UserGroup)
+        //     // .ToList()
+
         announcement.ViewsCount = dbContext.AnnouncementAudience
             .AsQueryable()
             .Count(aa => aa.AnnouncementId == announcementId && aa.Viewed);

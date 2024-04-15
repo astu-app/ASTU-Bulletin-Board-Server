@@ -545,7 +545,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 isOpen: true,
                 isAnonymous: false,
                 autoClosingAt: null,
-                questions: [question_1, question_2]
+                questions: [question_1, question_2],
+                voteFinishedAt: null
             );
             dbContext.Surveys.Add(survey);
             AddDbEntity(survey.Id, survey);
@@ -617,7 +618,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 isOpen: true,
                 isAnonymous: true,
                 autoClosingAt: null,
-                questions: [question_1, question_2]
+                questions: [question_1, question_2],
+                voteFinishedAt: null
             );
             dbContext.Surveys.Add(survey);
             AddDbEntity(survey.Id, survey);
@@ -659,7 +661,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 isOpen: false,
                 isAnonymous: true,
                 autoClosingAt: null,
-                questions: [question_1]
+                questions: [question_1],
+                voteFinishedAt: null
             );
             dbContext.Surveys.Add(survey);
             AddDbEntity(survey.Id, survey);
@@ -695,7 +698,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 isOpen: true,
                 isAnonymous: false,
                 autoClosingAt: null,
-                questions: [question_1]
+                questions: [question_1],
+                voteFinishedAt: null
             );
             dbContext.Surveys.Add(survey);
             AddDbEntity(survey.Id, survey);
@@ -733,7 +737,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 isOpen: true,
                 isAnonymous: false,
                 autoClosingAt: DateTime.Now.AddHours(12),
-                questions: [question_1]
+                questions: [question_1],
+                voteFinishedAt: null
             );
             dbContext.Surveys.Add(survey);
             AddDbEntity(survey.Id, survey);
@@ -745,11 +750,11 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
     /// </summary>
     private void AddFiles()
     {
-        var file_1 = new File(File_1_Id, MainUsergroupAdminId, "file 1", "file 1 hash");
+        var file_1 = new File(File_1_Id, MainUsergroupAdminId, "file 1", "file 1 hash", 20_971_520);
         dbContext.Files.Add(file_1);
         AddDbEntity(file_1.Id, file_1);
 
-        var file_2 = new File(File_2_Id, MainUsergroupAdminId, "file 2", "file 2 hash");
+        var file_2 = new File(File_2_Id, MainUsergroupAdminId, "file 2", "file 2 hash", 20_971_520);
         dbContext.Files.Add(file_2);
         AddDbEntity(file_2.Id, file_2);
     }

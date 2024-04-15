@@ -40,6 +40,13 @@ public class Announcement
     /// Аудитория объявления
     /// </summary>
     public AnnouncementAudience Audience { get; private init; } = null!;
+    
+    /// <summary>
+    /// Корневой узел аудитории объявления, представленной в виде дерева (узел - группа пользователей, лист -
+    /// пользователь)
+    /// </summary>
+    // public __AudienceNode? AudienceThreeNode { get; set; } // todo remove
+    
 
     /// <summary>
     /// Количество пользователей, просмотревших объявление

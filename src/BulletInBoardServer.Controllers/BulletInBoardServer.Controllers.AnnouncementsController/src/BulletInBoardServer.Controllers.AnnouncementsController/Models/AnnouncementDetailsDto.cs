@@ -107,6 +107,13 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public DateTime? DelayedPublishingAt { get; set; }
 
         /// <summary>
+        /// Аудитория объявления
+        /// </summary>
+        /// <value>Аудитория объявления</value>
+        [DataMember(Name="audience", EmitDefaultValue=false)]
+        public List<AnnouncementAudienceUser> Audience { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -126,6 +133,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             sb.Append("  HiddenAt: ").Append(HiddenAt).Append("\n");
             sb.Append("  DelayedHidingAt: ").Append(DelayedHidingAt).Append("\n");
             sb.Append("  DelayedPublishingAt: ").Append(DelayedPublishingAt).Append("\n");
+            sb.Append("  Audience: ").Append(Audience).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -224,6 +232,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     DelayedPublishingAt == other.DelayedPublishingAt ||
                     DelayedPublishingAt != null &&
                     DelayedPublishingAt.Equals(other.DelayedPublishingAt)
+                ) && 
+                (
+                    Audience == other.Audience ||
+                    Audience != null &&
+                    other.Audience != null &&
+                    Audience.SequenceEqual(other.Audience)
                 );
         }
 
@@ -261,6 +275,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + DelayedHidingAt.GetHashCode();
                     if (DelayedPublishingAt != null)
                     hashCode = hashCode * 59 + DelayedPublishingAt.GetHashCode();
+                    if (Audience != null)
+                    hashCode = hashCode * 59 + Audience.GetHashCode();
                 return hashCode;
             }
         }

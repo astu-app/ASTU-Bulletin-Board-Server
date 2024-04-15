@@ -45,6 +45,7 @@ public class SurveyService(
             isOpen: true,
             isAnonymous: newSurvey.IsAnonymous,
             autoClosingAt: newSurvey.AutoClosingAt,
+            voteFinishedAt: null,
             questions: questions
         );
 
