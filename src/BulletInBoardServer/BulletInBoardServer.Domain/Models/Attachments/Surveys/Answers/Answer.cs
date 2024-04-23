@@ -12,6 +12,11 @@ public class Answer
     /// Идентификатор варианта ответа
     /// </summary>
     public Guid Id { get; init; }
+    
+    /// <summary>
+    /// Порядковый номер варианта ответа
+    /// </summary>
+    public int Serial { get; init; }
 
     /// <summary>
     /// Идентификатор опроса, к которому относится вариант ответа
@@ -51,12 +56,14 @@ public class Answer
     /// Вариант ответа вопроса
     /// </summary>
     /// <param name="id">Идентификатор варианта ответа</param>
+    /// <param name="serial">Порядковый номер враианта ответа</param>
     /// <param name="questionId">Идентификатор вопроса, с которым связан вариант вопроса</param>
     /// <param name="content">Текст варианта ответа</param>
     /// <param name="votersCount">Количество проголосовавших за вариант ответа</param>
-    public Answer(Guid id, Guid questionId, string content, int votersCount = 0)
+    public Answer(Guid id, int serial, Guid questionId, string content, int votersCount = 0)
     {
         Id = id;
+        Serial = serial;
         QuestionId = questionId;
         Content = content;
         VotersCount = votersCount;
@@ -66,11 +73,12 @@ public class Answer
     /// Вариант ответа вопроса
     /// </summary>
     /// <param name="id">Идентификатор варианта ответа</param>
+    /// <param name="serial">Порядковый номер враианта ответа</param>
     /// <param name="question">Вопрос, с которым связан вариант вопроса</param>
     /// <param name="content">Текст варианта ответа</param>
     /// <param name="votersCount">Количество проголосовавших за вариант ответа</param>
-    public Answer(Guid id, Question question, string content, int votersCount = 0)
-        : this(id, question.Id, content, votersCount)
+    public Answer(Guid id, int serial,  Question question, string content, int votersCount = 0)
+        : this(id, serial, question.Id, content, votersCount)
     {
         Question = question;
     }

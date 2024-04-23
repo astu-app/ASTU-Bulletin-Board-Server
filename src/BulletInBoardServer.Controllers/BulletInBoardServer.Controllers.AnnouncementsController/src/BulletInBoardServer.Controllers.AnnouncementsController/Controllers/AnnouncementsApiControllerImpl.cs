@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using BulletInBoardServer.Controllers.AnnouncementsController.Models;
 using BulletInBoardServer.Controllers.Core.Logging;
 using BulletInBoardServer.Controllers.Core.Responding;
@@ -81,7 +82,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
             var announcement = _service.Create(requesterId, createAnnouncement);
 
             _logger.Information(
-                "Пользователь {UserId} создал объявление {AnnouncementId}",
+                "Пользователь {UserId} создал объявление {AnnouncementId}", 
                 requesterId,
                 announcement.Id);
 
@@ -227,7 +228,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="403">Forbidden</response>
     /// <response code="404">Not Found</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult GetAnnouncementDetails([FromBody] Guid announcementId)
+    public override IActionResult GetAnnouncementDetails([FromRoute (Name = "id")][Required] Guid announcementId)
     {
         /*
          * 200 +

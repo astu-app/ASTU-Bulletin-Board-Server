@@ -1,3 +1,3 @@
 namespace BulletInBoardServer.Services.Services.Surveys.Models;
 
-public record CreateAnswer(string Content);
+public record CreateAnswer(string Content, int Serial);

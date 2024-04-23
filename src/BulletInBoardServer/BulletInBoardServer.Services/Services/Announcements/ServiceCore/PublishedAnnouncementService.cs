@@ -32,7 +32,7 @@ public class PublishedAnnouncementService(
                 (a, au) => new { Announcement = a, Audience = au })
             .Where(res =>
                 res.Announcement.IsPublished && (res.Audience.UserId == requesterId ||
-                                                 res.Audience.UserId == res.Announcement.AuthorId))
+                                                 res.Announcement.AuthorId == requesterId))
             .GroupBy(res => res.Announcement.Id)
             .ToList();
         

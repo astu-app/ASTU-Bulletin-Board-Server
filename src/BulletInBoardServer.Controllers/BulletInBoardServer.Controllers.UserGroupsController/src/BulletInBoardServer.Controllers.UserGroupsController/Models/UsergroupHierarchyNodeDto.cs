@@ -23,16 +23,16 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
     public class UserGroupHierarchyNodeDto : IEquatable<UserGroupHierarchyNodeDto>
     {
         /// <summary>
-        /// Gets or Sets Summary
+        /// Gets or Sets Id
         /// </summary>
-        [DataMember(Name="summary", EmitDefaultValue=false)]
-        public UserGroupSummaryDto Summary { get; set; }
+        [DataMember(Name="id", EmitDefaultValue=false)]
+        public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets ChildIds
+        /// Gets or Sets Children
         /// </summary>
-        [DataMember(Name="childIds", EmitDefaultValue=false)]
-        public List<Guid> ChildIds { get; set; }
+        [DataMember(Name="children", EmitDefaultValue=false)]
+        public List<UserGroupHierarchyNodeDto> Children { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -42,8 +42,8 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         {
             var sb = new StringBuilder();
             sb.Append("class UserGroupHierarchyNodeDto {\n");
-            sb.Append("  Summary: ").Append(Summary).Append("\n");
-            sb.Append("  ChildIds: ").Append(ChildIds).Append("\n");
+            sb.Append("  Id: ").Append(Id).Append("\n");
+            sb.Append("  Children: ").Append(Children).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -81,15 +81,15 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 
             return 
                 (
-                    Summary == other.Summary ||
-                    Summary != null &&
-                    Summary.Equals(other.Summary)
+                    Id == other.Id ||
+                    Id != null &&
+                    Id.Equals(other.Id)
                 ) && 
                 (
-                    ChildIds == other.ChildIds ||
-                    ChildIds != null &&
-                    other.ChildIds != null &&
-                    ChildIds.SequenceEqual(other.ChildIds)
+                    Children == other.Children ||
+                    Children != null &&
+                    other.Children != null &&
+                    Children.SequenceEqual(other.Children)
                 );
         }
 
@@ -103,10 +103,10 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (Summary != null)
-                    hashCode = hashCode * 59 + Summary.GetHashCode();
-                    if (ChildIds != null)
-                    hashCode = hashCode * 59 + ChildIds.GetHashCode();
+                    if (Id != null)
+                    hashCode = hashCode * 59 + Id.GetHashCode();
+                    if (Children != null)
+                    hashCode = hashCode * 59 + Children.GetHashCode();
                 return hashCode;
             }
         }

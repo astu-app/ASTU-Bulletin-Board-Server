@@ -31,8 +31,8 @@ public class SurveyServiceTest : DbInvolvingTestBase
     [Fact]
     public void Create_SurveyWithAutoClosing_CallsConfiguringOfAutomaticClosing()
     {
-        var newAnswers = new List<CreateAnswer> { new("answer 1"), new("answer 2") };
-        var newQuestions = new List<CreateQuestion> { new("question 1", true, newAnswers) };
+        var newAnswers = new List<CreateAnswer> { new("answer 1", 1), new("answer 2", 2) };
+        var newQuestions = new List<CreateQuestion> { new(1, "question 1", true, newAnswers) };
         var newSurvey = new CreateSurvey(true, DateTime.Now.AddHours(12), newQuestions);
 
         _service.Create(newSurvey);

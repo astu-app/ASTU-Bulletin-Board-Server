@@ -167,6 +167,7 @@ public class AnnouncementCreator
     private IEnumerable<AnnouncementAttachment> InitAttachmentJoins(IEnumerable<Guid> attachmentIds)
     {
         var joins = new List<AnnouncementAttachment>();
+        var attachmentSerial = 1;
         foreach (var attachmentId in attachmentIds)
             joins.Add(new AnnouncementAttachment(_announcement.Id, attachmentId));
 

@@ -28,6 +28,13 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Порядковый номер варианта ответов в списке вариантов ответов
+        /// </summary>
+        /// <value>Порядковый номер варианта ответов в списке вариантов ответов</value>
+        [DataMember(Name="serial", EmitDefaultValue=true)]
+        public int Serial { get; set; }
+
+        /// <summary>
         /// Текстовое содержимое варианта ответа
         /// </summary>
         /// <value>Текстовое содержимое варианта ответа</value>
@@ -50,6 +57,7 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
             var sb = new StringBuilder();
             sb.Append("class QuestionAnswerDetailsDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
+            sb.Append("  Serial: ").Append(Serial).Append("\n");
             sb.Append("  Content: ").Append(Content).Append("\n");
             sb.Append("  VotersAmount: ").Append(VotersAmount).Append("\n");
             sb.Append("}\n");
@@ -94,6 +102,11 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
                     Id.Equals(other.Id)
                 ) && 
                 (
+                    Serial == other.Serial ||
+                    
+                    Serial.Equals(other.Serial)
+                ) && 
+                (
                     Content == other.Content ||
                     Content != null &&
                     Content.Equals(other.Content)
@@ -117,6 +130,8 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
                 // Suitable nullity checks etc, of course :)
                     if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
+                    
+                    hashCode = hashCode * 59 + Serial.GetHashCode();
                     if (Content != null)
                     hashCode = hashCode * 59 + Content.GetHashCode();
                     

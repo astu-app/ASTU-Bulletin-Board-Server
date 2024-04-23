@@ -171,8 +171,9 @@ create table files
 
 create table attachments
 (
-    id   uuid primary key,
-    type text,
+    id     uuid primary key,
+    serial int,
+    type   text,
     
     constraint non_empty_type
         check (string_not_empty(type))
@@ -182,6 +183,7 @@ create table announcements_attachments
 (
     attachment_id   uuid,
     announcement_id uuid,
+    serial          int,
 
     primary key (attachment_id, announcement_id)
 );
@@ -232,6 +234,7 @@ create table surveys
 create table questions
 (
     id                         uuid primary key,
+    serial                     int,
     
     survey_id                  uuid not null,
 
@@ -245,6 +248,7 @@ create table questions
 create table answers
 (
     id           uuid primary key,
+    serial       int,
 
     question_id  uuid not null,
 

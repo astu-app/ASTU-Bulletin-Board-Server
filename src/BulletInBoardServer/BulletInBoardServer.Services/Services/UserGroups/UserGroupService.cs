@@ -51,6 +51,21 @@ public class UserGroupService(ApplicationDbContext dbContext)
             .ToUserGroupList();
 
     /// <summary>
+    /// Получить иерархии групп пользователей, управляемых указанным администратором
+    /// </summary>
+    /// <param name="adminId"></param>
+    /// <returns>Набор корневых групп пользователей, управляемых администратором</returns>
+    public UserGroupList GetUsergroupHierarchy(Guid adminId)
+    {
+        // todo сделать удаление из ownedUsergroups групп, которые находятся в подчинении других групп, находящихся в этом же списке 
+        var ownedUsergroups = GetOwnedList(adminId);
+        foreach (var usergroup in ownedUsergroups) 
+            LoadUserGroupRecursively(usergroup);
+
+        return ownedUsergroups;
+    }
+
+    /// <summary>
     /// Получить детальную информацию о группе пользователей
     /// </summary>
     /// <param name="usergroupId">Id группы пользователей</param>
@@ -138,5 +153,20 @@ public class UserGroupService(ApplicationDbContext dbContext)
     {
         var redactor = new UserGroupRedactor(dbContext);
         redactor.DeleteMembers(delete);
+    }
+
+
+
+    private void LoadUserGroupRecursively(UserGroup usergroup)
+    {
+        dbContext.Entry(usergroup).Collection(ug => ug.ChildrenGroups).Load();
+        dbContext.Entry(usergroup)
+            .Collection(ug => ug.MemberRights)
+            .Query()
+            .Include(ug => ug.User)
+            .Load();
+        
+        foreach (var child in usergroup.ChildrenGroups) 
+            LoadUserGroupRecursively(child);
     }
 }

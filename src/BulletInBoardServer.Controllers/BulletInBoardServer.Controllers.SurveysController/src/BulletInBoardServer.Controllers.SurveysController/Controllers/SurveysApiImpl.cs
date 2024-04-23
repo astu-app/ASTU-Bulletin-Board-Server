@@ -59,6 +59,7 @@ public class SurveysApiControllerImpl : SurveysApiController
          *   surveyDoesNotExist +
          * 409
          *   surveyAlreadyClosed +
+         * 500 +
          */
 
         var requesterId = Guid.Empty; // todo id пользователя
@@ -85,6 +86,11 @@ public class SurveysApiControllerImpl : SurveysApiController
             return Conflict(
                 ResponseConstructor.ConstructResponseWithOnlyCode(CloseSurveyResponses.SurveyAlreadyClosed));
         }
+        catch (Exception err)
+        {
+            _loggingHelper.LogError(err, 500, "Закрытие опроса", requesterId);
+            return Problem();
+        }
     }
 
     /// <summary>
@@ -101,22 +107,51 @@ public class SurveysApiControllerImpl : SurveysApiController
          * 201 +
          * 403
          *   createSurveyForbidden
+         * 409: 
+         *   surveyContainsQuestionSerialsDuplicates
+         *   questionContainsAnswersSerialsDuplicates
+         * 500 +
          */
         
         var requesterId = Guid.Empty; // todo id пользователя
 
-        var createSurvey = createSurveyDto.Adapt<CreateSurvey>();
-        var survey = _service.Create(createSurvey);
+        try
+        {
+            var createSurvey = createSurveyDto.Adapt<CreateSurvey>();
+            var survey = _service.Create(createSurvey);
 
-        _logger.Information("Пользователь {RequesterId} создал опрос {SurveyId}", requesterId, survey.Id);
-        
-        return Created("/api/announcements/get-details", survey.Id);
+            _logger.Information("Пользователь {RequesterId} создал опрос {SurveyId}", requesterId, survey.Id);
+
+            return Created("/api/announcements/get-details", survey.Id);
+        }
+        catch (SurveyContainsQuestionSerialsDuplicates err)
+        {
+            _loggingHelper.LogWarning(409, "Создание опроса",
+                nameof(CreateSurveyResponses.SurveyContainsQuestionSerialsDuplicates), requesterId, err.Message);
+            return Conflict(
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateSurveyResponses
+                    .SurveyContainsQuestionSerialsDuplicates));
+        }
+        catch (QuestionContainsAnswersSerialsDuplicates err)
+        {
+            _loggingHelper.LogWarning(409, "Создание опроса",
+                nameof(CreateSurveyResponses.QuestionContainsAnswersSerialsDuplicates), requesterId, err.Message);
+            return Conflict(
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateSurveyResponses
+                    .QuestionContainsAnswersSerialsDuplicates));
+        }
+        catch (Exception err)
+        {
+            _loggingHelper.LogError(err, 500, "Создание опроса", requesterId);
+            return Problem();
+        }
     }
 
     /// <summary>
     /// Скачать результаты опроса
     /// </summary>
-    /// <param name="downloadSurveyResultsRequestDto"></param>
+    /// <param name="id">Id пророса</param>
+    /// <param name="filetype">Тип файла с результатами опроса</param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
     /// <response code="401">Unauthorized</response>
@@ -124,7 +159,7 @@ public class SurveysApiControllerImpl : SurveysApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult DownloadSurveyResults(DownloadSurveyResultsRequestDto downloadSurveyResultsRequestDto)
+    public override IActionResult DownloadSurveyResults(Guid id, string filetype)
     {
         //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
         // return StatusCode(200, default(DownloadSurveyResultsOk));
@@ -176,6 +211,7 @@ public class SurveysApiControllerImpl : SurveysApiController
          *   cannotSelectMultipleAnswersInSingleChoiceQuestion +
          *   presentedQuestionsDoesntMatchSurveyQuestions +
          *   presentedVotesDoesntMatchQuestionAnswers +
+         * 500 +
          */
         
         // var requesterId = Guid.Empty; // todo id пользователя
@@ -230,6 +266,11 @@ public class SurveysApiControllerImpl : SurveysApiController
                 nameof(VoteInSurveyResponses.PresentedVotesDoesntMatchQuestionAnswers), requesterId, err.Message);
             return Conflict(
                 ResponseConstructor.ConstructResponseWithOnlyCode(VoteInSurveyResponses.PresentedVotesDoesntMatchQuestionAnswers));
+        }
+        catch (Exception err)
+        {
+            _loggingHelper.LogError(err, 500, "Голосование в опросе", requesterId);
+            return Problem();
         }
     }
 }

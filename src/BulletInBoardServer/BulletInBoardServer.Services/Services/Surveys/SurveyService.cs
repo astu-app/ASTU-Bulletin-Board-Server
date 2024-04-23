@@ -33,6 +33,7 @@ public class SurveyService(
                 let answers = CreateAnswers(newQuestion.Answers, questionId)
                 select new Question(
                     id: questionId,
+                    serial: newQuestion.Serial,
                     surveyId: surveyId,
                     content: newQuestion.Content,
                     isMultipleChoiceAllowed: newQuestion.IsMultipleChoiceAllowed,
@@ -155,6 +156,7 @@ public class SurveyService(
         foreach (var answer in newAnswers)
             answers.Add(new Answer(
                 id: Guid.NewGuid(),
+                serial: answer.Serial,
                 questionId: questionId,
                 content: answer.Content));
 

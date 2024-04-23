@@ -111,7 +111,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// </summary>
         /// <value>Аудитория объявления</value>
         [DataMember(Name="audience", EmitDefaultValue=false)]
-        public List<AnnouncementAudienceUser> Audience { get; set; }
+        public List<UserSummaryDto> Audience { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

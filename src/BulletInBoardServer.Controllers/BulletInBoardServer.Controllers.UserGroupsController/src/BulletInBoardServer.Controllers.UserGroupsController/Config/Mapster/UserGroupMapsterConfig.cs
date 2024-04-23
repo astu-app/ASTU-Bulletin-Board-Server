@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using BulletInBoardServer.Controllers.UserGroupsController.Models;
 using BulletInBoardServer.Domain.Models.UserGroups;
 using BulletInBoardServer.Domain.Models.Users;
@@ -62,5 +64,46 @@ public class UserGroupMapsterConfig : IRegister
                     s.AdminChanged, 
                     s.AdminId, 
                     s.MembersChanged ? s.MemberIds.Adapt<UpdateIdentifierList>() : null));
+
+        config.NewConfig<UserGroupList, UsergroupHierarchyDto>()
+            .Map(d => d.Roots, s => s)
+            .Map(d => d.Usergroups, s => s);
+
+        config.NewConfig<UserGroupList, List<UserGroupSummaryWithMembersDto>>()
+            .MapWith(userGroups => userGroups
+                .SelectMany(GetAllUserGroupsFromHierarchy)
+                .DistinctBy(ug => ug.Summary.Id)
+                .ToList());
+        
+        config.NewConfig<UserGroup, UserGroupSummaryWithMembersDto>()
+            .Map(d => d.Summary.Id, s => s.Id)
+            .Map(d => d.Summary.Name, s => s.Name)
+            .Map(d => d.Members, s => s.MemberRights);
+        
+        config.NewConfig<UserGroup, UserGroupHierarchyNodeDto>()
+            .Map(d => d.Id, s => s.Id)
+            .Map(d => d.Children, s => s.ChildrenGroups)
+            .PreserveReference(true);
+
+        config.NewConfig<SingleMemberRights, UserSummaryDto>()
+            .Map(d => d.Id, s => s.User.Id)
+            .Map(d => d.FirstName, s => s.User.FirstName)
+            .Map(d => d.SecondName, s => s.User.SecondName)
+            .Map(d => d.Patronymic, s => s.User.Patronymic);
+    }
+
+
+
+    private static List<UserGroupSummaryWithMembersDto> GetAllUserGroupsFromHierarchy(UserGroup userGroup)
+    {
+        var list = new List<UserGroupSummaryWithMembersDto>
+        {
+            userGroup.Adapt<UserGroupSummaryWithMembersDto>(),
+        };
+        foreach (var child in userGroup.ChildrenGroups) 
+            list.AddRange(GetAllUserGroupsFromHierarchy(child));
+
+        Console.Out.WriteLine(userGroup.Name); // todo debug
+        return list;
     }
 }

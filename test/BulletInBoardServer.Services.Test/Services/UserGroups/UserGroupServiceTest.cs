@@ -31,7 +31,7 @@ public class UserGroupServiceTest : DbInvolvingTestBase
         var create = new CreateUserGroup
         {
             Name = "New group",
-            ChildGroupIds = [UserGroup_1_Id],
+            ChildGroupIds = [UserGroup_4_Id],
             ParentGroupIds = [UserGroup_7_Id],
         };
 

@@ -1,4 +1,5 @@
 ﻿using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
+using BulletInBoardServer.Domain.Models.Attachments.Surveys.Exceptions;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions.Validation;
 using FluentAssertions;
@@ -9,6 +10,32 @@ namespace BulletInBoardServer.Domain.Test.Models.Attachments.Surveys.Questions.V
 [TestSubject(typeof(QuestionValidator))]
 public class QuestionValidatorTest
 {
+    [Fact] // todo прогнать тест
+    public void AllQuestionsValidOrThrow_AllSerialsUniqueOrThrow_Throws()
+    {
+        var questions = new QuestionList
+        {
+            new(Guid.NewGuid(), 1, Guid.NewGuid(), "q1", false,
+                [
+                    new Answer(Guid.NewGuid(), 1, Guid.NewGuid(), "a1"),
+                    new Answer(Guid.NewGuid(), 2, Guid.NewGuid(), "a2"),
+                ]
+            ),
+            new(Guid.NewGuid(), 1, Guid.NewGuid(), "q2", false,
+                [
+                    new Answer(Guid.NewGuid(), 1, Guid.NewGuid(), "a1"),
+                    new Answer(Guid.NewGuid(), 2, Guid.NewGuid(), "a2"),
+                ]
+            ),
+        };
+
+        var validation = () => QuestionValidator.AllQuestionsValidOrThrow(questions);
+
+        validation.Should()
+            .Throw<SurveyContainsQuestionSerialsDuplicates>()
+            .WithMessage("Среди порядковых номеров вопросов не должно быть повторений");
+    }
+    
     [Fact]
     public void AllQuestionsValidOrThrow_EmptyQuestionList_Throws()
     {
@@ -56,7 +83,7 @@ public class QuestionValidatorTest
     {
         var answers = new AnswerList
         {
-            new(Guid.NewGuid(), Guid.NewGuid(), "answer 1")
+            new(Guid.NewGuid(), 1, Guid.NewGuid(), "answer 1")
         };
 
         var validation = () => QuestionValidator.AllAnswersValidOrThrow(answers);

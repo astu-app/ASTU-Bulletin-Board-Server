@@ -42,9 +42,6 @@
       <Content Include="..\api-specifications\openapi-generator-config\announcements-api.yaml.run.xml">
         <Link>api-specifications\openapi-generator-config\announcements-api.yaml.run.xml</Link>
       </Content>
-      <Content Include="..\api-specifications\openapi-generator-config\ping-api.yaml.run.xml">
-        <Link>api-specifications\openapi-generator-config\ping-api.yaml.run.xml</Link>
-      </Content>
       <Content Include="..\api-specifications\openapi-generator-config\surveys-api.yaml.run.xml">
         <Link>api-specifications\openapi-generator-config\surveys-api.yaml.run.xml</Link>
       </Content>

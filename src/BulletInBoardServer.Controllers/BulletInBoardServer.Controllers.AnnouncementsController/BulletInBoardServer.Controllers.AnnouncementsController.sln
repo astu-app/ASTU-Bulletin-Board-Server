@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2043
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletInBoardServer.Controllers.AnnouncementsController", "src\BulletInBoardServer.Controllers.AnnouncementsController\BulletInBoardServer.Controllers.AnnouncementsController.csproj", "{9ABB1382-D4F0-442B-9A37-D37AC3983E43}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletInBoardServer.Controllers.AnnouncementsController", "src\BulletInBoardServer.Controllers.AnnouncementsController\BulletInBoardServer.Controllers.AnnouncementsController.csproj", "{8AC0C3D2-EDF1-4DEA-A9D1-F1B264273452}"
 EndProject
 Global
     GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
         Release|Any CPU = Release|Any CPU
     EndGlobalSection
     GlobalSection(ProjectConfigurationPlatforms) = postSolution
-        {9ABB1382-D4F0-442B-9A37-D37AC3983E43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-        {9ABB1382-D4F0-442B-9A37-D37AC3983E43}.Debug|Any CPU.Build.0 = Debug|Any CPU
-        {9ABB1382-D4F0-442B-9A37-D37AC3983E43}.Release|Any CPU.ActiveCfg = Release|Any CPU
-        {9ABB1382-D4F0-442B-9A37-D37AC3983E43}.Release|Any CPU.Build.0 = Release|Any CPU
+        {8AC0C3D2-EDF1-4DEA-A9D1-F1B264273452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {8AC0C3D2-EDF1-4DEA-A9D1-F1B264273452}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {8AC0C3D2-EDF1-4DEA-A9D1-F1B264273452}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {8AC0C3D2-EDF1-4DEA-A9D1-F1B264273452}.Release|Any CPU.Build.0 = Release|Any CPU
     EndGlobalSection
     GlobalSection(SolutionProperties) = preSolution
         HideSolutionNode = FALSE

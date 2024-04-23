@@ -30,6 +30,13 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Порядковый номер вопроса в списке вопросов
+        /// </summary>
+        /// <value>Порядковый номер вопроса в списке вопросов</value>
+        [DataMember(Name="serial", EmitDefaultValue=true)]
+        public int Serial { get; set; }
+
+        /// <summary>
         /// Текстовое содержимое вопроса
         /// </summary>
         /// <value>Текстовое содержимое вопроса</value>
@@ -42,13 +49,6 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
         /// <value>Разрешен ли множественный выбор</value>
         [DataMember(Name="isMultipleChoiceAllowed", EmitDefaultValue=true)]
         public bool IsMultipleChoiceAllowed { get; set; } = false;
-
-        /// <summary>
-        /// Количество проголосовавших
-        /// </summary>
-        /// <value>Количество проголосовавших</value>
-        [DataMember(Name="votersAmount", EmitDefaultValue=true)]
-        public int VotersAmount { get; set; }
 
         /// <summary>
         /// Варианты ответов опроса
@@ -66,9 +66,9 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
             var sb = new StringBuilder();
             sb.Append("class QuestionDetailsDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
+            sb.Append("  Serial: ").Append(Serial).Append("\n");
             sb.Append("  Content: ").Append(Content).Append("\n");
             sb.Append("  IsMultipleChoiceAllowed: ").Append(IsMultipleChoiceAllowed).Append("\n");
-            sb.Append("  VotersAmount: ").Append(VotersAmount).Append("\n");
             sb.Append("  Answers: ").Append(Answers).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -112,6 +112,11 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
                     Id.Equals(other.Id)
                 ) && 
                 (
+                    Serial == other.Serial ||
+                    
+                    Serial.Equals(other.Serial)
+                ) && 
+                (
                     Content == other.Content ||
                     Content != null &&
                     Content.Equals(other.Content)
@@ -120,11 +125,6 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
                     IsMultipleChoiceAllowed == other.IsMultipleChoiceAllowed ||
                     
                     IsMultipleChoiceAllowed.Equals(other.IsMultipleChoiceAllowed)
-                ) && 
-                (
-                    VotersAmount == other.VotersAmount ||
-                    
-                    VotersAmount.Equals(other.VotersAmount)
                 ) && 
                 (
                     Answers == other.Answers ||
@@ -146,12 +146,12 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
                 // Suitable nullity checks etc, of course :)
                     if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
+                    
+                    hashCode = hashCode * 59 + Serial.GetHashCode();
                     if (Content != null)
                     hashCode = hashCode * 59 + Content.GetHashCode();
                     
                     hashCode = hashCode * 59 + IsMultipleChoiceAllowed.GetHashCode();
-                    
-                    hashCode = hashCode * 59 + VotersAmount.GetHashCode();
                     if (Answers != null)
                     hashCode = hashCode * 59 + Answers.GetHashCode();
                 return hashCode;

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using BulletInBoardServer.Controllers.AnnouncementsController.Models;
+using BulletInBoardServer.Domain.Models.AnnouncementCategories;
 using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Attachments;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
@@ -48,6 +49,12 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.FirstName, s => s.FirstName)
             .Map(d => d.SecondName, s => s.SecondName)
             .Map(d => d.Patronymic, s => s.Patronymic);
+        
+        config.NewConfig<AnnouncementCategory, AnnouncementCategoryDetailsDto>()
+            .TwoWays()
+            .Map(d => d.Id, s => s.Id)
+            .Map(d => d.Name, s => s.Name)
+            .Map(d => d.Color, s => s.ColorHex);
 
         // config.NewConfig<IAudienceNode, AnnouncementAudienceDto>() // remove
         //     .ConstructUsing(src => new AnnouncementAudienceDto 
@@ -99,7 +106,7 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.VotersAmount, s => s.VotersCount)
             .Map(d => d.AutoClosingAt, s => s.AutoClosingAt)
             .Map(d => d.VoteFinishedAt, s => s.VoteFinishedAt)
-            .Map(d => d.Questions, s => s.Questions);
+            .Map(d => d.Questions, s => s.Questions.OrderBy(q => q.Serial));
             // .Map(d => d.Questions, s => s.Questions.Select(q => q.Adapt<QuestionDetailsDto>()).ToList());
 
         // config.NewConfig<QuestionList, List<QuestionDetailsDto>>()

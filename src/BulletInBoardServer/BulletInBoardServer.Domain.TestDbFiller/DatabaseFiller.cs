@@ -457,10 +457,14 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
         {
             var connections = new ChildUseGroup[]
             {
+                new(MainUsergroupId, UserGroup_1_Id),
+                new(UserGroup_1_Id, UserGroup_2_Id),
                 new(UserGroup_1_Id, UserGroup_3_Id),
-                new(UserGroup_2_Id, UserGroup_3_Id),
+                new(UserGroup_2_Id, UserGroup_4_Id),
+                new(UserGroup_3_Id, UserGroup_4_Id),
+                new(UserGroup_3_Id, UserGroup_5_Id),
+                new(UserGroup_4_Id, UserGroup_6_Id),
                 new(UserGroup_5_Id, UserGroup_7_Id),
-                new(UserGroup_4_Id, UserGroup_2_Id),
             };
             dbContext.ChildUseGroups.AddRange(connections);
         }
@@ -482,17 +486,17 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
         void AddPublicSurvey_1()
         {
             // Create answers
-            var answer_1 = new Answer(Answer_1_OfPublicSurvey_1_Id,
+            var answer_1 = new Answer(Answer_1_OfPublicSurvey_1_Id, 0,
                 Question_1_WithSingleChoice_OfPublicSurvey_1_Id, "ответ 1 вопроса 1 публичного опроса 1");
-            var answer_2 = new Answer(Answer_2_OfPublicSurvey_1_Id,
+            var answer_2 = new Answer(Answer_2_OfPublicSurvey_1_Id, 1,
                 Question_1_WithSingleChoice_OfPublicSurvey_1_Id, "ответ 2 вопроса 1 публичного опроса 1");
-            var answer_3 = new Answer(Answer_3_OfPublicSurvey_1_Id,
+            var answer_3 = new Answer(Answer_3_OfPublicSurvey_1_Id, 2,
                 Question_1_WithSingleChoice_OfPublicSurvey_1_Id, "ответ 3 вопроса 1 публичного опроса 1");
-            var answer_4 = new Answer(Answer_4_OfPublicSurvey_1_Id,
+            var answer_4 = new Answer(Answer_4_OfPublicSurvey_1_Id, 3,
                 Question_2_WithMultipleChoice_OfPublicSurvey_1_Id, "ответ 4 вопроса 2 публичного опроса 1");
-            var answer_5 = new Answer(Answer_5_OfPublicSurvey_1_Id,
+            var answer_5 = new Answer(Answer_5_OfPublicSurvey_1_Id, 4,
                 Question_2_WithMultipleChoice_OfPublicSurvey_1_Id, "ответ 5 вопроса 2 публичного опроса 1");
-            var answer_6 = new Answer(Answer_6_OfPublicSurvey_1_Id,
+            var answer_6 = new Answer(Answer_6_OfPublicSurvey_1_Id, 5,
                 Question_2_WithMultipleChoice_OfPublicSurvey_1_Id, "ответ 6 вопроса 2 публичного опроса 1");
             dbContext.Answers.Add(answer_1);
             dbContext.Answers.Add(answer_2);
@@ -510,6 +514,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             // Create questions
             var question_1 = new Question(
                 id: Question_1_WithSingleChoice_OfPublicSurvey_1_Id,
+                serial: 0,
                 surveyId: PublicSurvey_1_Id,
                 "вопрос 1 с единственным выбором публичного опроса 1",
                 isMultipleChoiceAllowed: false,
@@ -525,6 +530,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
 
             var question_2 = new Question(
                 id: Question_2_WithMultipleChoice_OfPublicSurvey_1_Id,
+                serial: 1,
                 surveyId: PublicSurvey_1_Id,
                 "вопрос 2 с множественным выбором публичного опроса 1",
                 isMultipleChoiceAllowed: true,
@@ -555,17 +561,17 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
         void AddAnonymousSurvey_1()
         {
             // Create answers
-            var answer_1 = new Answer(Answer_1_OfAnonymousSurvey_1_Id,
+            var answer_1 = new Answer(Answer_1_OfAnonymousSurvey_1_Id, 0,
                 Question_1_WithSingleChoice_OfAnonymousSurvey_1_Id, "ответ 1 вопроса 1 анонимного опроса");
-            var answer_2 = new Answer(Answer_2_OfAnonymousSurvey_1_Id,
+            var answer_2 = new Answer(Answer_2_OfAnonymousSurvey_1_Id, 1,
                 Question_1_WithSingleChoice_OfAnonymousSurvey_1_Id, "ответ 2 вопроса 1 анонимного опроса");
-            var answer_3 = new Answer(Answer_3_OfAnonymousSurvey_1_Id,
+            var answer_3 = new Answer(Answer_3_OfAnonymousSurvey_1_Id, 2,
                 Question_1_WithSingleChoice_OfAnonymousSurvey_1_Id, "ответ 3 вопроса 1 анонимного опроса");
-            var answer_4 = new Answer(Answer_4_OfAnonymousSurvey_1_Id,
+            var answer_4 = new Answer(Answer_4_OfAnonymousSurvey_1_Id, 3,
                 Question_2_WithMultipleChoice_OfAnonymousSurvey_1_Id, "ответ 4 вопроса 2 анонимного опроса");
-            var answer_5 = new Answer(Answer_5_OfAnonymousSurvey_1_Id,
+            var answer_5 = new Answer(Answer_5_OfAnonymousSurvey_1_Id, 4,
                 Question_2_WithMultipleChoice_OfAnonymousSurvey_1_Id, "ответ 5 вопроса 2 анонимного опроса");
-            var answer_6 = new Answer(Answer_6_OfAnonymousSurvey_1_Id,
+            var answer_6 = new Answer(Answer_6_OfAnonymousSurvey_1_Id, 5,
                 Question_2_WithMultipleChoice_OfAnonymousSurvey_1_Id, "ответ 6 вопроса 2 анонимного опроса");
             dbContext.Answers.Add(answer_1);
             dbContext.Answers.Add(answer_2);
@@ -583,6 +589,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             // Create questions
             var question_1 = new Question(
                 id: Question_1_WithSingleChoice_OfAnonymousSurvey_1_Id,
+                serial: 0,
                 surveyId: AnonymousSurvey_1_Id,
                 "вопрос 1 с единственным выбором анонимного опроса",
                 isMultipleChoiceAllowed: false,
@@ -598,6 +605,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
 
             var question_2 = new Question(
                 id: Question_2_WithMultipleChoice_OfAnonymousSurvey_1_Id,
+                serial: 1,
                 surveyId: AnonymousSurvey_1_Id,
                 "вопрос 2 с множественным выбором анонимного опроса",
                 isMultipleChoiceAllowed: true,
@@ -628,10 +636,10 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
         void AddClosedAnonymousSurvey_1()
         {
             // Create answers
-            var answer_1 = new Answer(Answer_1_OfClosedAnonymousSurvey_1_Id,
+            var answer_1 = new Answer(Answer_1_OfClosedAnonymousSurvey_1_Id, 0,
                 Question_1_WithSingleChoice_OfClosedAnonymousSurvey_1_Id,
                 "ответ 1 вопроса 1 закрытого анонимного опроса");
-            var answer_2 = new Answer(Answer_2_OfClosedAnonymousSurvey_1_Id,
+            var answer_2 = new Answer(Answer_2_OfClosedAnonymousSurvey_1_Id, 1,
                 Question_1_WithSingleChoice_OfClosedAnonymousSurvey_1_Id,
                 "ответ 2 вопроса 1 закрытого анонимного опроса");
             dbContext.Answers.Add(answer_1);
@@ -642,6 +650,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             // Create questions
             var question_1 = new Question(
                 id: Question_1_WithSingleChoice_OfClosedAnonymousSurvey_1_Id,
+                serial: 0,
                 surveyId: ClosedAnonymousSurvey_1_Id,
                 "вопрос 1 с единственным выбором закрытого анонимного опроса",
                 isMultipleChoiceAllowed: false,
@@ -671,9 +680,9 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
         void AddPublicSurvey_2()
         {
             // Create answers
-            var answer_1 = new Answer(Answer_1_OfPublicSurvey_2_Id,
+            var answer_1 = new Answer(Answer_1_OfPublicSurvey_2_Id, 0,
                 Question_1_WithSingleChoice_OfPublicSurvey_2_Id, "ответ 1 вопроса 1 публичного опроса 1");
-            var answer_2 = new Answer(Answer_2_OfPublicSurvey_2_Id,
+            var answer_2 = new Answer(Answer_2_OfPublicSurvey_2_Id, 1,
                 Question_1_WithSingleChoice_OfPublicSurvey_2_Id, "ответ 2 вопроса 1 публичного опроса 1");
             dbContext.Answers.Add(answer_1);
             dbContext.Answers.Add(answer_2);
@@ -683,6 +692,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             // Create questions
             var question_1 = new Question(
                 id: Question_1_WithSingleChoice_OfPublicSurvey_2_Id,
+                serial: 0,
                 surveyId: PublicSurvey_2_Id,
                 "вопрос 1 с единственным выбором публичного опроса 2",
                 isMultipleChoiceAllowed: false,
@@ -708,10 +718,10 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
         void AddSurveyExpectsAutoClosing()
         {
             // Create answers
-            var answer_1 = new Answer(Answer_1_OfSurveyExpectsAutoClosing_Id,
+            var answer_1 = new Answer(Answer_1_OfSurveyExpectsAutoClosing_Id, 0,
                 Question_1_WithSingleChoice_OfSurveyExpectsAutoClosing_Id,
                 "ответ 1 вопроса, ожидающего автоматическое закрытие");
-            var answer_2 = new Answer(Answer_2_OfSurveyExpectsAutoClosing_Id,
+            var answer_2 = new Answer(Answer_2_OfSurveyExpectsAutoClosing_Id, 1,
                 Question_1_WithSingleChoice_OfSurveyExpectsAutoClosing_Id,
                 "ответ 2 вопроса, ожидающего автоматическое закрытие");
             dbContext.Answers.Add(answer_1);
@@ -722,6 +732,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             // Create questions
             var question_1 = new Question(
                 id: Question_1_WithSingleChoice_OfSurveyExpectsAutoClosing_Id,
+                serial: 0,
                 surveyId: PublicSurvey_2_Id,
                 "вопрос 1 опроса, ожидающего автоматическое закрытие",
                 isMultipleChoiceAllowed: false,

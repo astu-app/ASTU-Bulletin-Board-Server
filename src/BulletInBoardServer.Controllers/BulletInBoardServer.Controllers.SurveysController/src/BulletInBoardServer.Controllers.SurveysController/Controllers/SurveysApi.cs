@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.ComponentModel.DataAnnotations;
 using BulletInBoardServer.Controllers.SurveysController.Attributes;
 using BulletInBoardServer.Controllers.SurveysController.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -60,7 +61,8 @@ namespace BulletInBoardServer.Controllers.SurveysController.Controllers
         /// <summary>
         /// Скачать результаты опроса
         /// </summary>
-        /// <param name="downloadSurveyResultsRequestDto"></param>
+        /// <param name="id">Идентификатор опроса</param>
+        /// <param name="filetype">Тип файла с результатами опроса</param>
         /// <response code="200">Ok</response>
         /// <response code="400">Bad Request</response>
         /// <response code="401">Unauthorized</response>
@@ -69,15 +71,14 @@ namespace BulletInBoardServer.Controllers.SurveysController.Controllers
         /// <response code="409">Conflict</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
-        [Route("/api/surveys/download-results")]
-        [Consumes("application/json")]
+        [Route("/api/surveys/download-results/{id}/{filetype}")]
         [ValidateModelState]
         [ProducesResponseType(statusCode: 200, type: typeof(DownloadSurveyResultsOk))]
         [ProducesResponseType(statusCode: 400, type: typeof(DownloadSurveyResultsForbidden))]
         [ProducesResponseType(statusCode: 403, type: typeof(DownloadSurveyResultsForbidden))]
         [ProducesResponseType(statusCode: 404, type: typeof(DownloadSurveyResultsNotFound))]
         [ProducesResponseType(statusCode: 409, type: typeof(DownloadSurveyResultsConflict))]
-        public abstract IActionResult DownloadSurveyResults([FromBody]DownloadSurveyResultsRequestDto downloadSurveyResultsRequestDto);
+        public abstract IActionResult DownloadSurveyResults([FromRoute (Name = "id")][Required]Guid id, [FromRoute (Name = "filetype")][Required]string filetype);
 
         /// <summary>
         /// Проголосовать в опросе

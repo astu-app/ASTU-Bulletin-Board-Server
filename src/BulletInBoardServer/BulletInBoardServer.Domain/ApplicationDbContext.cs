@@ -488,6 +488,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(e => e.Id)
                 .HasColumnName("id")
                 .HasColumnType("uuid");
+            
+            entity.Property(e => e.Serial)
+                .HasColumnName("serial")
+                .HasColumnType("integer")
+                .IsRequired();
 
             entity.Property(e => e.SurveyId)
                 .HasColumnName("survey_id")
@@ -521,6 +526,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnName("id")
                 .HasColumnType("uuid")
                 .ValueGeneratedOnAdd();
+            
+            entity.Property(e => e.Serial)
+                .HasColumnName("serial")
+                .HasColumnType("integer")
+                .IsRequired();
 
             entity.Property(e => e.QuestionId)
                 .HasColumnName("question_id")

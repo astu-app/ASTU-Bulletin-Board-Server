@@ -26,7 +26,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// Gets or Sets Content
         /// </summary>
         [DataMember(Name="content", EmitDefaultValue=false)]
-        public List<UserGroupHierarchyNodeDto> Content { get; set; }
+        public List<UserGroupSummaryDto> Content { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

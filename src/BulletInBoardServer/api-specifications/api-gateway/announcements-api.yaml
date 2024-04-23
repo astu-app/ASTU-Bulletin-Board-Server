@@ -86,17 +86,19 @@ paths:
         500:
           description: Internal Server Error
   
-  /announcements/get-details:
+  /announcements/get-details/{id}:
     get:
       tags: [ Announcements ]
       operationId: getAnnouncementDetails
       summary: Получить подробности о выбранном объявлении
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/announcementIdentifierDto'
+      parameters:
+        - in: path
+          name: id
+          schema: 
+            type: string
+            format: uuid
+          required: true
+          description: Идентификатор объявления
       responses:
         200:
           description: Ok
@@ -704,7 +706,7 @@ components:
           description: Аудитория объявления
           type: array
           items: 
-            $ref: '#/components/schemas/announcementAudienceUser'
+            $ref: './users-api.yaml#/components/schemas/userSummaryDto'
 
     fileSummaryDto:
       type: object
@@ -792,19 +794,19 @@ components:
 #              - $ref: '#/components/schemas/announcementAudienceUserGroup'
 #              - $ref: '#/components/schemas/announcementAudienceUser'
 
-    announcementAudienceUser:
-      description: Обычный пользователь в дереве аудитории объявления
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        firstName:
-          type: string
-        secondName:
-          type: string
-        patronymic:
-          type: string
+#    announcementAudienceUser:
+#      description: Обычный пользователь в дереве аудитории объявления
+#      type: object
+#      properties:
+#        id:
+#          type: string
+#          format: uuid
+#        firstName:
+#          type: string
+#        secondName:
+#          type: string
+#        patronymic:
+#          type: string
 
     createAnnouncementResponses:
       type: string

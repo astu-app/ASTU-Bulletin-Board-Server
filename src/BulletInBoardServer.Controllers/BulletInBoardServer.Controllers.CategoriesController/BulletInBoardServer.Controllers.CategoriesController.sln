@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2043
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletInBoardServer.Controllers.CategoriesController", "src\BulletInBoardServer.Controllers.CategoriesController\BulletInBoardServer.Controllers.CategoriesController.csproj", "{D14A6680-28CA-49CE-8672-D870621BC6D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletInBoardServer.Controllers.CategoriesController", "src\BulletInBoardServer.Controllers.CategoriesController\BulletInBoardServer.Controllers.CategoriesController.csproj", "{6B112B1C-5D8E-43FF-827F-7093A69EF361}"
 EndProject
 Global
     GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
         Release|Any CPU = Release|Any CPU
     EndGlobalSection
     GlobalSection(ProjectConfigurationPlatforms) = postSolution
-        {D14A6680-28CA-49CE-8672-D870621BC6D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-        {D14A6680-28CA-49CE-8672-D870621BC6D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-        {D14A6680-28CA-49CE-8672-D870621BC6D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-        {D14A6680-28CA-49CE-8672-D870621BC6D0}.Release|Any CPU.Build.0 = Release|Any CPU
+        {6B112B1C-5D8E-43FF-827F-7093A69EF361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {6B112B1C-5D8E-43FF-827F-7093A69EF361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {6B112B1C-5D8E-43FF-827F-7093A69EF361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {6B112B1C-5D8E-43FF-827F-7093A69EF361}.Release|Any CPU.Build.0 = Release|Any CPU
     EndGlobalSection
     GlobalSection(SolutionProperties) = preSolution
         HideSolutionNode = FALSE

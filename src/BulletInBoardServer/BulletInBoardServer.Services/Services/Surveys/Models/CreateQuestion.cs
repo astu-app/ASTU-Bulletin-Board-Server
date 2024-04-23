@@ -1,3 +1,3 @@
 ﻿namespace BulletInBoardServer.Services.Services.Surveys.Models;
 
-public record CreateQuestion(string Content, bool IsMultipleChoiceAllowed, IEnumerable<CreateAnswer> Answers);
+public record CreateQuestion(int Serial, string Content, bool IsMultipleChoiceAllowed, IEnumerable<CreateAnswer> Answers);

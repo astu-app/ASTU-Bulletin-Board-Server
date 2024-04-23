@@ -16,9 +16,9 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.SurveysController.Models
 { 
         /// <summary>
-        /// Ответы:   createSurveyForbidden - Пользователь не имеет права создать опрос 
+        /// Ответы:   createSurveyForbidden - Пользователь не имеет права создать опрос   surveyContainsQuestionSerialsDuplicates - Опрос содержит вопросы с одинаковыми порядковыми номерами   questionContainsAnswersSerialsDuplicates - Вопрос содержит варианты ответов с повторяющимися порядковыми номерами 
         /// </summary>
-        /// <value>Ответы:   createSurveyForbidden - Пользователь не имеет права создать опрос </value>
+        /// <value>Ответы:   createSurveyForbidden - Пользователь не имеет права создать опрос   surveyContainsQuestionSerialsDuplicates - Опрос содержит вопросы с одинаковыми порядковыми номерами   questionContainsAnswersSerialsDuplicates - Вопрос содержит варианты ответов с повторяющимися порядковыми номерами </value>
         [TypeConverter(typeof(CustomEnumConverter<CreateSurveyResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum CreateSurveyResponses
@@ -28,6 +28,18 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
             /// Enum CreateSurveyForbidden for createSurveyForbidden
             /// </summary>
             [EnumMember(Value = "createSurveyForbidden")]
-            CreateSurveyForbidden = 1
+            CreateSurveyForbidden = 1,
+            
+            /// <summary>
+            /// Enum SurveyContainsQuestionSerialsDuplicates for surveyContainsQuestionSerialsDuplicates
+            /// </summary>
+            [EnumMember(Value = "surveyContainsQuestionSerialsDuplicates")]
+            SurveyContainsQuestionSerialsDuplicates = 2,
+            
+            /// <summary>
+            /// Enum QuestionContainsAnswersSerialsDuplicates for questionContainsAnswersSerialsDuplicates
+            /// </summary>
+            [EnumMember(Value = "questionContainsAnswersSerialsDuplicates")]
+            QuestionContainsAnswersSerialsDuplicates = 3
         }
 }

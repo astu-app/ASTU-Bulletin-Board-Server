@@ -18,35 +18,31 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
     /// 
     /// </summary>
     [DataContract]
-    public class QuestionAnswerDetailsDto : IEquatable<QuestionAnswerDetailsDto>
+    public class UserSummaryDto : IEquatable<UserSummaryDto>
     {
         /// <summary>
-        /// Идентификатор варианта ответа
+        /// Gets or Sets Id
         /// </summary>
-        /// <value>Идентификатор варианта ответа</value>
         [DataMember(Name="id", EmitDefaultValue=false)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Порядковый номер варианта ответов в списке вариантов ответов
+        /// Gets or Sets FirstName
         /// </summary>
-        /// <value>Порядковый номер варианта ответов в списке вариантов ответов</value>
-        [DataMember(Name="serial", EmitDefaultValue=true)]
-        public int Serial { get; set; }
+        [DataMember(Name="firstName", EmitDefaultValue=false)]
+        public string FirstName { get; set; }
 
         /// <summary>
-        /// Текстовое содержимое варианта ответа
+        /// Gets or Sets SecondName
         /// </summary>
-        /// <value>Текстовое содержимое варианта ответа</value>
-        [DataMember(Name="content", EmitDefaultValue=false)]
-        public string Content { get; set; }
+        [DataMember(Name="secondName", EmitDefaultValue=false)]
+        public string SecondName { get; set; }
 
         /// <summary>
-        /// Количество пользователей, проголосовавших за вариант ответа
+        /// Gets or Sets Patronymic
         /// </summary>
-        /// <value>Количество пользователей, проголосовавших за вариант ответа</value>
-        [DataMember(Name="votersAmount", EmitDefaultValue=true)]
-        public int VotersAmount { get; set; }
+        [DataMember(Name="patronymic", EmitDefaultValue=true)]
+        public string? Patronymic { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -55,11 +51,11 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class QuestionAnswerDetailsDto {\n");
+            sb.Append("class UserSummaryDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
-            sb.Append("  Serial: ").Append(Serial).Append("\n");
-            sb.Append("  Content: ").Append(Content).Append("\n");
-            sb.Append("  VotersAmount: ").Append(VotersAmount).Append("\n");
+            sb.Append("  FirstName: ").Append(FirstName).Append("\n");
+            sb.Append("  SecondName: ").Append(SecondName).Append("\n");
+            sb.Append("  Patronymic: ").Append(Patronymic).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -82,15 +78,15 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((QuestionAnswerDetailsDto)obj);
+            return obj.GetType() == GetType() && Equals((UserSummaryDto)obj);
         }
 
         /// <summary>
-        /// Returns true if QuestionAnswerDetailsDto instances are equal
+        /// Returns true if UserSummaryDto instances are equal
         /// </summary>
-        /// <param name="other">Instance of QuestionAnswerDetailsDto to be compared</param>
+        /// <param name="other">Instance of UserSummaryDto to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(QuestionAnswerDetailsDto other)
+        public bool Equals(UserSummaryDto other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -102,19 +98,19 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Id.Equals(other.Id)
                 ) && 
                 (
-                    Serial == other.Serial ||
-                    
-                    Serial.Equals(other.Serial)
+                    FirstName == other.FirstName ||
+                    FirstName != null &&
+                    FirstName.Equals(other.FirstName)
                 ) && 
                 (
-                    Content == other.Content ||
-                    Content != null &&
-                    Content.Equals(other.Content)
+                    SecondName == other.SecondName ||
+                    SecondName != null &&
+                    SecondName.Equals(other.SecondName)
                 ) && 
                 (
-                    VotersAmount == other.VotersAmount ||
-                    
-                    VotersAmount.Equals(other.VotersAmount)
+                    Patronymic == other.Patronymic ||
+                    Patronymic != null &&
+                    Patronymic.Equals(other.Patronymic)
                 );
         }
 
@@ -130,12 +126,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                 // Suitable nullity checks etc, of course :)
                     if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
-                    
-                    hashCode = hashCode * 59 + Serial.GetHashCode();
-                    if (Content != null)
-                    hashCode = hashCode * 59 + Content.GetHashCode();
-                    
-                    hashCode = hashCode * 59 + VotersAmount.GetHashCode();
+                    if (FirstName != null)
+                    hashCode = hashCode * 59 + FirstName.GetHashCode();
+                    if (SecondName != null)
+                    hashCode = hashCode * 59 + SecondName.GetHashCode();
+                    if (Patronymic != null)
+                    hashCode = hashCode * 59 + Patronymic.GetHashCode();
                 return hashCode;
             }
         }
@@ -143,12 +139,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(QuestionAnswerDetailsDto left, QuestionAnswerDetailsDto right)
+        public static bool operator ==(UserSummaryDto left, UserSummaryDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(QuestionAnswerDetailsDto left, QuestionAnswerDetailsDto right)
+        public static bool operator !=(UserSummaryDto left, UserSummaryDto right)
         {
             return !Equals(left, right);
         }

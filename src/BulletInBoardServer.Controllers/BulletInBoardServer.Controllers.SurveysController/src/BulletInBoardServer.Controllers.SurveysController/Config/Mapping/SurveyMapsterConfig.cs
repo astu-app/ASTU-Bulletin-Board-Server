@@ -20,11 +20,13 @@ public class SurveyMapsterConfig : IRegister
             .Map(d => d.Questions, s => s.Questions.Adapt<IEnumerable<CreateQuestion>>()); 
 
         config.NewConfig<CreateQuestionDto, CreateQuestion>()
+            .Map(d => d.Serial, s => s.Serial)
             .Map(d => d.Content, s => s.Content)
             .Map(d => d.IsMultipleChoiceAllowed, s => s.IsMultipleChoiceAllowed)
             .Map(d => d.Answers, s => s.Answers); 
 
         config.NewConfig<CreateAnswerDto, CreateAnswer>()
+            .Map(d => d.Serial, s => s.Serial)
             .Map(d => d.Content, s => s.Content);
         
         config.NewConfig<VoteInSurveyDto, SurveyVotes>()

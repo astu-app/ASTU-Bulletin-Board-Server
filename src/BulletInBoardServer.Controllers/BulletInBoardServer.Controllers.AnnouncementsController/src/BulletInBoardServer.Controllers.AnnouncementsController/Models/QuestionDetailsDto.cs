@@ -30,6 +30,13 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Порядковый номер вопроса в списке вопросов
+        /// </summary>
+        /// <value>Порядковый номер вопроса в списке вопросов</value>
+        [DataMember(Name="serial", EmitDefaultValue=true)]
+        public int Serial { get; set; }
+
+        /// <summary>
         /// Текстовое содержимое вопроса
         /// </summary>
         /// <value>Текстовое содержимое вопроса</value>
@@ -59,6 +66,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             var sb = new StringBuilder();
             sb.Append("class QuestionDetailsDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
+            sb.Append("  Serial: ").Append(Serial).Append("\n");
             sb.Append("  Content: ").Append(Content).Append("\n");
             sb.Append("  IsMultipleChoiceAllowed: ").Append(IsMultipleChoiceAllowed).Append("\n");
             sb.Append("  Answers: ").Append(Answers).Append("\n");
@@ -104,6 +112,11 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Id.Equals(other.Id)
                 ) && 
                 (
+                    Serial == other.Serial ||
+                    
+                    Serial.Equals(other.Serial)
+                ) && 
+                (
                     Content == other.Content ||
                     Content != null &&
                     Content.Equals(other.Content)
@@ -133,6 +146,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                 // Suitable nullity checks etc, of course :)
                     if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
+                    
+                    hashCode = hashCode * 59 + Serial.GetHashCode();
                     if (Content != null)
                     hashCode = hashCode * 59 + Content.GetHashCode();
                     

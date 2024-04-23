@@ -6,6 +6,7 @@ namespace BulletInBoardServer.Domain.Models.Attachments;
 /// Базовый класс для вложения объявлений
 /// </summary>
 /// <param name="id">Идентификатор вложения</param>
+/// <param name="announcements">Список объявлений, к которым относятся вопросы</param>
 /// <param name="type">Тип вложения</param>
 public abstract class AttachmentBase(Guid id, AnnouncementList announcements, string type)
 {

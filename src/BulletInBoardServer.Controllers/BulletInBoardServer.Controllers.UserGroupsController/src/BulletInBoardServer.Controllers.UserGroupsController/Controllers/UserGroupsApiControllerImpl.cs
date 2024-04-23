@@ -341,16 +341,53 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Empty; // todo id пользователя
+        // var requesterId = Guid.Empty; // todo id пользователя
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // todo id пользователя
 
         try
         {
             var usergroups = _service.GetOwnedList(requesterId);
 
-            _logger.Information("Пользователь {UserId} получил список своих групп пользователей", requesterId);
+            _logger.Information("Пользователь {UserId} получил список групп пользователей, в которых является администратором", requesterId);
 
             var dtos = usergroups.Adapt<IEnumerable<UserGroupSummaryDto>>();
             return Ok(dtos);
+        }
+        catch (Exception err)
+        {
+            _loggingHelper.LogError(err, 500, "Получение списка своих групп пользователей", requesterId);
+            return Problem();
+        }
+    }
+
+    /// <summary>
+    /// Получение иерархии управляемых групп пользователей для пользователя
+    /// </summary>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="500">Internal Server Error</response>
+    public override IActionResult GetUserHierarchy()
+    {
+        /*
+         * 200 +
+         * 403
+         *   getUsergroupHierarchyForbidden
+         * 500 +
+         */
+
+        // var requesterId = Guid.Empty; // todo id пользователя
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // todo id пользователя
+
+        try
+        {
+            var usergroups = _service.GetUsergroupHierarchy(requesterId);
+
+            _logger.Information("Пользователь {UserId} иерархии своих  групп пользователей", requesterId);
+
+            var dto = usergroups.Adapt<UsergroupHierarchyDto>();
+            return Ok(dto);
         }
         catch (Exception err)
         {

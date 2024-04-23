@@ -14,6 +14,11 @@ public class Question
     /// Идентификатор вопроса
     /// </summary>
     public Guid Id { get; init; }
+    
+    /// <summary>
+    /// Порядковый номер вопроса в списке
+    /// </summary>
+    public int Serial { get; init; }
 
     /// <summary>
     /// Идентификатор опроса, к которому относится вопрос
@@ -43,12 +48,13 @@ public class Question
 
 
 
-    public Question(Guid id, Guid surveyId, string content, bool isMultipleChoiceAllowed, AnswerList answers)
+    public Question(Guid id, int serial, Guid surveyId, string content, bool isMultipleChoiceAllowed, AnswerList answers)
     {
         QuestionValidator.QuestionContentValidOrThrow(content);
         QuestionValidator.AllAnswersValidOrThrow(answers);
 
         Id = id;
+        Serial = serial;
         SurveyId = surveyId;
         Content = content;
         IsMultipleChoiceAllowed = isMultipleChoiceAllowed;

@@ -103,17 +103,25 @@ paths:
         500:
           description: Internal Server Error
   
-  /surveys/download-results:
+  /surveys/download-results/{id}/{filetype}:
     get:
       operationId: downloadSurveyResults
       summary: Скачать результаты опроса
       tags: [ Surveys ]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/downloadSurveyResultsRequestDto'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Идентификатор опроса
+        - in: path
+          name: filetype
+          schema: 
+            type: string
+          description: Тип файла с результатами опроса
+          required: true
       responses:
         200:
           description: Ok
@@ -356,6 +364,10 @@ components:
     createQuestionDto:
       type: object
       properties:
+        serial:
+          description: Порядковый номер вопроса в списке вопросов
+          type: integer
+          minimum: 0
         content:
           description: Содержимое вопроса
           type: string
@@ -376,6 +388,10 @@ components:
           description: Идентификатор опроса
           type: string
           format: uuid
+        serial:
+          description: Порядковый номер вопроса в списке вопросов
+          type: integer
+          minimum: 0
         content:
           description: Текстовое содержимое вопроса
           type: string
@@ -397,6 +413,10 @@ components:
           description: Идентификатор варианта ответа
           type: string
           format: uuid
+        serial:
+          description: Порядковый номер варианта ответов в списке вариантов ответов
+          type: integer
+          minimum: 0
         content:
           description: Текстовое содержимое варианта ответа
           type: string
@@ -406,14 +426,13 @@ components:
           minimum: 0
     
     # answer
-    answerIdentifierDto:
-      description: Идентификатор варианта ответа
-      type: string
-      format: uuid
-    
     createAnswerDto:
       type: object
       properties:
+        serial:
+          description: Порядковый номер варианта ответа в списке вариантов ответов
+          type: integer
+          minimum: 0
         content:
           description: текстовое содержимое варианта ответа
           type: string
@@ -457,9 +476,14 @@ components:
       enum:
         # 403
         - createSurveyForbidden
+        # 409
+        - surveyContainsQuestionSerialsDuplicates
+        - questionContainsAnswersSerialsDuplicates
       description: >
         Ответы:
           createSurveyForbidden - Пользователь не имеет права создать опрос
+          surveyContainsQuestionSerialsDuplicates - Опрос содержит вопросы с одинаковыми порядковыми номерами
+          questionContainsAnswersSerialsDuplicates - Вопрос содержит варианты ответов с повторяющимися порядковыми номерами
 
     getSurveyDetailsResponses:
       type: string

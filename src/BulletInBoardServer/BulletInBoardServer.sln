@@ -100,7 +100,6 @@ Global
 		{735F52AB-4B78-4D7C-BA29-7E23B5BD72CF} = {E55E9672-2EB6-407E-B7D2-C1ACB3CB5FB8}
 	EndGlobalSection
 	GlobalSection(RiderSharedRunConfigurations) = postSolution
-		File = api-specifications\openapi-generator-config\ping-api.yaml.run.xml
 		File = api-specifications\openapi-generator-config\surveys-api.yaml.run.xml
 		File = api-specifications\openapi-generator-config\announcements-api.yaml.run.xml
 		File = api-specifications\openapi-generator-config\announcement-categories-api.yaml.run.xml

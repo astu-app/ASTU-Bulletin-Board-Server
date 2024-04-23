@@ -77,6 +77,7 @@ public class Survey : AttachmentBase
     /// <param name="autoClosingAt">Время автоматического закрытия опроса</param>
     /// <param name="voteFinishedAt">Момент фактического закрытия опроса</param>
     /// <param name="questions">Вопросы опроса</param>
+    /// <exception cref="SurveyContainsQuestionSerialsDuplicates">Опрос содержит вопросы с повторяющимися порядковыми номерами</exception>
     /// <exception cref="ArgumentNullException">Список вопросов null</exception>
     /// <exception cref="ArgumentException">Список вопросов пустой</exception>
     public Survey(

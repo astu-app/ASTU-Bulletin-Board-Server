@@ -23,6 +23,13 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
     public class CreateQuestionDto : IEquatable<CreateQuestionDto>
     {
         /// <summary>
+        /// Порядковый номер вопроса в списке вопросов
+        /// </summary>
+        /// <value>Порядковый номер вопроса в списке вопросов</value>
+        [DataMember(Name="serial", EmitDefaultValue=true)]
+        public int Serial { get; set; }
+
+        /// <summary>
         /// Содержимое вопроса
         /// </summary>
         /// <value>Содержимое вопроса</value>
@@ -51,6 +58,7 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
         {
             var sb = new StringBuilder();
             sb.Append("class CreateQuestionDto {\n");
+            sb.Append("  Serial: ").Append(Serial).Append("\n");
             sb.Append("  Content: ").Append(Content).Append("\n");
             sb.Append("  IsMultipleChoiceAllowed: ").Append(IsMultipleChoiceAllowed).Append("\n");
             sb.Append("  Answers: ").Append(Answers).Append("\n");
@@ -91,6 +99,11 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
 
             return 
                 (
+                    Serial == other.Serial ||
+                    
+                    Serial.Equals(other.Serial)
+                ) && 
+                (
                     Content == other.Content ||
                     Content != null &&
                     Content.Equals(other.Content)
@@ -118,6 +131,8 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
+                    
+                    hashCode = hashCode * 59 + Serial.GetHashCode();
                     if (Content != null)
                     hashCode = hashCode * 59 + Content.GetHashCode();
                     

@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.ComponentModel.DataAnnotations;
 using BulletInBoardServer.Controllers.UserGroupsController.Attributes;
 using BulletInBoardServer.Controllers.UserGroupsController.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -128,9 +129,24 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         public abstract IActionResult GetOwnedUsergroups();
 
         /// <summary>
+        /// Получение иерархии управляемых групп пользователей для пользователя
+        /// </summary>
+        /// <response code="200">Ok</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Route("/api/usergroups/get-user-hierarchy")]
+        [ValidateModelState]
+        [ProducesResponseType(statusCode: 200, type: typeof(GetUserHierarchyOk))]
+        [ProducesResponseType(statusCode: 403, type: typeof(GetUserHierarchyForbidden))]
+        public abstract IActionResult GetUserHierarchy();
+
+        /// <summary>
         /// Получение подробной информации о группе пользователей
         /// </summary>
-        /// <param name="body"></param>
+        /// <param name="id">Идентификатор группы пользователей</param>
         /// <response code="200">Ok</response>
         /// <response code="400">Bad Request</response>
         /// <response code="401">Unauthorized</response>
@@ -138,13 +154,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
-        [Route("/api/usergroups/get-details")]
-        [Consumes("application/json")]
+        [Route("/api/usergroups/get-details/{id}")]
         [ValidateModelState]
         [ProducesResponseType(statusCode: 200, type: typeof(GetUsergroupDetailsOk))]
         [ProducesResponseType(statusCode: 403, type: typeof(GetUsergroupDetailsForbidden))]
         [ProducesResponseType(statusCode: 404, type: typeof(GetUsergroupDetailsNotFound))]
-        public abstract IActionResult GetUsergroupDetails([FromBody]Guid body);
+        public abstract IActionResult GetUsergroupDetails([FromRoute (Name = "id")][Required]Guid id);
 
         /// <summary>
         /// Редактирование группы пользователей
