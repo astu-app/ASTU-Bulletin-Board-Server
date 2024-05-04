@@ -140,6 +140,61 @@ paths:
         500:
           description: Internal Server Error
 
+  /announcements/get-update-content/{id}:
+    get:
+      tags: [ Announcements ]
+      operationId: getAnnouncementUpdateContent
+      summary: Получить данные для редактирования объявления
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Идентификатор объявления
+      responses:
+        200:
+          description: Ok
+          content: 
+            application/json:
+              schema:
+                type: object
+                title: getAnnouncementUpdateContentOk
+                properties:
+                  content:
+                    $ref: '#/components/schemas/contentForAnnouncementUpdatingDto'
+        400:
+          # Некорректный формат идентификатора
+          description: Bad Request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                title: getAnnouncementUpdateContentForbidden
+                properties:
+                  code:
+                    # getAnnouncementUpdateContentForbidden
+                    $ref: '#/components/schemas/getAnnouncementUpdateContentResponses'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema: 
+                type: object
+                title: getAnnouncementUpdateContentNotFound
+                properties:
+                  code:
+                    # announcementDoesNotExist
+                    $ref: '#/components/schemas/getAnnouncementUpdateContentResponses'
+        500:
+          description: Internal Server Error
+        
+    
   /announcements/update:
     put:
       tags: [ Announcements ]
@@ -729,6 +784,71 @@ components:
             - mediafile # Медиафайл отображается в объявлении сразу
             - file # Обычный файл загружается вручную
 
+    contentForAnnouncementUpdatingDto:
+      type: object
+      properties:
+        id:
+          description: Идентификатор объявления
+          type: string
+          format: uuid
+        authorName:
+          description: Автор объявления
+          type: string
+        viewsCount:
+          description: Количество просмотревших объявление пользователей
+          type: integer
+          minimum: 0
+        audienceSize:
+          description: Размер аудитории объявления
+          type: integer
+          minimum: 0
+        content:
+          description: Текстовое содержимое объявления
+          type: string
+        categories:
+          description: Категории объявления
+          type: array
+          items:
+            $ref: './announcement-categories-api.yaml#/components/schemas/announcementCategoryDetailsDto'
+        audienceHierarchy:
+          $ref: './usergroups-api.yaml#/components/schemas/usergroupHierarchyDto'
+        files:
+          description: Массив файлов, прикрепленных к объявлению
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/fileSummaryDto'
+        surveys:
+          description: Массив опросов объявления
+          type: array
+          nullable: true
+          items:
+            $ref: './surveys-api.yaml#/components/schemas/surveyDetailsDto'
+        publishedAt:
+          description: Момент публикации объявления. Объявление не является опубликованным, если null
+          type: string
+          format: date-time
+          nullable: true
+          default: null
+        hiddenAt:
+          description: Момент сокрытия объявления. Объявление не является скрытым, если null
+          type: string
+          format: date-time
+          nullable: true
+          default: null
+        delayedHidingAt:
+          description: Момент отложенного сокрытия объявления. Объявление не будет скрыто автоматически, если null
+          type: string
+          format: date-time
+          nullable: true
+          default: null
+        delayedPublishingAt:
+          description: Момент отложенной публикации объявления. Объявление не будет опубликовано автоматически, если null
+          type: string
+          format: date-time
+          nullable: true
+          default: null
+    
     updateAnnouncementDto:
       type: object
       required:
@@ -848,6 +968,18 @@ components:
           detailsAccessForbidden - Пользователь не имеет права просмотреть подробности объявления
           announcementDoesNotExist - Объявление не существует
 
+    getAnnouncementUpdateContentResponses:
+      type: string
+      enum:
+        # 403
+        - getAnnouncementUpdateContentForbidden
+        # 404
+        - announcementDoesNotExist
+      description: >
+        Ответы:
+          getAnnouncementUpdateContentForbidden - Пользователь не имеет права получить данные для редактирования объявление
+          announcementDoesNotExist - Объявление не существует
+    
     updateAnnouncementResponses:
       type: string
       enum:

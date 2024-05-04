@@ -24,3 +24,20 @@ components:
         patronymic:
           type: string
           nullable: true
+
+    selectableUserSummaryDto:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        secondName:
+          type: string
+        patronymic:
+          type: string
+          nullable: true
+        isSelected:
+          type: boolean

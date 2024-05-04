@@ -81,6 +81,24 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         public abstract IActionResult GetAnnouncementDetails([FromRoute (Name = "id")][Required]Guid id);
 
         /// <summary>
+        /// Получить данные для редактирования объявления
+        /// </summary>
+        /// <param name="id">Идентификатор объявления</param>
+        /// <response code="200">Ok</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Route("/api/announcements/get-update-content/{id}")]
+        [ValidateModelState]
+        [ProducesResponseType(statusCode: 200, type: typeof(GetAnnouncementUpdateContentOk))]
+        [ProducesResponseType(statusCode: 403, type: typeof(GetAnnouncementUpdateContentForbidden))]
+        [ProducesResponseType(statusCode: 404, type: typeof(GetAnnouncementUpdateContentNotFound))]
+        public abstract IActionResult GetAnnouncementUpdateContent([FromRoute (Name = "id")][Required]Guid id);
+
+        /// <summary>
         /// Получить список объявлений, ожидающих отложенное сокрытие
         /// </summary>
         /// <response code="200">Ok</response>

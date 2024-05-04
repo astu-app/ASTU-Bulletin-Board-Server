@@ -4,6 +4,7 @@ using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 using BulletInBoardServer.Services.Services.Common.Exceptions;
+using BulletInBoardServer.Services.Services.UserGroups;
 
 namespace BulletInBoardServer.Services.Services.Announcements;
 
@@ -15,7 +16,8 @@ public class AnnouncementService(
     PublishedAnnouncementService publishedAnnouncementService,
     HiddenAnnouncementService hiddenAnnouncementService,
     DelayedPublicationAnnouncementService delayedPublicationAnnouncementService,
-    DelayedHidingAnnouncementService delayedHidingAnnouncementService)
+    DelayedHidingAnnouncementService delayedHidingAnnouncementService,
+    UserGroupService userGroupService)
 {
     /* ********************************** Общие операции *********************************** */
 
@@ -37,10 +39,26 @@ public class AnnouncementService(
     /// <param name="requesterId"></param>
     /// <param name="announcementId"></param>
     /// <returns>Объявления с загруженными связанными сущностями</returns>
-    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public Announcement GetDetails(Guid requesterId, Guid announcementId) =>
         generalOperationsService.GetDetails(requesterId, announcementId);
+
+    /// <summary>
+    /// Метод возвращает данные для редактирования указанного объявления
+    /// </summary>
+    /// <param name="requesterId">Id пользователя, запросившего операцию</param>
+    /// <param name="announcementId">Id объявления, данные для редактирования которого овзвращаются</param>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в БД</exception>
+    /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
+    /// <returns>Данные для редактирования объявления</returns>
+    public UpdateAnnouncementContent GetContentForAnnouncementUpdating(Guid requesterId, Guid announcementId)
+    {
+        var details = GetDetails(requesterId, announcementId);
+        var audienceHierarchy = userGroupService.GetUsergroupHierarchy(requesterId);
+
+        return new UpdateAnnouncementContent(details, audienceHierarchy);
+    }
 
     /// <summary>
     /// Метод редактирует объявление
@@ -59,7 +77,7 @@ public class AnnouncementService(
     /// </summary>
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="announcementId">Id заданного объявления</param>
-    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void Delete(Guid requesterId, Guid announcementId) =>
         generalOperationsService.Delete(requesterId, announcementId);
@@ -70,7 +88,7 @@ public class AnnouncementService(
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="announcementId">Id заданного объявления</param>
     /// <param name="publishedAt">Время публикации объявления</param>
-    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void Publish(Guid requesterId, Guid announcementId, DateTime publishedAt) =>
         generalOperationsService.PublishManually(requesterId, announcementId, publishedAt);
@@ -95,7 +113,7 @@ public class AnnouncementService(
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <param name="announcementId">Id объявления, которое требуется скрыть</param>
     /// <param name="hiddenAt">Момент сокрытия объявления</param>
-    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void Hide(Guid requesterId, Guid announcementId, DateTime hiddenAt) =>
         publishedAnnouncementService.HideManually(requesterId, announcementId, hiddenAt);
@@ -120,7 +138,7 @@ public class AnnouncementService(
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <param name="announcementId">Id восстанавливаемого объявления</param>
     /// <param name="restoredAt">Время восстановления объявления</param>
-    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void Restore(Guid requesterId, Guid announcementId, DateTime restoredAt) =>
         hiddenAnnouncementService.Restore(requesterId, announcementId, restoredAt);

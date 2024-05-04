@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.AnnouncementsController.Converters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
@@ -20,7 +21,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// </summary>
         /// <value>Ответы:   audienceNullOrEmpty - Список аудитории null или пустой   contentNullOrEmpty - Текстовое содержимое объявления является null, пустым или состоит только из пробельных символов   announcementCreationForbidden - Пользователь не имеет права создать объявление   announcementCategoriesDoNotExist - В качестве одного или нескольких из id категорий объявлений прикреплен несуществующий в базе id   attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом   delayedPublishingMomentAfterDelayedHidingMoment - Момент отложенной публикации наступит после момента отложенного сокрытия </value>
         [TypeConverter(typeof(CustomEnumConverter<CreateAnnouncementResponses>))]
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum CreateAnnouncementResponses
         {
             

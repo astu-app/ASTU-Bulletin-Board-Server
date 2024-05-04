@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.AnnouncementsController.Converters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
@@ -20,7 +21,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// </summary>
         /// <value>Ответы:   postedAnnouncementsListAccessForbidden - Пользователь не имеет права просматривать списки опубликованных объявлений </value>
         [TypeConverter(typeof(CustomEnumConverter<GetPostedAnnouncementListResponses>))]
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum GetPostedAnnouncementListResponses
         {
             

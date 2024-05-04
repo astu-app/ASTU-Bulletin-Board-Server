@@ -40,7 +40,7 @@ public class HiddenAnnouncementService(
     /// <param name="requesterId">Id запросившего операцию пользователя</param>
     /// <param name="announcementId">Id восстанавливаемого объявления</param>
     /// <param name="restoredAt">Время восстановления объявления</param>
-    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void Restore(Guid requesterId, Guid announcementId, DateTime restoredAt)
     {

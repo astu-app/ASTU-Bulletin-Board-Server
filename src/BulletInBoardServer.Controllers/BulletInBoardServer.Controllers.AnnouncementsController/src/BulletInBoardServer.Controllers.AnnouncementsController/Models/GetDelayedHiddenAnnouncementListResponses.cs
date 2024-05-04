@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.AnnouncementsController.Converters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
@@ -20,7 +21,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// </summary>
         /// <value>Ответы:    getDelayedHiddenAnnouncementListAccessForbidden - Пользователь не имеет права просматривать списки объявлений, ожидающих отложенное сокрытие</value>
         [TypeConverter(typeof(CustomEnumConverter<GetDelayedHiddenAnnouncementListResponses>))]
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum GetDelayedHiddenAnnouncementListResponses
         {
             

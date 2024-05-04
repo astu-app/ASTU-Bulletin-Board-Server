@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.UserGroupsController.Converters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
@@ -20,7 +21,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// </summary>
         /// <value>Ответы:   getUsergroupDetailsForbidden - Пользователь не имеет права запрашивать детали группы пользователей   userGroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id      </value>
         [TypeConverter(typeof(CustomEnumConverter<GetUsergroupDetailsResponses>))]
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum GetUsergroupDetailsResponses
         {
             

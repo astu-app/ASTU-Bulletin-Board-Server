@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.AnnouncementsController.Converters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
@@ -20,7 +21,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// </summary>
         /// <value>Ответы:   contentEmpty - Текстовое содержимое объявления пустое или состоит только из пробельных символов   audienceEmpty - Аудитория пользователей пуста   announcementEditingForbidden - Пользователь не имеет права изменить объявление   announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id   announcementCategoriesDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id   attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент отложенного сокрытия уже наступил в прошлом   autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто   autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым   cannotDetachSurvey - Открепление опросов запрещено </value>
         [TypeConverter(typeof(CustomEnumConverter<UpdateAnnouncementResponses>))]
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum UpdateAnnouncementResponses
         {
             

@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.UserGroupsController.Converters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
@@ -20,7 +21,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// </summary>
         /// <value>Ответы:   addMembersToUsergroupForbidden - Пользователь не имеет права добавить пользователя в группу пользователей   userGroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id   usersDoNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id   userAlreadyMember - В качестве одного или нескольких из id прикреплен id пользователя, уже являющегося участником этой группы пользователей   userIsAdmin - В качестве одного из id прикреплен id пользователя, уже являющегося администратором этой группы пользователей </value>
         [TypeConverter(typeof(CustomEnumConverter<AddMembersToUsergroupResponses>))]
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum AddMembersToUsergroupResponses
         {
             

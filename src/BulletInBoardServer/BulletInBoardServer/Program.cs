@@ -98,10 +98,12 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/ping");
 
-Task.Run(InitDelayedAnnouncementOperationsDispatcherAsync);
-Task.Run(InitAutomaticSurveyOperationsDispatcherAsync);
+var initDelayedAnnouncementOperationsTask = Task.Run(InitDelayedAnnouncementOperationsDispatcherAsync);
+var initAutomaticSurveyOperationsTask = Task.Run(InitAutomaticSurveyOperationsDispatcherAsync);
 
 app.Run();
+
+Task.WaitAll(initDelayedAnnouncementOperationsTask, initAutomaticSurveyOperationsTask);
 return;
 
 

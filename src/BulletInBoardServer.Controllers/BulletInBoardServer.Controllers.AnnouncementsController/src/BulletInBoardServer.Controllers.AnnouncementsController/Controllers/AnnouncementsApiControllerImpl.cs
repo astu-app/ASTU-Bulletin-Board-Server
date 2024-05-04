@@ -25,7 +25,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
 /// </summary>
 public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 {
-    private readonly AnnouncementService _service;
+    private readonly AnnouncementService _announcementService;
+    
 
     private readonly ILogger _logger = Log.ForContext<AnnouncementService>();
     private readonly LoggingHelper _loggingHelper;
@@ -35,9 +36,9 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <summary>
     /// Контроллер объявлений
     /// </summary>
-    public AnnouncementsApiControllerImpl(AnnouncementService service)
+    public AnnouncementsApiControllerImpl(AnnouncementService announcementService)
     {
-        _service = service;
+        _announcementService = announcementService;
         _loggingHelper = new LoggingHelper(_logger);
     }
 
@@ -79,7 +80,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         var createAnnouncement = dto.Adapt<CreateAnnouncement>();
         try
         {
-            var announcement = _service.Create(requesterId, createAnnouncement);
+            var announcement = _announcementService.Create(requesterId, createAnnouncement);
 
             _logger.Information(
                 "Пользователь {UserId} создал объявление {AnnouncementId}", 
@@ -187,7 +188,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 
         try
         {
-            _service.Delete(requesterId, announcementId);
+            _announcementService.Delete(requesterId, announcementId);
 
             _logger.Information("Пользователь {RequesterId} удалил объявление {AnnouncementId}",
                 requesterId, announcementId);
@@ -202,7 +203,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
                 ResponseConstructor.ConstructResponseWithOnlyCode(DeleteAnnouncementResponses
                     .AnnouncementDeletionForbidden));
         }
-        catch (AnnouncementDoesNotExist err)
+        catch (AnnouncementDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Удаление объявления",
                 nameof(DeleteAnnouncementResponses.AnnouncementDoesNotExist),
@@ -244,7 +245,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 
         try
         {
-            var announcement = _service.GetDetails(requesterId, announcementId);
+            var announcement = _announcementService.GetDetails(requesterId, announcementId);
 
             _logger.Information(
                 "Пользователь {RequesterId} получил подробности объявления {AnnouncementId}",
@@ -260,7 +261,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
                 ResponseConstructor.ConstructResponseWithOnlyCode(GetAnnouncementDetailsResponses
                     .DetailsAccessForbidden));
         }
-        catch (AnnouncementDoesNotExist err)
+        catch (AnnouncementDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Получение деталей объявления",
                 nameof(GetAnnouncementDetailsResponses.AnnouncementDoesNotExist), requesterId, err.Message);
@@ -271,6 +272,64 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         catch (Exception err)
         {
             _loggingHelper.LogError(err, 500, "Получение деталей объявления", requesterId);
+            return Problem();
+        }
+    }
+
+    /// <summary>
+    /// Получить данные для редактирования объявления
+    /// </summary>
+    /// <param name="id">Идентификатор объявления</param>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">Internal Server Error</response>
+    public override IActionResult GetAnnouncementUpdateContent([FromRoute (Name = "id")][Required] Guid id)
+    {
+        /*
+         * 200 + 
+         * 403:
+         *   getAnnouncementUpdateContentForbidden +
+         * 409:
+         *   announcementDoesNotExist +
+         * 500 +
+         */
+
+        // var requesterId = Guid.Empty; // todo id пользователя
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
+
+        try
+        {
+            var content = _announcementService.GetContentForAnnouncementUpdating(requesterId, id);
+
+            _logger.Information(
+                "Пользователь {RequesterId} получил данные для редактирования объявления {AnnouncementId}",
+                requesterId, id);
+
+            return Ok(content.Adapt<ContentForAnnouncementUpdatingDto>());
+        }
+        catch (OperationNotAllowedException err)
+        {
+            _loggingHelper.LogWarning(403, "Получение данных для редактирования объявления",
+                nameof(GetAnnouncementUpdateContentResponses.GetAnnouncementUpdateContentForbidden), requesterId,
+                err.Message);
+            return StatusCode(403,
+                ResponseConstructor.ConstructResponseWithOnlyCode(GetAnnouncementUpdateContentResponses
+                    .GetAnnouncementUpdateContentForbidden));
+        }
+        catch (AnnouncementDoesNotExistException err)
+        {
+            _loggingHelper.LogWarning(404, "Получение данных для редактирования объявления",
+                nameof(GetAnnouncementUpdateContentResponses.AnnouncementDoesNotExist), requesterId, err.Message);
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(GetAnnouncementUpdateContentResponses
+                    .AnnouncementDoesNotExist));
+        }
+        catch (Exception err)
+        {
+            _loggingHelper.LogError(err, 500, "Получение данных для редактирования объявления", requesterId);
             return Problem();
         }
     }
@@ -295,7 +354,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 
         try
         {
-            var announcements = _service.GetDelayedHidingAnnouncementsForUser(requesterId);
+            var announcements = _announcementService.GetDelayedHidingAnnouncementsForUser(requesterId);
 
             _logger.Information("Пользователь {RequesterId} запросил список объявлений с отложенным сокрытием",
                 requesterId);
@@ -329,7 +388,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 
         try
         {
-            var announcements = _service.GetDelayedPublicationAnnouncements(requesterId);
+            var announcements = _announcementService.GetDelayedPublicationAnnouncements(requesterId);
 
             _logger.Information("Пользователь {RequesterId} запросил список объявлений с отложенной публикацией",
                 requesterId);
@@ -363,7 +422,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 
         try
         {
-            var announcements = _service.GetHiddenAnnouncements(requesterId);
+            var announcements = _announcementService.GetHiddenAnnouncements(requesterId);
 
             _logger.Information("Пользователь {RequesterId} запросил список скрытых объявлений", requesterId);
 
@@ -397,7 +456,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 
         try
         {
-            var announcements = _service.GetPublishedAnnouncements(requesterId);
+            var announcements = _announcementService.GetPublishedAnnouncements(requesterId);
 
             _logger.Information("Пользователь {RequesterId} запросил список опубликованных объявлений",
                 requesterId);
@@ -440,7 +499,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 
         try
         {
-            _service.Hide(requesterId, announcementId, DateTime.Now);
+            _announcementService.Hide(requesterId, announcementId, DateTime.Now);
 
             _logger.Information("Пользователь {RequesterId} скрыл объявление {AnnouncementId}",
                 requesterId, announcementId);
@@ -455,7 +514,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
                 ResponseConstructor.ConstructResponseWithOnlyCode(HidePostedAnnouncementResponses
                     .AnnouncementHidingForbidden));
         }
-        catch (AnnouncementDoesNotExist err)
+        catch (AnnouncementDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Сокрытие объявления",
                 nameof(HidePostedAnnouncementResponses.AnnouncementDoesNotExist), requesterId, err.Message);
@@ -511,7 +570,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 
         try
         {
-            _service.Publish(requesterId, announcementId, DateTime.Now); // todo id пользователя
+            _announcementService.Publish(requesterId, announcementId, DateTime.Now); // todo id пользователя
 
             _logger.Information(
                 "Пользователь {RequesterId} немедленно опубликовал объявление {AnnouncementId}, ожидающее отложенную публикацию",
@@ -528,7 +587,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
                 ResponseConstructor.ConstructResponseWithOnlyCode(PublishImmediatelyDelayedAnnouncementResponses
                     .ImmediatePublishingForbidden));
         }
-        catch (AnnouncementDoesNotExist err)
+        catch (AnnouncementDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Немедленная публикация объявления, ожидающего отложенной публикации",
                 nameof(PublishImmediatelyDelayedAnnouncementResponses.AnnouncementDoesNotExist), requesterId,
@@ -573,7 +632,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 
         try
         {
-            _service.Restore(requesterId, announcementId, DateTime.Now);
+            _announcementService.Restore(requesterId, announcementId, DateTime.Now);
 
             _logger.Information("Пользователь {RequesterId} восстановил скрытое объявление {AnnouncementId}",
                 requesterId, announcementId);
@@ -588,7 +647,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
                 ResponseConstructor.ConstructResponseWithOnlyCode(
                     RestoreHiddenAnnouncementResponses.RestoreForbidden));
         }
-        catch (AnnouncementDoesNotExist err)
+        catch (AnnouncementDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Восстановление скрытого объявления",
                 nameof(RestoreHiddenAnnouncementResponses.AnnouncementDoesNotExist), requesterId, err.Message);
@@ -651,7 +710,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         try
         {
             var editAnnouncement = updateAnnouncementDto.Adapt<EditAnnouncement>();
-            _service.Edit(requesterId, editAnnouncement);
+            _announcementService.Edit(requesterId, editAnnouncement);
 
             _logger.Information("Пользователь {RequesterId} отредактировал объявление {AnnouncementId}",
                 requesterId, updateAnnouncementDto.Id);
@@ -682,7 +741,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
                 ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
                     .AnnouncementEditingForbidden));
         }
-        catch (AnnouncementDoesNotExist err)
+        catch (AnnouncementDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Редактирование объявления",
                 nameof(UpdateAnnouncementResponses.AnnouncementDoesNotExist), requesterId, err.Message);

@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.AnnouncementsController.Converters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
@@ -20,7 +21,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// </summary>
         /// <value>Ответы:    immediatePublishingForbidden - Пользователь не имеет права незамедлительно опубликовать отложенное объявление   announcementDoesNotExist - Объявление не существует </value>
         [TypeConverter(typeof(CustomEnumConverter<PublishImmediatelyDelayedAnnouncementResponses>))]
-        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum PublishImmediatelyDelayedAnnouncementResponses
         {
             

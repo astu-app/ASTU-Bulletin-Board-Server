@@ -58,7 +58,7 @@ public class GeneralOperationsService(
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="announcementId">Id объявления</param>
     /// <returns>Объявление со связанными сущностями</returns>
-    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public Announcement GetDetails(Guid requesterId, Guid announcementId)
     {
@@ -168,7 +168,7 @@ public class GeneralOperationsService(
     /// </summary>
     /// <param name="requesterId">Id пользователя, запросившего операцию </param>
     /// <param name="announcementId">Id объявления</param>
-    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void Delete(Guid requesterId, Guid announcementId)
     {
@@ -199,7 +199,7 @@ public class GeneralOperationsService(
     /// <param name="requesterId">Id пользователя, запросившего операцию</param>
     /// <param name="announcementId">Id заданного объявления</param>
     /// <param name="publishedAt">Время публикации объявления</param>
-    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в БД</exception>
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public void PublishManually(Guid requesterId, Guid announcementId, DateTime publishedAt)
     {

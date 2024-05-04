@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BulletInBoardServer.Controllers.UserGroupsController.Models;
 using BulletInBoardServer.Domain.Models.UserGroups;
@@ -90,6 +89,16 @@ public class UserGroupMapsterConfig : IRegister
             .Map(d => d.FirstName, s => s.User.FirstName)
             .Map(d => d.SecondName, s => s.User.SecondName)
             .Map(d => d.Patronymic, s => s.User.Patronymic);
+
+        config.NewConfig<User, string>()
+            .MapWith(src => $"{src.FirstName} {src.SecondName} {src.Patronymic}");
+
+        config.NewConfig<SingleMemberRights, SelectableUserSummaryDto>()
+            .Map(d => d.Id, s => s.User.Id)
+            .Map(d => d.FirstName, s => s.User.FirstName)
+            .Map(d => d.SecondName, s => s.User.SecondName)
+            .Map(d => d.Patronymic, s => s.User.Patronymic)
+            .Map(d => d.IsSelected, s => false);
     }
 
 
@@ -100,10 +109,9 @@ public class UserGroupMapsterConfig : IRegister
         {
             userGroup.Adapt<UserGroupSummaryWithMembersDto>(),
         };
-        foreach (var child in userGroup.ChildrenGroups) 
+        foreach (var child in userGroup.ChildrenGroups.OrderBy(ug => ug.Name))
             list.AddRange(GetAllUserGroupsFromHierarchy(child));
 
-        Console.Out.WriteLine(userGroup.Name); // todo debug
         return list;
     }
 }

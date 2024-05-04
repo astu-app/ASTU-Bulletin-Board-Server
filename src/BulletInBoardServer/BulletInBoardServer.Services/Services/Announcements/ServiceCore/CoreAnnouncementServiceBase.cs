@@ -14,7 +14,7 @@ public class CoreAnnouncementServiceBase(IServiceScopeFactory scopeFactory)
     /// <param name="announcementId">Id загружаемого объявления</param>
     /// <param name="dbContext">Контекст базы данных</param>
     /// <returns></returns>
-    /// <exception cref="AnnouncementDoesNotExist">Объявление отсутствует в БД</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в БД</exception>
     /// <exception cref="InvalidOperationException">Не удалось загрузить объявление из БД</exception>
     protected static Announcement GetAnnouncementSummary(Guid announcementId, ApplicationDbContext dbContext)
     {
@@ -22,11 +22,11 @@ public class CoreAnnouncementServiceBase(IServiceScopeFactory scopeFactory)
         {
             var announcement = dbContext.Announcements.SingleOrDefault(a => a.Id == announcementId);
             if (announcement is null)
-                throw new AnnouncementDoesNotExist($"Объявление с Id = {announcementId} отсутствует в БД");
+                throw new AnnouncementDoesNotExistException($"Объявление с Id = {announcementId} отсутствует в БД");
 
             return announcement;
         }
-        catch (InvalidOperationException err) when (err is not AnnouncementDoesNotExist)
+        catch (InvalidOperationException err) when (err is not AnnouncementDoesNotExistException)
         {
             throw new InvalidOperationException("Не удалось загрузить объявление из БД", err);
         }

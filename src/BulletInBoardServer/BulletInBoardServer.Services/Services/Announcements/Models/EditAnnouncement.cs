@@ -3,7 +3,7 @@
 namespace BulletInBoardServer.Services.Services.Announcements.Models;
 
 /// <summary>
-/// Класс с данными для редактирования объявления
+/// Класс с данными для редактирования объявления, принимаемый от клиента
 /// </summary>
 public class EditAnnouncement
 {

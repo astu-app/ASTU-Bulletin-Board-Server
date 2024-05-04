@@ -532,7 +532,7 @@ components:
         members:
           type: array
           items:
-            $ref: './users-api.yaml#/components/schemas/userSummaryDto'
+            $ref: './users-api.yaml#/components/schemas/selectableUserSummaryDto'
 
     userGroupDetailsDto:
       type: object
