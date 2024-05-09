@@ -59,7 +59,7 @@ public class Announcement
     /// <summary>
     /// Размер аудитории объявления
     /// </summary>
-    public int AudienceSize { get; init; }
+    public int AudienceSize { get; set; }
 
     /// <summary>
     /// Момент публикации уже опубликованного объявления. Null, если объявления не опубликовано
@@ -136,13 +136,14 @@ public class Announcement
             Attach(attachments);
     }
 
-    public Announcement(Guid id, string content, Guid authorId,
+    public Announcement(Guid id, string content, Guid authorId, int audienceSize,
         DateTime? publishedAt, DateTime? hiddenAt,
         DateTime? delayedPublishingAt, DateTime? delayedHidingAt)
     {
         Id = id;
         Content = content;
         AuthorId = authorId;
+        AudienceSize = audienceSize;
         PublishedAt = publishedAt;
         HiddenAt = hiddenAt;
         DelayedPublishingAt = delayedPublishingAt;

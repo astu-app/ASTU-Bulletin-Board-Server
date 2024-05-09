@@ -110,6 +110,8 @@ public class AnnouncementMapsterConfig : IRegister
         config.NewConfig<Survey, SurveyDetailsDto>()
             .Map(d => d.Id, s => s.Id)
             .Map(d => d.IsOpen, s => s.IsOpen)
+            .Map(d => d.IsVotedByRequester, s => s.IsVotedByRequester)
+            .Map(d => d.ResultsOpenBeforeClosing, s => s.ResultsOpenBeforeClosing)
             .Map(d => d.IsAnonymous, s => s.IsAnonymous)
             .Map(d => d.VotersAmount, s => s.VotersCount)
             .Map(d => d.AutoClosingAt, s => s.AutoClosingAt)

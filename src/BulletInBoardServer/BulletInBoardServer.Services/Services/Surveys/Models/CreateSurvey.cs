@@ -2,5 +2,6 @@
 
 public record CreateSurvey(
     bool IsAnonymous,
+    bool ResultsOpenBeforeClosing,
     DateTime AutoClosingAt,
     IEnumerable<CreateQuestion> Questions);

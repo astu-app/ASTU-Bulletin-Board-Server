@@ -636,8 +636,6 @@ components:
             type: string
             format: uuid
             uniqueItems: true
-          minItems: 1
-          nullable: true
         delayedPublishingAt:
           description: Срок отложенной публикации объявления
           type: string

@@ -68,11 +68,15 @@ public class PublishedAnnouncementService(
                .ThenInclude(q => q.Answers)
                .ThenInclude(q => q.Participation)
                .Load();
+           
+           foreach (var survey in announcement.Attachments.OfType<Survey>()) 
+               survey.IsVotedByRequester = survey.Voters.Any(v => v.Id == requesterId);
        }
 
        var summaries = announcementGroups
            .Select(group => group.First().Announcement.GetSummary( 
                group.Count(g => g.Audience.Viewed)))
+           .OrderByDescending(a => a.PublishedAt)
            .ToList(); 
        return summaries;
     }

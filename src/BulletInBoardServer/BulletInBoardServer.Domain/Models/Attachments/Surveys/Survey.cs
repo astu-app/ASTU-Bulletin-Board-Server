@@ -19,9 +19,19 @@ public class Survey : AttachmentBase
     public bool IsOpen { get; private set; }
 
     /// <summary>
+    /// Проголосовал ли пользователь, запросивший данные об опросе, в нем
+    /// </summary>
+    public bool IsVotedByRequester { get; set; }
+
+    /// <summary>
     /// Анонимен ли опрос
     /// </summary>
     public bool IsAnonymous { get; init; }
+    
+    /// <summary>
+    /// Доступны ли результаты опроса до его закрытия
+    /// </summary>
+    public bool ResultsOpenBeforeClosing { get; private set; }
 
     /// <summary>
     /// Момент автоматического закрытия опроса. Null, если автоматическое закрытие не задано
@@ -74,6 +84,7 @@ public class Survey : AttachmentBase
     /// <param name="announcements">Объявления, к которым опрос прикреплен</param>
     /// <param name="isOpen">Открыт ли опрос</param>
     /// <param name="isAnonymous">Анонимен ли опрос</param>
+    /// <param name="resultsOpenBeforeClosing">Доступны ли результаты опроса до его закрытия</param>
     /// <param name="autoClosingAt">Время автоматического закрытия опроса</param>
     /// <param name="voteFinishedAt">Момент фактического закрытия опроса</param>
     /// <param name="questions">Вопросы опроса</param>
@@ -84,6 +95,7 @@ public class Survey : AttachmentBase
         Guid id,
         AnnouncementList announcements,
         bool isOpen, bool isAnonymous,
+        bool resultsOpenBeforeClosing,
         DateTime? autoClosingAt,
         DateTime? voteFinishedAt,
         QuestionList questions)
@@ -93,6 +105,7 @@ public class Survey : AttachmentBase
 
         IsOpen = isOpen;
         IsAnonymous = isAnonymous;
+        ResultsOpenBeforeClosing = resultsOpenBeforeClosing;
         AutoClosingAt = autoClosingAt;
         Questions = questions;
         VoteFinishedAt = voteFinishedAt;

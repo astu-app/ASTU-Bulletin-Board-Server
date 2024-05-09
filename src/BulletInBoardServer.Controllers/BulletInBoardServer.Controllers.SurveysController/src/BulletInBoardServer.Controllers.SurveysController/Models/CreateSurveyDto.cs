@@ -37,6 +37,13 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
         public bool IsAnonymous { get; set; }
 
         /// <summary>
+        /// Открыты ли результаты опроса до закрытия
+        /// </summary>
+        /// <value>Открыты ли результаты опроса до закрытия</value>
+        [DataMember(Name="resultsOpenBeforeClosing", EmitDefaultValue=true)]
+        public bool ResultsOpenBeforeClosing { get; set; }
+
+        /// <summary>
         /// Срок окончания голосования. Null, если голосование не ограничено по сроку
         /// </summary>
         /// <value>Срок окончания голосования. Null, если голосование не ограничено по сроку</value>
@@ -53,6 +60,7 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
             sb.Append("class CreateSurveyDto {\n");
             sb.Append("  Questions: ").Append(Questions).Append("\n");
             sb.Append("  IsAnonymous: ").Append(IsAnonymous).Append("\n");
+            sb.Append("  ResultsOpenBeforeClosing: ").Append(ResultsOpenBeforeClosing).Append("\n");
             sb.Append("  VoteUntil: ").Append(VoteUntil).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -102,6 +110,11 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
                     IsAnonymous.Equals(other.IsAnonymous)
                 ) && 
                 (
+                    ResultsOpenBeforeClosing == other.ResultsOpenBeforeClosing ||
+                    
+                    ResultsOpenBeforeClosing.Equals(other.ResultsOpenBeforeClosing)
+                ) && 
+                (
                     VoteUntil == other.VoteUntil ||
                     VoteUntil != null &&
                     VoteUntil.Equals(other.VoteUntil)
@@ -122,6 +135,8 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
                     hashCode = hashCode * 59 + Questions.GetHashCode();
                     
                     hashCode = hashCode * 59 + IsAnonymous.GetHashCode();
+                    
+                    hashCode = hashCode * 59 + ResultsOpenBeforeClosing.GetHashCode();
                     if (VoteUntil != null)
                     hashCode = hashCode * 59 + VoteUntil.GetHashCode();
                 return hashCode;

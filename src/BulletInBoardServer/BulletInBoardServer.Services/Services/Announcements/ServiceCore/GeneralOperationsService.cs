@@ -2,6 +2,7 @@
 using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Domain.Models.Attachments;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
+using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
 using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
@@ -90,8 +91,21 @@ public class GeneralOperationsService(
             .Include(s => s.Voters)
             .Include(s => s.Questions)
             .ThenInclude(q => q.Answers)
-            .ThenInclude(q => q.Participation)
+            
+            // .ThenInclude(a => a.Participation.Where(_ => a.Question.Survey.IsOpen || a.Question.Survey.ResultsOpenBeforeClosing))
             .Load();
+
+        foreach (var survey in announcement.Attachments.OfType<Survey>())
+        {
+            var answersEnumerable = survey.Questions.SelectMany(q => q.Answers);
+            // Если открыт и результаты опроса открыты до того, как опрос будет закрыт, догружаем проголосовавших
+            // за каждый вариант ответа пользователей. Иначе же зануляем количество проголосовавших за каждый
+            // вариант ответа
+            if (survey is { IsOpen: true, ResultsOpenBeforeClosing: false })
+                SetVotersCountToZero(answersEnumerable.ToList());
+            else
+                LoadAnswersParticipants(answersEnumerable.ToList());
+        }
 
         // announcement.AudienceThreeNode = dbContext.UserGroups
         //     .Include(ug => ug.ChildrenGroups)
@@ -214,6 +228,25 @@ public class GeneralOperationsService(
     }
 
 
+
+    private void SetVotersCountToZero(IEnumerable<Answer> answers)
+    {
+        foreach (var answer in answers)
+            answer.VotersCount = 0;
+    }
+
+    private void LoadAnswersParticipants(IEnumerable<Answer> answers) => 
+        answers.AsParallel().ForAll(LoadAnswerParticipants);
+
+    private void LoadAnswerParticipants(Answer answer)
+    {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+
+        dbContext.Entry(answer)
+            .Collection(a => a.Participation)
+            .Load();
+    }
 
     private void PublishManually(Announcement announcement, DateTime publishedAt,
         DbContext dbContext)

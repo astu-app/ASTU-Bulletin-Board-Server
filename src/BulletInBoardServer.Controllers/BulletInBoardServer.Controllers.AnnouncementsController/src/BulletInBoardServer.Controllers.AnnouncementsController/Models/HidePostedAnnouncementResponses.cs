@@ -12,7 +12,6 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.AnnouncementsController.Converters;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
@@ -21,7 +20,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// </summary>
         /// <value>Ответы:   announcementHidingForbidden - Пользователь не имеет права скрыть объявление   announcementDoesNotExist - Объявление не существует   announcementAlreadyHidden - Объявление уже скрыто   announcementNotYetPublished - Объявление еще не опубликовано </value>
         [TypeConverter(typeof(CustomEnumConverter<HidePostedAnnouncementResponses>))]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum HidePostedAnnouncementResponses
         {
             

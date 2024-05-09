@@ -109,6 +109,7 @@ public class AnnouncementRedactor
             _dbContext.AnnouncementAudience
                 .Where(aa => aa.AnnouncementId == _announcement.Id && toRemove.Contains(aa.UserId))
                 .ExecuteDelete();
+            _announcement.AudienceSize -= toRemove.Count;
         }
 
         var toAdd = _edit.AudienceIds.ToAdd;
@@ -116,6 +117,7 @@ public class AnnouncementRedactor
         {
             var newAudience = toAdd.Select(id => new AnnouncementAudience(_announcement.Id, id));
             _dbContext.AnnouncementAudience.AddRange(newAudience);
+            _announcement.AudienceSize += toAdd.Count;
         }
     }
 

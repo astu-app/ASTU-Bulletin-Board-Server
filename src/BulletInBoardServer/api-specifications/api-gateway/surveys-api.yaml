@@ -259,6 +259,9 @@ components:
         isAnonymous:
           description: Анонимен ли опрос
           type: boolean
+        resultsOpenBeforeClosing:
+          description: Открыты ли результаты опроса до закрытия
+          type: boolean
         voteUntil:
           description: Срок окончания голосования. Null, если голосование не ограничено по сроку
           type: string
@@ -272,6 +275,9 @@ components:
           description: Идентификатор опроса
           type: string
           format: uuid
+        isVotedByRequester:
+          description: Проголосовал ли в опросе пользователь, запросивший детали опроса
+          type: boolean
         isOpen:
           description: Открыт ли опрос
           type: boolean
@@ -280,6 +286,9 @@ components:
           description: Анонимен ли опрос
           type: boolean
           default: false
+        resultsOpenBeforeClosing:
+          description: Открыты ли результаты опроса до закрытия
+          type: boolean
         votersAmount:
           description: Количество проголосовавших в опросе пользователей
           type: integer

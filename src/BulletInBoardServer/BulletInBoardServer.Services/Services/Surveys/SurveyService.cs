@@ -45,6 +45,7 @@ public class SurveyService(
             announcements: [],
             isOpen: true,
             isAnonymous: newSurvey.IsAnonymous,
+            resultsOpenBeforeClosing: newSurvey.ResultsOpenBeforeClosing,
             autoClosingAt: newSurvey.AutoClosingAt,
             voteFinishedAt: null,
             questions: questions
@@ -81,15 +82,16 @@ public class SurveyService(
         var votingService = new VotingService(dbContext);
         votingService.Vote(voterId, surveyId, votes);
     }
-    
+
     /// <summary>
     /// Метод предоставляет опрос со всеми его вопросами, вариантами ответов и проголосовавшими пользователями
     /// </summary>
     /// <param name="surveyId">Идентификатор опроса</param>
+    /// <param name="requesterId">Пользователь, запросивший данные опроса</param>
     /// <returns>Загруженный опрос со связанными сущностями</returns>
     /// <exception cref="SurveyDoesNotExistException">Опрос с заданным id не существует в БД</exception>
     /// <exception cref="InvalidOperationException">Не удалось загрузить опрос из БД</exception>
-    public Survey GetDetails(Guid surveyId)
+    public Survey GetDetails(Guid surveyId, Guid? requesterId = null)
     {
         try
         {
@@ -101,9 +103,9 @@ public class SurveyService(
                 .ThenInclude(a => a.Participation)
                 .ThenInclude(p => p.User)
                 .Single();
-            
-            if (survey is null)
-                throw new SurveyDoesNotExistException();
+
+            survey.IsVotedByRequester = dbContext.Participation
+                .Any(p => p.SurveyId == surveyId && p.UserId == requesterId);
 
             return survey;
         }
@@ -120,7 +122,11 @@ public class SurveyService(
     /// <returns>Структурированный список проголосовавших в опросе пользователей</returns>
     public SurveyVotersBase GetSurveyVoters(Guid surveyId) // todo использовать для выгрузки результатов
     {
-        var survey = GetDetails(surveyId);
+        var survey = LoadSurveySummary(surveyId);
+        if (survey is { IsOpen: false, ResultsOpenBeforeClosing: false })
+            throw new SurveyResultsClosedException();
+
+        survey = GetDetails(surveyId);
         var getter = SurveyVotersGetterBase.ResolveVotersGetter(survey);
         return getter.GetVoters();
     }

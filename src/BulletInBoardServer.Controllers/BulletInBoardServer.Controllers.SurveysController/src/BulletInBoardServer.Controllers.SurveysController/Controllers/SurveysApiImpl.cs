@@ -215,7 +215,7 @@ public class SurveysApiControllerImpl : SurveysApiController
          */
         
         // var requesterId = Guid.Empty; // todo id пользователя
-        var requesterId = Guid.Parse("26ee62dc-6b8c-4001-9a35-79a99a8944f3"); // debug
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {

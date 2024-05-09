@@ -166,6 +166,10 @@ public static class TestDataIds
     // опубликованное объявление без заданного момента отложенного сокрытия
     public static readonly Guid PublishedAnnouncementWithDisabledDelayedHidingId =
         Guid.Parse("39a4e588-3055-4216-93a3-5a9d5ed98102");
+    
+    // опубликованное объявление с опросом, ожидающим автоматического закрытия, результаты которого закрыты до закрытия 
+    public static readonly Guid PublishedAnnouncementWithSurveyExpectsAutoClosingId = 
+        Guid.Parse("668d1d10-a9c9-4b49-844c-8cc00488a0a9");
 
     #endregion объявления
 }

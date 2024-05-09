@@ -16,6 +16,7 @@ public class SurveyMapsterConfig : IRegister
     {
         config.NewConfig<CreateSurveyDto, CreateSurvey>()
             .Map(d => d.IsAnonymous, s => s.IsAnonymous)
+            .Map(d => d.ResultsOpenBeforeClosing, s => s.ResultsOpenBeforeClosing)
             .Map(d => d.AutoClosingAt, s => s.VoteUntil)
             .Map(d => d.Questions, s => s.Questions.Adapt<IEnumerable<CreateQuestion>>()); 
 
@@ -28,12 +29,11 @@ public class SurveyMapsterConfig : IRegister
         config.NewConfig<CreateAnswerDto, CreateAnswer>()
             .Map(d => d.Serial, s => s.Serial)
             .Map(d => d.Content, s => s.Content);
-        
+
         config.NewConfig<VoteInSurveyDto, SurveyVotes>()
             .ConstructUsing(src =>
                 new SurveyVotes(src.QuestionVotes.ToDictionary(
                     qv => qv.QuestionId,
                     qv => qv.AnswerIds.ToList())));
-
     }
 }

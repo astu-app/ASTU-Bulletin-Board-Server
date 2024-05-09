@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
@@ -48,7 +47,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// Идентификаторы вложений, прикрепляемых к объявлению
         /// </summary>
         /// <value>Идентификаторы вложений, прикрепляемых к объявлению</value>
-        [DataMember(Name="attachmentIds", EmitDefaultValue=true)]
+        [DataMember(Name="attachmentIds", EmitDefaultValue=false)]
         public List<Guid> AttachmentIds { get; set; }
 
         /// <summary>
@@ -89,7 +88,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// <returns>JSON string presentation of the object</returns>
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
         }
 
         /// <summary>

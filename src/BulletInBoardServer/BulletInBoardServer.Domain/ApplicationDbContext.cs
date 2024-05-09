@@ -459,6 +459,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnType("boolean")
                 .HasDefaultValue(true);
 
+            entity.Property(e => e.ResultsOpenBeforeClosing)
+                .HasColumnName("results_open_before_closing")
+                .HasColumnType("boolean")
+                .HasDefaultValue(true);
+
             entity.Property(e => e.AutoClosingAt)
                 .HasColumnName("auto_closing_at")
                 .HasColumnType("timestamp")
@@ -476,6 +481,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.HasMany(e => e.Voters)
                 .WithMany()
                 .UsingEntity<Participation>();
+
+            entity.Ignore(e => e.IsVotedByRequester);
         });
     }
 

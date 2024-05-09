@@ -550,6 +550,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 announcements: [],
                 isOpen: true,
                 isAnonymous: false,
+                resultsOpenBeforeClosing: true,
                 autoClosingAt: null,
                 questions: [question_1, question_2],
                 voteFinishedAt: null
@@ -625,6 +626,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 announcements: [],
                 isOpen: true,
                 isAnonymous: true,
+                resultsOpenBeforeClosing: true,
                 autoClosingAt: null,
                 questions: [question_1, question_2],
                 voteFinishedAt: null
@@ -669,6 +671,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 announcements: [],
                 isOpen: false,
                 isAnonymous: true,
+                resultsOpenBeforeClosing: true,
                 autoClosingAt: null,
                 questions: [question_1],
                 voteFinishedAt: null
@@ -707,6 +710,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 announcements: [],
                 isOpen: true,
                 isAnonymous: false,
+                resultsOpenBeforeClosing: true,
                 autoClosingAt: null,
                 questions: [question_1],
                 voteFinishedAt: null
@@ -720,10 +724,10 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             // Create answers
             var answer_1 = new Answer(Answer_1_OfSurveyExpectsAutoClosing_Id, 0,
                 Question_1_WithSingleChoice_OfSurveyExpectsAutoClosing_Id,
-                "ответ 1 вопроса, ожидающего автоматическое закрытие");
+                "ответ 1 вопроса, ожидающего автоматическое закрытие, результаты которого не доступны до закрытия");
             var answer_2 = new Answer(Answer_2_OfSurveyExpectsAutoClosing_Id, 1,
                 Question_1_WithSingleChoice_OfSurveyExpectsAutoClosing_Id,
-                "ответ 2 вопроса, ожидающего автоматическое закрытие");
+                "ответ 2 вопроса, ожидающего автоматическое закрытие, результаты которого не доступны до закрытия");
             dbContext.Answers.Add(answer_1);
             dbContext.Answers.Add(answer_2);
             AddDbEntity(answer_1.Id, answer_1);
@@ -734,7 +738,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 id: Question_1_WithSingleChoice_OfSurveyExpectsAutoClosing_Id,
                 serial: 0,
                 surveyId: PublicSurvey_2_Id,
-                "вопрос 1 опроса, ожидающего автоматическое закрытие",
+                "вопрос 1 опроса, ожидающего автоматическое закрытие, результаты которого не доступны до закрытия",
                 isMultipleChoiceAllowed: false,
                 answers: [answer_1, answer_2,]
             );
@@ -747,6 +751,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 announcements: [],
                 isOpen: true,
                 isAnonymous: false,
+                resultsOpenBeforeClosing: false,
                 autoClosingAt: DateTime.Now.AddHours(12),
                 questions: [question_1],
                 voteFinishedAt: null
@@ -805,6 +810,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
         AddHiddenAnnouncementWithEnabledDelayedMoments();
         AddPublishedAnnouncementWithEnabledDelayedHiding();
         AddPublishedAnnouncementWithDisabledDelayedHiding();
+        AddAnnouncementWithSurveyExpectsAutoClosing();
         return;
 
 
@@ -965,7 +971,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
         {
             var announcement = new Announcement(
                 id: PublishedAnnouncementWithDisabledDelayedHidingId,
-                content: "Опубликованное объявление  без заданного момента отложенного сокрытия",
+                content: "Опубликованное объявление без заданного момента отложенного сокрытия",
                 author: mainUsergroupAdmin,
                 categories: [],
                 audience: [mainUsergroupAdmin],
@@ -974,6 +980,24 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 delayedPublishingAt: null,
                 delayedHidingAt: null,
                 attachments: []
+            );
+            dbContext.Announcements.Add(announcement);
+            AddDbEntity(announcement.Id, announcement);
+        }
+        
+        void AddAnnouncementWithSurveyExpectsAutoClosing()
+        {
+            var announcement = new Announcement(
+                id: PublishedAnnouncementWithSurveyExpectsAutoClosingId,
+                content: "Опубликованное объявление c опросом, ожидающим автоматического закрытия, результаты которого не доступны до закрытия",
+                author: mainUsergroupAdmin,
+                categories: [],
+                audience: [mainUsergroupAdmin],
+                publishedAt: DateTime.Now.Subtract(TimeSpan.FromHours(12)),
+                hiddenAt: null,
+                delayedPublishingAt: null,
+                delayedHidingAt: null,
+                attachments: [GetDbEntity<Survey>(SurveyExpectsAutoClosingId)]
             );
             dbContext.Announcements.Add(announcement);
             AddDbEntity(announcement.Id, announcement);

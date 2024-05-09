@@ -75,6 +75,7 @@ public class VotingService(ApplicationDbContext dbContext)
         try
         {
             var survey = dbContext.Surveys
+                .Include(survey => survey.Voters)
                 .Include(survey => survey.Questions)
                 .ThenInclude(question => question.Answers)
                 .Single(s => s.Id == _surveyId);
@@ -95,7 +96,7 @@ public class VotingService(ApplicationDbContext dbContext)
     {
         var votesQuestionIds = _votes.GetQuestionsIds();
         var surveyQuestionIds = _survey.Questions.Select(q => q.Id);
-        var allRefer = surveyQuestionIds.SequenceEqual(votesQuestionIds);
+        var allRefer = !surveyQuestionIds.Except(votesQuestionIds).Any();
         if (!allRefer) throw new PresentedQuestionsDoesntMatchSurveyQuestionsException();
     }
 

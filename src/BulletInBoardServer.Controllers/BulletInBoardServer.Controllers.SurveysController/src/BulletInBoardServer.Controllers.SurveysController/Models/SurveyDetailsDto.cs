@@ -30,6 +30,13 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
         public Guid Id { get; set; }
 
         /// <summary>
+        /// Проголосовал ли в опросе пользователь, запросивший детали опроса
+        /// </summary>
+        /// <value>Проголосовал ли в опросе пользователь, запросивший детали опроса</value>
+        [DataMember(Name="isVotedByRequester", EmitDefaultValue=true)]
+        public bool IsVotedByRequester { get; set; }
+
+        /// <summary>
         /// Открыт ли опрос
         /// </summary>
         /// <value>Открыт ли опрос</value>
@@ -42,6 +49,13 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
         /// <value>Анонимен ли опрос</value>
         [DataMember(Name="isAnonymous", EmitDefaultValue=true)]
         public bool IsAnonymous { get; set; } = false;
+
+        /// <summary>
+        /// Открыты ли результаты опроса до закрытия
+        /// </summary>
+        /// <value>Открыты ли результаты опроса до закрытия</value>
+        [DataMember(Name="resultsOpenBeforeClosing", EmitDefaultValue=true)]
+        public bool ResultsOpenBeforeClosing { get; set; }
 
         /// <summary>
         /// Количество проголосовавших в опросе пользователей
@@ -80,8 +94,10 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
             var sb = new StringBuilder();
             sb.Append("class SurveyDetailsDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
+            sb.Append("  IsVotedByRequester: ").Append(IsVotedByRequester).Append("\n");
             sb.Append("  IsOpen: ").Append(IsOpen).Append("\n");
             sb.Append("  IsAnonymous: ").Append(IsAnonymous).Append("\n");
+            sb.Append("  ResultsOpenBeforeClosing: ").Append(ResultsOpenBeforeClosing).Append("\n");
             sb.Append("  VotersAmount: ").Append(VotersAmount).Append("\n");
             sb.Append("  AutoClosingAt: ").Append(AutoClosingAt).Append("\n");
             sb.Append("  VoteFinishedAt: ").Append(VoteFinishedAt).Append("\n");
@@ -128,6 +144,11 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
                     Id.Equals(other.Id)
                 ) && 
                 (
+                    IsVotedByRequester == other.IsVotedByRequester ||
+                    
+                    IsVotedByRequester.Equals(other.IsVotedByRequester)
+                ) && 
+                (
                     IsOpen == other.IsOpen ||
                     
                     IsOpen.Equals(other.IsOpen)
@@ -136,6 +157,11 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
                     IsAnonymous == other.IsAnonymous ||
                     
                     IsAnonymous.Equals(other.IsAnonymous)
+                ) && 
+                (
+                    ResultsOpenBeforeClosing == other.ResultsOpenBeforeClosing ||
+                    
+                    ResultsOpenBeforeClosing.Equals(other.ResultsOpenBeforeClosing)
                 ) && 
                 (
                     VotersAmount == other.VotersAmount ||
@@ -173,9 +199,13 @@ namespace BulletInBoardServer.Controllers.SurveysController.Models
                     if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
                     
+                    hashCode = hashCode * 59 + IsVotedByRequester.GetHashCode();
+                    
                     hashCode = hashCode * 59 + IsOpen.GetHashCode();
                     
                     hashCode = hashCode * 59 + IsAnonymous.GetHashCode();
+                    
+                    hashCode = hashCode * 59 + ResultsOpenBeforeClosing.GetHashCode();
                     
                     hashCode = hashCode * 59 + VotersAmount.GetHashCode();
                     if (AutoClosingAt != null)

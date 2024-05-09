@@ -218,17 +218,19 @@ create table announcements_announcement_categories
 
 create table surveys
 (
-    id                   uuid primary key,
+    id                          uuid       primary key,
     
-    voters_count         integer          default 0,
+    voters_count                integer    default 0,
     
-    is_open              boolean not null default true,
-    is_anonymous         boolean not null default true,
+    is_open                     boolean    not null default true,
+    is_anonymous                boolean    not null default true,
     
-    auto_closing_at      timestamp,
-    expects_auto_closing boolean generated always as ( auto_closing_at is not null ) stored,
+    results_open_before_closing boolean    not null default true,
     
-    vote_finished_at     timestamp        default null
+    auto_closing_at             timestamp,
+    expects_auto_closing        boolean    generated always as ( auto_closing_at is not null ) stored,
+    
+    vote_finished_at            timestamp  default null
 );
 
 create table questions

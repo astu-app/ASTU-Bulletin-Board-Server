@@ -12,7 +12,6 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.AnnouncementsController.Converters;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
@@ -21,7 +20,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// </summary>
         /// <value>Ответы:   restoreForbidden - Пользователь не имеет права восстановить скрытое объявление   announcementDoesNotExist - Объявление не существует   announcementNotHidden - Объявление не является скрытым </value>
         [TypeConverter(typeof(CustomEnumConverter<RestoreHiddenAnnouncementResponses>))]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum RestoreHiddenAnnouncementResponses
         {
             

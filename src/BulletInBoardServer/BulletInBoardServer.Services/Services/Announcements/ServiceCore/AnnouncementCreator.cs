@@ -137,6 +137,7 @@ public class AnnouncementCreator
             id: Guid.NewGuid(),
             content: _create.Content,
             authorId: _authorId,
+            audienceSize: _create.UserIds.Count(),
             publishedAt: null,
             hiddenAt: null,
             delayedPublishingAt: _create.DelayedPublishingAt,
