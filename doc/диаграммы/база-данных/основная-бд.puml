@@ -92,6 +92,7 @@ rectangle "schema 'public'" as public_schema {
     entity announcements_attachments {
         <b><<PK>></b> <<FK>> attachment_id: uuid
         <b><<PK>></b> <<FK>> announcement_id: uuid
+        <b><<PK>></b> <<FK>> serial: int
     }
     announcements <-left- announcements_attachments
     attachments <-right- announcements_attachments
@@ -117,6 +118,8 @@ rectangle "schema 'public'" as public_schema {
         
         is_open: boolean
         is_anonymous: boolean
+        
+        results_open_before_closing: boolean
         
         auto_closing_at: timestamp?
     }
