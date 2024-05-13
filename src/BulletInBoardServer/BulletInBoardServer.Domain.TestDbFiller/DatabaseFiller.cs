@@ -880,7 +880,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                     GetDbEntity<AnnouncementCategory>(AnnouncementCategory_2_Id),
                 ],
                 audience: [mainUsergroupAdmin, usualUser_1],
-                publishedAt: DateTime.Now.Subtract(TimeSpan.FromHours(3)),
+                publishedAt: null, // не может содержать другое значение, так как объявление скрыто
                 hiddenAt: DateTime.Now.Subtract(TimeSpan.FromHours(1)),
                 delayedPublishingAt: null,
                 delayedHidingAt: null,

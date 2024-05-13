@@ -671,6 +671,7 @@ components:
           description: Время публикации объявления
           type: string
           format: date-time
+          nullable: true
         viewsCount:
           description: Количество просмотревших объявление пользователей
           type: integer

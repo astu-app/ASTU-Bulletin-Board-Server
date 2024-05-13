@@ -1,4 +1,5 @@
 ﻿using BulletInBoardServer.Services.Services.Announcements.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
@@ -19,15 +20,22 @@ public class DelayedPublicationAnnouncementService(IServiceScopeFactory scopeFac
     {
         using var scope = CreateScope();
         var dbContext = GetDbContextForScope(scope);
-        
-        return dbContext.Announcements
+
+        var announcements = dbContext.Announcements
             .Where(a => a.AuthorId == requesterId && a.ExpectsDelayedPublishing)
+            .Include(a => a.Author)
             .Select(a => new
             {
                 Announcement = a,
                 ViewsCount = dbContext.AnnouncementAudience.Count(au => au.AnnouncementId == a.Id && au.Viewed)
             })
-            .Select(res => res.Announcement.GetSummary(res.ViewsCount));
+            .ToList();
+
+        foreach (var announcement in announcements)
+            LoadAnnouncementSurveys(announcement.Announcement, requesterId, dbContext);
+
+        return announcements
+            .Select(res => res.Announcement.GetSummary(res.ViewsCount)); // todo сортировка по возрастанию времени отложенной публикации 
     }
 
     /// <summary>

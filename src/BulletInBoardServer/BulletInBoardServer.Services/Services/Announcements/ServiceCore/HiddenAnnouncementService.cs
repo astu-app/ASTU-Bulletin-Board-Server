@@ -21,17 +21,22 @@ public class HiddenAnnouncementService(
     {
         using var scope = CreateScope();
         var dbContext = GetDbContextForScope(scope);
-        
-        return dbContext.Announcements
-            .Include(a => a.Author)
+
+        var announcements = dbContext.Announcements
             .Where(a => a.AuthorId == requesterId && a.IsHidden)
+            .Include(a => a.Author)
             .Select(a => new
             {
                 Announcement = a,
                 ViewsCount = dbContext.AnnouncementAudience.Count(au => au.AnnouncementId == a.Id && au.Viewed)
             })
-            .Select(res => res.Announcement.GetSummary(res.ViewsCount))
             .ToList();
+
+        foreach (var announcement in announcements)
+            LoadAnnouncementSurveys(announcement.Announcement, requesterId, dbContext);
+
+        return announcements
+            .Select(res => res.Announcement.GetSummary(res.ViewsCount));
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿using BulletInBoardServer.Services.Services.Announcements.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
@@ -19,15 +20,22 @@ public class DelayedHidingAnnouncementService(IServiceScopeFactory scopeFactory)
     {
         using var scope = CreateScope();
         var dbContext = GetDbContextForScope(scope);
-        
-        return dbContext.Announcements
+
+        var announcements = dbContext.Announcements
             .Where(a => a.AuthorId == requesterId && a.ExpectsDelayedHiding)
+            .Include(a => a.Author)
             .Select(a => new
             {
                 Announcement = a,
                 ViewsCount = dbContext.AnnouncementAudience.Count(au => au.AnnouncementId == a.Id && au.Viewed)
             })
-            .Select(res => res.Announcement.GetSummary(res.ViewsCount));
+            .ToList();
+
+        foreach (var announcement in announcements)
+            LoadAnnouncementSurveys(announcement.Announcement, requesterId, dbContext);
+
+        return announcements
+            .Select(res => res.Announcement.GetSummary(res.ViewsCount)); // todo сортировка по возрастанию времени отложенного сокрытия
     }
 
     /// <summary>
@@ -39,7 +47,7 @@ public class DelayedHidingAnnouncementService(IServiceScopeFactory scopeFactory)
     {
         using var scope = CreateScope();
         var dbContext = GetDbContextForScope(scope);
-        
+
         // Отключение отложенного сокрытия происходит при вызове диспетчером этого метода
         var announcement = GetAnnouncementSummary(announcementId, dbContext);
         announcement.Hide(DateTime.Now, hiddenAt);

@@ -47,8 +47,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// Время публикации объявления
         /// </summary>
         /// <value>Время публикации объявления</value>
-        [DataMember(Name="publishedAt", EmitDefaultValue=false)]
-        public DateTime PublishedAt { get; set; }
+        [DataMember(Name="publishedAt", EmitDefaultValue=true)]
+        public DateTime? PublishedAt { get; set; }
 
         /// <summary>
         /// Количество просмотревших объявление пользователей

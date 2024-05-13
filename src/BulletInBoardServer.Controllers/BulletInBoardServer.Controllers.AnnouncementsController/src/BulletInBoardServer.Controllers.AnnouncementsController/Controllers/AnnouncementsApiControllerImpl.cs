@@ -75,7 +75,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        // var requesterId = Guid.Empty; // todo id пользователя
         var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         var createAnnouncement = dto.Adapt<CreateAnnouncement>();
@@ -185,7 +184,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Empty; // todo id пользователя
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -241,7 +240,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        // var requesterId = Guid.Empty; // todo id пользователя
         var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
@@ -298,7 +296,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        // var requesterId = Guid.Empty; // todo id пользователя
         var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
@@ -351,7 +348,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Empty; // todo id пользователя;
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -385,7 +382,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Empty; // todo id пользователя;
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -419,7 +416,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Empty; // todo id пользователя;
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -453,7 +450,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          */
 
         // var requesterId = Guid.Empty; // todo id пользователя;
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc");
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -496,7 +493,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Empty; // todo id пользователя
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -567,11 +564,11 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Empty; // todo id пользователя
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
-            _announcementService.Publish(requesterId, announcementId, DateTime.Now); // todo id пользователя
+            _announcementService.Publish(requesterId, announcementId, DateTime.Now);
 
             _logger.Information(
                 "Пользователь {RequesterId} немедленно опубликовал объявление {AnnouncementId}, ожидающее отложенную публикацию",
@@ -629,7 +626,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Empty; // todo id пользователя
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -660,7 +657,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
         {
             _loggingHelper.LogWarning(404, "Восстановление скрытого объявления",
                 nameof(RestoreHiddenAnnouncementResponses.AnnouncementNotHidden), requesterId, err.Message);
-            return NotFound(
+            return Conflict(
                 ResponseConstructor.ConstructResponseWithOnlyCode(RestoreHiddenAnnouncementResponses
                     .AnnouncementNotHidden));
         }
@@ -705,8 +702,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        // var requesterId = Guid.Empty; // todo id пользователя
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // todo id пользователя
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
