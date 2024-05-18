@@ -36,12 +36,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public string? Content { get; set; }
 
         /// <summary>
-        /// Gets or Sets CategoryIds
-        /// </summary>
-        [DataMember(Name="categoryIds", EmitDefaultValue=true)]
-        public UpdateIdentifierListDto CategoryIds { get; set; }
-
-        /// <summary>
         /// Gets or Sets AudienceIds
         /// </summary>
         [DataMember(Name="audienceIds", EmitDefaultValue=true)]
@@ -93,7 +87,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             sb.Append("class UpdateAnnouncementDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Content: ").Append(Content).Append("\n");
-            sb.Append("  CategoryIds: ").Append(CategoryIds).Append("\n");
             sb.Append("  AudienceIds: ").Append(AudienceIds).Append("\n");
             sb.Append("  AttachmentIds: ").Append(AttachmentIds).Append("\n");
             sb.Append("  DelayedPublishingAtChanged: ").Append(DelayedPublishingAtChanged).Append("\n");
@@ -147,11 +140,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Content.Equals(other.Content)
                 ) && 
                 (
-                    CategoryIds == other.CategoryIds ||
-                    CategoryIds != null &&
-                    CategoryIds.Equals(other.CategoryIds)
-                ) && 
-                (
                     AudienceIds == other.AudienceIds ||
                     AudienceIds != null &&
                     AudienceIds.Equals(other.AudienceIds)
@@ -197,8 +185,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + Id.GetHashCode();
                     if (Content != null)
                     hashCode = hashCode * 59 + Content.GetHashCode();
-                    if (CategoryIds != null)
-                    hashCode = hashCode * 59 + CategoryIds.GetHashCode();
                     if (AudienceIds != null)
                     hashCode = hashCode * 59 + AudienceIds.GetHashCode();
                     if (AttachmentIds != null)

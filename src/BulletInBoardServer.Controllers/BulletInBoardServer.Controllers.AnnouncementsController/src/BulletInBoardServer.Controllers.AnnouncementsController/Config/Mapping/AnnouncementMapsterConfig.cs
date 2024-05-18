@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BulletInBoardServer.Controllers.AnnouncementsController.Models;
-using BulletInBoardServer.Domain.Models.AnnouncementCategories;
 using BulletInBoardServer.Domain.Models.Announcements;
-using BulletInBoardServer.Domain.Models.Attachments;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions;
@@ -27,7 +25,6 @@ public class AnnouncementMapsterConfig : IRegister
             .ConstructUsing(src => new CreateAnnouncement(
                 src.Content, 
                 src.UserIds, 
-                src.CategoryIds,
                 src.AttachmentIds, 
                 src.DelayedPublishingAt, 
                 src.DelayedHidingAt));
@@ -39,8 +36,6 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.AuthorName, s => s.Author)
             .Map(d => d.ViewsCount, s => s.ViewsCount)
             .Map(d => d.AudienceSize, s => s.AudienceSize)
-            .Map(d => d.Categories, s => s.Categories)
-            .Map(d => d.Files, s => s.Attachments.OfType<File>())
             .Map(d => d.Surveys, s => s.Attachments.OfType<Survey>())
             .Map(d => d.HiddenAt, s => s.HiddenAt)
             .Map(d => d.PublishedAt, s => s.PublishedAt)
@@ -51,18 +46,6 @@ public class AnnouncementMapsterConfig : IRegister
 
         config.NewConfig<User, string>()
             .MapWith(src => $"{src.FirstName} {src.SecondName} {src.Patronymic}");
-
-        config.NewConfig<User, AnnouncementAudienceUser>()
-            .Map(d => d.Id, s => s.Id)
-            .Map(d => d.FirstName, s => s.FirstName)
-            .Map(d => d.SecondName, s => s.SecondName)
-            .Map(d => d.Patronymic, s => s.Patronymic);
-        
-        config.NewConfig<AnnouncementCategory, AnnouncementCategoryDetailsDto>()
-            .TwoWays()
-            .Map(d => d.Id, s => s.Id)
-            .Map(d => d.Name, s => s.Name)
-            .Map(d => d.Color, s => s.ColorHex);
 
         // config.NewConfig<IAudienceNode, AnnouncementAudienceDto>() // remove
         //     .ConstructUsing(src => new AnnouncementAudienceDto 
@@ -83,7 +66,6 @@ public class AnnouncementMapsterConfig : IRegister
         config.NewConfig<UpdateAnnouncementDto, EditAnnouncement>()
             .Map(d => d.Id, s => s.Id)
             .Map(d => d.Content, s => s.Content)
-            .Map(d => d.CategoryIds, s => s.CategoryIds)
             .Map(d => d.AudienceIds, s => s.AudienceIds)
             .Map(d => d.AttachmentIds, s => s.AttachmentIds)
             .Map(d => d.DelayedPublishingAtChanged, s => s.DelayedPublishingAtChanged)
@@ -99,13 +81,7 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.ViewsCount, s => s.ViewsCount)
             .Map(d => d.AudienceSize, s => s.AudienceSize)
             .Map(d => d.PublishedAt, s => s.PublishedAt)
-            .Map(d => d.Files, a => a.Attachments.OfType<File>())
             .Map(d => d.Surveys, a => a.Attachments.OfType<Survey>());
-
-        config.NewConfig<File, FileSummaryDto>()
-            .Map(d => d.Id, s => s.Id)
-            .Map(d => d.Name, s => s.Name)
-            .Map(d => d.SizeInBytes, s => s.SizeInBytes);
 
         config.NewConfig<Survey, SurveyDetailsDto>()
             .Map(d => d.Id, s => s.Id)
@@ -168,9 +144,7 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.Content, s => s.Announcement.Content)
             .Map(d => d.ViewsCount, s => s.Announcement.ViewsCount)
             .Map(d => d.AudienceSize, s => s.Announcement.AudienceSize)
-            .Map(d => d.Categories, s => s.Announcement.Categories)
             .Map(d => d.AudienceHierarchy, s => MapAudienceHierarchy(s.Announcement.Audience, s.PotentialAudienceHierarchy))
-            .Map(d => d.Files, s => s.Announcement.Attachments.OfType<File>())
             .Map(d => d.Surveys, s => s.Announcement.Attachments.OfType<Survey>())
             .Map(d => d.PublishedAt, s => s.Announcement.PublishedAt)
             .Map(d => d.HiddenAt, s => s.Announcement.HiddenAt)

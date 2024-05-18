@@ -65,9 +65,7 @@ paths:
                 title: createAnnouncementNotFound
                 properties:
                   code:
-                    # announcementCategoriesDoNotExist
-                    # filesDoNotExist
-                    # surveysDoNotExist
+                    # attachmentsDoNotExist
                     $ref: '#/components/schemas/createAnnouncementResponses'
         409:
           description: Conflict
@@ -245,7 +243,6 @@ paths:
                 properties:
                   code:
                     # announcementDoesNotExist
-                    # announcementCategoriesDoNotExist
                     # attachmentDoesNotExist
                     # pieceOfAudienceDoesNotExist
                     $ref: '#/components/schemas/updateAnnouncementResponses'
@@ -622,13 +619,6 @@ components:
             format: uuid
             uniqueItems: true
           minItems: 1
-        categoryIds:
-          description: Идентификаторы категорий объявлений
-          type: array
-          items:
-            type: string
-            format: uuid
-            uniqueItems: true
         attachmentIds:
           description: Идентификаторы вложений, прикрепляемых к объявлению
           type: array
@@ -680,12 +670,6 @@ components:
           description: Размер аудитории объявления
           type: integer
           minimum: 0
-        files:
-          description: Массив файлов, прикрепленных к объявлению
-          type: array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/fileSummaryDto'
         surveys:
           description: Массив опросов, прикрепленных к объявлению
           type: array
@@ -714,17 +698,6 @@ components:
           description: Размер аудитории объявления
           type: integer
           minimum: 0
-        categories:
-          description: Массив категорий объявлений
-          type: array
-          items:
-            $ref: './announcement-categories-api.yaml#/components/schemas/announcementCategoryDetailsDto'
-        files:
-          description: Массив файлов, прикрепленных к объявлению
-          type: array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/fileSummaryDto'
         surveys:
           description: Массив опросов объявления
           type: array
@@ -762,27 +735,6 @@ components:
           items: 
             $ref: './users-api.yaml#/components/schemas/userSummaryDto'
 
-    fileSummaryDto:
-      type: object
-      properties:
-        id:
-          description: Идентификатор файла
-          type: string
-          format: uuid
-        name:
-          description: Название файла
-          type: string
-        sizeInBytes:
-          description: Размер файла в байтах
-          type: integer
-          format: int64
-        type:
-          description: Тип файла
-          type: string
-          enum:
-            - mediafile # Медиафайл отображается в объявлении сразу
-            - file # Обычный файл загружается вручную
-
     contentForAnnouncementUpdatingDto:
       type: object
       properties:
@@ -804,19 +756,8 @@ components:
         content:
           description: Текстовое содержимое объявления
           type: string
-        categories:
-          description: Категории объявления
-          type: array
-          items:
-            $ref: './announcement-categories-api.yaml#/components/schemas/announcementCategoryDetailsDto'
         audienceHierarchy:
           $ref: './usergroups-api.yaml#/components/schemas/usergroupHierarchyDto'
-        files:
-          description: Массив файлов, прикрепленных к объявлению
-          type: array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/fileSummaryDto'
         surveys:
           description: Массив опросов объявления
           type: array
@@ -863,8 +804,6 @@ components:
           type: string
           nullable: true
           default: null
-        categoryIds:
-          $ref: './common-schemas.yaml#/components/schemas/updateIdentifierListDto'
         audienceIds:
           $ref: './common-schemas.yaml#/components/schemas/updateIdentifierListDto'
         attachmentIds:
@@ -936,7 +875,6 @@ components:
         # 403
         - announcementCreationForbidden
         # 404
-        - announcementCategoriesDoNotExist
         - attachmentsDoNotExist
         - pieceOfAudienceDoesNotExist
         # 409
@@ -948,7 +886,6 @@ components:
           audienceNullOrEmpty - Список аудитории null или пустой
           contentNullOrEmpty - Текстовое содержимое объявления является null, пустым или состоит только из пробельных символов
           announcementCreationForbidden - Пользователь не имеет права создать объявление
-          announcementCategoriesDoNotExist - В качестве одного или нескольких из id категорий объявлений прикреплен несуществующий в базе id
           attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id
           pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id
           delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом
@@ -989,7 +926,6 @@ components:
         - announcementEditingForbidden
         # 404
         - announcementDoesNotExist
-        - announcementCategoriesDoesNotExist
         - attachmentsDoNotExist
         - pieceOfAudienceDoesNotExist
         # 409
@@ -1004,7 +940,6 @@ components:
           audienceEmpty - Аудитория пользователей пуста
           announcementEditingForbidden - Пользователь не имеет права изменить объявление
           announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id
-          announcementCategoriesDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id
           attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id
           pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id
           delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом

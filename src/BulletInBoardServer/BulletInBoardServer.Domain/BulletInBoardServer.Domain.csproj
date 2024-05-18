@@ -22,9 +22,6 @@
         <Content Include="..\initdb\1151_create_triggers.sql">
             <Link>initdb\1151_create_triggers.sql</Link>
         </Content>
-        <Content Include="..\initdb\1201_create_archive_schema.sql">
-            <Link>initdb\1201_create_archive_schema.sql</Link>
-        </Content>
         <Content Include="..\initdb\1301_create_logs_schema.sql">
             <Link>initdb\1301_create_logs_schema.sql</Link>
         </Content>

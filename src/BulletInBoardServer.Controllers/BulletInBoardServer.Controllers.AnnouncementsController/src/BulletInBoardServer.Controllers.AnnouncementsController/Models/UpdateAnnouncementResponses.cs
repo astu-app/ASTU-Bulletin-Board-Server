@@ -16,9 +16,9 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
         /// <summary>
-        /// Ответы:   contentEmpty - Текстовое содержимое объявления пустое или состоит только из пробельных символов   audienceEmpty - Аудитория пользователей пуста   announcementEditingForbidden - Пользователь не имеет права изменить объявление   announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id   announcementCategoriesDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id   attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент отложенного сокрытия уже наступил в прошлом   autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто   autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым   cannotDetachSurvey - Открепление опросов запрещено 
+        /// Ответы:   contentEmpty - Текстовое содержимое объявления пустое или состоит только из пробельных символов   audienceEmpty - Аудитория пользователей пуста   announcementEditingForbidden - Пользователь не имеет права изменить объявление   announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id   attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент отложенного сокрытия уже наступил в прошлом   autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто   autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым   cannotDetachSurvey - Открепление опросов запрещено 
         /// </summary>
-        /// <value>Ответы:   contentEmpty - Текстовое содержимое объявления пустое или состоит только из пробельных символов   audienceEmpty - Аудитория пользователей пуста   announcementEditingForbidden - Пользователь не имеет права изменить объявление   announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id   announcementCategoriesDoesNotExist - В качестве одного из id категорий объявлений прикреплен несуществующий в базе id   attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент отложенного сокрытия уже наступил в прошлом   autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто   autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым   cannotDetachSurvey - Открепление опросов запрещено </value>
+        /// <value>Ответы:   contentEmpty - Текстовое содержимое объявления пустое или состоит только из пробельных символов   audienceEmpty - Аудитория пользователей пуста   announcementEditingForbidden - Пользователь не имеет права изменить объявление   announcementDoesNotExist - В качестве id объявления прикреплен несуществующий в базе id   attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент отложенного сокрытия уже наступил в прошлом   autoHidingAnAlreadyHiddenAnnouncement - Попытка задать срок автоматического сокрытия объявлению, которое уже скрыто   autoPublishingPublishedAndNonHiddenAnnouncement - Попытка задать срок автоматической публикации объявлению, которое уже было опубликовано и в настоящий момент не является скрытым   cannotDetachSurvey - Открепление опросов запрещено </value>
         [TypeConverter(typeof(CustomEnumConverter<UpdateAnnouncementResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum UpdateAnnouncementResponses
@@ -49,51 +49,45 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             AnnouncementDoesNotExist = 4,
             
             /// <summary>
-            /// Enum AnnouncementCategoriesDoesNotExist for announcementCategoriesDoesNotExist
-            /// </summary>
-            [EnumMember(Value = "announcementCategoriesDoesNotExist")]
-            AnnouncementCategoriesDoesNotExist = 5,
-            
-            /// <summary>
             /// Enum AttachmentsDoNotExist for attachmentsDoNotExist
             /// </summary>
             [EnumMember(Value = "attachmentsDoNotExist")]
-            AttachmentsDoNotExist = 6,
+            AttachmentsDoNotExist = 5,
             
             /// <summary>
             /// Enum PieceOfAudienceDoesNotExist for pieceOfAudienceDoesNotExist
             /// </summary>
             [EnumMember(Value = "pieceOfAudienceDoesNotExist")]
-            PieceOfAudienceDoesNotExist = 7,
+            PieceOfAudienceDoesNotExist = 6,
             
             /// <summary>
             /// Enum DelayedPublishingMomentIsInPast for delayedPublishingMomentIsInPast
             /// </summary>
             [EnumMember(Value = "delayedPublishingMomentIsInPast")]
-            DelayedPublishingMomentIsInPast = 8,
+            DelayedPublishingMomentIsInPast = 7,
             
             /// <summary>
             /// Enum DelayedHidingMomentIsInPast for delayedHidingMomentIsInPast
             /// </summary>
             [EnumMember(Value = "delayedHidingMomentIsInPast")]
-            DelayedHidingMomentIsInPast = 9,
+            DelayedHidingMomentIsInPast = 8,
             
             /// <summary>
             /// Enum AutoHidingAnAlreadyHiddenAnnouncement for autoHidingAnAlreadyHiddenAnnouncement
             /// </summary>
             [EnumMember(Value = "autoHidingAnAlreadyHiddenAnnouncement")]
-            AutoHidingAnAlreadyHiddenAnnouncement = 10,
+            AutoHidingAnAlreadyHiddenAnnouncement = 9,
             
             /// <summary>
             /// Enum AutoPublishingPublishedAndNonHiddenAnnouncement for autoPublishingPublishedAndNonHiddenAnnouncement
             /// </summary>
             [EnumMember(Value = "autoPublishingPublishedAndNonHiddenAnnouncement")]
-            AutoPublishingPublishedAndNonHiddenAnnouncement = 11,
+            AutoPublishingPublishedAndNonHiddenAnnouncement = 10,
             
             /// <summary>
             /// Enum CannotDetachSurvey for cannotDetachSurvey
             /// </summary>
             [EnumMember(Value = "cannotDetachSurvey")]
-            CannotDetachSurvey = 12
+            CannotDetachSurvey = 11
         }
 }

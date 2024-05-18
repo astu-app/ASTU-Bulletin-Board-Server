@@ -37,13 +37,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public List<Guid> UserIds { get; set; }
 
         /// <summary>
-        /// Идентификаторы категорий объявлений
-        /// </summary>
-        /// <value>Идентификаторы категорий объявлений</value>
-        [DataMember(Name="categoryIds", EmitDefaultValue=false)]
-        public List<Guid> CategoryIds { get; set; }
-
-        /// <summary>
         /// Идентификаторы вложений, прикрепляемых к объявлению
         /// </summary>
         /// <value>Идентификаторы вложений, прикрепляемых к объявлению</value>
@@ -74,7 +67,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             sb.Append("class CreateAnnouncementDto {\n");
             sb.Append("  Content: ").Append(Content).Append("\n");
             sb.Append("  UserIds: ").Append(UserIds).Append("\n");
-            sb.Append("  CategoryIds: ").Append(CategoryIds).Append("\n");
             sb.Append("  AttachmentIds: ").Append(AttachmentIds).Append("\n");
             sb.Append("  DelayedPublishingAt: ").Append(DelayedPublishingAt).Append("\n");
             sb.Append("  DelayedHidingAt: ").Append(DelayedHidingAt).Append("\n");
@@ -126,12 +118,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     UserIds.SequenceEqual(other.UserIds)
                 ) && 
                 (
-                    CategoryIds == other.CategoryIds ||
-                    CategoryIds != null &&
-                    other.CategoryIds != null &&
-                    CategoryIds.SequenceEqual(other.CategoryIds)
-                ) && 
-                (
                     AttachmentIds == other.AttachmentIds ||
                     AttachmentIds != null &&
                     other.AttachmentIds != null &&
@@ -163,8 +149,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + Content.GetHashCode();
                     if (UserIds != null)
                     hashCode = hashCode * 59 + UserIds.GetHashCode();
-                    if (CategoryIds != null)
-                    hashCode = hashCode * 59 + CategoryIds.GetHashCode();
                     if (AttachmentIds != null)
                     hashCode = hashCode * 59 + AttachmentIds.GetHashCode();
                     if (DelayedPublishingAt != null)

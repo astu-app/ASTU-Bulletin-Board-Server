@@ -149,26 +149,6 @@ create table child_usergroups
     primary key (usergroup_id, child_usergroup_id)
 );
 
-create table files
-(
-    id            uuid primary key,
-    
-    uploader_id   uuid not null,
-
-    name          text,
-    hash          text,
-    size_in_bytes bigint,
-
-    constraint non_empty_name
-        check (string_not_empty(name)),
-    
-    constraint non_empty_hash
-        check (string_not_empty(hash)),
-    
-    constraint non_negative_size
-        check (size_in_bytes >= 0)
-);
-
 create table attachments
 (
     id     uuid primary key,
@@ -186,34 +166,6 @@ create table announcements_attachments
     serial          int,
 
     primary key (attachment_id, announcement_id)
-);
-
-create table announcement_categories
-(
-    id        uuid primary key,
-    name      text,
-    color_hex text,
-    
-    constraint non_empty_name
-        check (string_not_empty(name)),
-    constraint non_empty_color
-        check (is_color_format_correct(color_hex))
-);
-
-create table announcement_categories_subscribers
-(
-    announcement_category_id uuid,
-    subscriber_id            uuid,
-
-    primary key (announcement_category_id, subscriber_id)
-);
-
-create table announcements_announcement_categories
-(
-    announcement_id          uuid,
-    announcement_category_id uuid,
-
-    primary key (announcement_id, announcement_category_id)
 );
 
 create table surveys
@@ -316,36 +268,12 @@ alter table announcement_audience
         foreign key (user_id) references users (id)
             on update cascade on delete cascade;
 
-alter table files
-    add constraint files_uploader_id_fkey
-        foreign key (uploader_id) references users (id)
-            on update cascade on delete cascade,
-    add constraint files_attachments_id_fkey
-        foreign key (id) references attachments
-            on update cascade on delete cascade;
-
 alter table announcements_attachments
     add constraint announcements_attachments_attachment_id_fkey
         foreign key (attachment_id) references attachments (id)
             on update cascade on delete cascade,
     add constraint announcements_attachments_announcement_id_fkey
         foreign key (announcement_id) references announcements (id)
-            on update cascade on delete cascade;
-
-alter table announcement_categories_subscribers
-    add constraint categories_subscribers_category_id_fkey
-        foreign key (announcement_category_id) references announcement_categories (id)
-            on update cascade on delete cascade,
-    add constraint categories_subscribers_subscriber_id_fkey
-        foreign key (subscriber_id) references users (id)
-            on update cascade on delete cascade; 
-
-alter table announcements_announcement_categories
-    add constraint announcements_categories_announcement_id_fkey
-        foreign key (announcement_id) references announcements (id)
-            on update cascade on delete cascade,
-    add constraint announcements_categories_category_id_fkey
-        foreign key (announcement_category_id) references announcement_categories (id)
             on update cascade on delete cascade;
 
 alter table surveys

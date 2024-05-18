@@ -2,7 +2,6 @@
 using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Attachments;
 using BulletInBoardServer.Domain.Models.JoinEntities;
-using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Attachments.Exceptions;
@@ -63,11 +62,6 @@ public class AnnouncementRedactor
             ApplyAudienceChanging();
         }
 
-        if (_edit.CategoryIds is not null)
-        {
-            ApplyCategoriesChanging();
-        }
-
         if (_edit.AttachmentIds is not null)
         {
             NewAttachmentsValidOrThrow();
@@ -118,29 +112,6 @@ public class AnnouncementRedactor
             var newAudience = toAdd.Select(id => new AnnouncementAudience(_announcement.Id, id));
             _dbContext.AnnouncementAudience.AddRange(newAudience);
             _announcement.AudienceSize += toAdd.Count;
-        }
-    }
-
-    private void ApplyCategoriesChanging()
-    {
-        if (_edit.CategoryIds is null)
-            throw new InvalidOperationException($"{nameof(_edit.CategoryIds)} не может быть null на данном этапе");
-
-        var toRemove = _edit.CategoryIds.ToRemove;
-        if (toRemove is not null)
-        {
-            _dbContext.AnnouncementCategoryJoins
-                .Where(aa =>
-                    aa.AnnouncementId == _announcement.Id &&
-                    toRemove.Contains(aa.AnnouncementCategoryId))
-                .ExecuteDelete();
-        }
-
-        var toAdd = _edit.CategoryIds.ToAdd;
-        if (toAdd is not null)
-        {
-            var newAudience = toAdd.Select(id => new AnnouncementAnnouncementCategory(_announcement.Id, id));
-            _dbContext.AnnouncementCategoryJoins.AddRange(newAudience);
         }
     }
 
@@ -208,8 +179,6 @@ public class AnnouncementRedactor
             {
                 case { SqlState: "23503", ConstraintName: "announcement_audience_announcement_id_fkey" }:
                     throw new PieceOfAudienceDoesNotExistException(err);
-                case { SqlState: "23503", ConstraintName: "announcements_categories_category_id_fkey" }:
-                    throw new AnnouncementCategoryDoesNotExistException(err);
                 case { SqlState: "23503", ConstraintName: "announcements_attachments_attachment_id_fkey" }:
                     throw new AttachmentDoesNotExistException(err);
                 default:

@@ -341,7 +341,6 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
          * 500 +
          */
 
-        // var requesterId = Guid.Empty; // todo id пользователя
         var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // todo id пользователя
 
         try
@@ -377,7 +376,6 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
          * 500 +
          */
 
-        // var requesterId = Guid.Empty; // todo id пользователя
         var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // todo id пользователя
 
         try

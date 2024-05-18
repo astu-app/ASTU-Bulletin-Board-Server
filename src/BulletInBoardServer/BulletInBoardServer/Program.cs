@@ -1,10 +1,8 @@
 using BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
-using BulletInBoardServer.Controllers.CategoriesController.Controllers;
 using BulletInBoardServer.Controllers.SurveysController.Controllers;
 using BulletInBoardServer.Controllers.UserGroupsController.Controllers;
 using BulletInBoardServer.Domain;
 using BulletInBoardServer.Infrastructure;
-using BulletInBoardServer.Services.Services.AnnouncementCategories;
 using BulletInBoardServer.Services.Services.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
@@ -15,8 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using AnnouncementsInputFormatterStream = BulletInBoardServer.Controllers.AnnouncementsController.Formatters.InputFormatterStream;
-using SurveysInputFormatterStream = BulletInBoardServer.Controllers.SurveysController.Formatters.InputFormatterStream; 
-using AnnouncementCategoryInputFormatterStream = BulletInBoardServer.Controllers.CategoriesController.Formatters.InputFormatterStream;
+using SurveysInputFormatterStream = BulletInBoardServer.Controllers.SurveysController.Formatters.InputFormatterStream;
 using UserGroupInputFormatterStream = BulletInBoardServer.Controllers.UserGroupsController.Formatters.InputFormatterStream;
 
 const string apiVersion = "0.0.3";
@@ -24,7 +21,6 @@ var controllerClasses = new[]
 {
     typeof(AnnouncementsApiController), 
     typeof(SurveysApiController), 
-    typeof(AnnouncementCategoriesApiController),
     typeof(UserGroupsApiController),
 };
 
@@ -39,7 +35,6 @@ builder.Services.AddControllers(options =>
 {
     options.InputFormatters.Insert(0, new AnnouncementsInputFormatterStream());
     options.InputFormatters.Insert(1, new SurveysInputFormatterStream());
-    options.InputFormatters.Insert(2, new AnnouncementCategoryInputFormatterStream());
     options.InputFormatters.Insert(3, new UserGroupInputFormatterStream());
 });
 
@@ -73,7 +68,6 @@ builder.Services.AddHealthChecks();
 
 RegisterAnnouncementService();
 RegisterSurveyService();
-RegisterAnnouncementCategoryService();
 RegisterUserGroupService();
 
 var app = builder.Build();
@@ -124,9 +118,6 @@ void RegisterSurveyService() =>
         .AddScoped<SurveyService>()
         .AddScoped<IAutomaticSurveyOperationsDispatcher, AutomaticSurveyOperationsDispatcher>()
         .AddScoped<AutoClosingSurveyService>();
-
-void RegisterAnnouncementCategoryService() => 
-    builder.Services.AddScoped<AnnouncementCategoryService>();
 
 void RegisterUserGroupService() => 
     builder.Services.AddScoped<UserGroupService>();

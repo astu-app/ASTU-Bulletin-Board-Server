@@ -11,9 +11,7 @@ left to right direction
 package "BulletInBoardServer.Controllers" as controllers {
     [BulletInBoardServer.Controllers.Core] as controllerCore
     [BulletInBoardServer.Controllers.AnnouncementsController] as announcementsController
-    [BulletInBoardServer.Controllers.CategoriesController] as categoriesController
     [BulletInBoardServer.Controllers.SurveysController] as surveysController
-    [BulletInBoardServer.Controllers.PingController] as pingController
 }
 
 package "Test" as test {
@@ -27,10 +25,8 @@ main                    -> services
 main                    -> domain
 
 announcementsController -> services
-categoriesController    -> services
 surveysController       -> services
 announcementsController -down-> controllerCore
-categoriesController    -down-> controllerCore
 surveysController       -down-> controllerCore
 
 services                --> domain

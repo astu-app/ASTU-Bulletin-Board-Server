@@ -2,7 +2,6 @@
 using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Domain.Models.JoinEntities;
-using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Attachments.Exceptions;
 using BulletInBoardServer.Services.Services.Audience.Exceptions;
@@ -151,9 +150,6 @@ public class AnnouncementCreator
 
         var attachmentJoins = InitAttachmentJoins(_create.AttachmentIds);
         _dbContext.AnnouncementAttachmentJoins.AddRange(attachmentJoins);
-
-        var categoryJoins = InitCategoryJoins(_create.CategoryIds);
-        _dbContext.AnnouncementCategoryJoins.AddRange(categoryJoins);
     }
 
     private IEnumerable<AnnouncementAudience> InitUserAudience(IEnumerable<Guid> userIds)
@@ -170,15 +166,6 @@ public class AnnouncementCreator
         var joins = new List<AnnouncementAttachment>();
         foreach (var attachmentId in attachmentIds)
             joins.Add(new AnnouncementAttachment(_announcement.Id, attachmentId));
-
-        return joins;
-    }
-
-    private IEnumerable<AnnouncementAnnouncementCategory> InitCategoryJoins(IEnumerable<Guid> categoryIds)
-    {
-        var joins = new List<AnnouncementAnnouncementCategory>();
-        foreach (var categoryId in categoryIds)
-            joins.Add(new AnnouncementAnnouncementCategory(_announcement.Id, categoryId));
 
         return joins;
     }
@@ -200,8 +187,6 @@ public class AnnouncementCreator
                     throw new PieceOfAudienceDoesNotExistException(err);
                 case { SqlState: "23503", ConstraintName: "announcements_attachments_attachment_id_fkey" }:
                     throw new AttachmentDoesNotExistException(err);
-                case { SqlState: "23503", ConstraintName: "announcements_categories_category_id_fkey" }:
-                    throw new AnnouncementCategoryDoesNotExistException(err);
                 default:
                     throw;
             }

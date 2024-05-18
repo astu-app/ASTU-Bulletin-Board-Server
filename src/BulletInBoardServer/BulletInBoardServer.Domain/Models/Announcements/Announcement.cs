@@ -1,5 +1,4 @@
-﻿using BulletInBoardServer.Domain.Models.AnnouncementCategories;
-using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
+﻿using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Domain.Models.Attachments;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Users;
@@ -30,11 +29,6 @@ public class Announcement
     /// Автор объявления
     /// </summary>
     public User Author { get; init; } = null!;
-
-    /// <summary>
-    /// Категории объявления
-    /// </summary>
-    public AnnouncementCategoryList Categories { get; private init; } = null!;
 
     /// <summary>
     /// Аудитория объявления
@@ -112,19 +106,17 @@ public class Announcement
 
 
 
-    public Announcement(Guid id, string content, User author, AnnouncementCategoryList categories,
+    public Announcement(Guid id, string content, User author,
         AnnouncementAudience audience, DateTime? publishedAt, DateTime? hiddenAt,
         DateTime? delayedPublishingAt, DateTime? delayedHidingAt,
         AttachmentList attachments)
     {
-        CategoriesValidOrThrow(categories);
         AudienceValidOrThrow(audience);
 
         Id = id;
         Content = content;
         AuthorId = author.Id;
         Author = author;
-        Categories = categories;
         Audience = audience;
         AudienceSize = audience.Count;
         PublishedAt = publishedAt;
@@ -346,9 +338,6 @@ public class Announcement
         foreach (var attachment in attachments)
             AddAttachmentOrThrow(attachment);
     }
-
-    private static void CategoriesValidOrThrow(AnnouncementCategoryList categories) =>
-        ArgumentNullException.ThrowIfNull(categories);
 
     private static void AudienceValidOrThrow(AnnouncementAudience audience)
     {

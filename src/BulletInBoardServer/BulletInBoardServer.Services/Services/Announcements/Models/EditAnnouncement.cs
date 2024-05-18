@@ -21,14 +21,6 @@ public class EditAnnouncement
     public string? Content { get; init; }
 
     /// <summary>
-    /// Новый список идентификаторов категорий объявления
-    /// </summary>
-    /// <remarks>
-    /// Null, если категории не были изменены
-    /// </remarks>
-    public UpdateIdentifierList? CategoryIds { get; init; }
-
-    /// <summary>
     /// Новый список идентификаторов пользователей-аудитории объявления
     /// </summary>
     /// <remarks>

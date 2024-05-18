@@ -32,21 +32,6 @@ public static class TestDataIds
 
     #endregion
 
-    #region файлы
-
-    public static readonly Guid File_1_Id = Guid.Parse("4b7afd10-85f5-4e83-a555-161d241689e9");
-    public static readonly Guid File_2_Id = Guid.Parse("cb82ffd8-17ac-40f8-851e-4190149d09e9");
-
-    #endregion файлы
-
-    #region категории объявлений
-
-    public static readonly Guid AnnouncementCategory_1_Id = Guid.Parse("abc22865-7c89-43fe-b6f5-0585f599783d");
-    public static readonly Guid AnnouncementCategory_2_Id = Guid.Parse("ab142921-7d4f-4932-82c1-d6e903070b8c");
-    public static readonly Guid AnnouncementCategory_3_Id = Guid.Parse("d6ee33fe-aa5b-4846-95f7-05b76b9ec6ff");
-
-    #endregion категории объявлений
-
     #region опросы
 
     // публичный опрос 1

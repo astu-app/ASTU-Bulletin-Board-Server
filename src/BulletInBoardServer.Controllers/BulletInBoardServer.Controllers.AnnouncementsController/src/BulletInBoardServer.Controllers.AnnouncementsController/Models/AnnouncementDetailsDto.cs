@@ -58,20 +58,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public int AudienceSize { get; set; }
 
         /// <summary>
-        /// Массив категорий объявлений
-        /// </summary>
-        /// <value>Массив категорий объявлений</value>
-        [DataMember(Name="categories", EmitDefaultValue=false)]
-        public List<AnnouncementCategoryDetailsDto> Categories { get; set; }
-
-        /// <summary>
-        /// Массив файлов, прикрепленных к объявлению
-        /// </summary>
-        /// <value>Массив файлов, прикрепленных к объявлению</value>
-        [DataMember(Name="files", EmitDefaultValue=true)]
-        public List<FileSummaryDto> Files { get; set; }
-
-        /// <summary>
         /// Массив опросов объявления
         /// </summary>
         /// <value>Массив опросов объявления</value>
@@ -126,8 +112,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             sb.Append("  AuthorName: ").Append(AuthorName).Append("\n");
             sb.Append("  ViewsCount: ").Append(ViewsCount).Append("\n");
             sb.Append("  AudienceSize: ").Append(AudienceSize).Append("\n");
-            sb.Append("  Categories: ").Append(Categories).Append("\n");
-            sb.Append("  Files: ").Append(Files).Append("\n");
             sb.Append("  Surveys: ").Append(Surveys).Append("\n");
             sb.Append("  PublishedAt: ").Append(PublishedAt).Append("\n");
             sb.Append("  HiddenAt: ").Append(HiddenAt).Append("\n");
@@ -196,18 +180,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     AudienceSize.Equals(other.AudienceSize)
                 ) && 
                 (
-                    Categories == other.Categories ||
-                    Categories != null &&
-                    other.Categories != null &&
-                    Categories.SequenceEqual(other.Categories)
-                ) && 
-                (
-                    Files == other.Files ||
-                    Files != null &&
-                    other.Files != null &&
-                    Files.SequenceEqual(other.Files)
-                ) && 
-                (
                     Surveys == other.Surveys ||
                     Surveys != null &&
                     other.Surveys != null &&
@@ -261,10 +233,6 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + ViewsCount.GetHashCode();
                     
                     hashCode = hashCode * 59 + AudienceSize.GetHashCode();
-                    if (Categories != null)
-                    hashCode = hashCode * 59 + Categories.GetHashCode();
-                    if (Files != null)
-                    hashCode = hashCode * 59 + Files.GetHashCode();
                     if (Surveys != null)
                     hashCode = hashCode * 59 + Surveys.GetHashCode();
                     if (PublishedAt != null)

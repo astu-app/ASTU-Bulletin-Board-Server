@@ -5,7 +5,6 @@ using BulletInBoardServer.Controllers.AnnouncementsController.Models;
 using BulletInBoardServer.Controllers.Core.Logging;
 using BulletInBoardServer.Controllers.Core.Responding;
 using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
-using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
@@ -65,7 +64,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 403:
          *     announcementCreationForbidden
          * 404:
-         *   announcementCategoriesDoNotExist +
          *   attachmentsDoNotExist +
          *   pieceOfAudienceDoesNotExist +
          * 409:
@@ -122,14 +120,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
             return NotFound(
                 ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses
                     .PieceOfAudienceDoesNotExist));
-        }
-        catch (AnnouncementCategoryDoesNotExistException err)
-        {
-            _loggingHelper.LogWarning(404, "Создание объявления",
-                nameof(CreateAnnouncementResponses.AnnouncementCategoriesDoNotExist), requesterId, err.Message);
-            return NotFound(
-                ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses
-                    .AnnouncementCategoriesDoNotExist));
         }
         catch (DelayedPublishingMomentComesInPastException err)
         {
@@ -690,7 +680,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          *   announcementEditingForbidden +
          * 404:
          *   announcementDoesNotExist +
-         *   announcementCategoriesDoNotExist +
          *   attachmentsDoNotExist +
          *   pieceOfAudienceDoesNotExist +
          * 409:
@@ -745,14 +734,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
             return NotFound(
                 ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
                     .AnnouncementDoesNotExist));
-        }
-        catch (AnnouncementCategoryDoesNotExistException err)
-        {
-            _loggingHelper.LogWarning(404, "Редактирование объявления",
-                nameof(UpdateAnnouncementResponses.AnnouncementCategoriesDoesNotExist), requesterId, err.Message);
-            return NotFound(
-                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateAnnouncementResponses
-                    .AnnouncementCategoriesDoesNotExist));
         }
         catch (AttachmentDoesNotExistException err)
         {

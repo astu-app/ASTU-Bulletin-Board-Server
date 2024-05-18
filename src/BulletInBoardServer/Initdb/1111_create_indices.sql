@@ -11,14 +11,8 @@ create extension pg_trgm;
 create index announcements_published_at_idx on announcements (published_at); -- todo тип индекса?
 create index announcements_is_published_idx on announcements (is_published);
 
--- usergroups table
-create index usergroups_name_idx on usergroups using gin (name gin_trgm_ops);
-
 -- child_usergroups table
 create index child_usergroups_child_usergroup_id on child_usergroups using hash (child_usergroup_id);
-
--- announcement_categories table
-create index announcement_categories_name_idx on announcement_categories using gin (name gin_trgm_ops);
 
 -- questions table
 create index questions_survey_id on questions using hash (survey_id);

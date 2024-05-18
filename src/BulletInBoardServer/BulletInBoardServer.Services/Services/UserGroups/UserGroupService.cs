@@ -77,6 +77,7 @@ public class UserGroupService(ApplicationDbContext dbContext)
             .Where(ug => ug.Id == usergroupId)
             .Include(ug => ug.Admin)
             .Include(ug => ug.MemberRights)
+            .ThenInclude(m => m.User)
             .Include(ug => ug.ChildrenGroups)
             .FirstOrDefault();
         if (usergroup is null)
@@ -85,10 +86,12 @@ public class UserGroupService(ApplicationDbContext dbContext)
         var parents = dbContext.UserGroups
             .Join(dbContext.ChildUseGroups,
                 ug => ug.Id,
-                cug => cug.ChildUserGroupId,
+                cug => cug.UserGroupId,
                 (ug, cug) => new { UserGroup = ug, ChildUserGroup = cug })
-            .Where(join => join.ChildUserGroup.UserGroupId == usergroupId)
+            .Where(join => join.ChildUserGroup.ChildUserGroupId == usergroupId)
             .Select(join => join.UserGroup)
+            .Distinct()
+            .OrderBy(ug => ug.Name)
             .ToUserGroupList();
 
         var details = new UserGroupDetails

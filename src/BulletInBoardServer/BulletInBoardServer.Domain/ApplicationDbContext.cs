@@ -1,4 +1,3 @@
-using BulletInBoardServer.Domain.Models.AnnouncementCategories;
 using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
@@ -10,7 +9,6 @@ using BulletInBoardServer.Domain.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using AnnouncementAudience = BulletInBoardServer.Domain.Models.JoinEntities.AnnouncementAudience;
 using AttachmentBase = BulletInBoardServer.Domain.Models.Attachments.AttachmentBase;
-using File = BulletInBoardServer.Domain.Models.Attachments.File;
 
 namespace BulletInBoardServer.Domain;
 
@@ -24,15 +22,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<AnnouncementAudience> AnnouncementAudience { get; init; } = null!;
     public DbSet<AnnouncementAttachment> AnnouncementAttachmentJoins { get; init; } = null!;
     public DbSet<AttachmentBase> Attachments { get; init; } = null!;
-    public DbSet<File> Files { get; init; } = null!;
     public DbSet<Survey> Surveys { get; init; } = null!;
     public DbSet<Question> Questions { get; init; } = null!;
     public DbSet<Answer> Answers { get; init; } = null!;
     public DbSet<Participation> Participation { get; init; } = null!;
     public DbSet<UserSelection> UserSelections { get; init; } = null!;
-    public DbSet<AnnouncementCategory> AnnouncementCategories { get; init; } = null!;
-    public DbSet<AnnouncementAnnouncementCategory> AnnouncementCategoryJoins { get; init; } = null!;
-    public DbSet<AnnouncementCategorySubscription> AnnouncementCategorySubscriptions { get; init; } = null!;
 
 
 
@@ -40,12 +34,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     {
         ConfigureAnnouncements(modelBuilder);
         ConfigureAttachments(modelBuilder);
-        ConfigureFiles(modelBuilder);
         ConfigureUsers(modelBuilder);
         ConfigureAnnouncementAudience(modelBuilder);
         ConfigureUsergroups(modelBuilder);
         ConfigureMemberRights(modelBuilder);
-        ConfigureAnnouncementCategories(modelBuilder);
         ConfigureSurveys(modelBuilder);
         ConfigureQuestions(modelBuilder);
         ConfigureAnswers(modelBuilder);
@@ -126,31 +118,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Ignore(e => e.ViewsCount);
 
             entity
-                .HasMany(e => e.Categories)
-                .WithMany()
-                .UsingEntity<AnnouncementAnnouncementCategory>(
-                    join => join
-                        .HasOne(e => e.AnnouncementCategory)
-                        .WithMany()
-                        .HasForeignKey(e => e.AnnouncementCategoryId),
-                    join => join
-                        .HasOne(e => e.Announcement)
-                        .WithMany()
-                        .HasForeignKey(e => e.AnnouncementId),
-                    join =>
-                    {
-                        join.ToTable("announcements_announcement_categories");
-                        join.HasKey(e => new { e.AnnouncementId, e.AnnouncementCategoryId });
-                        join.Property(e => e.AnnouncementId)
-                            .HasColumnName("announcement_id")
-                            .HasColumnType("uuid");
-                        join.Property(e => e.AnnouncementCategoryId)
-                            .HasColumnName("announcement_category_id")
-                            .HasColumnType("uuid");
-                    }
-                );
-
-            entity
                 .HasMany(e => e.Audience)
                 .WithMany()
                 .UsingEntity<AnnouncementAudience>();
@@ -206,43 +173,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                             .WithMany()
                             .HasForeignKey(e => e.AttachmentId);
                     });
-        });
-    }
-
-    private static void ConfigureFiles(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<File>(entity =>
-        {
-            entity.ToTable(
-                "files",
-                builder => builder.Property(e => e.Id).HasColumnName("id"));
-            entity.Property(e => e.Id)
-                .HasColumnName("id")
-                .HasColumnType("uuid");
-
-            entity.Property(e => e.UploaderId)
-                .HasColumnName("uploader_id")
-                .HasColumnType("uuid")
-                .IsRequired();
-            entity
-                .HasOne(e => e.Uploader)
-                .WithMany()
-                .HasForeignKey(e => e.UploaderId);
-
-            entity.Property(e => e.Name)
-                .HasColumnName("name")
-                .HasColumnType("text")
-                .IsRequired();
-
-            entity.Property(e => e.Hash)
-                .HasColumnName("hash")
-                .HasColumnType("text")
-                .IsRequired();
-            
-            entity.Property(e => e.SizeInBytes)
-                .HasColumnName("size_in_bytes")
-                .HasColumnType("bigint")
-                .IsRequired();
         });
     }
 
@@ -378,54 +308,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasOne(e => e.UserGroup)
                 .WithMany(e => e.MemberRights)
                 .HasForeignKey(e => e.UserGroupId);
-        });
-    }
-
-    private static void ConfigureAnnouncementCategories(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<AnnouncementCategory>(entity =>
-        {
-            entity.ToTable("announcement_categories");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id)
-                .HasColumnName("id")
-                .HasColumnType("uuid")
-                .ValueGeneratedOnAdd();
-
-            entity.Property(e => e.Name)
-                .HasColumnName("name")
-                .HasColumnType("text")
-                .IsRequired();
-
-            entity.Property(e => e.ColorHex)
-                .HasColumnName("color_hex")
-                .HasColumnType("text")
-                .IsRequired();
-
-            entity
-                .HasMany(e => e.Subscribers)
-                .WithMany()
-                .UsingEntity<AnnouncementCategorySubscription>(
-                    join => join
-                        .HasOne(e => e.Subscriber) 
-                        .WithMany()
-                        .HasForeignKey(e => e.SubscriberId),
-                    join => join
-                        .HasOne(e => e.AnnouncementCategory)
-                        .WithMany()
-                        .HasForeignKey(e => e.AnnouncementCategoryId),
-                    join =>
-                    {
-                        join.ToTable("announcement_categories_subscribers");
-                        join.HasKey(e => new { e.AnnouncementCategoryId, e.SubscriberId });
-                        join.Property(e => e.AnnouncementCategoryId)
-                            .HasColumnName("announcement_category_id")
-                            .HasColumnType("uuid");
-                        join.Property(e => e.SubscriberId)
-                            .HasColumnName("subscriber_id")
-                            .HasColumnType("uuid");
-                    }
-                );
         });
     }
 

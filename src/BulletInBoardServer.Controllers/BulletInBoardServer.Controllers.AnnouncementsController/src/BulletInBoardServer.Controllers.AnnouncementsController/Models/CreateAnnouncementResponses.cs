@@ -16,9 +16,9 @@ using Newtonsoft.Json;
 namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
 { 
         /// <summary>
-        /// Ответы:   audienceNullOrEmpty - Список аудитории null или пустой   contentNullOrEmpty - Текстовое содержимое объявления является null, пустым или состоит только из пробельных символов   announcementCreationForbidden - Пользователь не имеет права создать объявление   announcementCategoriesDoNotExist - В качестве одного или нескольких из id категорий объявлений прикреплен несуществующий в базе id   attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом   delayedPublishingMomentAfterDelayedHidingMoment - Момент отложенной публикации наступит после момента отложенного сокрытия 
+        /// Ответы:   audienceNullOrEmpty - Список аудитории null или пустой   contentNullOrEmpty - Текстовое содержимое объявления является null, пустым или состоит только из пробельных символов   announcementCreationForbidden - Пользователь не имеет права создать объявление   attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом   delayedPublishingMomentAfterDelayedHidingMoment - Момент отложенной публикации наступит после момента отложенного сокрытия 
         /// </summary>
-        /// <value>Ответы:   audienceNullOrEmpty - Список аудитории null или пустой   contentNullOrEmpty - Текстовое содержимое объявления является null, пустым или состоит только из пробельных символов   announcementCreationForbidden - Пользователь не имеет права создать объявление   announcementCategoriesDoNotExist - В качестве одного или нескольких из id категорий объявлений прикреплен несуществующий в базе id   attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом   delayedPublishingMomentAfterDelayedHidingMoment - Момент отложенной публикации наступит после момента отложенного сокрытия </value>
+        /// <value>Ответы:   audienceNullOrEmpty - Список аудитории null или пустой   contentNullOrEmpty - Текстовое содержимое объявления является null, пустым или состоит только из пробельных символов   announcementCreationForbidden - Пользователь не имеет права создать объявление   attachmentsDoNotExist - В качестве одного или нескольких из id вложений прикреплен несуществующий в базе id   pieceOfAudienceDoesNotExist - В качестве одного или нескольких из id пользователей прикреплен несуществующий в базе id   delayedPublishingMomentIsInPast - Момент отложенной публикации уже наступил в прошлом   delayedHidingMomentIsInPast - Момент автоматического сокрытия уже наступил в прошлом   delayedPublishingMomentAfterDelayedHidingMoment - Момент отложенной публикации наступит после момента отложенного сокрытия </value>
         [TypeConverter(typeof(CustomEnumConverter<CreateAnnouncementResponses>))]
         [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum CreateAnnouncementResponses
@@ -43,39 +43,33 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             AnnouncementCreationForbidden = 3,
             
             /// <summary>
-            /// Enum AnnouncementCategoriesDoNotExist for announcementCategoriesDoNotExist
-            /// </summary>
-            [EnumMember(Value = "announcementCategoriesDoNotExist")]
-            AnnouncementCategoriesDoNotExist = 4,
-            
-            /// <summary>
             /// Enum AttachmentsDoNotExist for attachmentsDoNotExist
             /// </summary>
             [EnumMember(Value = "attachmentsDoNotExist")]
-            AttachmentsDoNotExist = 5,
+            AttachmentsDoNotExist = 4,
             
             /// <summary>
             /// Enum PieceOfAudienceDoesNotExist for pieceOfAudienceDoesNotExist
             /// </summary>
             [EnumMember(Value = "pieceOfAudienceDoesNotExist")]
-            PieceOfAudienceDoesNotExist = 6,
+            PieceOfAudienceDoesNotExist = 5,
             
             /// <summary>
             /// Enum DelayedPublishingMomentIsInPast for delayedPublishingMomentIsInPast
             /// </summary>
             [EnumMember(Value = "delayedPublishingMomentIsInPast")]
-            DelayedPublishingMomentIsInPast = 7,
+            DelayedPublishingMomentIsInPast = 6,
             
             /// <summary>
             /// Enum DelayedHidingMomentIsInPast for delayedHidingMomentIsInPast
             /// </summary>
             [EnumMember(Value = "delayedHidingMomentIsInPast")]
-            DelayedHidingMomentIsInPast = 8,
+            DelayedHidingMomentIsInPast = 7,
             
             /// <summary>
             /// Enum DelayedPublishingMomentAfterDelayedHidingMoment for delayedPublishingMomentAfterDelayedHidingMoment
             /// </summary>
             [EnumMember(Value = "delayedPublishingMomentAfterDelayedHidingMoment")]
-            DelayedPublishingMomentAfterDelayedHidingMoment = 9
+            DelayedPublishingMomentAfterDelayedHidingMoment = 8
         }
 }

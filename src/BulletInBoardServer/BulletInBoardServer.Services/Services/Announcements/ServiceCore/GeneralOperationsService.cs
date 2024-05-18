@@ -79,7 +79,6 @@ public class GeneralOperationsService(
             .Where(a => a.Id == announcementId)
             .Include(a => a.Author)
             .Include(a => a.Audience)
-            .Include(a => a.Categories)
             .Include(a => a.Attachments)
             .Single();
         // Так как к объявлению могут быть прикреплены разные типы вложений и присутствует необходимость загрузить

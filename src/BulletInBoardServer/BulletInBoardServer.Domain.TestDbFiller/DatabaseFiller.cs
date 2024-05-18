@@ -1,5 +1,4 @@
-﻿using BulletInBoardServer.Domain.Models.AnnouncementCategories;
-using BulletInBoardServer.Domain.Models.Announcements;
+﻿using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Questions;
@@ -7,7 +6,6 @@ using BulletInBoardServer.Domain.Models.JoinEntities;
 using BulletInBoardServer.Domain.Models.UserGroups;
 using BulletInBoardServer.Domain.Models.Users;
 using static BulletInBoardServer.Domain.TestDbFiller.TestDataIds;
-using File = BulletInBoardServer.Domain.Models.Attachments.File;
 
 // ReSharper disable InconsistentNaming
 
@@ -25,8 +23,6 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
         AddUserGroups();
 
         AddSurveys();
-        AddFiles();
-        AddAnnouncementCategories();
         AddAnnouncements();
 
         dbContext.SaveChanges();
@@ -762,38 +758,6 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
     }
 
     /// <summary>
-    /// Добавление файлов
-    /// </summary>
-    private void AddFiles()
-    {
-        var file_1 = new File(File_1_Id, MainUsergroupAdminId, "file 1", "file 1 hash", 20_971_520);
-        dbContext.Files.Add(file_1);
-        AddDbEntity(file_1.Id, file_1);
-
-        var file_2 = new File(File_2_Id, MainUsergroupAdminId, "file 2", "file 2 hash", 20_971_520);
-        dbContext.Files.Add(file_2);
-        AddDbEntity(file_2.Id, file_2);
-    }
-
-    /// <summary>
-    /// Добавление категорий объявлений
-    /// </summary>
-    private void AddAnnouncementCategories()
-    {
-        var announcementCategory_1 = new AnnouncementCategory(AnnouncementCategory_1_Id, "Категория 1", "#FFFFFF");
-        dbContext.AnnouncementCategories.Add(announcementCategory_1);
-        AddDbEntity(announcementCategory_1.Id, announcementCategory_1);
-
-        var announcementCategory_2 = new AnnouncementCategory(AnnouncementCategory_2_Id, "Категория 2", "#FFFFFF");
-        dbContext.AnnouncementCategories.Add(announcementCategory_2);
-        AddDbEntity(announcementCategory_2.Id, announcementCategory_2);
-
-        var announcementCategory_3 = new AnnouncementCategory(AnnouncementCategory_3_Id, "Категория 3", "#FFFFFF");
-        dbContext.AnnouncementCategories.Add(announcementCategory_3);
-        AddDbEntity(announcementCategory_3.Id, announcementCategory_3);
-    }
-
-    /// <summary>
     /// Добавление объявлений
     /// </summary>
     private void AddAnnouncements()
@@ -820,7 +784,6 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 id: AnnouncementWithPublicSurvey_1_Id,
                 content: "Объявление с публичным опросом",
                 author: mainUsergroupAdmin,
-                categories: [],
                 audience: [mainUsergroupAdmin, usualUser_1],
                 publishedAt: DateTime.Now,
                 hiddenAt: null,
@@ -838,7 +801,6 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 id: AnnouncementWithAnonymousSurvey_1_Id,
                 content: "Объявление с анонимным опросом",
                 author: mainUsergroupAdmin,
-                categories: [],
                 audience: [mainUsergroupAdmin, usualUser_1],
                 publishedAt: DateTime.Now,
                 hiddenAt: null,
@@ -856,7 +818,6 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 id: AnnouncementWithClosedAnonymousSurvey_1_Id,
                 content: "Объявление с закрытым анонимным опросом",
                 author: mainUsergroupAdmin,
-                categories: [],
                 audience: [mainUsergroupAdmin, usualUser_1],
                 publishedAt: DateTime.Now,
                 hiddenAt: null,
@@ -874,21 +835,12 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 id: FullyFilledAnnouncement_1_Id,
                 content: "Полностью заполненное объявление 1",
                 author: mainUsergroupAdmin,
-                categories:
-                [
-                    GetDbEntity<AnnouncementCategory>(AnnouncementCategory_1_Id),
-                    GetDbEntity<AnnouncementCategory>(AnnouncementCategory_2_Id),
-                ],
                 audience: [mainUsergroupAdmin, usualUser_1],
                 publishedAt: null, // не может содержать другое значение, так как объявление скрыто
                 hiddenAt: DateTime.Now.Subtract(TimeSpan.FromHours(1)),
                 delayedPublishingAt: null,
                 delayedHidingAt: null,
-                attachments:
-                [
-                    GetDbEntity<Survey>(PublicSurvey_2_Id),
-                    GetDbEntity<File>(File_1_Id),
-                ]
+                attachments: [GetDbEntity<Survey>(PublicSurvey_2_Id)]
             );
             dbContext.Announcements.Add(announcement);
             AddDbEntity(announcement.Id, announcement);
@@ -900,7 +852,6 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 id: AnnouncementWithFilledDelayedMomentsId,
                 content: "Объявление с заполненными моментами отложенной публикации и отложенного сокрытия",
                 author: mainUsergroupAdmin,
-                categories: [],
                 audience: [mainUsergroupAdmin, usualUser_1],
                 publishedAt: null,
                 hiddenAt: null,
@@ -919,7 +870,6 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 content:
                 "Скрытое объявление с выключенными моментами отложенной публикации и отложенного сокрытия",
                 author: mainUsergroupAdmin,
-                categories: [],
                 audience: [mainUsergroupAdmin, usualUser_1],
                 publishedAt: null,
                 hiddenAt: DateTime.Now.Subtract(TimeSpan.FromHours(12)),
@@ -937,7 +887,6 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 id: HiddenAnnouncementWithEnabledDelayedPublishingId,
                 content: "Скрытое объявление с включенным моментом отложенной публикации",
                 author: mainUsergroupAdmin,
-                categories: [],
                 audience: [mainUsergroupAdmin],
                 publishedAt: null,
                 hiddenAt: DateTime.Now.Subtract(TimeSpan.FromHours(12)),
@@ -955,7 +904,6 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 id: PublishedAnnouncementWithEnabledDelayedHidingId,
                 content: "Опубликованное объявление с заданным моментом отложенного сокрытия",
                 author: mainUsergroupAdmin,
-                categories: [],
                 audience: [mainUsergroupAdmin],
                 publishedAt: DateTime.Now.Subtract(TimeSpan.FromHours(12)),
                 hiddenAt: null,
@@ -973,7 +921,6 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 id: PublishedAnnouncementWithDisabledDelayedHidingId,
                 content: "Опубликованное объявление без заданного момента отложенного сокрытия",
                 author: mainUsergroupAdmin,
-                categories: [],
                 audience: [mainUsergroupAdmin],
                 publishedAt: DateTime.Now.Subtract(TimeSpan.FromHours(12)),
                 hiddenAt: null,
@@ -991,7 +938,6 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
                 id: PublishedAnnouncementWithSurveyExpectsAutoClosingId,
                 content: "Опубликованное объявление c опросом, ожидающим автоматического закрытия, результаты которого не доступны до закрытия",
                 author: mainUsergroupAdmin,
-                categories: [],
                 audience: [mainUsergroupAdmin],
                 publishedAt: DateTime.Now.Subtract(TimeSpan.FromHours(12)),
                 hiddenAt: null,

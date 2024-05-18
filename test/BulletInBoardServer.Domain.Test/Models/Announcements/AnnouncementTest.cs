@@ -271,10 +271,12 @@ public class AnnouncementTest
 
 
     private static Announcement CreateValidAnnouncement() =>
-        new(Guid.Empty, "content",
-            new User("name", "second name"),
-            [],
-            [new User("name", "second name")],
-            null, null, null, null,
-            []);
+        new(
+            id: Guid.Empty, 
+            content: "content",
+            author: new User("name", "second name"),
+            audience: [new User("name", "second name")],
+            publishedAt: null, 
+            hiddenAt: null, delayedPublishingAt: null, delayedHidingAt: null,
+            attachments: []);
 }

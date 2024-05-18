@@ -1,6 +1,5 @@
 ﻿using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
-using BulletInBoardServer.Services.Services.AnnouncementCategories.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
@@ -8,6 +7,7 @@ using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 using BulletInBoardServer.Services.Services.Attachments.Exceptions;
 using BulletInBoardServer.Services.Services.Audience.Exceptions;
 using BulletInBoardServer.Services.Services.Common.Models;
+using BulletInBoardServer.Services.Services.UserGroups;
 using BulletInBoardServer.Services.Test.Services.Announcements.DelayedOperations;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -34,7 +34,8 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
             new PublishedAnnouncementService(scopeFactory, _dispatcher),
             new HiddenAnnouncementService(scopeFactory, _dispatcher),
             new DelayedPublicationAnnouncementService(scopeFactory),
-            new DelayedHidingAnnouncementService(scopeFactory));
+            new DelayedHidingAnnouncementService(scopeFactory),
+            new UserGroupService(DbContext));
     }
 
     /* ********************************** Общие операции *********************************** */
@@ -46,7 +47,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         var createAnnouncement = new CreateAnnouncement(
             content: null!,
             userIds: [MainUsergroupAdminId],
-            categoryIds: [],
             attachmentIds: [],
             delayedPublishingAt: null,
             delayedHidingAt: null
@@ -63,7 +63,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         var createAnnouncement = new CreateAnnouncement(
             content: "   ",
             userIds: [MainUsergroupAdminId],
-            categoryIds: [],
             attachmentIds: [],
             delayedPublishingAt: null,
             delayedHidingAt: null
@@ -81,7 +80,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         var createAnnouncement = new CreateAnnouncement(
             content: "qwerty",
             userIds: [MainUsergroupAdminId],
-            categoryIds: [],
             attachmentIds: [],
             delayedPublishingAt: null,
             delayedHidingAt: null
@@ -98,7 +96,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         var createAnnouncement = new CreateAnnouncement(
             content: "qwerty",
             userIds: [MainUsergroupAdminId],
-            categoryIds: [],
             attachmentIds: [],
             delayedPublishingAt: DateTime.Now.AddDays(1),
             delayedHidingAt: null
@@ -115,7 +112,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         var createAnnouncement = new CreateAnnouncement(
             content: "qwerty",
             userIds: [MainUsergroupAdminId],
-            categoryIds: [],
             attachmentIds: [],
             delayedPublishingAt: DateTime.Now.Subtract(TimeSpan.FromMinutes(1)),
             delayedHidingAt: null
@@ -132,7 +128,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         var createAnnouncement = new CreateAnnouncement(
             content: "qwerty",
             userIds: [MainUsergroupAdminId],
-            categoryIds: [],
             attachmentIds: [],
             delayedPublishingAt: null,
             delayedHidingAt: DateTime.Now.Subtract(TimeSpan.FromMinutes(1))
@@ -149,7 +144,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         var createAnnouncement = new CreateAnnouncement(
             content: "qwerty",
             userIds: [MainUsergroupAdminId],
-            categoryIds: [],
             attachmentIds: [],
             delayedPublishingAt: DateTime.Now.AddHours(5),
             delayedHidingAt: DateTime.Now.AddHours(1)
@@ -166,7 +160,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         var createAnnouncement = new CreateAnnouncement(
             content: "qwerty",
             userIds: [MainUsergroupAdminId, Guid.NewGuid()],
-            categoryIds: [],
             attachmentIds: [],
             delayedPublishingAt: null,
             delayedHidingAt: null
@@ -178,29 +171,11 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
     }
 
     [Fact]
-    public void Create_NonExistingCategoryIds_Throws()
-    {
-        var createAnnouncement = new CreateAnnouncement(
-            content: "qwerty",
-            userIds: [MainUsergroupAdminId],
-            categoryIds: [Guid.NewGuid()],
-            attachmentIds: [],
-            delayedPublishingAt: null,
-            delayedHidingAt: null
-        );
-
-        var create = () => _announcementService.Create(MainUsergroupAdminId, createAnnouncement);
-
-        create.Should().ThrowExactly<AnnouncementCategoryDoesNotExistException>();
-    }
-
-    [Fact]
     public void Create_NonExistingAttachmentIds_Throws()
     {
         var createAnnouncement = new CreateAnnouncement(
             content: "qwerty",
             userIds: [MainUsergroupAdminId],
-            categoryIds: [],
             attachmentIds: [PublicSurvey_1_Id, Guid.NewGuid()],
             delayedPublishingAt: null,
             delayedHidingAt: null
@@ -217,7 +192,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         var createAnnouncement = new CreateAnnouncement(
             content: "qwerty",
             userIds: [MainUsergroupAdminId],
-            categoryIds: [],
             attachmentIds: [],
             delayedPublishingAt: DateTime.Now.AddDays(1),
             delayedHidingAt: null
@@ -234,7 +208,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
         var createAnnouncement = new CreateAnnouncement(
             content: "qwerty",
             userIds: [MainUsergroupAdminId],
-            categoryIds: [],
             attachmentIds: [],
             delayedPublishingAt: null,
             delayedHidingAt: DateTime.Now.AddDays(1)
@@ -274,7 +247,7 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
     {
         Guid[] removingUserIds = [UsualUser_1_Id];
         var beforeChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
-        var newAudienceSize = beforeChanging.Attachments.Count - removingUserIds.Length;
+        var newAudienceSize = beforeChanging.Audience.Count - removingUserIds.Length;
         DbContext.ChangeTracker.Clear();
 
         var edit = new EditAnnouncement
@@ -293,55 +266,9 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
     }
 
     [Fact]
-    public void Edit_AddCategories_CategoriesAddedCorrectly()
-    {
-        Guid[] newCategoryIds = [AnnouncementCategory_3_Id];
-        var beforeChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
-        var newCategoriesCount = beforeChanging.Categories.Count + newCategoryIds.Length; 
-        DbContext.ChangeTracker.Clear();
-
-        var edit = new EditAnnouncement
-        {
-            Id = FullyFilledAnnouncement_1_Id,
-            CategoryIds = new UpdateIdentifierList { ToAdd = newCategoryIds },
-        };
-        _announcementService.Edit(MainUsergroupAdminId, edit);
-
-        var afterChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
-        afterChanging.Categories
-            .Should()
-            .HaveCount(newCategoriesCount)
-            .And
-            .Contain(ac => afterChanging.Categories.Select(category => category.Id).Contains(ac.Id));
-    }
-
-    [Fact]
-    public void Edit_RemoveCategories_CategoriesRemovedCorrectly()
-    {
-        Guid[] removingCategoryIds = [AnnouncementCategory_1_Id];
-        var beforeChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
-        var newCategoriesCount = beforeChanging.Categories.Count - removingCategoryIds.Length;
-        DbContext.ChangeTracker.Clear();
-
-        var edit = new EditAnnouncement
-        {
-            Id = FullyFilledAnnouncement_1_Id,
-            CategoryIds = new UpdateIdentifierList { ToRemove = removingCategoryIds },
-        };
-        _announcementService.Edit(MainUsergroupAdminId, edit);
-
-        var afterChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
-        afterChanging.Categories
-            .Should()
-            .HaveCount(newCategoriesCount)
-            .And
-            .NotContain(ac => removingCategoryIds.Contains(ac.Id));
-    }
-
-    [Fact]
     public void Edit_AddAttachments_AttachmentsAddedCorrectly()
     {
-        Guid[] newAttachmentIds = [File_2_Id];
+        Guid[] newAttachmentIds = [SurveyExpectsAutoClosingId];
         var beforeChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
         var newAttachmentsCount = beforeChanging.Attachments.Count + newAttachmentIds.Length; 
         DbContext.ChangeTracker.Clear();
@@ -359,29 +286,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
             .HaveCount(newAttachmentsCount)
             .And
             .Contain(a => newAttachmentIds.Contains(a.Id));
-    }
-
-    [Fact]
-    public void Edit_RemoveAttachments_AttachmentsRemovedCorrectly()
-    {
-        Guid[] removingAttachmentIds = [File_1_Id];
-        var beforeChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
-        var newAttachmentsCount = beforeChanging.Attachments.Count - removingAttachmentIds.Length;
-        DbContext.ChangeTracker.Clear();
-
-        var edit = new EditAnnouncement
-        {
-            Id = FullyFilledAnnouncement_1_Id,
-            AttachmentIds = new UpdateIdentifierList { ToRemove = removingAttachmentIds },
-        };
-        _announcementService.Edit(MainUsergroupAdminId, edit);
-
-        var afterChanging = LoadAnnouncement(FullyFilledAnnouncement_1_Id);
-        afterChanging.Attachments
-            .Should()
-            .HaveCount(newAttachmentsCount)
-            .And
-            .NotContain(a => removingAttachmentIds.Contains(a.Id));
     }
 
     [Fact]
@@ -559,7 +463,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
             AnnouncementWithPublicSurvey_1_Id,
             AnnouncementWithAnonymousSurvey_1_Id,
             AnnouncementWithClosedAnonymousSurvey_1_Id,
-            FullyFilledAnnouncement_1_Id,
         ];
 
         var actualAnnouncementIds = _announcementService.GetPublishedAnnouncements(userId)
@@ -717,7 +620,6 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
             .Where(a => a.Id == announcementId)
             .Include(a => a.Author)
             .Include(a => a.Audience)
-            .Include(a => a.Categories)
             .Include(a => a.Attachments)
             .Single();
 }
