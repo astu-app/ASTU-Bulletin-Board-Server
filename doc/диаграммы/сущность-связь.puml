@@ -23,26 +23,13 @@ entity "Объявление" as announcement {
 announcement }o--|| user : < Автор
 announcement }o--|{ user : > Предназначено
 
-entity "Категория" as category {
-    Название
-}
-announcement }o--o{ category
-user }o-up-o{ category : > Подписан
-
-entity "Файл" as attachedFile { 
-    Название
-    Содержимое
-    Хэш
-    Количество ссылок
-}
-announcement }|--o{ attachedFile : < Прикреплен
-
 entity "Опрос" as survey {
     Размер аудитории
     Флаг открытости
     Флаг анонимности
     Флаг ограничения времени голосования
     Срок окончания времени голосования
+    Флаг блокирования результатов\n        до окончания голосования
 }
 announcement ||--o| survey : < Прикреплен
 user }o--o{ survey : > Проголосовал в

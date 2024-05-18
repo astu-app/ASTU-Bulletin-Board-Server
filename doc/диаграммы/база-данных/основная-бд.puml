@@ -121,6 +121,7 @@ rectangle "schema 'public'" as public_schema {
         
         results_open_before_closing: boolean
         
+        expects_auto_closing: boolean
         auto_closing_at: timestamp?
     }
     attachments <-- surveys 
@@ -167,121 +168,6 @@ rectangle "schema 'public'" as public_schema {
 
 
 
-rectangle "schema 'archive'" as archive_schema {
-    ' announcement's related entity group
-    entity "announcements" as archived_announcements  {
-        <b><<PK>></b> id: uuid
-        ..
-        author_id: uuid
-        
-        content: text
-        
-        auto_hiding_at: timestamp?
-        auto_publishing_at: timestamp?
-        
-        published_at: timestamp?
-        hidden_at: timestamp?
-    }
-    
-    entity "attachments" as archived_attachments {
-        <b><<PK>></b> id: uuid
-        ..
-        type: text
-    }
-    
-    entity "announcements_attachments" as archived_announcements_attachments {
-        <b><<PK>></b> attachment_id: uuid
-        <b><<PK>></b> announcement_id: uuid
-    }
-    archived_announcements <.. archived_announcements_attachments
-    archived_attachments <.up. archived_announcements_attachments
-    
-    entity "surveys" as archived_surveys {
-            <b><<PK>></b> id: uuid
-            ..
-            announcement_id: uuid
-            
-            is_open: boolean
-            is_anonymous: boolean
-            is_multiple_choice_allowed: boolean
-            
-            auto_closing_at: timestamp?
-    }
-    archived_attachments <.. archived_surveys
-    
-    entity "questions" as archived_questions {
-        <b><<PK>></b> id: uuid
-        ..
-        survey_id: uuid
-        content: text    
-        voters_count: integer
-        is_open: bool
-        is_anonymous: bool
-    }
-    archived_surveys <.. archived_questions
-    
-    entity "answers" as archived_answers {
-        <b><<PK>></b> id: uuid
-        ..
-        question_id: uuid
-        
-        content: text
-        voters_count: integer
-    }
-    archived_questions <.. archived_answers
-
-    entity "files" as archived_files {
-        <b><<PK>></b> id: uuid
-        ..
-        uploader_id: uuid
-
-        name: text
-        hash: text
-        sizeInBytes: bigint
-
-        links_count: integer
-    }
-    archived_attachments <.. archived_files
-    
-    ' usergroup's related entity group
-    entity "usergroups" as archived_usergroups {
-        <b><<PK>></b> id: uuid
-        ..
-        admin_id: uuid
-        name: text
-    } 
-    
-    entity "member_rights" as archived_member_rights {
-        <b><<PK>></b> user_id: uuid
-        <b><<PK>></b> usergroup_id: uuid
-    } 
-    archived_usergroups <.. archived_member_rights
-    
-    entity child_usergroups {
-        <b><<PK>></b> usergroup_id: uuid
-        <b><<PK>></b> child_usergroup_id: uuid
-    }
-    archived_usergroups <.. child_usergroups
-    
-    ' announcement category's related entity group
-    entity "announcement_categories" as archived_announcement_categories {
-        <b><<PK>></b> id: uuid
-        ..
-        name: text
-        colorHex: text
-    }
-    
-    entity "announcements_announcement_categories" as archived_announcements_announcement_categories {
-        <b><<PK>></b> <<FK>> announcement_id: uuid
-        <b><<PK>></b> <<FK>> announcement_category_id: uuid
-    }
-    archived_announcements <.. archived_announcements_announcement_categories
-    archived_announcement_categories <.up. archived_announcements_announcement_categories
-}
-public_schema <.right. archive_schema
-
-
-
 ' logs schema
 rectangle "schema 'logs'" as logs_schema {
     entity announcements_logs {
@@ -291,59 +177,8 @@ rectangle "schema 'logs'" as logs_schema {
         user_id: uuid
         details: jsonb?
     }
-    
-    entity files_logs {
-        operation_time: timestamp
-        operation_type: text
-        file_id: uuid
-        user_id: uuid
-    }
-    
-    entity usergroups_logs {
-        operation_time: timestamp
-        operation_type: text
-        usergroup_id: uuid
-        user_id: uuid
-        details: jsonb?
-    }
-    
-    entity announcement_categories_logs {
-        operation_time: timestamp
-        operation_type: text
-        category_id: uuid
-        user_id: uuid
-        details: jsonb?
-    }
-    
-    entity surveys_logs {
-        operation_time: timestamp
-        operation_type: text
-        survey_id: uuid
-        user_id: uuid
-    }
-    
-    entity questions_logs {
-        operation_time: timestamp
-        operation_type: text
-        question_id: uuid
-        survey_id: uuid
-    }
-    
-    entity answers_logs {
-        operation_time: timestamp
-        operation_type: text
-        answer_id: uuid
-        question_id: uuid
-    }
-    
-    entity users_logs {
-        operation_time: timestamp
-        operation_type: text
-        user_id: uuid
-        details: jsonb?
-    }
 }
 public_schema <.. logs_schema
-archive_schema <.. logs_schema
+'archive_schema <.. logs_schema
 
 @enduml 
