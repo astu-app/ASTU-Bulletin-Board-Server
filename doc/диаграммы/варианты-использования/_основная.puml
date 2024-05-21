@@ -6,19 +6,18 @@ left to right direction
 :Студент: as student
 :Сотрудник: as employee
 :Администратор группы: as groupAdmin
-:Администратор: as admin
 
 rectangle "Доска объявлений" {
-    student --> (<font color="gray">S-1.</font> Просмотреть доску объявлений)
-    student --> (<font color="gray">S-3.</font> Управление подписками)
+    (<font color="gray">S-1.</font> Просмотреть доску объявлений) as view_board
+    (<font color="gray">S-1.1.</font> Пройти опрос) as take_survey
+    
+    student --> view_board
+    view_board <.right. take_survey : extend
     student --> (<font color="gray">S-2.</font> Получить уведомление \n о новом объявлении)
     
     student <|-r- employee
     employee --> (<font color="gray">E-2.</font> Управление опросами)
     employee --> (<font color="gray">E-1.</font> Управление объявлениями)
-    
-    employee <|-r- admin
-    admin --> (<font color="gray">A-1.</font> Управление категориями объявлений)
     
     employee <|-r- groupAdmin
     groupAdmin --> (<font color="gray">G-1.</font> Управление \n администрируемыми группами)

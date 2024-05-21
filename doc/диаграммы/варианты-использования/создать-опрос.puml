@@ -14,6 +14,7 @@ rectangle "Доска объявлений" {
     create_survey --> add_questions : include
     create_survey <.. (<font color="gray">E-2.1.2.</font> Задать анонимность голосования) : extend
     create_survey <.. (<font color="gray">E-2.1.3.</font> Задать срок окончания голосования) : extend 
+    create_survey <.. (<font color="gray">E-2.1.4.</font> Установить блокировку результатов \n до закрытия голосования) : extend 
     add_questions --> (<font color="gray">E-2.1.1.1.</font> Задать варианты ответов) : include
     add_questions <.. (<font color="gray">E-2.1.1.2.</font> Задать возможность \n множественного выбора) : extend
 }

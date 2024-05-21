@@ -7,21 +7,17 @@ left to right direction
 
 rectangle "Доска объявлений" {
     (<font color="gray">E-1.1.</font> Создать объявление) as create_announcement
-    (<font color="gray">E-1.1.5.</font> Прикрепить файлы) as add_files
     (<font color="gray">E-1.1.7.</font> Прикрепить опрос) as add_survey
     (<font color="gray">E-1.1.6.</font> Выбрать категории) as select_categories
 
     employee --> create_announcement
      
-    create_announcement <.. add_files : extend
     create_announcement <.. add_survey : extend
     create_announcement <.. (<font color="gray">E-1.1.3.</font> Установить срок автоматического сокрытия) : extend
     create_announcement <.. (<font color="gray">E-1.1.4.</font> Задать дату и время отложенной публикации) : extend
-    create_announcement <.. select_categories : extend
     create_announcement --> (<font color="gray">E-1.1.2.</font> Выбрать получателей) : include
     create_announcement --> (<font color="gray">E-1.1.1.</font> Указать текст объявления) : include
     
-    add_files --> (<font color="gray">E-1.1.5.1.</font> Загрузить файлы) : include
     add_survey --> (<font color="gray">E-2.1.</font> Создать опрос) : include
 }
 @enduml
