@@ -20,16 +20,16 @@ rectangle "Локальная сеть" {
 }
 
 cloud "Интернет" as internet
-app_server -left- internet : https / ftp
+app_server -left- internet : http / https
 
 node "Мобильный клиент" as mobile_client {
     component "Мобильное приложение" as mobile_app
 }
-internet -- mobile_app : https / ftp
+internet -- mobile_app : http / https
 
 node "Десктопный клиент" as desktop_client {
     component "Браузер" as browser
 }
-internet -- browser : https / ftp
+internet -- browser : http / https
 
 @enduml

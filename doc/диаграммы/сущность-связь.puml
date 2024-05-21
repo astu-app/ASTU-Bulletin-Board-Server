@@ -2,6 +2,7 @@
 'https://plantuml.com/class-diagram
 
 hide methods
+left to right direction
 
 entity "Пользователь" as user {
     Фамилия
@@ -52,7 +53,7 @@ entity "Группа пользователей" as userGroup {
     Название
 }
 user }o--|{ userGroup : > Участник
-user |o-right-o{ userGroup : > Администратор
+user |o--o{ userGroup : > Администратор
 userGroup }o--o{ userGroup : Подчинена любому количеству \n Является родителем любого количества
 
 entity "Права участника группы" as memberRights {}

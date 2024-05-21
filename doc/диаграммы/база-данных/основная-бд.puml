@@ -61,28 +61,7 @@ rectangle "schema 'public'" as public_schema {
     }
     usergroups <-- member_rights
     users <-- member_rights
-    
-    entity announcement_categories {
-        <b><<PK>></b> id: uuid
-        ..
-        name: text
-        color_hex: text
-    }
-    
-    entity announcements_announcement_categories {
-        <b><<PK>></b> <<FK>> announcement_id: uuid
-        <b><<PK>></b> <<FK>> announcement_category_id: uuid
-    }
-    announcements <-right- announcements_announcement_categories
-    announcement_categories <-- announcements_announcement_categories
-    
-    entity announcement_categories_subscribers {
-        <b><<PK>></b> <<FK>> announcement_category_id: uuid
-        <b><<PK>></b> <<FK>> subscriber_id: uuid
-    }
-    announcement_categories <-left- announcement_categories_subscribers
-    users <-right- announcement_categories_subscribers
-    
+
     entity attachments {
         <b><<PK>></b> id: uuid
         ..
@@ -94,23 +73,9 @@ rectangle "schema 'public'" as public_schema {
         <b><<PK>></b> <<FK>> announcement_id: uuid
         <b><<PK>></b> <<FK>> serial: int
     }
-    announcements <-left- announcements_attachments
-    attachments <-right- announcements_attachments
-    
-    entity files {
-        <b><<PK>></b> <<FK>> id: uuid
-        ..
-        <<FK>> uploader_id: uuid
-        ..
-        name: text
-        hash: text
-        sizeInBytes: bigint
-        
-        links_count: integer
-    }
-    users <-- files : uploader
-    attachments <-up- files
-    
+    announcements <-- announcements_attachments
+    attachments <-- announcements_attachments
+
     entity surveys {
         <b><<PK>></b> <<FK>> id: uuid
         ..
@@ -124,7 +89,7 @@ rectangle "schema 'public'" as public_schema {
         expects_auto_closing: boolean
         auto_closing_at: timestamp?
     }
-    attachments <-- surveys 
+    attachments <-- surveys : is attachment
     
     entity questions {
         <b><<PK>></b> id: uuid
@@ -178,7 +143,7 @@ rectangle "schema 'logs'" as logs_schema {
         details: jsonb?
     }
 }
-public_schema <.. logs_schema
+public_schema <.up. logs_schema
 'archive_schema <.. logs_schema
 
 @enduml 
