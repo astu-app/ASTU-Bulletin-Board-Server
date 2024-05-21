@@ -8,7 +8,6 @@ left to right direction
 rectangle "Доска объявлений" {
     (<font color="gray">E-1.1.</font> Создать объявление) as create_announcement
     (<font color="gray">E-1.1.7.</font> Прикрепить опрос) as add_survey
-    (<font color="gray">E-1.1.6.</font> Выбрать категории) as select_categories
 
     employee --> create_announcement
      
