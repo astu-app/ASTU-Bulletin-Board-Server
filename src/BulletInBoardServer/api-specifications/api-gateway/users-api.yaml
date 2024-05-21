@@ -15,13 +15,17 @@ components:
       nullable: true
       properties:
         id:
+          description: Идентификатор пользователя
           type: string
           format: uuid
         firstName:
+          description: Имя пользователя
           type: string
         secondName:
+          description: Фамилия пользователя
           type: string
         patronymic:
+          description: Отчество пользователя
           type: string
           nullable: true
 
@@ -30,14 +34,19 @@ components:
       nullable: true
       properties:
         id:
+          description: Идентификатор пользователя
           type: string
           format: uuid
         firstName:
+          description: Имя пользователя
           type: string
         secondName:
+          description: Фамилия пользователя
           type: string
         patronymic:
+          description: Отчество пользователя
           type: string
           nullable: true
         isSelected:
+          description: Выбран ли пользователь
           type: boolean

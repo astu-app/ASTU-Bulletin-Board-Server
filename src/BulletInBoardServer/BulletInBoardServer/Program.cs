@@ -60,8 +60,7 @@ builder.Services.AddSwaggerGen(options =>
     }
 });
 
-var connectionString = builder.Configuration.GetConnectionString("MainDatabase") ??
-                       throw new ApplicationException("Не удалось подключить строку подключения к базу данных");
+var connectionString = GetConnectionString();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
 builder.Services.AddHealthChecks();
@@ -101,6 +100,32 @@ Task.WaitAll(initDelayedAnnouncementOperationsTask, initAutomaticSurveyOperation
 return;
 
 
+string GetConnectionString()
+{
+    if (builder.Environment.IsProduction())
+        return ConstructConnectionStringFromEnvironment();
+
+    return builder.Configuration.GetConnectionString("MainDatabase") ??
+           throw new ApplicationException("Не удалось получить строку подключения к базе данных");
+}
+
+string ConstructConnectionStringFromEnvironment()
+{
+    var host = Environment.GetEnvironmentVariable("DATABASE_HOST") ??
+               throw new ApplicationException($"Переменная окружения DATABASE_HOST отсутствует");
+    var port = Environment.GetEnvironmentVariable("DATABASE_PORT") ??
+               throw new ApplicationException($"Переменная окружения DATABASE_PORT отсутствует");
+    var database = Environment.GetEnvironmentVariable("DATABASE_NAME") ??
+                   throw new ApplicationException($"Переменная окружения DATABASE_NAME отсутствует");
+    var username = Environment.GetEnvironmentVariable("DATABASE_USERNAME") ??
+                   throw new ApplicationException($"Переменная окружения DATABASE_USERNAME отсутствует");
+    var password = Environment.GetEnvironmentVariable("DATABASE_PASSWORD") ??
+                   throw new ApplicationException($"Переменная окружения DATABASE_PASSWORD отсутствует");
+
+    var connectionString_ =
+        $"Host = {host}; Port = {port}; Database = {database}; Username = {username}; Password = {password};";
+    return connectionString_;
+}
 void RegisterAnnouncementService() =>
     builder.Services
         .AddScoped<AnnouncementService>()

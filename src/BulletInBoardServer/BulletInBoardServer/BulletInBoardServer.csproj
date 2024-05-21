@@ -15,9 +15,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
       <Content Include="..\api-specifications\api-gateway\announcements-api.yaml">
         <Link>api-specifications\api-gateway\announcements-api.yaml</Link>
       </Content>

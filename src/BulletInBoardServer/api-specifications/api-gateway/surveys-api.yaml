@@ -394,7 +394,7 @@ components:
       type: object
       properties:
         id:
-          description: Идентификатор опроса
+          description: Идентификатор вопроса
           type: string
           format: uuid
         serial:
