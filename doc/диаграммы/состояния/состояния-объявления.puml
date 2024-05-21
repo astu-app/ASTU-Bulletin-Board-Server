@@ -1,0 +1,34 @@
+﻿@startuml
+'https://plantuml.com/state-diagram
+
+'scale 350 width
+'skinparam linetype ortho
+
+state creation as "Создание"
+state publicationPending as "Ожидает публикации"
+state published as "Опубликовано"
+
+state editing as "Редактирование"
+
+state hidingPending as "Ожидает сокрытия"
+state hidden as "Скрыто"
+
+[*] --> creation
+
+creation -> published : Режим отложенной \n публикации не задан
+
+creation --> publicationPending : Режим отложенной \n публикации задан
+publicationPending --> published : Момент отложенной \n публикации задан
+
+published --> editing : Редактирование начато
+publicationPending --> editing : Редактирование начато
+hidingPending --> editing : Редактирование начато
+editing --> published : Отложенные моменты \n не заданы
+editing --> hidingPending : Задан режим \n отложенного сокрытия
+editing --> publicationPending : Задан режим \n отложенной публикации
+
+hidingPending --> hidden : Наступил момент \n сокрытия
+
+hidden --> published : Восстановлено
+
+@enduml
