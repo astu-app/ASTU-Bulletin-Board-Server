@@ -33,7 +33,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// </summary>
         /// <value>Список участников группы пользователей</value>
         [DataMember(Name="members", EmitDefaultValue=false)]
-        public List<SelectableUserSummaryDto> Members { get; set; }
+        public List<CheckableUserSummaryDto> Members { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

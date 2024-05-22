@@ -18,7 +18,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
     /// 
     /// </summary>
     [DataContract]
-    public class UserSummaryDto : IEquatable<UserSummaryDto>
+    public class CheckableUserSummaryDto : IEquatable<CheckableUserSummaryDto>
     {
         /// <summary>
         /// Идентификатор пользователя
@@ -49,17 +49,25 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public string? Patronymic { get; set; }
 
         /// <summary>
+        /// Выбран ли пользователь
+        /// </summary>
+        /// <value>Выбран ли пользователь</value>
+        [DataMember(Name="isChecked", EmitDefaultValue=true)]
+        public bool IsChecked { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class UserSummaryDto {\n");
+            sb.Append("class CheckableUserSummaryDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  FirstName: ").Append(FirstName).Append("\n");
             sb.Append("  SecondName: ").Append(SecondName).Append("\n");
             sb.Append("  Patronymic: ").Append(Patronymic).Append("\n");
+            sb.Append("  IsChecked: ").Append(IsChecked).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -82,15 +90,15 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((UserSummaryDto)obj);
+            return obj.GetType() == GetType() && Equals((CheckableUserSummaryDto)obj);
         }
 
         /// <summary>
-        /// Returns true if UserSummaryDto instances are equal
+        /// Returns true if CheckableUserSummaryDto instances are equal
         /// </summary>
-        /// <param name="other">Instance of UserSummaryDto to be compared</param>
+        /// <param name="other">Instance of CheckableUserSummaryDto to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(UserSummaryDto other)
+        public bool Equals(CheckableUserSummaryDto other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -115,6 +123,11 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Patronymic == other.Patronymic ||
                     Patronymic != null &&
                     Patronymic.Equals(other.Patronymic)
+                ) && 
+                (
+                    IsChecked == other.IsChecked ||
+                    
+                    IsChecked.Equals(other.IsChecked)
                 );
         }
 
@@ -136,6 +149,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + SecondName.GetHashCode();
                     if (Patronymic != null)
                     hashCode = hashCode * 59 + Patronymic.GetHashCode();
+                    
+                    hashCode = hashCode * 59 + IsChecked.GetHashCode();
                 return hashCode;
             }
         }
@@ -143,12 +158,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(UserSummaryDto left, UserSummaryDto right)
+        public static bool operator ==(CheckableUserSummaryDto left, CheckableUserSummaryDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(UserSummaryDto left, UserSummaryDto right)
+        public static bool operator !=(CheckableUserSummaryDto left, CheckableUserSummaryDto right)
         {
             return !Equals(left, right);
         }

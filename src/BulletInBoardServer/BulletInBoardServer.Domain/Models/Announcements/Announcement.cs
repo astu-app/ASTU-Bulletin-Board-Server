@@ -33,7 +33,7 @@ public class Announcement
     /// <summary>
     /// Аудитория объявления
     /// </summary>
-    public AnnouncementAudience Audience { get; private init; } = null!;
+    public AnnouncementAudience Audience { get; set; } = [];
     
     /// <summary>
     /// Корневой узел аудитории объявления, представленной в виде дерева (узел - группа пользователей, лист -

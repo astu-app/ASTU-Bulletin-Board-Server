@@ -3,6 +3,7 @@ using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Domain.Models.Attachments;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Answers;
+using BulletInBoardServer.Domain.Models.Users;
 using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
@@ -74,11 +75,13 @@ public class GeneralOperationsService(
         // для каждой коллекции создается отдельный запрос к базе данных, что создает излишнюю нагрузку на СУБД
         // и на сеть. Для уменьшения нагрузки можно загрузить содержимое коллекций отдельным запросом. В таком 
         // случае будет выполнена повторная загрузка уже загруженных данных, но учитывая небольшой объем этих
-        // данных, временные затраты на повторную его загрузку минимальны. 
+        // данных, временные затраты на повторную его загрузку минимальны.
+        //
+        // Аудитория будет подгружена позже
+        // ReSharper disable once EntityFramework.NPlusOne.IncompleteDataQuery - аудитория будет загружена и установлена позже
         announcement = dbContext.Announcements
             .Where(a => a.Id == announcementId)
             .Include(a => a.Author)
-            .Include(a => a.Audience)
             .Include(a => a.Attachments)
             .Single();
         // Так как к объявлению могут быть прикреплены разные типы вложений и присутствует необходимость загрузить
@@ -127,10 +130,16 @@ public class GeneralOperationsService(
         //     .FirstOrDefault();
         //     // .Select(join => join.UserGroup)
         //     // .ToList()
-
-        announcement.ViewsCount = dbContext.AnnouncementAudience
-            .AsQueryable()
-            .Count(aa => aa.AnnouncementId == announcementId && aa.Viewed);
+        
+        announcement.Audience = dbContext.AnnouncementAudienceJoins
+            .Where(a => a.AnnouncementId == announcementId)
+            .Include(a => a.User)
+            .ToList()
+            .Select(a => new CheckableUser(a.User, a.Viewed))
+            .ToAudience();
+        
+        // ReSharper disable once EntityFramework.NPlusOne.IncompleteDataUsage - так как аудитория загружается и утсанавливается в предыдущем выражении
+        announcement.ViewsCount = announcement.Audience.Count;
 
         return announcement;
     }

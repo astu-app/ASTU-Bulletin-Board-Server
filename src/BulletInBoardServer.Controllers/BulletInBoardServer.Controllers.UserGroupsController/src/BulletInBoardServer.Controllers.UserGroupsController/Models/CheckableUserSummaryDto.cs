@@ -1,7 +1,7 @@
 /*
- * API Шлюз. Объявления
+ * API Шлюз. Группы пользователей
  *
- * API шлюза для управления объявлениями
+ * API шлюза для управления группами пользователей
  *
  * The version of the OpenAPI document: 0.0.3
  *
@@ -12,13 +12,13 @@ using System;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
+namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
     /// <summary>
     /// 
     /// </summary>
     [DataContract]
-    public class SelectableUserSummaryDto : IEquatable<SelectableUserSummaryDto>
+    public class CheckableUserSummaryDto : IEquatable<CheckableUserSummaryDto>
     {
         /// <summary>
         /// Идентификатор пользователя
@@ -52,8 +52,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         /// Выбран ли пользователь
         /// </summary>
         /// <value>Выбран ли пользователь</value>
-        [DataMember(Name="isSelected", EmitDefaultValue=true)]
-        public bool IsSelected { get; set; }
+        [DataMember(Name="isChecked", EmitDefaultValue=true)]
+        public bool IsChecked { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -62,12 +62,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class SelectableUserSummaryDto {\n");
+            sb.Append("class CheckableUserSummaryDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  FirstName: ").Append(FirstName).Append("\n");
             sb.Append("  SecondName: ").Append(SecondName).Append("\n");
             sb.Append("  Patronymic: ").Append(Patronymic).Append("\n");
-            sb.Append("  IsSelected: ").Append(IsSelected).Append("\n");
+            sb.Append("  IsChecked: ").Append(IsChecked).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -90,15 +90,15 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((SelectableUserSummaryDto)obj);
+            return obj.GetType() == GetType() && Equals((CheckableUserSummaryDto)obj);
         }
 
         /// <summary>
-        /// Returns true if SelectableUserSummaryDto instances are equal
+        /// Returns true if CheckableUserSummaryDto instances are equal
         /// </summary>
-        /// <param name="other">Instance of SelectableUserSummaryDto to be compared</param>
+        /// <param name="other">Instance of CheckableUserSummaryDto to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(SelectableUserSummaryDto other)
+        public bool Equals(CheckableUserSummaryDto other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -125,9 +125,9 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Patronymic.Equals(other.Patronymic)
                 ) && 
                 (
-                    IsSelected == other.IsSelected ||
+                    IsChecked == other.IsChecked ||
                     
-                    IsSelected.Equals(other.IsSelected)
+                    IsChecked.Equals(other.IsChecked)
                 );
         }
 
@@ -150,7 +150,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     if (Patronymic != null)
                     hashCode = hashCode * 59 + Patronymic.GetHashCode();
                     
-                    hashCode = hashCode * 59 + IsSelected.GetHashCode();
+                    hashCode = hashCode * 59 + IsChecked.GetHashCode();
                 return hashCode;
             }
         }
@@ -158,12 +158,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(SelectableUserSummaryDto left, SelectableUserSummaryDto right)
+        public static bool operator ==(CheckableUserSummaryDto left, CheckableUserSummaryDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(SelectableUserSummaryDto left, SelectableUserSummaryDto right)
+        public static bool operator !=(CheckableUserSummaryDto left, CheckableUserSummaryDto right)
         {
             return !Equals(left, right);
         }

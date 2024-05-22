@@ -29,7 +29,7 @@ components:
           type: string
           nullable: true
 
-    selectableUserSummaryDto:
+    checkableUserSummaryDto:
       type: object
       nullable: true
       properties:
@@ -47,6 +47,6 @@ components:
           description: Отчество пользователя
           type: string
           nullable: true
-        isSelected:
+        isChecked:
           description: Выбран ли пользователь
           type: boolean

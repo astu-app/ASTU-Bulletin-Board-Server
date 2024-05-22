@@ -543,7 +543,7 @@ components:
           description: Список участников группы пользователей
           type: array
           items:
-            $ref: './users-api.yaml#/components/schemas/selectableUserSummaryDto'
+            $ref: './users-api.yaml#/components/schemas/checkableUserSummaryDto'
 
     userGroupDetailsDto:
       type: object

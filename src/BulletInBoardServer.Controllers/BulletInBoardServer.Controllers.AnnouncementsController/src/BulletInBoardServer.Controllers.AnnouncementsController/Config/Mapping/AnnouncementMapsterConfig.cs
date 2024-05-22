@@ -33,7 +33,7 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.Id, s => s.Id)
             .Map(d => d.Content, s => s.Content)
             // .Map(d => d.AuthorName, s => $"{s.Author.FirstName} {s.Author.SecondName} {s.Author.Patronymic}")
-            .Map(d => d.AuthorName, s => s.Author)
+            .Map(d => d.AuthorName, s => s.Author.FullName)
             .Map(d => d.ViewsCount, s => s.ViewsCount)
             .Map(d => d.AudienceSize, s => s.AudienceSize)
             .Map(d => d.Surveys, s => s.Attachments.OfType<Survey>())
@@ -44,8 +44,8 @@ public class AnnouncementMapsterConfig : IRegister
             // .Map(d => d.Audience, s => s.AudienceThreeNode); // todo remove
             .Map(d => d.Audience, s => s.Audience);
 
-        config.NewConfig<User, string>()
-            .MapWith(src => $"{src.FirstName} {src.SecondName} {src.Patronymic}");
+        // config.NewConfig<User, string>()
+        //     .MapWith(src => $"{src.FirstName} {src.SecondName} {src.Patronymic}");
 
         // config.NewConfig<IAudienceNode, AnnouncementAudienceDto>() // remove
         //     .ConstructUsing(src => new AnnouncementAudienceDto 
@@ -75,7 +75,7 @@ public class AnnouncementMapsterConfig : IRegister
 
         config.NewConfig<AnnouncementSummary, AnnouncementSummaryDto>()
             .Map(d => d.Id, s => s.Id)
-            .Map(d => d.AuthorName, s => s.Author)
+            .Map(d => d.AuthorName, s => s.Author.FullName)
             .Map(d => d.Content, s => s.Content)
             .Map(d => d.Content, s => s.Content)
             .Map(d => d.ViewsCount, s => s.ViewsCount)
@@ -131,22 +131,25 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.Children, s => s.ChildrenGroups)
             .PreserveReference(true);
 
-        config.NewConfig<SingleMemberRights, UserSummaryDto>()
-            .Map(d => d.Id, s => s.User.Id)
-            .Map(d => d.FirstName, s => s.User.FirstName)
-            .Map(d => d.SecondName, s => s.User.SecondName)
-            .Map(d => d.Patronymic, s => s.User.Patronymic);
+        config.NewConfig<User, CheckableUserSummaryDto>()
+            .Map(d => d.Id, s => s.Id)
+            .Map(d => d.FirstName, s => s.FirstName)
+            .Map(d => d.SecondName, s => s.SecondName)
+            .Map(d => d.Patronymic, s => s.Patronymic)
+            .Map(d => d.IsChecked, s => (s as CheckableUser).IsChecked, s => s is CheckableUser)
+            .Map(d => d.IsChecked, s => false, s => !(s is CheckableUser));
         
-        config.NewConfig<SingleMemberRights, SelectableUserSummaryDto>()
+        config.NewConfig<SingleMemberRights, CheckableUserSummaryDto>()
             .Map(d => d.Id, s => s.User.Id)
             .Map(d => d.FirstName, s => s.User.FirstName)
             .Map(d => d.SecondName, s => s.User.SecondName)
             .Map(d => d.Patronymic, s => s.User.Patronymic)
-            .Map(d => d.IsSelected, s => false);
+            .Map(d => d.IsChecked, s => (s.User as CheckableUser).IsChecked, s => s.User is CheckableUser)
+            .Map(d => d.IsChecked, s => false, s => !(s.User is CheckableUser));
         
         config.NewConfig<UpdateAnnouncementContent, ContentForAnnouncementUpdatingDto>()
             .Map(d => d.Id, s => s.Announcement.Id)
-            .Map(d => d.AuthorName, s => s.Announcement.Author)
+            .Map(d => d.AuthorName, s => s.Announcement.Author.FullName)
             .Map(d => d.Content, s => s.Announcement.Content)
             .Map(d => d.ViewsCount, s => s.Announcement.ViewsCount)
             .Map(d => d.AudienceSize, s => s.Announcement.AudienceSize)
@@ -193,13 +196,13 @@ public class AnnouncementMapsterConfig : IRegister
     private static UserGroupSummaryWithMembersDto MapUserGroup(UserGroup userGroup, IReadOnlySet<Guid> actualAudienceIds)
     {
         var mappedMembers = userGroup.MemberRights
-            .Select(ug => new SelectableUserSummaryDto
+            .Select(ug => new CheckableUserSummaryDto
             {
                 Id = ug.User.Id,
                 FirstName = ug.User.FirstName,
                 SecondName = ug.User.SecondName,
                 Patronymic = ug.User.Patronymic,
-                IsSelected = actualAudienceIds.Contains(ug.User.Id)
+                IsChecked = actualAudienceIds.Contains(ug.User.Id)
             })
             .ToList();
 

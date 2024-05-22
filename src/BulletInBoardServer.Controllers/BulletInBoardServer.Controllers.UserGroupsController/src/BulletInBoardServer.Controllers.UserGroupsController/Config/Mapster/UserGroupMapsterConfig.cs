@@ -92,12 +92,12 @@ public class UserGroupMapsterConfig : IRegister
             .Map(d => d.SecondName, s => s.User.SecondName)
             .Map(d => d.Patronymic, s => s.User.Patronymic);
 
-        config.NewConfig<SingleMemberRights, SelectableUserSummaryDto>()
+        config.NewConfig<SingleMemberRights, CheckableUserSummaryDto>()
             .Map(d => d.Id, s => s.User.Id)
             .Map(d => d.FirstName, s => s.User.FirstName)
             .Map(d => d.SecondName, s => s.User.SecondName)
             .Map(d => d.Patronymic, s => s.User.Patronymic)
-            .Map(d => d.IsSelected, s => false);
+            .Map(d => d.IsChecked, s => false);
     }
 
 

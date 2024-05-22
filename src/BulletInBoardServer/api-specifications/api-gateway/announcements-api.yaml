@@ -733,7 +733,7 @@ components:
           description: Аудитория объявления
           type: array
           items: 
-            $ref: './users-api.yaml#/components/schemas/userSummaryDto'
+            $ref: './users-api.yaml#/components/schemas/checkableUserSummaryDto'
 
     contentForAnnouncementUpdatingDto:
       type: object
