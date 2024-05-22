@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
@@ -24,14 +23,16 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
     public class UpdateIdentifierListDto : IEquatable<UpdateIdentifierListDto>
     {
         /// <summary>
-        /// Gets or Sets ToAdd
+        /// Список уникальных идентификаторов
         /// </summary>
+        /// <value>Список уникальных идентификаторов</value>
         [DataMember(Name="toAdd", EmitDefaultValue=true)]
         public List<Guid> ToAdd { get; set; }
 
         /// <summary>
-        /// Gets or Sets ToRemove
+        /// Список уникальных идентификаторов
         /// </summary>
+        /// <value>Список уникальных идентификаторов</value>
         [DataMember(Name="toRemove", EmitDefaultValue=true)]
         public List<Guid> ToRemove { get; set; }
 
@@ -55,7 +56,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// <returns>JSON string presentation of the object</returns>
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
         }
 
         /// <summary>

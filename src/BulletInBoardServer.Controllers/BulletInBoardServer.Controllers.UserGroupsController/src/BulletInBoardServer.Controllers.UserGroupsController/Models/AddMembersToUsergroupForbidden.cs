@@ -11,7 +11,6 @@
 using System;
 using System.Runtime.Serialization;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
@@ -46,7 +45,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// <returns>JSON string presentation of the object</returns>
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
         }
 
         /// <summary>

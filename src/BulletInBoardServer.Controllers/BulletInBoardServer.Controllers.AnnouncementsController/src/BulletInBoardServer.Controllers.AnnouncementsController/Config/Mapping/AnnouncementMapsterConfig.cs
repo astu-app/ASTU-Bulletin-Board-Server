@@ -114,10 +114,16 @@ public class AnnouncementMapsterConfig : IRegister
                 .SelectMany(ug => GetAllUserGroupsFromHierarchy(ug, new HashSet<Guid>()))
                 .DistinctBy(ug => ug.Summary.Id)
                 .ToList());
+
+        config.NewConfig<UserGroup, UserGroupSummaryDto>()
+            .Map(d => d.Id, s => s.Id)
+            .Map(d => d.Name, s => s.Name)
+            .Map(d => d.AdminName, s => s.Admin.FullName, s => s.Admin != null);
         
         config.NewConfig<UserGroup, UserGroupSummaryWithMembersDto>()
             .Map(d => d.Summary.Id, s => s.Id)
             .Map(d => d.Summary.Name, s => s.Name)
+            .Map(d => d.Summary.AdminName, s => s.Admin.FullName, s => s.Admin != null)
             .Map(d => d.Members, s => s.MemberRights);
         
         config.NewConfig<UserGroup, UserGroupHierarchyNodeDto>()

@@ -23,9 +23,9 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
     public class QuestionDetailsDto : IEquatable<QuestionDetailsDto>
     {
         /// <summary>
-        /// Идентификатор опроса
+        /// Идентификатор вопроса
         /// </summary>
-        /// <value>Идентификатор опроса</value>
+        /// <value>Идентификатор вопроса</value>
         [DataMember(Name="id", EmitDefaultValue=false)]
         public Guid Id { get; set; }
 

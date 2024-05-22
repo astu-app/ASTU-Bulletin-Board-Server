@@ -23,14 +23,16 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
     public class UserGroupHierarchyNodeDto : IEquatable<UserGroupHierarchyNodeDto>
     {
         /// <summary>
-        /// Gets or Sets Id
+        /// Идентификатор группы пользователей
         /// </summary>
+        /// <value>Идентификатор группы пользователей</value>
         [DataMember(Name="id", EmitDefaultValue=false)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets Children
+        /// Дочерние группы пользователей
         /// </summary>
+        /// <value>Дочерние группы пользователей</value>
         [DataMember(Name="children", EmitDefaultValue=false)]
         public List<UserGroupHierarchyNodeDto> Children { get; set; }
 

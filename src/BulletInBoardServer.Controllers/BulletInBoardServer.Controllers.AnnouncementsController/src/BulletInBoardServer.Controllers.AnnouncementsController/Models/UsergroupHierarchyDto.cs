@@ -23,14 +23,16 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
     public class UsergroupHierarchyDto : IEquatable<UsergroupHierarchyDto>
     {
         /// <summary>
-        /// Gets or Sets Usergroups
+        /// Список групп пользователей иерархии с включенными участниками
         /// </summary>
+        /// <value>Список групп пользователей иерархии с включенными участниками</value>
         [DataMember(Name="usergroups", EmitDefaultValue=false)]
         public List<UserGroupSummaryWithMembersDto> Usergroups { get; set; }
 
         /// <summary>
-        /// Gets or Sets Roots
+        /// Корни иерархии
         /// </summary>
+        /// <value>Корни иерархии</value>
         [DataMember(Name="roots", EmitDefaultValue=false)]
         public List<UserGroupHierarchyNodeDto> Roots { get; set; }
 

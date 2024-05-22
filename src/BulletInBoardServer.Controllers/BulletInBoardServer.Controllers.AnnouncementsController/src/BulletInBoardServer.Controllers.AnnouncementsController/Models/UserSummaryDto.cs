@@ -21,26 +21,30 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
     public class UserSummaryDto : IEquatable<UserSummaryDto>
     {
         /// <summary>
-        /// Gets or Sets Id
+        /// Идентификатор пользователя
         /// </summary>
+        /// <value>Идентификатор пользователя</value>
         [DataMember(Name="id", EmitDefaultValue=false)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets FirstName
+        /// Имя пользователя
         /// </summary>
+        /// <value>Имя пользователя</value>
         [DataMember(Name="firstName", EmitDefaultValue=false)]
         public string FirstName { get; set; }
 
         /// <summary>
-        /// Gets or Sets SecondName
+        /// Фамилия пользователя
         /// </summary>
+        /// <value>Фамилия пользователя</value>
         [DataMember(Name="secondName", EmitDefaultValue=false)]
         public string SecondName { get; set; }
 
         /// <summary>
-        /// Gets or Sets Patronymic
+        /// Отчество пользователя
         /// </summary>
+        /// <value>Отчество пользователя</value>
         [DataMember(Name="patronymic", EmitDefaultValue=true)]
         public string? Patronymic { get; set; }
 

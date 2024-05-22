@@ -29,8 +29,9 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public UserGroupSummaryDto Summary { get; set; }
 
         /// <summary>
-        /// Gets or Sets Members
+        /// Список участников группы пользователей
         /// </summary>
+        /// <value>Список участников группы пользователей</value>
         [DataMember(Name="members", EmitDefaultValue=false)]
         public List<SelectableUserSummaryDto> Members { get; set; }
 

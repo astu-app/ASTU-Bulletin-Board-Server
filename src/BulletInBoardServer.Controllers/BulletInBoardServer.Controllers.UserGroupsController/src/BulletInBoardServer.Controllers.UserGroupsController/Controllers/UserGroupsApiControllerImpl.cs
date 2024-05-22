@@ -367,7 +367,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// <response code="401">Unauthorized</response>
     /// <response code="403">Forbidden</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult GetUserHierarchy()
+    public override IActionResult GetOwnedHierarchy()
     {
         /*
          * 200 +

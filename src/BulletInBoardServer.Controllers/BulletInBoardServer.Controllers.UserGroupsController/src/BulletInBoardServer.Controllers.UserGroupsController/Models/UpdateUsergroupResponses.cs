@@ -12,7 +12,6 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.UserGroupsController.Converters;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
@@ -21,7 +20,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// </summary>
         /// <value>Ответы:   nameIsNullOrWhitespace - Имя не содержит символов или содержит исключительно пробельные   updateUsergroupForbidden - Пользователь не имеет права редактировать группу пользователей   usersDoNotExist - В качестве одного или нескольких id пользователей прикреплен несуществующий в базе id   adminCannotBeOrdinaryMember - Идентификатор администратора передан в массиве идентификаторов участников </value>
         [TypeConverter(typeof(CustomEnumConverter<UpdateUsergroupResponses>))]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum UpdateUsergroupResponses
         {
             

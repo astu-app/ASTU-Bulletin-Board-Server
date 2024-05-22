@@ -21,16 +21,25 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
     public class UserGroupSummaryDto : IEquatable<UserGroupSummaryDto>
     {
         /// <summary>
-        /// Gets or Sets Id
+        /// Идентификатор группы пользователей
         /// </summary>
+        /// <value>Идентификатор группы пользователей</value>
         [DataMember(Name="id", EmitDefaultValue=false)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Название группы пользователей
         /// </summary>
+        /// <value>Название группы пользователей</value>
         [DataMember(Name="name", EmitDefaultValue=false)]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Имя администратора группы пользователей
+        /// </summary>
+        /// <value>Имя администратора группы пользователей</value>
+        [DataMember(Name="adminName", EmitDefaultValue=true)]
+        public string? AdminName { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -42,6 +51,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             sb.Append("class UserGroupSummaryDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Name: ").Append(Name).Append("\n");
+            sb.Append("  AdminName: ").Append(AdminName).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -87,6 +97,11 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Name == other.Name ||
                     Name != null &&
                     Name.Equals(other.Name)
+                ) && 
+                (
+                    AdminName == other.AdminName ||
+                    AdminName != null &&
+                    AdminName.Equals(other.AdminName)
                 );
         }
 
@@ -104,6 +119,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + Id.GetHashCode();
                     if (Name != null)
                     hashCode = hashCode * 59 + Name.GetHashCode();
+                    if (AdminName != null)
+                    hashCode = hashCode * 59 + AdminName.GetHashCode();
                 return hashCode;
             }
         }

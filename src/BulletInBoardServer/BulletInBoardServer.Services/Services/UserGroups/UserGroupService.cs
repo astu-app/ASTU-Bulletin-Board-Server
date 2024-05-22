@@ -46,8 +46,8 @@ public class UserGroupService(ApplicationDbContext dbContext)
     /// <param name="adminId">Id администратора</param>
     /// <returns>Список управляемых администратором групп пользователей</returns>
     public UserGroupList GetOwnedList(Guid adminId) =>
-        dbContext.UserGroups
-            .Where(ug => ug.AdminId == adminId)
+        GetUsergroupHierarchy(adminId)
+            .FlattenUserGroupHierarchy()
             .ToUserGroupList();
 
     /// <summary>
@@ -58,7 +58,11 @@ public class UserGroupService(ApplicationDbContext dbContext)
     public UserGroupList GetUsergroupHierarchy(Guid adminId)
     {
         // todo сделать удаление из ownedUsergroups групп, которые находятся в подчинении других групп, находящихся в этом же списке 
-        var ownedUsergroups = GetOwnedList(adminId);
+        var ownedUsergroups = dbContext.UserGroups
+            .Where(ug => ug.AdminId == adminId)
+            .Include(ug => ug.Admin)
+            .ToUserGroupList();
+
         foreach (var usergroup in ownedUsergroups) 
             LoadUserGroupRecursively(usergroup);
 
@@ -79,11 +83,13 @@ public class UserGroupService(ApplicationDbContext dbContext)
             .Include(ug => ug.MemberRights)
             .ThenInclude(m => m.User)
             .Include(ug => ug.ChildrenGroups)
+            .ThenInclude(ug => ug.Admin)
             .FirstOrDefault();
         if (usergroup is null)
             throw new UserGroupDoesNotExistException();
 
         var parents = dbContext.UserGroups
+            .Include(ug => ug.Admin)
             .Join(dbContext.ChildUseGroups,
                 ug => ug.Id,
                 cug => cug.UserGroupId,
@@ -162,7 +168,11 @@ public class UserGroupService(ApplicationDbContext dbContext)
 
     private void LoadUserGroupRecursively(UserGroup usergroup)
     {
-        dbContext.Entry(usergroup).Collection(ug => ug.ChildrenGroups).Load();
+        dbContext.Entry(usergroup)
+            .Collection(ug => ug.ChildrenGroups)
+            .Query()
+            .Include(ug => ug.Admin)
+            .Load();
         dbContext.Entry(usergroup)
             .Collection(ug => ug.MemberRights)
             .Query()

@@ -11,7 +11,6 @@
 using System;
 using System.Runtime.Serialization;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
@@ -22,16 +21,25 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
     public class UserGroupSummaryDto : IEquatable<UserGroupSummaryDto>
     {
         /// <summary>
-        /// Gets or Sets Id
+        /// Идентификатор группы пользователей
         /// </summary>
+        /// <value>Идентификатор группы пользователей</value>
         [DataMember(Name="id", EmitDefaultValue=false)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Название группы пользователей
         /// </summary>
+        /// <value>Название группы пользователей</value>
         [DataMember(Name="name", EmitDefaultValue=false)]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Имя администратора группы пользователей
+        /// </summary>
+        /// <value>Имя администратора группы пользователей</value>
+        [DataMember(Name="adminName", EmitDefaultValue=true)]
+        public string? AdminName { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -43,6 +51,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             sb.Append("class UserGroupSummaryDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Name: ").Append(Name).Append("\n");
+            sb.Append("  AdminName: ").Append(AdminName).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -53,7 +62,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// <returns>JSON string presentation of the object</returns>
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
         }
 
         /// <summary>
@@ -88,6 +97,11 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
                     Name == other.Name ||
                     Name != null &&
                     Name.Equals(other.Name)
+                ) && 
+                (
+                    AdminName == other.AdminName ||
+                    AdminName != null &&
+                    AdminName.Equals(other.AdminName)
                 );
         }
 
@@ -105,6 +119,8 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
                     hashCode = hashCode * 59 + Id.GetHashCode();
                     if (Name != null)
                     hashCode = hashCode * 59 + Name.GetHashCode();
+                    if (AdminName != null)
+                    hashCode = hashCode * 59 + AdminName.GetHashCode();
                 return hashCode;
             }
         }

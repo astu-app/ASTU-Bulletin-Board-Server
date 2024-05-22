@@ -146,10 +146,10 @@ paths:
         500:
           description: Internal Server Error
 
-  /usergroups/get-user-hierarchy:
+  /usergroups/get-owned-hierarchy:
     get:
       tags: [ UserGroups ]
-      operationId: getUserHierarchy
+      operationId: getOwnedHierarchy
       summary: Получение иерархии управляемых групп пользователей для пользователя
       responses: 
         200:
@@ -158,7 +158,7 @@ paths:
             application/json:
               schema: 
                 type: object
-                title: getUserHierarchyOk
+                title: getOwnedHierarchyOk
                 properties: 
                   content: 
                     $ref: '#/components/schemas/usergroupHierarchyDto'
@@ -173,11 +173,11 @@ paths:
             application/json:
               schema:
                 type: object
-                title: getUserHierarchyForbidden
+                title: getOwnedHierarchyForbidden
                 properties:
                   code:
                     # getUsergroupHierarchyForbidden
-                    $ref: '#/components/schemas/getUserHierarchyResponses'
+                    $ref: '#/components/schemas/getOwnedHierarchyResponses'
         500:
           description: Internal Server Error
   
@@ -499,6 +499,10 @@ components:
         name:
           description: Название группы пользователей
           type: string
+        adminName:
+          description: Имя администратора группы пользователей
+          type: string
+          nullable: true
 
     usergroupHierarchyDto:
       type: object
@@ -669,7 +673,7 @@ components:
           getUsergroupDetailsForbidden - Пользователь не имеет права запрашивать детали группы пользователей
           userGroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id     
 
-    getUserHierarchyResponses:
+    getOwnedHierarchyResponses:
       type: string
       enum:
         # 403

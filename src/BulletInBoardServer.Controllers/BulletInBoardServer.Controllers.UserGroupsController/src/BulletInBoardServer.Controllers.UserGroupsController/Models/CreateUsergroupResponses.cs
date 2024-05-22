@@ -12,7 +12,6 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.UserGroupsController.Converters;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
@@ -21,7 +20,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// </summary>
         /// <value>Ответы:   nameIsNullOrWhitespace - Название группы пользователей null или состоит исключительно из пробельных символов   usergroupCreationForbidden - Пользователь не имеет права создать группу пользователей   usersDoNotExist - В качестве одного или нескольких id пользователей прикреплен несуществующий в базе id   userGroupsDoNotExist - В качестве одного или нескольких id групп пользователей прикреплен несуществующий в базе id   adminCannotBeOrdinaryMember - Идентификатор администратора передан в массиве идентификаторов участников   cyclicDependency - Группа пользователей не может быть создана, так как порождает цикл на графе групп пользователей </value>
         [TypeConverter(typeof(CustomEnumConverter<CreateUsergroupResponses>))]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum CreateUsergroupResponses
         {
             

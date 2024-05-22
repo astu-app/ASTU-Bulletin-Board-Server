@@ -2,8 +2,11 @@
 
 public static class UserGroupHierarchyExtensions
 {
+    public static IEnumerable<UserGroup> FlattenUserGroupHierarchy(this IEnumerable<UserGroup> roots) => 
+        roots.SelectMany(root => root.FlattenUserGroupHierarchy()).DistinctBy(ug => ug.Id);
+
     public static IEnumerable<UserGroup> FlattenUserGroupHierarchy(this UserGroup root) => 
-        root.GetDescendants().DistinctBy(ug => ug.Id) /*.SelectMany(node => node)*/;
+        root.GetDescendants().DistinctBy(ug => ug.Id);
 
     private static IEnumerable<UserGroup> GetDescendants(this UserGroup? userGroup)
     {

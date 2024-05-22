@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
@@ -30,8 +29,9 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public Guid UserGroupId { get; set; }
 
         /// <summary>
-        /// Gets or Sets UserIds
+        /// Список уникальных идентификаторов
         /// </summary>
+        /// <value>Список уникальных идентификаторов</value>
         [DataMember(Name="userIds", EmitDefaultValue=true)]
         public List<Guid> UserIds { get; set; }
 
@@ -55,7 +55,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// <returns>JSON string presentation of the object</returns>
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
         }
 
         /// <summary>

@@ -11,7 +11,6 @@
 using System;
 using System.Runtime.Serialization;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
@@ -19,13 +18,13 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
     /// 
     /// </summary>
     [DataContract]
-    public class GetUserHierarchyForbidden : IEquatable<GetUserHierarchyForbidden>
+    public class GetOwnedHierarchyOk : IEquatable<GetOwnedHierarchyOk>
     {
         /// <summary>
-        /// Gets or Sets Code
+        /// Gets or Sets Content
         /// </summary>
-        [DataMember(Name="code", EmitDefaultValue=true)]
-        public GetUserHierarchyResponses Code { get; set; }
+        [DataMember(Name="content", EmitDefaultValue=false)]
+        public UsergroupHierarchyDto Content { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -34,8 +33,8 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class GetUserHierarchyForbidden {\n");
-            sb.Append("  Code: ").Append(Code).Append("\n");
+            sb.Append("class GetOwnedHierarchyOk {\n");
+            sb.Append("  Content: ").Append(Content).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -46,7 +45,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// <returns>JSON string presentation of the object</returns>
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
         }
 
         /// <summary>
@@ -58,24 +57,24 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((GetUserHierarchyForbidden)obj);
+            return obj.GetType() == GetType() && Equals((GetOwnedHierarchyOk)obj);
         }
 
         /// <summary>
-        /// Returns true if GetUserHierarchyForbidden instances are equal
+        /// Returns true if GetOwnedHierarchyOk instances are equal
         /// </summary>
-        /// <param name="other">Instance of GetUserHierarchyForbidden to be compared</param>
+        /// <param name="other">Instance of GetOwnedHierarchyOk to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(GetUserHierarchyForbidden other)
+        public bool Equals(GetOwnedHierarchyOk other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Code == other.Code ||
-                    
-                    Code.Equals(other.Code)
+                    Content == other.Content ||
+                    Content != null &&
+                    Content.Equals(other.Content)
                 );
         }
 
@@ -89,8 +88,8 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    
-                    hashCode = hashCode * 59 + Code.GetHashCode();
+                    if (Content != null)
+                    hashCode = hashCode * 59 + Content.GetHashCode();
                 return hashCode;
             }
         }
@@ -98,12 +97,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(GetUserHierarchyForbidden left, GetUserHierarchyForbidden right)
+        public static bool operator ==(GetOwnedHierarchyOk left, GetOwnedHierarchyOk right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(GetUserHierarchyForbidden left, GetUserHierarchyForbidden right)
+        public static bool operator !=(GetOwnedHierarchyOk left, GetOwnedHierarchyOk right)
         {
             return !Equals(left, right);
         }

@@ -23,14 +23,16 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
     public class UpdateIdentifierListDto : IEquatable<UpdateIdentifierListDto>
     {
         /// <summary>
-        /// Gets or Sets ToAdd
+        /// Список уникальных идентификаторов
         /// </summary>
+        /// <value>Список уникальных идентификаторов</value>
         [DataMember(Name="toAdd", EmitDefaultValue=true)]
         public List<Guid> ToAdd { get; set; }
 
         /// <summary>
-        /// Gets or Sets ToRemove
+        /// Список уникальных идентификаторов
         /// </summary>
+        /// <value>Список уникальных идентификаторов</value>
         [DataMember(Name="toRemove", EmitDefaultValue=true)]
         public List<Guid> ToRemove { get; set; }
 

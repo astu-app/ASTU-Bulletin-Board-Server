@@ -33,7 +33,8 @@ public class UserGroupMapsterConfig : IRegister
 
         config.NewConfig<UserGroup, UserGroupSummaryDto>()
             .Map(d => d.Id, s => s.Id)
-            .Map(d => d.Name, s => s.Name);
+            .Map(d => d.Name, s => s.Name)
+            .Map(d => d.AdminName, s => s.Admin);
 
         config.NewConfig<UserGroupDetails, UserGroupDetailsDto>()
             .Map(d => d.Id, s => s.Id)
@@ -77,6 +78,7 @@ public class UserGroupMapsterConfig : IRegister
         config.NewConfig<UserGroup, UserGroupSummaryWithMembersDto>()
             .Map(d => d.Summary.Id, s => s.Id)
             .Map(d => d.Summary.Name, s => s.Name)
+            .Map(d => d.Summary.AdminName, s => s.Admin.FullName)
             .Map(d => d.Members, s => s.MemberRights);
         
         config.NewConfig<UserGroup, UserGroupHierarchyNodeDto>()
@@ -89,9 +91,6 @@ public class UserGroupMapsterConfig : IRegister
             .Map(d => d.FirstName, s => s.User.FirstName)
             .Map(d => d.SecondName, s => s.User.SecondName)
             .Map(d => d.Patronymic, s => s.User.Patronymic);
-
-        config.NewConfig<User, string>()
-            .MapWith(src => $"{src.FirstName} {src.SecondName} {src.Patronymic}");
 
         config.NewConfig<SingleMemberRights, SelectableUserSummaryDto>()
             .Map(d => d.Id, s => s.User.Id)

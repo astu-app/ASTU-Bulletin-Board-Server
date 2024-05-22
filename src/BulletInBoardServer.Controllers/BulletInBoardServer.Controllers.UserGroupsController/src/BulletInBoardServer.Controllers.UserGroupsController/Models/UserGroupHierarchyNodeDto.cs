@@ -9,22 +9,32 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
     /// <summary>
-    /// 
+    /// Объект описывает положение группы пользователей в иерархии групп пользователей
     /// </summary>
     [DataContract]
-    public class GetUserHierarchyNotFound : IEquatable<GetUserHierarchyNotFound>
+    public class UserGroupHierarchyNodeDto : IEquatable<UserGroupHierarchyNodeDto>
     {
         /// <summary>
-        /// Gets or Sets Code
+        /// Идентификатор группы пользователей
         /// </summary>
-        [DataMember(Name="code", EmitDefaultValue=true)]
-        public GetUserHierarchyResponses Code { get; set; }
+        /// <value>Идентификатор группы пользователей</value>
+        [DataMember(Name="id", EmitDefaultValue=false)]
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// Дочерние группы пользователей
+        /// </summary>
+        /// <value>Дочерние группы пользователей</value>
+        [DataMember(Name="children", EmitDefaultValue=false)]
+        public List<UserGroupHierarchyNodeDto> Children { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -33,8 +43,9 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class GetUserHierarchyNotFound {\n");
-            sb.Append("  Code: ").Append(Code).Append("\n");
+            sb.Append("class UserGroupHierarchyNodeDto {\n");
+            sb.Append("  Id: ").Append(Id).Append("\n");
+            sb.Append("  Children: ").Append(Children).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -57,24 +68,30 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((GetUserHierarchyNotFound)obj);
+            return obj.GetType() == GetType() && Equals((UserGroupHierarchyNodeDto)obj);
         }
 
         /// <summary>
-        /// Returns true if GetUserHierarchyNotFound instances are equal
+        /// Returns true if UserGroupHierarchyNodeDto instances are equal
         /// </summary>
-        /// <param name="other">Instance of GetUserHierarchyNotFound to be compared</param>
+        /// <param name="other">Instance of UserGroupHierarchyNodeDto to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(GetUserHierarchyNotFound other)
+        public bool Equals(UserGroupHierarchyNodeDto other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Code == other.Code ||
-                    
-                    Code.Equals(other.Code)
+                    Id == other.Id ||
+                    Id != null &&
+                    Id.Equals(other.Id)
+                ) && 
+                (
+                    Children == other.Children ||
+                    Children != null &&
+                    other.Children != null &&
+                    Children.SequenceEqual(other.Children)
                 );
         }
 
@@ -88,8 +105,10 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    
-                    hashCode = hashCode * 59 + Code.GetHashCode();
+                    if (Id != null)
+                    hashCode = hashCode * 59 + Id.GetHashCode();
+                    if (Children != null)
+                    hashCode = hashCode * 59 + Children.GetHashCode();
                 return hashCode;
             }
         }
@@ -97,12 +116,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(GetUserHierarchyNotFound left, GetUserHierarchyNotFound right)
+        public static bool operator ==(UserGroupHierarchyNodeDto left, UserGroupHierarchyNodeDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(GetUserHierarchyNotFound left, GetUserHierarchyNotFound right)
+        public static bool operator !=(UserGroupHierarchyNodeDto left, UserGroupHierarchyNodeDto right)
         {
             return !Equals(left, right);
         }

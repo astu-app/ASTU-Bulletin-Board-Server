@@ -22,8 +22,9 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
     public class UpdateAnnouncementDto : IEquatable<UpdateAnnouncementDto>
     {
         /// <summary>
-        /// Gets or Sets Id
+        /// Идентификатор обновляемого объявления
         /// </summary>
+        /// <value>Идентификатор обновляемого объявления</value>
         [Required]
         [DataMember(Name="id", EmitDefaultValue=false)]
         public Guid Id { get; set; }

@@ -1,4 +1,6 @@
-﻿namespace BulletInBoardServer.Domain.Models.Users;
+﻿using System.Text;
+
+namespace BulletInBoardServer.Domain.Models.Users;
 
 /// <summary>
 /// Пользователь системы
@@ -24,6 +26,23 @@ public class User
     /// Отчество пользователя
     /// </summary>
     public string? Patronymic { get; init; }
+    
+    /// <summary>
+    /// Полное имя пользователя
+    /// </summary>
+    public string FullName
+    {
+        get
+        {
+            var nameBuilder = new StringBuilder(FirstName)
+                .Append(' ')
+                .Append(SecondName);
+            if (Patronymic is not null)
+                nameBuilder.Append(' ').Append(Patronymic);
+            
+            return nameBuilder.ToString();
+        }
+    }
 
 
 

@@ -12,7 +12,6 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using BulletInBoardServer.Controllers.UserGroupsController.Converters;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
@@ -21,7 +20,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// </summary>
         /// <value>Ответы:   usergroupDeletionForbidden - Пользователь не имеет права удалить группу пользователей   userGroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id </value>
         [TypeConverter(typeof(CustomEnumConverter<DeleteUsergroupResponses>))]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
         public enum DeleteUsergroupResponses
         {
             

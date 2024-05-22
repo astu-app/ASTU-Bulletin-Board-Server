@@ -115,6 +115,21 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         public abstract IActionResult GetAllUsergroups();
 
         /// <summary>
+        /// Получение иерархии управляемых групп пользователей для пользователя
+        /// </summary>
+        /// <response code="200">Ok</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Route("/api/usergroups/get-owned-hierarchy")]
+        [ValidateModelState]
+        [ProducesResponseType(statusCode: 200, type: typeof(GetOwnedHierarchyOk))]
+        [ProducesResponseType(statusCode: 403, type: typeof(GetOwnedHierarchyForbidden))]
+        public abstract IActionResult GetOwnedHierarchy();
+
+        /// <summary>
         /// Получение списка групп пользователей, администратором которой является пользователь, запрашивающий операцию
         /// </summary>
         /// <response code="200">Ok</response>
@@ -127,21 +142,6 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(GetOwnedUsergroupsOk))]
         [ProducesResponseType(statusCode: 403, type: typeof(GetOwnedUsergroupsForbidden))]
         public abstract IActionResult GetOwnedUsergroups();
-
-        /// <summary>
-        /// Получение иерархии управляемых групп пользователей для пользователя
-        /// </summary>
-        /// <response code="200">Ok</response>
-        /// <response code="400">Bad Request</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="500">Internal Server Error</response>
-        [HttpGet]
-        [Route("/api/usergroups/get-user-hierarchy")]
-        [ValidateModelState]
-        [ProducesResponseType(statusCode: 200, type: typeof(GetUserHierarchyOk))]
-        [ProducesResponseType(statusCode: 403, type: typeof(GetUserHierarchyForbidden))]
-        public abstract IActionResult GetUserHierarchy();
 
         /// <summary>
         /// Получение подробной информации о группе пользователей

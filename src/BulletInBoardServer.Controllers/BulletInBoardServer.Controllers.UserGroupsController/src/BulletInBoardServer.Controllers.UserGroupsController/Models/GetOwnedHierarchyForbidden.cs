@@ -18,13 +18,13 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
     /// 
     /// </summary>
     [DataContract]
-    public class UsergroupIdentifierDto : IEquatable<UsergroupIdentifierDto>
+    public class GetOwnedHierarchyForbidden : IEquatable<GetOwnedHierarchyForbidden>
     {
         /// <summary>
-        /// Gets or Sets AnnouncementId
+        /// Gets or Sets Code
         /// </summary>
-        [DataMember(Name="announcementId", EmitDefaultValue=false)]
-        public Guid AnnouncementId { get; set; }
+        [DataMember(Name="code", EmitDefaultValue=true)]
+        public GetOwnedHierarchyResponses Code { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -33,8 +33,8 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class UsergroupIdentifierDto {\n");
-            sb.Append("  AnnouncementId: ").Append(AnnouncementId).Append("\n");
+            sb.Append("class GetOwnedHierarchyForbidden {\n");
+            sb.Append("  Code: ").Append(Code).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -57,24 +57,24 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((UsergroupIdentifierDto)obj);
+            return obj.GetType() == GetType() && Equals((GetOwnedHierarchyForbidden)obj);
         }
 
         /// <summary>
-        /// Returns true if UsergroupIdentifierDto instances are equal
+        /// Returns true if GetOwnedHierarchyForbidden instances are equal
         /// </summary>
-        /// <param name="other">Instance of UsergroupIdentifierDto to be compared</param>
+        /// <param name="other">Instance of GetOwnedHierarchyForbidden to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(UsergroupIdentifierDto other)
+        public bool Equals(GetOwnedHierarchyForbidden other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    AnnouncementId == other.AnnouncementId ||
-                    AnnouncementId != null &&
-                    AnnouncementId.Equals(other.AnnouncementId)
+                    Code == other.Code ||
+                    
+                    Code.Equals(other.Code)
                 );
         }
 
@@ -88,8 +88,8 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    if (AnnouncementId != null)
-                    hashCode = hashCode * 59 + AnnouncementId.GetHashCode();
+                    
+                    hashCode = hashCode * 59 + Code.GetHashCode();
                 return hashCode;
             }
         }
@@ -97,12 +97,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(UsergroupIdentifierDto left, UsergroupIdentifierDto right)
+        public static bool operator ==(GetOwnedHierarchyForbidden left, GetOwnedHierarchyForbidden right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(UsergroupIdentifierDto left, UsergroupIdentifierDto right)
+        public static bool operator !=(GetOwnedHierarchyForbidden left, GetOwnedHierarchyForbidden right)
         {
             return !Equals(left, right);
         }
