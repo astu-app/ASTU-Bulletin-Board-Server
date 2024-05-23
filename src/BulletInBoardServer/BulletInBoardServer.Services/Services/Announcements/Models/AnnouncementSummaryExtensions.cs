@@ -13,5 +13,7 @@ public static class AnnouncementSummaryExtensions
             audienceSize: announcement.AudienceSize,
             publishedAt: announcement.PublishedAt,
             hiddenAt: announcement.HiddenAt, 
+            delayedPublishingAt: announcement.DelayedPublishingAt, 
+            delayedHidingAt: announcement.DelayedHidingAt, 
             attachments: announcement.Attachments);
 }

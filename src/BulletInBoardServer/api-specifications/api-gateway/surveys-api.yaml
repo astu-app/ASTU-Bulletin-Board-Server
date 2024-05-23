@@ -289,10 +289,11 @@ components:
         resultsOpenBeforeClosing:
           description: Открыты ли результаты опроса до закрытия
           type: boolean
-        votersAmount:
-          description: Количество проголосовавших в опросе пользователей
-          type: integer
-          minimum: 0
+        voters:
+          description: Проголосовавшие в опросе пользователи
+          type: array
+          items:
+            $ref: './users-api.yaml#/components/schemas/userSummaryDto'
         autoClosingAt:
           description: Время окончания голосования (если задано)
           type: string
@@ -429,6 +430,11 @@ components:
         content:
           description: Текстовое содержимое варианта ответа
           type: string
+        voters:
+          description: Список проголосовавших за вариант ответа пользователей. Пустой, если вариант ответа относится к анонимному опросу
+          type: array
+          items:
+            $ref: './users-api.yaml#/components/schemas/userSummaryDto'
         votersAmount:
           description: Количество пользователей, проголосовавших за вариант ответа
           type: integer

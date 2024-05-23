@@ -51,6 +51,27 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public DateTime? PublishedAt { get; set; }
 
         /// <summary>
+        /// Время сокрытия объявления
+        /// </summary>
+        /// <value>Время сокрытия объявления</value>
+        [DataMember(Name="hiddenAt", EmitDefaultValue=true)]
+        public DateTime? HiddenAt { get; set; }
+
+        /// <summary>
+        /// Момент отложенной публикации объявления
+        /// </summary>
+        /// <value>Момент отложенной публикации объявления</value>
+        [DataMember(Name="delayedPublishingAt", EmitDefaultValue=true)]
+        public DateTime? DelayedPublishingAt { get; set; }
+
+        /// <summary>
+        /// Момент отложенного сокрытия объявления
+        /// </summary>
+        /// <value>Момент отложенного сокрытия объявления</value>
+        [DataMember(Name="delayedHidingAt", EmitDefaultValue=true)]
+        public DateTime? DelayedHidingAt { get; set; }
+
+        /// <summary>
         /// Количество просмотревших объявление пользователей
         /// </summary>
         /// <value>Количество просмотревших объявление пользователей</value>
@@ -83,6 +104,9 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             sb.Append("  AuthorName: ").Append(AuthorName).Append("\n");
             sb.Append("  Content: ").Append(Content).Append("\n");
             sb.Append("  PublishedAt: ").Append(PublishedAt).Append("\n");
+            sb.Append("  HiddenAt: ").Append(HiddenAt).Append("\n");
+            sb.Append("  DelayedPublishingAt: ").Append(DelayedPublishingAt).Append("\n");
+            sb.Append("  DelayedHidingAt: ").Append(DelayedHidingAt).Append("\n");
             sb.Append("  ViewsCount: ").Append(ViewsCount).Append("\n");
             sb.Append("  AudienceSize: ").Append(AudienceSize).Append("\n");
             sb.Append("  Surveys: ").Append(Surveys).Append("\n");
@@ -143,6 +167,21 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     PublishedAt.Equals(other.PublishedAt)
                 ) && 
                 (
+                    HiddenAt == other.HiddenAt ||
+                    HiddenAt != null &&
+                    HiddenAt.Equals(other.HiddenAt)
+                ) && 
+                (
+                    DelayedPublishingAt == other.DelayedPublishingAt ||
+                    DelayedPublishingAt != null &&
+                    DelayedPublishingAt.Equals(other.DelayedPublishingAt)
+                ) && 
+                (
+                    DelayedHidingAt == other.DelayedHidingAt ||
+                    DelayedHidingAt != null &&
+                    DelayedHidingAt.Equals(other.DelayedHidingAt)
+                ) && 
+                (
                     ViewsCount == other.ViewsCount ||
                     
                     ViewsCount.Equals(other.ViewsCount)
@@ -178,6 +217,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + Content.GetHashCode();
                     if (PublishedAt != null)
                     hashCode = hashCode * 59 + PublishedAt.GetHashCode();
+                    if (HiddenAt != null)
+                    hashCode = hashCode * 59 + HiddenAt.GetHashCode();
+                    if (DelayedPublishingAt != null)
+                    hashCode = hashCode * 59 + DelayedPublishingAt.GetHashCode();
+                    if (DelayedHidingAt != null)
+                    hashCode = hashCode * 59 + DelayedHidingAt.GetHashCode();
                     
                     hashCode = hashCode * 59 + ViewsCount.GetHashCode();
                     

@@ -662,6 +662,21 @@ components:
           type: string
           format: date-time
           nullable: true
+        hiddenAt:
+          description: Время сокрытия объявления
+          type: string
+          format: date-time
+          nullable: true
+        delayedPublishingAt:
+          description: Момент отложенной публикации объявления
+          type: string
+          format: date-time
+          nullable: true
+        delayedHidingAt:
+          description: Момент отложенного сокрытия объявления
+          type: string
+          format: date-time
+          nullable: true
         viewsCount:
           description: Количество просмотревших объявление пользователей
           type: integer

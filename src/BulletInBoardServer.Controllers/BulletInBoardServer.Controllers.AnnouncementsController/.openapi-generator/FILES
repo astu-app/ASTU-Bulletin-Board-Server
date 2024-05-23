@@ -68,5 +68,6 @@ src/BulletInBoardServer.Controllers.AnnouncementsController/Models/UpdateIdentif
 src/BulletInBoardServer.Controllers.AnnouncementsController/Models/UserGroupHierarchyNodeDto.cs
 src/BulletInBoardServer.Controllers.AnnouncementsController/Models/UserGroupSummaryDto.cs
 src/BulletInBoardServer.Controllers.AnnouncementsController/Models/UserGroupSummaryWithMembersDto.cs
+src/BulletInBoardServer.Controllers.AnnouncementsController/Models/UserSummaryDto.cs
 src/BulletInBoardServer.Controllers.AnnouncementsController/Models/UsergroupHierarchyDto.cs
 src/BulletInBoardServer.Controllers.AnnouncementsController/OpenApi/TypeExtensions.cs

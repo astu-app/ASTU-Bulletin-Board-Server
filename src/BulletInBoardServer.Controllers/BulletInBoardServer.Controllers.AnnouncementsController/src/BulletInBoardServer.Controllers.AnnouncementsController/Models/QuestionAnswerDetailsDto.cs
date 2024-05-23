@@ -9,6 +9,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -42,6 +44,13 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public string Content { get; set; }
 
         /// <summary>
+        /// Список проголосовавших за вариант ответа пользователей. Пустой, если вариант ответа относится к анонимному опросу
+        /// </summary>
+        /// <value>Список проголосовавших за вариант ответа пользователей. Пустой, если вариант ответа относится к анонимному опросу</value>
+        [DataMember(Name="voters", EmitDefaultValue=false)]
+        public List<UserSummaryDto> Voters { get; set; }
+
+        /// <summary>
         /// Количество пользователей, проголосовавших за вариант ответа
         /// </summary>
         /// <value>Количество пользователей, проголосовавших за вариант ответа</value>
@@ -59,6 +68,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Serial: ").Append(Serial).Append("\n");
             sb.Append("  Content: ").Append(Content).Append("\n");
+            sb.Append("  Voters: ").Append(Voters).Append("\n");
             sb.Append("  VotersAmount: ").Append(VotersAmount).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -112,6 +122,12 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Content.Equals(other.Content)
                 ) && 
                 (
+                    Voters == other.Voters ||
+                    Voters != null &&
+                    other.Voters != null &&
+                    Voters.SequenceEqual(other.Voters)
+                ) && 
+                (
                     VotersAmount == other.VotersAmount ||
                     
                     VotersAmount.Equals(other.VotersAmount)
@@ -134,6 +150,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + Serial.GetHashCode();
                     if (Content != null)
                     hashCode = hashCode * 59 + Content.GetHashCode();
+                    if (Voters != null)
+                    hashCode = hashCode * 59 + Voters.GetHashCode();
                     
                     hashCode = hashCode * 59 + VotersAmount.GetHashCode();
                 return hashCode;

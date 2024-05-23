@@ -58,11 +58,11 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public bool ResultsOpenBeforeClosing { get; set; }
 
         /// <summary>
-        /// Количество проголосовавших в опросе пользователей
+        /// Проголосовавшие в опросе пользователи
         /// </summary>
-        /// <value>Количество проголосовавших в опросе пользователей</value>
-        [DataMember(Name="votersAmount", EmitDefaultValue=true)]
-        public int VotersAmount { get; set; }
+        /// <value>Проголосовавшие в опросе пользователи</value>
+        [DataMember(Name="voters", EmitDefaultValue=false)]
+        public List<UserSummaryDto> Voters { get; set; }
 
         /// <summary>
         /// Время окончания голосования (если задано)
@@ -98,7 +98,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             sb.Append("  IsOpen: ").Append(IsOpen).Append("\n");
             sb.Append("  IsAnonymous: ").Append(IsAnonymous).Append("\n");
             sb.Append("  ResultsOpenBeforeClosing: ").Append(ResultsOpenBeforeClosing).Append("\n");
-            sb.Append("  VotersAmount: ").Append(VotersAmount).Append("\n");
+            sb.Append("  Voters: ").Append(Voters).Append("\n");
             sb.Append("  AutoClosingAt: ").Append(AutoClosingAt).Append("\n");
             sb.Append("  VoteFinishedAt: ").Append(VoteFinishedAt).Append("\n");
             sb.Append("  Questions: ").Append(Questions).Append("\n");
@@ -164,9 +164,10 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     ResultsOpenBeforeClosing.Equals(other.ResultsOpenBeforeClosing)
                 ) && 
                 (
-                    VotersAmount == other.VotersAmount ||
-                    
-                    VotersAmount.Equals(other.VotersAmount)
+                    Voters == other.Voters ||
+                    Voters != null &&
+                    other.Voters != null &&
+                    Voters.SequenceEqual(other.Voters)
                 ) && 
                 (
                     AutoClosingAt == other.AutoClosingAt ||
@@ -206,8 +207,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     hashCode = hashCode * 59 + IsAnonymous.GetHashCode();
                     
                     hashCode = hashCode * 59 + ResultsOpenBeforeClosing.GetHashCode();
-                    
-                    hashCode = hashCode * 59 + VotersAmount.GetHashCode();
+                    if (Voters != null)
+                    hashCode = hashCode * 59 + Voters.GetHashCode();
                     if (AutoClosingAt != null)
                     hashCode = hashCode * 59 + AutoClosingAt.GetHashCode();
                     if (VoteFinishedAt != null)

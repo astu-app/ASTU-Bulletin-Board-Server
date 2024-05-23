@@ -93,6 +93,8 @@ public class GeneralOperationsService(
             .Include(s => s.Voters)
             .Include(s => s.Questions)
             .ThenInclude(q => q.Answers)
+            // .ThenInclude(a => a.Participation)
+            // .ThenInclude(p => p.User)
             
             // .ThenInclude(a => a.Participation.Where(_ => a.Question.Survey.IsOpen || a.Question.Survey.ResultsOpenBeforeClosing))
             .Load();
@@ -254,6 +256,11 @@ public class GeneralOperationsService(
         dbContext.Entry(answer)
             .Collection(a => a.Participation)
             .Load();
+        
+        foreach (var participation in answer.Participation) 
+            dbContext.Entry(participation)
+                .Reference(p => p.User)
+                .Load();
     }
 
     private void PublishManually(Announcement announcement, DateTime publishedAt,

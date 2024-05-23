@@ -240,7 +240,8 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
                 "Пользователь {RequesterId} получил подробности объявления {AnnouncementId}",
                 requesterId, announcementId);
 
-            return Ok(announcement.Adapt<AnnouncementDetailsDto>());
+            var dto = announcement.Adapt<AnnouncementDetailsDto>();
+            return Ok(dto);
         }
         catch (OperationNotAllowedException err)
         {

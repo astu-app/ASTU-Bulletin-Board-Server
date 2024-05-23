@@ -12,6 +12,9 @@ namespace BulletInBoardServer.Services.Services.Announcements.Models;
 /// <param name="viewsCount">Количество просмотров объявления</param>
 /// <param name="publishedAt">Момент публикации объявления</param>
 /// <param name="hiddenAt">Момент сокрытия объявления</param>
+/// <param name="delayedPublishingAt">Момент отложенной объявления</param>
+/// <param name="delayedHidingAt">Момент отложенного сокрытия объявления</param>
+/// <param name="attachments">Вложения объявления</param>
 public class AnnouncementSummary(
     Guid id,
     User author,
@@ -20,6 +23,8 @@ public class AnnouncementSummary(
     int audienceSize,
     DateTime? publishedAt,
     DateTime? hiddenAt,
+    DateTime? delayedPublishingAt,
+    DateTime? delayedHidingAt,
     ICollection<AttachmentBase>? attachments)
 {
     /// <summary>
@@ -62,6 +67,16 @@ public class AnnouncementSummary(
     /// null, если объявление еще не скрыто
     /// </remarks>
     public DateTime? HiddenAt { get; } = hiddenAt;
+    
+    /// <summary>
+    /// Момент отложенной объявления
+    /// </summary>
+    public DateTime? DelayedPublishingAt{ get;} = delayedPublishingAt;
+    
+    /// <summary>
+    /// Момент отложенного сокрытия объявления
+    /// </summary>
+    public DateTime? DelayedHidingAt{ get;} = delayedHidingAt;
 
     /// <summary>
     /// Список вложений объявления

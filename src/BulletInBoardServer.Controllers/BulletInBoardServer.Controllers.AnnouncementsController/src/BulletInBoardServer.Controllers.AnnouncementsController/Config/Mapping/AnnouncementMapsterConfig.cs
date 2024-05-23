@@ -81,6 +81,8 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.ViewsCount, s => s.ViewsCount)
             .Map(d => d.AudienceSize, s => s.AudienceSize)
             .Map(d => d.PublishedAt, s => s.PublishedAt)
+            .Map(d => d.DelayedPublishingAt, s => s.DelayedPublishingAt)
+            .Map(d => d.DelayedHidingAt, s => s.DelayedHidingAt)
             .Map(d => d.Surveys, a => a.Attachments.OfType<Survey>());
 
         config.NewConfig<Survey, SurveyDetailsDto>()
@@ -89,7 +91,7 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.IsVotedByRequester, s => s.IsVotedByRequester)
             .Map(d => d.ResultsOpenBeforeClosing, s => s.ResultsOpenBeforeClosing)
             .Map(d => d.IsAnonymous, s => s.IsAnonymous)
-            .Map(d => d.VotersAmount, s => s.VotersCount)
+            .Map(d => d.Voters, s => s.Voters)
             .Map(d => d.AutoClosingAt, s => s.AutoClosingAt)
             .Map(d => d.VoteFinishedAt, s => s.VoteFinishedAt)
             .Map(d => d.Questions, s => s.Questions.OrderBy(q => q.Serial));
@@ -103,6 +105,7 @@ public class AnnouncementMapsterConfig : IRegister
         config.NewConfig<Answer, QuestionAnswerDetailsDto>()
             .Map(d => d.Id, s => s.Id)
             .Map(d => d.Content, s => s.Content)
+            .Map(d => d.Voters, s => s.Participation.Select(p => p.User) ?? Array.Empty<User>()) // remove
             .Map(d => d.VotersAmount, s => s.VotersCount);
 
         config.NewConfig<UserGroupList, UsergroupHierarchyDto>()

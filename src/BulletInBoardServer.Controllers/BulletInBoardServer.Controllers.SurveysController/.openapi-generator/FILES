@@ -34,6 +34,7 @@ src/BulletInBoardServer.Controllers.SurveysController/Models/QuestionAnswerDetai
 src/BulletInBoardServer.Controllers.SurveysController/Models/QuestionDetailsDto.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/SurveyDetailsDto.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/SurveyResultsDto.cs
+src/BulletInBoardServer.Controllers.SurveysController/Models/UserSummaryDto.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/VoteInQuestionConflict.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/VoteInQuestionDto.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/VoteInQuestionForbidden.cs
