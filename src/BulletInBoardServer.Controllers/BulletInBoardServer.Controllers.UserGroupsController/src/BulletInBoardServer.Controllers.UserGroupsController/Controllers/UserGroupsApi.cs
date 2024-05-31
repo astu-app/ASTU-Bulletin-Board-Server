@@ -59,7 +59,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         [ValidateModelState]
         [ProducesResponseType(statusCode: 201, type: typeof(CreateUsergroupCreated))]
         [ProducesResponseType(statusCode: 400, type: typeof(CreateUsergroupBadRequest))]
-        [ProducesResponseType(statusCode: 403, type: typeof(CreateUsergroupForbidden))]
+        [ProducesResponseType(statusCode: 403, type: typeof(CreateUsergroupForbidden1))]
         [ProducesResponseType(statusCode: 404, type: typeof(CreateUsergroupNotFound))]
         [ProducesResponseType(statusCode: 409, type: typeof(CreateUsergroupConflict))]
         public abstract IActionResult CreateUsergroup([FromBody]CreateUserGroupDto createUserGroupDto);
@@ -142,6 +142,20 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(GetOwnedUsergroupsOk))]
         [ProducesResponseType(statusCode: 403, type: typeof(GetOwnedUsergroupsForbidden))]
         public abstract IActionResult GetOwnedUsergroups();
+
+        /// <summary>
+        /// Получить данные для создания группы пользователей
+        /// </summary>
+        /// <response code="200">OK</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Route("/api/usergroups/get-create-content")]
+        [ValidateModelState]
+        [ProducesResponseType(statusCode: 200, type: typeof(GetUsergroupCreateContentOk))]
+        [ProducesResponseType(statusCode: 403, type: typeof(CreateUsergroupForbidden))]
+        public abstract IActionResult GetUsergroupCreateContent();
 
         /// <summary>
         /// Получение подробной информации о группе пользователей

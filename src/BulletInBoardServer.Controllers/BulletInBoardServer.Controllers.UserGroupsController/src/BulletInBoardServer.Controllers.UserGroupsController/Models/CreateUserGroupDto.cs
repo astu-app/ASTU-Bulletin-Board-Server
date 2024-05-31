@@ -39,11 +39,11 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public Guid? AdminId { get; set; }
 
         /// <summary>
-        /// Идентификаторы участников группы пользователей
+        /// Участники группы пользователей с правами
         /// </summary>
-        /// <value>Идентификаторы участников группы пользователей</value>
-        [DataMember(Name="memberIds", EmitDefaultValue=false)]
-        public List<Guid> MemberIds { get; set; }
+        /// <value>Участники группы пользователей с правами</value>
+        [DataMember(Name="members", EmitDefaultValue=false)]
+        public List<UserIdWithMemberRightsDto> Members { get; set; }
 
         /// <summary>
         /// Идентификаторы групп пользователей, являющихся родителями создаваемой
@@ -69,7 +69,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             sb.Append("class CreateUserGroupDto {\n");
             sb.Append("  Name: ").Append(Name).Append("\n");
             sb.Append("  AdminId: ").Append(AdminId).Append("\n");
-            sb.Append("  MemberIds: ").Append(MemberIds).Append("\n");
+            sb.Append("  Members: ").Append(Members).Append("\n");
             sb.Append("  ParentIds: ").Append(ParentIds).Append("\n");
             sb.Append("  ChildIds: ").Append(ChildIds).Append("\n");
             sb.Append("}\n");
@@ -119,10 +119,10 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
                     AdminId.Equals(other.AdminId)
                 ) && 
                 (
-                    MemberIds == other.MemberIds ||
-                    MemberIds != null &&
-                    other.MemberIds != null &&
-                    MemberIds.SequenceEqual(other.MemberIds)
+                    Members == other.Members ||
+                    Members != null &&
+                    other.Members != null &&
+                    Members.SequenceEqual(other.Members)
                 ) && 
                 (
                     ParentIds == other.ParentIds ||
@@ -152,8 +152,8 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
                     hashCode = hashCode * 59 + Name.GetHashCode();
                     if (AdminId != null)
                     hashCode = hashCode * 59 + AdminId.GetHashCode();
-                    if (MemberIds != null)
-                    hashCode = hashCode * 59 + MemberIds.GetHashCode();
+                    if (Members != null)
+                    hashCode = hashCode * 59 + Members.GetHashCode();
                     if (ParentIds != null)
                     hashCode = hashCode * 59 + ParentIds.GetHashCode();
                     if (ChildIds != null)

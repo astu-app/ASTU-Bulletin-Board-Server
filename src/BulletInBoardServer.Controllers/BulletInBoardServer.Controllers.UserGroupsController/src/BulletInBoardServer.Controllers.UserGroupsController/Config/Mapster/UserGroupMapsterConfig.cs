@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BulletInBoardServer.Controllers.UserGroupsController.Models;
 using BulletInBoardServer.Domain.Models.UserGroups;
@@ -27,20 +28,70 @@ public class UserGroupMapsterConfig : IRegister
         config.NewConfig<CreateUserGroupDto, CreateUserGroup>()
             .Map(d => d.Name, s => s.Name)
             .Map(d => d.AdminId, s => s.AdminId)
-            .Map(d => d.MemberIds, s => s.MemberIds)
+            .Map(d => d.Members, s => s.Members)
             .Map(d => d.ParentGroupIds, s => s.ParentIds)
             .Map(d => d.ChildGroupIds, s => s.ChildIds);
+
+        config.NewConfig<UserIdWithMemberRightsDto, SingleMemberRights>()
+            .ConstructUsing(src =>
+                new SingleMemberRights(
+                    src.UserId,
+                    src.UsergroupId ?? Guid.Empty,
+                    src.Rights.CanViewAnnouncements,
+                    src.Rights.CanCreateAnnouncements,
+                    src.Rights.CanCreateSurveys,
+                    src.Rights.CanViewUserGroupDetails,
+                    src.Rights.CanCreateUserGroups,
+                    src.Rights.CanEditUserGroups,
+                    src.Rights.CanEditMembers,
+                    src.Rights.CanEditMemberRights,
+                    src.Rights.CanEditUserGroupAdmin,
+                    src.Rights.CanDeleteUserGroup
+                )
+            );
+
+        config.NewConfig<SingleMemberRights, UserSummaryWithMemberRightsDto>()
+            // .ConstructUsing(src =>
+            //     new UserSummaryWithMemberRightsDto
+            //     {
+            //         User = src.Adapt<UserSummaryDto>(),
+            //         Rights = new MemberRightsDto
+            //         {
+            //             CanViewAnnouncements = src.CanViewAnnouncements,
+            //             CanCreateAnnouncements = src.CanCreateAnnouncements,
+            //             CanCreateSurveys = src.CanCreateSurveys,
+            //             CanViewUserGroupDetails = src.CanViewUserGroupDetails,
+            //             CanCreateUserGroups = src.CanCreateUserGroups,
+            //             CanEditUserGroups = src.CanEditUserGroups,
+            //             CanEditMembers = src.CanEditMembers,
+            //             CanEditMemberRights = src.CanEditMemberRights,
+            //             CanEditUserGroupAdmin = src.CanEditUserGroupAdmin,
+            //             CanDeleteUserGroup = src.CanDeleteUserGroup,
+            //         }
+            //     }
+            // );
+            .Map(d => d.User, s => s.User)
+            .Map(d => d.Rights.CanViewAnnouncements, s => s.CanViewAnnouncements)
+            .Map(d => d.Rights.CanCreateAnnouncements, s => s.CanCreateAnnouncements)
+            .Map(d => d.Rights.CanCreateSurveys, s => s.CanCreateSurveys)
+            .Map(d => d.Rights.CanViewUserGroupDetails, s => s.CanViewUserGroupDetails)
+            .Map(d => d.Rights.CanCreateUserGroups, s => s.CanCreateUserGroups)
+            .Map(d => d.Rights.CanEditUserGroups, s => s.CanEditUserGroups)
+            .Map(d => d.Rights.CanEditMembers, s => s.CanEditMembers)
+            .Map(d => d.Rights.CanEditMemberRights, s => s.CanEditMemberRights)
+            .Map(d => d.Rights.CanEditUserGroupAdmin, s => s.CanEditUserGroupAdmin)
+            .Map(d => d.Rights.CanDeleteUserGroup, s => s.CanDeleteUserGroup);
 
         config.NewConfig<UserGroup, UserGroupSummaryDto>()
             .Map(d => d.Id, s => s.Id)
             .Map(d => d.Name, s => s.Name)
-            .Map(d => d.AdminName, s => s.Admin);
+            .Map(d => d.AdminName, s => s.Admin.FullName);
 
         config.NewConfig<UserGroupDetails, UserGroupDetailsDto>()
             .Map(d => d.Id, s => s.Id)
             .Map(d => d.Name, s => s.Name)
             .Map(d => d.Admin, s => s.Admin.Adapt<UserSummaryDto>()) 
-            .Map(d => d.Members, s => s.MemberRights.Adapt<List<UserSummaryDto>>()) 
+            .Map(d => d.Members, s => s.MemberRights.Adapt<List<UserSummaryWithMemberRightsDto>>()) 
             .Map(d => d.Parents, s => s.ParentGroups.Adapt<List<UserGroupSummaryDto>>()) 
             .Map(d => d.Children, s => s.ChildrenGroups.Adapt<List<UserGroupSummaryDto>>());
 
@@ -98,6 +149,10 @@ public class UserGroupMapsterConfig : IRegister
             .Map(d => d.SecondName, s => s.User.SecondName)
             .Map(d => d.Patronymic, s => s.User.Patronymic)
             .Map(d => d.IsChecked, s => false);
+
+        config.NewConfig<CreateUserGroupContent, GetUsergroupCreateContentDto>()
+            .Map(d => d.Users, s => s.Users)
+            .Map(d => d.Usergroups, s => s.UserGroups);
     }
 
 

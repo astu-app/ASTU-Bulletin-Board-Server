@@ -245,8 +245,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(mainUsergroup.Id, mainUsergroup);
 
             // Add members
-            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), mainUsergroup);
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), mainUsergroup);
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), mainUsergroup, true, true, true, true, true, true, true, true, true, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), mainUsergroup, true);
             rights.Add(adminRights);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(adminRights);
@@ -273,8 +273,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup, true, true, true, true, true, true, true, true, true, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
             rights.Add(adminRights);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(adminRights);
@@ -301,8 +301,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup, true, true, true, true, true, true, true, true, true, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
             rights.Add(adminRights);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(adminRights);
@@ -329,8 +329,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup, true, true, true, true, true, true, true, true, true, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
             rights.Add(adminRights);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(adminRights);
@@ -357,8 +357,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup, true, true, true, true, true, true, true, true, true, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
             rights.Add(adminRights);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(adminRights);
@@ -385,8 +385,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup, true, true, true, true, true, true, true, true, true, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
             rights.Add(adminRights);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(adminRights);
@@ -413,8 +413,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup, true, true, true, true, true, true, true, true, true, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
             rights.Add(adminRights);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(adminRights);
@@ -441,8 +441,8 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup);
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
+            var adminRights = new SingleMemberRights(GetDbEntity<User>(adminId), usergroup, true, true, true, true, true, true, true, true, true, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
             rights.Add(adminRights);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(adminRights);

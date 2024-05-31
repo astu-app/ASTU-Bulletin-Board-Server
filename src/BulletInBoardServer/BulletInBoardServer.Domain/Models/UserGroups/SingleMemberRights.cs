@@ -36,13 +36,71 @@ public class SingleMemberRights
     /// </remarks>
     public UserGroup UserGroup { get; init; } = null!;
 
+    /* ************************************** Объявления ************************************** */
+    /// <summary>
+    /// Может ли пользователь просматривать объявления группы
+    /// </summary>
+    public bool CanViewAnnouncements { get; set; }
+
+    /// <summary>
+    /// Может ли пользователь создавать объявления
+    /// </summary>
+    public bool CanCreateAnnouncements { get; set; }
+
+    /* ************************************** Опросы************************************** */
+    /// <summary>
+    /// Может ли пользователь создавать опросы
+    /// </summary>
+    public bool CanCreateSurveys { get; set; }
+
+    /* ************************************** Группы пользователей ************************************** */
+    /// <summary>
+    /// Может ли пользователь просматривать подробности своей группы пользователей и групп из подчиненной иерархии.
+    /// </summary>
+    public bool CanViewUserGroupDetails { get; set; }
+
+    /// <summary>
+    /// Может ли пользователь создавать группы пользователей и встраивать их в подчиненную иерархию
+    /// </summary>
+    public bool CanCreateUserGroups { get; set; }
+
+    /// <summary>
+    /// Может ли пользователь редактировать свою группу пользователей и групп из подчиненной иерархии
+    /// </summary>
+    public bool CanEditUserGroups { get; set; }
+
+    /// <summary>
+    /// Может ли пользователь изменять состав участников своей группы пользователей и групп из подчиненной иерархии
+    /// </summary>
+    public bool CanEditMembers { get; set; }
+
+    /// <summary>
+    /// Может ли пользователь редактировать права участников своей группы пользователей и групп из подчиненной иерархии
+    /// </summary>
+    public bool CanEditMemberRights { get; set; }
+
+    /// <summary>
+    /// Может ли пользователь редактировать администратора групп из подчиненной иерархии
+    /// </summary>
+    public bool CanEditUserGroupAdmin { get; set; }
+
+    /// <summary>
+    /// Может ли пользователь удалять группы пользователей подчиненной иерархии
+    /// </summary>
+    public bool CanDeleteUserGroup { get; set; }
+
 
 
     /// <summary>
     /// Права конкретного участника группы пользователей
     /// </summary>
-    public SingleMemberRights(User user, UserGroup userGroup)
-        : this(user.Id, userGroup.Id)
+    public SingleMemberRights(User user, UserGroup userGroup, bool canViewAnnouncements = false,
+        bool canCreateAnnouncements = false, bool canCreateSurveys = false, bool canViewUserGroupDetails = false,
+        bool canCreateUserGroups = false, bool canEditUserGroups = false, bool canEditMembers = false,
+        bool canEditMemberRights = false, bool canEditUserGroupAdmin = false, bool canDeleteUserGroup = false)
+        : this(user.Id, userGroup.Id, canViewAnnouncements, canCreateAnnouncements, canCreateSurveys,
+            canViewUserGroupDetails, canCreateUserGroups, canEditUserGroups, canEditMembers, canEditMemberRights,
+            canEditUserGroupAdmin, canDeleteUserGroup)
     {
         User = user;
         UserGroup = userGroup;
@@ -51,9 +109,23 @@ public class SingleMemberRights
     /// <summary>
     /// Права конкретного участника группы пользователей
     /// </summary>
-    public SingleMemberRights(Guid userId, Guid userGroupId)
+    public SingleMemberRights(Guid userId, Guid userGroupId, bool canViewAnnouncements = false,
+        bool canCreateAnnouncements = false, bool canCreateSurveys = false, bool canViewUserGroupDetails = false,
+        bool canCreateUserGroups = false, bool canEditUserGroups = false, bool canEditMembers = false,
+        bool canEditMemberRights = false, bool canEditUserGroupAdmin = false, bool canDeleteUserGroup = false)
     {
         UserId = userId;
         UserGroupId = userGroupId;
+        
+        CanViewAnnouncements = canViewAnnouncements;
+        CanCreateAnnouncements = canCreateAnnouncements;
+        CanCreateSurveys = canCreateSurveys;
+        CanViewUserGroupDetails = canViewUserGroupDetails;
+        CanCreateUserGroups = canCreateUserGroups;
+        CanEditUserGroups = canEditUserGroups;
+        CanEditMembers = canEditMembers;
+        CanEditMemberRights = canEditMemberRights;
+        CanEditUserGroupAdmin = canEditUserGroupAdmin;
+        CanDeleteUserGroup = canDeleteUserGroup;
     }
 }

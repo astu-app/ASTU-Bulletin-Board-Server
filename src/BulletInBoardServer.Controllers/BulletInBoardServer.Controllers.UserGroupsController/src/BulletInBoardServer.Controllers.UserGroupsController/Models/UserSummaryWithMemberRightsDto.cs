@@ -15,16 +15,22 @@ using System.Text;
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
     /// <summary>
-    /// 
+    /// Пользователь с правами в группе пользователей
     /// </summary>
     [DataContract]
-    public class CreateUsergroupForbidden : IEquatable<CreateUsergroupForbidden>
+    public class UserSummaryWithMemberRightsDto : IEquatable<UserSummaryWithMemberRightsDto>
     {
         /// <summary>
-        /// Gets or Sets Code
+        /// Gets or Sets User
         /// </summary>
-        [DataMember(Name="code", EmitDefaultValue=true)]
-        public GetUsergroupCreateContentResponses Code { get; set; }
+        [DataMember(Name="user", EmitDefaultValue=true)]
+        public UserSummaryDto User { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Rights
+        /// </summary>
+        [DataMember(Name="rights", EmitDefaultValue=false)]
+        public MemberRightsDto Rights { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -33,8 +39,9 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class CreateUsergroupForbidden {\n");
-            sb.Append("  Code: ").Append(Code).Append("\n");
+            sb.Append("class UserSummaryWithMemberRightsDto {\n");
+            sb.Append("  User: ").Append(User).Append("\n");
+            sb.Append("  Rights: ").Append(Rights).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -57,24 +64,29 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((CreateUsergroupForbidden)obj);
+            return obj.GetType() == GetType() && Equals((UserSummaryWithMemberRightsDto)obj);
         }
 
         /// <summary>
-        /// Returns true if CreateUsergroupForbidden instances are equal
+        /// Returns true if UserSummaryWithMemberRightsDto instances are equal
         /// </summary>
-        /// <param name="other">Instance of CreateUsergroupForbidden to be compared</param>
+        /// <param name="other">Instance of UserSummaryWithMemberRightsDto to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(CreateUsergroupForbidden other)
+        public bool Equals(UserSummaryWithMemberRightsDto other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Code == other.Code ||
-                    
-                    Code.Equals(other.Code)
+                    User == other.User ||
+                    User != null &&
+                    User.Equals(other.User)
+                ) && 
+                (
+                    Rights == other.Rights ||
+                    Rights != null &&
+                    Rights.Equals(other.Rights)
                 );
         }
 
@@ -88,8 +100,10 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    
-                    hashCode = hashCode * 59 + Code.GetHashCode();
+                    if (User != null)
+                    hashCode = hashCode * 59 + User.GetHashCode();
+                    if (Rights != null)
+                    hashCode = hashCode * 59 + Rights.GetHashCode();
                 return hashCode;
             }
         }
@@ -97,12 +111,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(CreateUsergroupForbidden left, CreateUsergroupForbidden right)
+        public static bool operator ==(UserSummaryWithMemberRightsDto left, UserSummaryWithMemberRightsDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(CreateUsergroupForbidden left, CreateUsergroupForbidden right)
+        public static bool operator !=(UserSummaryWithMemberRightsDto left, UserSummaryWithMemberRightsDto right)
         {
             return !Equals(left, right);
         }

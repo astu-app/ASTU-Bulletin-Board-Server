@@ -197,6 +197,7 @@ public class Announcement
         SetPublishedMoment(now, restoringMoment);
 
         DelayedPublishingAt = null;
+        DelayedHidingAt = null;
     }
     
     /// <summary>

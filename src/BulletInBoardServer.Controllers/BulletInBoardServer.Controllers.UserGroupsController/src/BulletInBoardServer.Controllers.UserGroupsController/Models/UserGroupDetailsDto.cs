@@ -47,7 +47,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// </summary>
         /// <value>Краткая информация об участниках группы пользователей</value>
         [DataMember(Name="members", EmitDefaultValue=false)]
-        public List<UserSummaryDto> Members { get; set; }
+        public List<UserSummaryWithMemberRightsDto> Members { get; set; }
 
         /// <summary>
         /// Родительские группы пользователей

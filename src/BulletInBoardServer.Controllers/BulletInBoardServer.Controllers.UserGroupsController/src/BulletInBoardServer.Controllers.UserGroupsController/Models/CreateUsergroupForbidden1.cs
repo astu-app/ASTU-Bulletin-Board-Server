@@ -18,13 +18,13 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
     /// 
     /// </summary>
     [DataContract]
-    public class CreateUsergroupForbidden : IEquatable<CreateUsergroupForbidden>
+    public class CreateUsergroupForbidden1 : IEquatable<CreateUsergroupForbidden1>
     {
         /// <summary>
         /// Gets or Sets Code
         /// </summary>
         [DataMember(Name="code", EmitDefaultValue=true)]
-        public GetUsergroupCreateContentResponses Code { get; set; }
+        public CreateUsergroupResponses Code { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -33,7 +33,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class CreateUsergroupForbidden {\n");
+            sb.Append("class CreateUsergroupForbidden1 {\n");
             sb.Append("  Code: ").Append(Code).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -57,15 +57,15 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((CreateUsergroupForbidden)obj);
+            return obj.GetType() == GetType() && Equals((CreateUsergroupForbidden1)obj);
         }
 
         /// <summary>
-        /// Returns true if CreateUsergroupForbidden instances are equal
+        /// Returns true if CreateUsergroupForbidden1 instances are equal
         /// </summary>
-        /// <param name="other">Instance of CreateUsergroupForbidden to be compared</param>
+        /// <param name="other">Instance of CreateUsergroupForbidden1 to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(CreateUsergroupForbidden other)
+        public bool Equals(CreateUsergroupForbidden1 other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -97,12 +97,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(CreateUsergroupForbidden left, CreateUsergroupForbidden right)
+        public static bool operator ==(CreateUsergroupForbidden1 left, CreateUsergroupForbidden1 right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(CreateUsergroupForbidden left, CreateUsergroupForbidden right)
+        public static bool operator !=(CreateUsergroupForbidden1 left, CreateUsergroupForbidden1 right)
         {
             return !Equals(left, right);
         }

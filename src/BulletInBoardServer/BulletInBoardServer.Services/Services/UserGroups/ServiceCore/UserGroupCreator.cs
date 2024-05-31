@@ -79,15 +79,30 @@ public class UserGroupCreator(CreateUserGroup create, ApplicationDbContext dbCon
 
     private void MembersNotContainAdminIdOrThrow()
     {
-        var contain = create.MemberIds.Any(id => id == create.AdminId);
+        var contain = create.Members
+            .Select(m => m.UserId)
+            .Any(id => id == create.AdminId);
         if (contain)
             throw new AdminCannotBeOrdinaryMemberException();
     }
     
     private void AddMembers()
     {
-        foreach (var memberId in create.MemberIds) 
-            dbContext.MemberRights.Add(new SingleMemberRights(memberId, _usergroup.Id));
+        foreach (var member in create.Members) 
+            dbContext.MemberRights.Add(new SingleMemberRights(
+                userId: member.UserId, 
+                userGroupId: _usergroup.Id,
+                canViewAnnouncements: member.CanViewAnnouncements,
+                canCreateAnnouncements: member.CanCreateAnnouncements,
+                canCreateSurveys: member.CanCreateSurveys,
+                canViewUserGroupDetails: member.CanViewUserGroupDetails,
+                canCreateUserGroups: member.CanCreateUserGroups,
+                canEditUserGroups: member.CanEditUserGroups,
+                canEditMembers: member.CanEditMembers,
+                canEditMemberRights: member.CanEditMemberRights,
+                canEditUserGroupAdmin: member.CanEditUserGroupAdmin,
+                canDeleteUserGroup: member.CanDeleteUserGroup
+            ));
     }
 
     private void AddChildUserGroups()

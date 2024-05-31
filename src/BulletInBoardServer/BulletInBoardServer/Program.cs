@@ -60,6 +60,17 @@ builder.Services.AddSwaggerGen(options =>
     }
 });
 
+// todo add docker
+builder.Services.AddCors(options => options.AddPolicy("CORS_ip",
+    policy => policy.WithOrigins(
+            "http://localhost:5010",
+            "https://localhost:7222",
+            "http://192.168.1.11:5010",
+            "https://192.168.1.11:7222")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials()));
+
 var connectionString = GetConnectionString();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 
@@ -86,6 +97,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("CORS_ip");
 app.UseAuthorization();
 
 app.MapControllers();

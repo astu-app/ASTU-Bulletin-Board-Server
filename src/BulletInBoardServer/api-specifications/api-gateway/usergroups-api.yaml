@@ -2,13 +2,45 @@ openapi: 3.0.3
 info:
   title: API Шлюз. Группы пользователей
   description: API шлюза для управления группами пользователей
-  version: 0.0.3
+  version: 0.1.0
 servers:
   - url: '/api'
 tags:
   - name: UserGroups
     description: API управления группами пользователей
 paths:
+  /usergroups/get-create-content:
+    get:
+      tags: [ UserGroups ]
+      operationId: getUsergroupCreateContent
+      summary: Получить данные для создания группы пользователей
+      responses: 
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                title: getUsergroupCreateContentOk
+                properties: 
+                  content:
+                    $ref: '#/components/schemas/getUsergroupCreateContentDto'
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                title: createUsergroupForbidden
+                properties:
+                  code:
+                    # getUsergroupCreateContentForbidden
+                    $ref: '#/components/schemas/getUsergroupCreateContentResponses'
+        500:
+          description: Internal Server Error
+  
   /usergroups/create:
     post:
       tags: [ UserGroups ]
@@ -451,6 +483,21 @@ components:
       type: string
       format: uuid
 
+    getUsergroupCreateContentDto:
+      description: Данные для создания группы пользователей
+      type: object
+      properties: 
+        users:
+          description: Список пользователей, которые могут быть назначены администратором или участником группы пользователей
+          type: array
+          items:
+            $ref: './users-api.yaml#/components/schemas/userSummaryDto'
+        usergroups:
+          description: Список групп пользователей, которые могут быть установлены в качестве родителей или потомков создаваемой группы пользователей. В списке отсутствуют корневые точки графа пользователей
+          type: array
+          items:
+            $ref: '#/components/schemas/userGroupSummaryDto'
+
     createUserGroupDto:
       type: object
       required:
@@ -464,12 +511,11 @@ components:
           type: string
           format: uuid
           nullable: true
-        memberIds:
-          description: Идентификаторы участников группы пользователей
+        members:
+          description: Участники группы пользователей с правами
           type: array
           items:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/userIdWithMemberRightsDto'
         parentIds:
           description: Идентификаторы групп пользователей, являющихся родителями создаваемой
           type: array
@@ -487,6 +533,66 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/userGroupSummaryDto'
+
+    userSummaryWithMemberRightsDto:
+      type: object
+      description: Пользователь с правами в группе пользователей
+      properties: 
+        user:
+          $ref: './users-api.yaml#/components/schemas/userSummaryDto'
+        rights:
+          $ref: "#/components/schemas/memberRightsDto"
+    
+    userIdWithMemberRightsDto:
+      type: object
+      description: Идентификатор пользователя с правами в группе пользователей
+      required:
+        - userId
+      properties:
+        userId:
+          type: string
+          format: uuid
+        usergroupId:
+          type: string
+          format: uuid
+          nullable: true
+        rights:
+          $ref: "#/components/schemas/memberRightsDto"
+    
+    memberRightsDto:
+      type: object
+      description: Права пользователя в группе пользователей  
+      properties: 
+        canViewAnnouncements:
+          type: boolean
+          default: true
+        canCreateAnnouncements:
+          type: boolean
+          default: false
+        canCreateSurveys:
+          type: boolean
+          default: false
+        canViewUserGroupDetails:
+          type: boolean
+          default: false
+        canCreateUserGroups:
+          type: boolean
+          default: false
+        canEditUserGroups:
+          type: boolean
+          default: false
+        canEditMembers:
+          type: boolean
+          default: false
+        canEditMemberRights:
+          type: boolean
+          default: false
+        canEditUserGroupAdmin:
+          type: boolean
+          default: false
+        canDeleteUserGroup:
+          type: boolean
+          default: false
 
     userGroupSummaryDto:
       type: object
@@ -561,7 +667,7 @@ components:
           description: Краткая информация об участниках группы пользователей
           type: array
           items:
-            $ref: './users-api.yaml#/components/schemas/userSummaryDto'
+            $ref: '#/components/schemas/userSummaryWithMemberRightsDto'
         parents:
           description: Родительские группы пользователей
           type: array
@@ -620,6 +726,15 @@ components:
           format: uuid
         userIds:
           $ref: './common-schemas.yaml#/components/schemas/uniqueIdentifiers'
+
+    getUsergroupCreateContentResponses:
+      type: string
+      enum:
+        # 403
+        - getUsergroupCreateContentForbidden
+      description: >
+        Ответы:
+          getUsergroupCreateContentForbidden - Пользователь не имеет права получать данные для создания группы пользователей
 
     createUsergroupResponses:
       type: string

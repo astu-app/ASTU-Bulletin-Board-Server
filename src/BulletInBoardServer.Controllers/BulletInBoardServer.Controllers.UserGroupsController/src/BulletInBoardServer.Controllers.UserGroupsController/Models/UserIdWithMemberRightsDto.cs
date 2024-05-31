@@ -9,22 +9,36 @@
  */
 
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using System.Text;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
     /// <summary>
-    /// 
+    /// Идентификатор пользователя с правами в группе пользователей
     /// </summary>
     [DataContract]
-    public class CreateUsergroupForbidden : IEquatable<CreateUsergroupForbidden>
+    public class UserIdWithMemberRightsDto : IEquatable<UserIdWithMemberRightsDto>
     {
         /// <summary>
-        /// Gets or Sets Code
+        /// Gets or Sets UserId
         /// </summary>
-        [DataMember(Name="code", EmitDefaultValue=true)]
-        public GetUsergroupCreateContentResponses Code { get; set; }
+        [Required]
+        [DataMember(Name="userId", EmitDefaultValue=false)]
+        public Guid UserId { get; set; }
+
+        /// <summary>
+        /// Gets or Sets UsergroupId
+        /// </summary>
+        [DataMember(Name="usergroupId", EmitDefaultValue=true)]
+        public Guid? UsergroupId { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Rights
+        /// </summary>
+        [DataMember(Name="rights", EmitDefaultValue=false)]
+        public MemberRightsDto Rights { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -33,8 +47,10 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class CreateUsergroupForbidden {\n");
-            sb.Append("  Code: ").Append(Code).Append("\n");
+            sb.Append("class UserIdWithMemberRightsDto {\n");
+            sb.Append("  UserId: ").Append(UserId).Append("\n");
+            sb.Append("  UsergroupId: ").Append(UsergroupId).Append("\n");
+            sb.Append("  Rights: ").Append(Rights).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -57,24 +73,34 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((CreateUsergroupForbidden)obj);
+            return obj.GetType() == GetType() && Equals((UserIdWithMemberRightsDto)obj);
         }
 
         /// <summary>
-        /// Returns true if CreateUsergroupForbidden instances are equal
+        /// Returns true if UserIdWithMemberRightsDto instances are equal
         /// </summary>
-        /// <param name="other">Instance of CreateUsergroupForbidden to be compared</param>
+        /// <param name="other">Instance of UserIdWithMemberRightsDto to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(CreateUsergroupForbidden other)
+        public bool Equals(UserIdWithMemberRightsDto other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Code == other.Code ||
-                    
-                    Code.Equals(other.Code)
+                    UserId == other.UserId ||
+                    UserId != null &&
+                    UserId.Equals(other.UserId)
+                ) && 
+                (
+                    UsergroupId == other.UsergroupId ||
+                    UsergroupId != null &&
+                    UsergroupId.Equals(other.UsergroupId)
+                ) && 
+                (
+                    Rights == other.Rights ||
+                    Rights != null &&
+                    Rights.Equals(other.Rights)
                 );
         }
 
@@ -88,8 +114,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    
-                    hashCode = hashCode * 59 + Code.GetHashCode();
+                    if (UserId != null)
+                    hashCode = hashCode * 59 + UserId.GetHashCode();
+                    if (UsergroupId != null)
+                    hashCode = hashCode * 59 + UsergroupId.GetHashCode();
+                    if (Rights != null)
+                    hashCode = hashCode * 59 + Rights.GetHashCode();
                 return hashCode;
             }
         }
@@ -97,12 +127,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(CreateUsergroupForbidden left, CreateUsergroupForbidden right)
+        public static bool operator ==(UserIdWithMemberRightsDto left, UserIdWithMemberRightsDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(CreateUsergroupForbidden left, CreateUsergroupForbidden right)
+        public static bool operator !=(UserIdWithMemberRightsDto left, UserIdWithMemberRightsDto right)
         {
             return !Equals(left, right);
         }

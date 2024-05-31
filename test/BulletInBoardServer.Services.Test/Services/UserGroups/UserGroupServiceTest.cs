@@ -1,4 +1,5 @@
-﻿using BulletInBoardServer.Domain.Models.UserGroups.Exceptions;
+﻿using BulletInBoardServer.Domain.Models.UserGroups;
+using BulletInBoardServer.Domain.Models.UserGroups.Exceptions;
 using BulletInBoardServer.Services.Services.Common.Models;
 using BulletInBoardServer.Services.Services.UserGroups;
 using BulletInBoardServer.Services.Services.UserGroups.Exceptions;
@@ -61,7 +62,7 @@ public class UserGroupServiceTest : DbInvolvingTestBase
         var create = new CreateUserGroup
         {
             Name = "New group",
-            MemberIds = new[] { Guid.NewGuid() },
+            Members = new[] { new SingleMemberRights(Guid.NewGuid(), Guid.Empty) },
         };
 
         var action = () => _userGroupService.Create(create);

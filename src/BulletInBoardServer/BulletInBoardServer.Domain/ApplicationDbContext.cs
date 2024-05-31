@@ -299,6 +299,47 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(e => e.UserGroupId)
                 .HasColumnName("usergroup_id")
                 .HasColumnType("uuid");
+            
+            entity.Property(e => e.CanViewAnnouncements)
+                .HasColumnName("can_view_announcements")
+                .HasColumnType("boolean")
+                .HasDefaultValue(true);
+            entity.Property(e => e.CanCreateAnnouncements)
+                .HasColumnName("can_create_announcements")
+                .HasColumnType("boolean")
+                .HasDefaultValue(false);
+            entity.Property(e => e.CanCreateSurveys)
+                .HasColumnName("can_create_surveys")
+                .HasColumnType("boolean")
+                .HasDefaultValue(false);
+            entity.Property(e => e.CanViewUserGroupDetails)
+                .HasColumnName("can_view_usergroup_details")
+                .HasColumnType("boolean")
+                .HasDefaultValue(false);
+            entity.Property(e => e.CanCreateUserGroups)
+                .HasColumnName("can_create_usergroups")
+                .HasColumnType("boolean")
+                .HasDefaultValue(false);
+            entity.Property(e => e.CanEditUserGroups)
+                .HasColumnName("can_edit_usergroups")
+                .HasColumnType("boolean")
+                .HasDefaultValue(false);
+            entity.Property(e => e.CanEditMembers)
+                .HasColumnName("can_edit_members")
+                .HasColumnType("boolean")
+                .HasDefaultValue(false);
+            entity.Property(e => e.CanEditMemberRights)
+                .HasColumnName("can_edit_member_rights")
+                .HasColumnType("boolean")
+                .HasDefaultValue(false);
+            entity.Property(e => e.CanEditUserGroupAdmin)
+                .HasColumnName("can_edit_usergroup_admin")
+                .HasColumnType("boolean")
+                .HasDefaultValue(false);
+            entity.Property(e => e.CanDeleteUserGroup)
+                .HasColumnName("can_delete_usergroup")
+                .HasColumnType("boolean")
+                .HasDefaultValue(false);
 
             entity
                 .HasOne(e => e.User)

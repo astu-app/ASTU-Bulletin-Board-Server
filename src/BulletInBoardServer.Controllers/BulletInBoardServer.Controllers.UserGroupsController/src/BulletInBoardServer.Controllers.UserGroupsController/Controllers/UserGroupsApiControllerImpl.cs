@@ -360,6 +360,40 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     }
 
     /// <summary>
+    /// Получить данные для создания группы пользователей
+    /// </summary>
+    /// <response code="200">OK</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="500">Internal Server Error</response>
+    public override IActionResult GetUsergroupCreateContent()
+    {
+        /*
+         * 200 +
+         * 403
+         *   getUsergroupCreateContentForbidden
+         * 500 +
+         */
+
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // todo id пользователя
+
+        try
+        {
+            var usergroups = _service.GetContentForUserGroupCreation(requesterId);
+
+            _logger.Information("Пользователь {UserId} получил данные для создания группы пользователей", requesterId);
+
+            var dto = usergroups.Adapt<GetUsergroupCreateContentDto>();
+            return Ok(dto);
+        }
+        catch (Exception err)
+        {
+            _loggingHelper.LogError(err, 500, "Получение данных для создания группы пользователей", requesterId);
+            return Problem();
+        }
+    }
+
+    /// <summary>
     /// Получение иерархии управляемых групп пользователей для пользователя
     /// </summary>
     /// <response code="200">Ok</response>
@@ -382,7 +416,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
         {
             var usergroups = _service.GetUsergroupHierarchy(requesterId);
 
-            _logger.Information("Пользователь {UserId} иерархии своих  групп пользователей", requesterId);
+            _logger.Information("Пользователь {UserId} запросил иерархию своих групп пользователей", requesterId);
 
             var dto = usergroups.Adapt<UsergroupHierarchyDto>();
             return Ok(dto);

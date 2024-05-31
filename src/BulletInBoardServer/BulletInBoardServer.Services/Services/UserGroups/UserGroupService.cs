@@ -1,6 +1,7 @@
 ﻿using BulletInBoardServer.Domain;
 using BulletInBoardServer.Domain.Models.UserGroups;
 using BulletInBoardServer.Domain.Models.UserGroups.Exceptions;
+using BulletInBoardServer.Domain.Models.Users;
 using BulletInBoardServer.Services.Services.UserGroups.Exceptions;
 using BulletInBoardServer.Services.Services.UserGroups.Models;
 using BulletInBoardServer.Services.Services.UserGroups.ServiceCOre;
@@ -15,6 +16,19 @@ namespace BulletInBoardServer.Services.Services.UserGroups;
 /// <param name="dbContext"></param>
 public class UserGroupService(ApplicationDbContext dbContext)
 {
+    /// <summary>
+    /// Получение данных для создания группы пользователей
+    /// </summary>
+    /// <param name="requesterId">Идентификатор пользователя, запросившего операцию</param>
+    /// <returns>Данные для создания группы пользователей</returns>
+    public CreateUserGroupContent GetContentForUserGroupCreation(Guid requesterId)
+    {
+        var users = dbContext.Users.ToUserList();
+        var userGroups = GetOwnedList(requesterId);
+        
+        return new CreateUserGroupContent(users, userGroups);
+    }
+    
     /// <summary>
     /// Создать группу пользователей
     /// </summary>
@@ -48,6 +62,7 @@ public class UserGroupService(ApplicationDbContext dbContext)
     public UserGroupList GetOwnedList(Guid adminId) =>
         GetUsergroupHierarchy(adminId)
             .FlattenUserGroupHierarchy()
+            .OrderBy(ug => ug.Name)
             .ToUserGroupList();
 
     /// <summary>
