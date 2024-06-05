@@ -4,7 +4,6 @@ using System.Linq;
 using BulletInBoardServer.Controllers.UserGroupsController.Models;
 using BulletInBoardServer.Domain.Models.UserGroups;
 using BulletInBoardServer.Domain.Models.Users;
-using BulletInBoardServer.Services.Services.Common.Models;
 using BulletInBoardServer.Services.Services.UserGroups.Models;
 using Mapster;
 
@@ -17,13 +16,13 @@ public class UserGroupMapsterConfig : IRegister
     /// <inheritdoc />
     public void Register(TypeAdapterConfig config)
     {
-        config.NewConfig<AddMembersToUsergroupDto, ChangeUserGroupMembers>() 
+        config.NewConfig<AddMembersToUsergroupDto, AddUserGroupMembers>() 
             .Map(d => d.UserGroupId, s => s.UserGroupId)
-            .Map(d => d.UserIds, s => s.UserIds);
+            .Map(d => d.Members, s => s.Members);
         
-        config.NewConfig<DeleteUsersFromUsergroupDto, ChangeUserGroupMembers>()
+        config.NewConfig<DeleteUsersFromUsergroupDto, DeleteUserGroupMembers>()
             .Map(d => d.UserGroupId, s => s.UserGroupId)
-            .Map(d => d.UserIds, s => s.UserIds);
+            .Map(d => d.MemberIds, s => s.MemberIds);
 
         config.NewConfig<CreateUserGroupDto, CreateUserGroup>()
             .Map(d => d.Name, s => s.Name)
@@ -51,25 +50,6 @@ public class UserGroupMapsterConfig : IRegister
             );
 
         config.NewConfig<SingleMemberRights, UserSummaryWithMemberRightsDto>()
-            // .ConstructUsing(src =>
-            //     new UserSummaryWithMemberRightsDto
-            //     {
-            //         User = src.Adapt<UserSummaryDto>(),
-            //         Rights = new MemberRightsDto
-            //         {
-            //             CanViewAnnouncements = src.CanViewAnnouncements,
-            //             CanCreateAnnouncements = src.CanCreateAnnouncements,
-            //             CanCreateSurveys = src.CanCreateSurveys,
-            //             CanViewUserGroupDetails = src.CanViewUserGroupDetails,
-            //             CanCreateUserGroups = src.CanCreateUserGroups,
-            //             CanEditUserGroups = src.CanEditUserGroups,
-            //             CanEditMembers = src.CanEditMembers,
-            //             CanEditMemberRights = src.CanEditMemberRights,
-            //             CanEditUserGroupAdmin = src.CanEditUserGroupAdmin,
-            //             CanDeleteUserGroup = src.CanDeleteUserGroup,
-            //         }
-            //     }
-            // );
             .Map(d => d.User, s => s.User)
             .Map(d => d.Rights.CanViewAnnouncements, s => s.CanViewAnnouncements)
             .Map(d => d.Rights.CanCreateAnnouncements, s => s.CanCreateAnnouncements)
@@ -106,15 +86,17 @@ public class UserGroupMapsterConfig : IRegister
             .Map(d => d.FirstName, s => s.User.FirstName)
             .Map(d => d.SecondName, s => s.User.SecondName)
             .Map(d => d.Patronymic, s => s.User.Patronymic);
-        
+
         config.NewConfig<UpdateUserGroupDto, EditUserGroup>()
-            .ConstructUsing(s =>
-                new EditUserGroup(
-                    s.Id, 
-                    s.Name, 
-                    s.AdminChanged, 
-                    s.AdminId, 
-                    s.MembersChanged ? s.MemberIds.Adapt<UpdateIdentifierList>() : null));
+            .Map(d => d.Id, s => s.Id)
+            .Map(d => d.Name, s => s.Name)
+            .Map(d => d.AdminChanged, s => s.AdminChanged)
+            .Map(d => d.AdminId, s => s.AdminId)
+            .Map(d => d.Members, s => s.Members);
+
+        config.NewConfig<UpdateMemberListDto, UpdateMemberList>()
+            .Map(d => d.IdsToRemove, s => s.IdsToRemove)
+            .Map(d => d.NewMembers, s => s.NewMembers);
 
         config.NewConfig<UserGroupList, UsergroupHierarchyDto>()
             .Map(d => d.Roots, s => s)
@@ -153,6 +135,16 @@ public class UserGroupMapsterConfig : IRegister
         config.NewConfig<CreateUserGroupContent, GetUsergroupCreateContentDto>()
             .Map(d => d.Users, s => s.Users)
             .Map(d => d.Usergroups, s => s.UserGroups);
+        
+        config.NewConfig<UpdateUserGroupContent, ContentForUserGroupEditingDto>()
+            .Map(d => d.Id, s => s.UserGroup.Id)
+            .Map(d => d.Name, s => s.UserGroup.Name)
+            .Map(d => d.Admin, s => s.UserGroup.Admin)
+            .Map(d => d.Members, s => s.UserGroup.MemberRights)
+            .Map(d => d.Users, s => s.PotentialMembers);
+            // .Map(d => d.Parents, s => s.UserGroup.ParentGroups) // remove
+            // .Map(d => d.Children, s => s.UserGroup.ChildrenGroups)
+            // .Map(d => d.Usergroups, s => s.PotentialRelatives);
     }
 
 

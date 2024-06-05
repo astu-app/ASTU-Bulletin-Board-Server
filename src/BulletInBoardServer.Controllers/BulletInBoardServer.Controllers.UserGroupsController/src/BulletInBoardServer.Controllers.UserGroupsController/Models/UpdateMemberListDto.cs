@@ -9,22 +9,32 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
     /// <summary>
-    /// 
+    /// DTO для редактирования списка пользователей в группе пользователей
     /// </summary>
     [DataContract]
-    public class DeleteUsergroupNotFound : IEquatable<DeleteUsergroupNotFound>
+    public class UpdateMemberListDto : IEquatable<UpdateMemberListDto>
     {
         /// <summary>
-        /// Gets or Sets Code
+        /// Идентификаторы удаляемых участников
         /// </summary>
-        [DataMember(Name="code", EmitDefaultValue=true)]
-        public DeleteUsergroupResponses Code { get; set; }
+        /// <value>Идентификаторы удаляемых участников</value>
+        [DataMember(Name="idsToRemove", EmitDefaultValue=false)]
+        public List<Guid> IdsToRemove { get; set; }
+
+        /// <summary>
+        /// Новые участники группы пользователей с правами
+        /// </summary>
+        /// <value>Новые участники группы пользователей с правами</value>
+        [DataMember(Name="newMembers", EmitDefaultValue=false)]
+        public List<UserIdWithMemberRightsDto> NewMembers { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -33,8 +43,9 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class DeleteUsergroupNotFound {\n");
-            sb.Append("  Code: ").Append(Code).Append("\n");
+            sb.Append("class UpdateMemberListDto {\n");
+            sb.Append("  IdsToRemove: ").Append(IdsToRemove).Append("\n");
+            sb.Append("  NewMembers: ").Append(NewMembers).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -57,24 +68,31 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((DeleteUsergroupNotFound)obj);
+            return obj.GetType() == GetType() && Equals((UpdateMemberListDto)obj);
         }
 
         /// <summary>
-        /// Returns true if DeleteUsergroupNotFound instances are equal
+        /// Returns true if UpdateMemberListDto instances are equal
         /// </summary>
-        /// <param name="other">Instance of DeleteUsergroupNotFound to be compared</param>
+        /// <param name="other">Instance of UpdateMemberListDto to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(DeleteUsergroupNotFound other)
+        public bool Equals(UpdateMemberListDto other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return 
                 (
-                    Code == other.Code ||
-                    
-                    Code.Equals(other.Code)
+                    IdsToRemove == other.IdsToRemove ||
+                    IdsToRemove != null &&
+                    other.IdsToRemove != null &&
+                    IdsToRemove.SequenceEqual(other.IdsToRemove)
+                ) && 
+                (
+                    NewMembers == other.NewMembers ||
+                    NewMembers != null &&
+                    other.NewMembers != null &&
+                    NewMembers.SequenceEqual(other.NewMembers)
                 );
         }
 
@@ -88,8 +106,10 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    
-                    hashCode = hashCode * 59 + Code.GetHashCode();
+                    if (IdsToRemove != null)
+                    hashCode = hashCode * 59 + IdsToRemove.GetHashCode();
+                    if (NewMembers != null)
+                    hashCode = hashCode * 59 + NewMembers.GetHashCode();
                 return hashCode;
             }
         }
@@ -97,12 +117,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(DeleteUsergroupNotFound left, DeleteUsergroupNotFound right)
+        public static bool operator ==(UpdateMemberListDto left, UpdateMemberListDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(DeleteUsergroupNotFound left, DeleteUsergroupNotFound right)
+        public static bool operator !=(UpdateMemberListDto left, UpdateMemberListDto right)
         {
             return !Equals(left, right);
         }

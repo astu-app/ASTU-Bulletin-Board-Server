@@ -8,6 +8,8 @@ using BulletInBoardServer.Services.Services.Users.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
+// ReSharper disable InconsistentNaming
+
 namespace BulletInBoardServer.Services.Services.UserGroups.ServiceCOre;
 
 /// <summary>

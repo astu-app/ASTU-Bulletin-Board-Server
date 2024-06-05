@@ -67,7 +67,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
 
         try
         {
-            var addMembersToUsergroup = dto.Adapt<ChangeUserGroupMembers>();
+            var addMembersToUsergroup = dto.Adapt<AddUserGroupMembers>();
             _service.AddMembers(addMembersToUsergroup);
 
             _logger.Information(
@@ -223,7 +223,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
 
         try
         {
-            var deleteMembersFromUsergroup = dto.Adapt<ChangeUserGroupMembers>();
+            var deleteMembersFromUsergroup = dto.Adapt<DeleteUserGroupMembers>();
             _service.DeleteMembers(deleteMembersFromUsergroup);
 
             _logger.Information("Пользователь {UserId} удалил пользователей из группы {GroupId}", requesterId,
@@ -479,6 +479,55 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     }
 
     /// <summary>
+    /// Получение данных для редактирования группы пользователей
+    /// </summary>
+    /// <param name="userGroupId">Идентификатор группы пользователей</param>
+    /// <response code="200">Ok</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="403">Forbidden</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="500">Internal Server Error</response>
+    public override IActionResult GetUsergroupUpdateContent(Guid userGroupId)
+    {
+        /*
+         * 200 +
+         * 403
+         *   getUsergroupEditContentForbidden
+         * 404
+         *   userGroupDoesNotExist +
+         * 500 +
+         */
+        
+        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // todo id пользователя
+
+        try
+        {
+            var content = _service.GetContentForUserGroupUpdating(userGroupId, requesterId);
+
+            _logger.Information(
+                "Пользователь {UserId} получил данные для редактирования группы пользователей {GroupId}",
+                requesterId, userGroupId);
+
+            return Ok(content.Adapt<ContentForUserGroupEditingDto>());
+        }
+        catch (UserGroupDoesNotExistException err)
+        {
+            _loggingHelper.LogWarning(404, "Получение данных для редактирования группы пользователей",
+                nameof(ContentForUserGroupEditingResponses.UserGroupDoesNotExist), requesterId, err.Message);
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateUsergroupResponses
+                    .UserGroupsDoNotExist));
+        }
+        catch (Exception err)
+        {
+            _loggingHelper.LogError(err, 500, "Получение данных для редактирования группы пользователей",
+                requesterId);
+            return Problem();
+        }
+    }
+
+    /// <summary>
     /// Редактирование группы пользователей
     /// </summary>
     /// <param name="dto"></param>
@@ -525,32 +574,32 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
                 ResponseConstructor.ConstructResponseWithOnlyCode(UpdateUsergroupResponses
                     .NameIsNullOrWhitespace));
         }
-        catch (UserGroupDoesNotExistException err)
-        {
-            _loggingHelper.LogWarning(404, "Редактирование группы пользователей",
-                nameof(UpdateUsergroupResponses.UserGroupsDoNotExist), requesterId, err.Message);
-            return NotFound(
-                ResponseConstructor.ConstructResponseWithOnlyCode(CreateUsergroupResponses
-                    .UserGroupsDoNotExist));
-        }
+        // catch (UserGroupDoesNotExistException err) // remove
+        // {
+        //     _loggingHelper.LogWarning(404, "Редактирование группы пользователей",
+        //         nameof(UpdateUsergroupResponses.UserGroupsDoNotExist), requesterId, err.Message);
+        //     return NotFound(
+        //         ResponseConstructor.ConstructResponseWithOnlyCode(CreateUsergroupResponses
+        //             .UserGroupsDoNotExist));
+        // }
         catch (UserDoesNotExistException err)
         {
             _loggingHelper.LogWarning(404, "Редактирование группы пользователей",
                 nameof(UpdateUsergroupResponses.UsersDoNotExist), requesterId, err.Message);
             return NotFound(
-                ResponseConstructor.ConstructResponseWithOnlyCode(CreateUsergroupResponses.UsersDoNotExist));
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateUsergroupResponses.UsersDoNotExist));
         }
         catch (AdminCannotBeOrdinaryMemberException err)
         {
-            _loggingHelper.LogWarning(404, "Редактирование группы пользователей",
+            _loggingHelper.LogWarning(409, "Редактирование группы пользователей",
                 nameof(UpdateUsergroupResponses.AdminCannotBeOrdinaryMember), requesterId, err.Message);
-            return NotFound(
-                ResponseConstructor.ConstructResponseWithOnlyCode(CreateUsergroupResponses
+            return Conflict(
+                ResponseConstructor.ConstructResponseWithOnlyCode(UpdateUsergroupResponses
                     .AdminCannotBeOrdinaryMember));
         }
         catch (Exception err)
         {
-            _loggingHelper.LogError(err, 500, "Получение подробной информации о группе пользователей",
+            _loggingHelper.LogError(err, 500, "Редактирование группы пользователей",
                 requesterId);
             return Problem();
         }

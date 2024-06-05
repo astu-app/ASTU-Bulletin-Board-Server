@@ -17,10 +17,10 @@ using System.Text;
 namespace BulletInBoardServer.Controllers.UserGroupsController.Models
 { 
     /// <summary>
-    /// 
+    /// Данные для редактирования группы пользователей
     /// </summary>
     [DataContract]
-    public class UserGroupDetailsDto : IEquatable<UserGroupDetailsDto>
+    public class ContentForUserGroupEditingDto : IEquatable<ContentForUserGroupEditingDto>
     {
         /// <summary>
         /// Идентификатор группы пользователей
@@ -50,18 +50,11 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public List<UserSummaryWithMemberRightsDto> Members { get; set; }
 
         /// <summary>
-        /// Родительские группы пользователей
+        /// Список пользователей, которые могут быть назначены администратором или добавлены в группу пользователей. В списке отсутствуют текущий администратор и участники группы пользователей
         /// </summary>
-        /// <value>Родительские группы пользователей</value>
-        [DataMember(Name="parents", EmitDefaultValue=false)]
-        public List<UserGroupSummaryDto> Parents { get; set; }
-
-        /// <summary>
-        /// Дочерние группы пользователей
-        /// </summary>
-        /// <value>Дочерние группы пользователей</value>
-        [DataMember(Name="children", EmitDefaultValue=false)]
-        public List<UserGroupSummaryDto> Children { get; set; }
+        /// <value>Список пользователей, которые могут быть назначены администратором или добавлены в группу пользователей. В списке отсутствуют текущий администратор и участники группы пользователей</value>
+        [DataMember(Name="users", EmitDefaultValue=false)]
+        public List<UserSummaryDto> Users { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -70,13 +63,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class UserGroupDetailsDto {\n");
+            sb.Append("class ContentForUserGroupEditingDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
             sb.Append("  Name: ").Append(Name).Append("\n");
             sb.Append("  Admin: ").Append(Admin).Append("\n");
             sb.Append("  Members: ").Append(Members).Append("\n");
-            sb.Append("  Parents: ").Append(Parents).Append("\n");
-            sb.Append("  Children: ").Append(Children).Append("\n");
+            sb.Append("  Users: ").Append(Users).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -99,15 +91,15 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((UserGroupDetailsDto)obj);
+            return obj.GetType() == GetType() && Equals((ContentForUserGroupEditingDto)obj);
         }
 
         /// <summary>
-        /// Returns true if UserGroupDetailsDto instances are equal
+        /// Returns true if ContentForUserGroupEditingDto instances are equal
         /// </summary>
-        /// <param name="other">Instance of UserGroupDetailsDto to be compared</param>
+        /// <param name="other">Instance of ContentForUserGroupEditingDto to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(UserGroupDetailsDto other)
+        public bool Equals(ContentForUserGroupEditingDto other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -135,16 +127,10 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
                     Members.SequenceEqual(other.Members)
                 ) && 
                 (
-                    Parents == other.Parents ||
-                    Parents != null &&
-                    other.Parents != null &&
-                    Parents.SequenceEqual(other.Parents)
-                ) && 
-                (
-                    Children == other.Children ||
-                    Children != null &&
-                    other.Children != null &&
-                    Children.SequenceEqual(other.Children)
+                    Users == other.Users ||
+                    Users != null &&
+                    other.Users != null &&
+                    Users.SequenceEqual(other.Users)
                 );
         }
 
@@ -166,10 +152,8 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
                     hashCode = hashCode * 59 + Admin.GetHashCode();
                     if (Members != null)
                     hashCode = hashCode * 59 + Members.GetHashCode();
-                    if (Parents != null)
-                    hashCode = hashCode * 59 + Parents.GetHashCode();
-                    if (Children != null)
-                    hashCode = hashCode * 59 + Children.GetHashCode();
+                    if (Users != null)
+                    hashCode = hashCode * 59 + Users.GetHashCode();
                 return hashCode;
             }
         }
@@ -177,12 +161,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(UserGroupDetailsDto left, UserGroupDetailsDto right)
+        public static bool operator ==(ContentForUserGroupEditingDto left, ContentForUserGroupEditingDto right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(UserGroupDetailsDto left, UserGroupDetailsDto right)
+        public static bool operator !=(ContentForUserGroupEditingDto left, ContentForUserGroupEditingDto right)
         {
             return !Equals(left, right);
         }

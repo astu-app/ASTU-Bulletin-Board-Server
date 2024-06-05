@@ -18,13 +18,13 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
     /// 
     /// </summary>
     [DataContract]
-    public class DeleteUsergroupNotFound : IEquatable<DeleteUsergroupNotFound>
+    public class GetUsergroupEditContentNotFound : IEquatable<GetUsergroupEditContentNotFound>
     {
         /// <summary>
         /// Gets or Sets Code
         /// </summary>
         [DataMember(Name="code", EmitDefaultValue=true)]
-        public DeleteUsergroupResponses Code { get; set; }
+        public ContentForUserGroupEditingResponses Code { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -33,7 +33,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class DeleteUsergroupNotFound {\n");
+            sb.Append("class GetUsergroupEditContentNotFound {\n");
             sb.Append("  Code: ").Append(Code).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
@@ -57,15 +57,15 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         {
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((DeleteUsergroupNotFound)obj);
+            return obj.GetType() == GetType() && Equals((GetUsergroupEditContentNotFound)obj);
         }
 
         /// <summary>
-        /// Returns true if DeleteUsergroupNotFound instances are equal
+        /// Returns true if GetUsergroupEditContentNotFound instances are equal
         /// </summary>
-        /// <param name="other">Instance of DeleteUsergroupNotFound to be compared</param>
+        /// <param name="other">Instance of GetUsergroupEditContentNotFound to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(DeleteUsergroupNotFound other)
+        public bool Equals(GetUsergroupEditContentNotFound other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -97,12 +97,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         #region Operators
         #pragma warning disable 1591
 
-        public static bool operator ==(DeleteUsergroupNotFound left, DeleteUsergroupNotFound right)
+        public static bool operator ==(GetUsergroupEditContentNotFound left, GetUsergroupEditContentNotFound right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(DeleteUsergroupNotFound left, DeleteUsergroupNotFound right)
+        public static bool operator !=(GetUsergroupEditContentNotFound left, GetUsergroupEditContentNotFound right)
         {
             return !Equals(left, right);
         }

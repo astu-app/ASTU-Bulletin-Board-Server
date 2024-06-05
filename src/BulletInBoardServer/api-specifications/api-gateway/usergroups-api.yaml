@@ -267,6 +267,60 @@ paths:
         500:
           description: Internal Server Error
 
+  /usergroups/get-update-content/{id}:
+    get:
+      tags: [ UserGroups ]
+      operationId: getUsergroupUpdateContent
+      summary: Получение данных для редактирования группы пользователей
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Идентификатор группы пользователей
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                title: getUsergroupUpdateContentOk
+                properties:
+                  content:
+                    $ref: '#/components/schemas/contentForUserGroupEditingDto'
+        400:
+          # Некорректный формат идентификатора
+          description: Bad Request
+        401:
+          description: Unauthorized
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                title: getUsergroupUpdateContentForbidden
+                properties:
+                  code:
+                    # getUsergroupUpdateContentForbidden
+                    $ref: '#/components/schemas/contentForUserGroupEditingResponses'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                title: getUsergroupUpdateContentNotFound
+                properties:
+                  code:
+                    # userGroupDoesNotExist
+                    $ref: '#/components/schemas/contentForUserGroupEditingResponses'
+        500:
+          description: Internal Server Error
+  
   /usergroups/update:
     put:
       tags: [ UserGroups ]
@@ -542,7 +596,7 @@ components:
           $ref: './users-api.yaml#/components/schemas/userSummaryDto'
         rights:
           $ref: "#/components/schemas/memberRightsDto"
-    
+
     userIdWithMemberRightsDto:
       type: object
       description: Идентификатор пользователя с правами в группе пользователей
@@ -664,7 +718,7 @@ components:
         admin:
           $ref: './users-api.yaml#/components/schemas/userSummaryDto'
         members:
-          description: Краткая информация об участниках группы пользователей
+          description: Краткая информация об участниках группы пользователей, включая их права
           type: array
           items:
             $ref: '#/components/schemas/userSummaryWithMemberRightsDto'
@@ -679,7 +733,47 @@ components:
           items:
             $ref: '#/components/schemas/userGroupSummaryDto'
 
+    contentForUserGroupEditingDto:
+      type: object
+      description: Данные для редактирования группы пользователей
+      properties:
+        id:
+          description: Идентификатор группы пользователей
+          type: string
+          format: uuid
+        name:
+          description: Название группы пользователей
+          type: string
+        admin:
+          $ref: './users-api.yaml#/components/schemas/userSummaryDto'
+        members:
+          description: Краткая информация об участниках группы пользователей, включая их права
+          type: array
+          items:
+            $ref: '#/components/schemas/userSummaryWithMemberRightsDto'
+        users:
+          description: Список пользователей, которые могут быть назначены администратором или добавлены в группу пользователей. В списке отсутствуют текущий администратор и участники группы пользователей
+          type: array
+          items:
+            $ref: './users-api.yaml#/components/schemas/userSummaryDto'
+#        parents: # remove
+#          description: Родительские группы пользователей
+#          type: array
+#          items:
+#            $ref: '#/components/schemas/userGroupSummaryDto'
+#        children:
+#          description: Дочерние группы пользователей
+#          type: array
+#          items:
+#            $ref: '#/components/schemas/userGroupSummaryDto'
+#        usergroups:
+#          description: Список групп пользователей, которые могут быть установлены в качестве родителей или потомков создаваемой группы пользователей. В списке отсутствуют корневые точки графа пользователей 
+#          type: array
+#          items:
+#            $ref: '#/components/schemas/userGroupSummaryDto'
+
     updateUserGroupDto:
+      description: DTO для обновления группы пользователей
       type: object
       required:
         - id
@@ -687,6 +781,7 @@ components:
         - membersChanged
       properties:
         id:
+          description: Идентификатор группы пользователей
           type: string
           format: uuid
         name:
@@ -703,11 +798,29 @@ components:
           format: uuid
           nullable: true
           default: null
-        membersChanged:
-          description: Изменен ли список групп пользователей. True, если изменен
-          type: boolean
-        memberIds:
-          $ref: './common-schemas.yaml#/components/schemas/updateIdentifierListDto'
+        members:
+          $ref: '#/components/schemas/updateMemberListDto'
+#        childGroups: # remove
+#          $ref: './common-schemas.yaml#/components/schemas/updateIdentifierListDto'
+#        parentGroups:
+#          $ref: './common-schemas.yaml#/components/schemas/updateIdentifierListDto'
+
+    updateMemberListDto:
+      description: DTO для редактирования списка пользователей в группе пользователей
+      type: object
+      nullable: true
+      properties: 
+        idsToRemove:
+          description: Идентификаторы удаляемых участников
+          type: array
+          items:
+            type: string
+            format: uuid
+        newMembers:
+          description: Новые участники группы пользователей с правами
+          type: array
+          items:
+            $ref: '#/components/schemas/userIdWithMemberRightsDto'
 
     addMembersToUsergroupDto:
       type: object
@@ -715,8 +828,8 @@ components:
         userGroupId:
           type: string
           format: uuid
-        userIds:
-          $ref: './common-schemas.yaml#/components/schemas/uniqueIdentifiers'
+        members:
+          $ref: '#/components/schemas/userIdWithMemberRightsDto'
     
     deleteUsersFromUsergroupDto:
       type: object
@@ -724,7 +837,7 @@ components:
         userGroupId:
           type: string
           format: uuid
-        userIds:
+        memberIds:
           $ref: './common-schemas.yaml#/components/schemas/uniqueIdentifiers'
 
     getUsergroupCreateContentResponses:
@@ -788,6 +901,18 @@ components:
           getUsergroupDetailsForbidden - Пользователь не имеет права запрашивать детали группы пользователей
           userGroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id     
 
+    contentForUserGroupEditingResponses:
+      type: string
+      enum:
+        # 403
+        - getUsergroupUpdateContentForbidden
+        # 404
+        - userGroupDoesNotExist
+      description: >
+        Ответы:
+        getUsergroupUpdateContentForbidden - Пользователь не имеет права запрашивать данные для редактирования групп пользователей
+        userGroupDoesNotExist - В качестве id группы пользователей прикреплен несуществующий в базе id
+
     getOwnedHierarchyResponses:
       type: string
       enum:
@@ -806,7 +931,7 @@ components:
         - updateUsergroupForbidden
         # 404
         - usersDoNotExist
-        - userGroupsDoNotExist
+#        - userGroupsDoNotExist # remove с соответствующим комментом
         # 409
         - adminCannotBeOrdinaryMember
       description: >
@@ -814,6 +939,7 @@ components:
           nameIsNullOrWhitespace - Имя не содержит символов или содержит исключительно пробельные
           updateUsergroupForbidden - Пользователь не имеет права редактировать группу пользователей
           usersDoNotExist - В качестве одного или нескольких id пользователей прикреплен несуществующий в базе id
+          userGroupsDoNotExist - В качестве одного или нескольких id групп пользователей прикреплен несуществующий в базе id
           adminCannotBeOrdinaryMember - Идентификатор администратора передан в массиве идентификаторов участников
 
     deleteUsergroupResponses:

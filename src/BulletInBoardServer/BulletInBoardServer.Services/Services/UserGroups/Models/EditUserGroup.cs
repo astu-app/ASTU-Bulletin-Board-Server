@@ -1,13 +1,11 @@
-﻿using BulletInBoardServer.Services.Services.Common.Models;
-
-namespace BulletInBoardServer.Services.Services.UserGroups.Models;
+﻿namespace BulletInBoardServer.Services.Services.UserGroups.Models;
 
 public class EditUserGroup(
     Guid id,
     string? name,
     bool adminChanged,
     Guid? adminId,
-    UpdateIdentifierList? memberIds)
+    UpdateMemberList? members)
 {
     public Guid Id { get; } = id;
 
@@ -16,5 +14,5 @@ public class EditUserGroup(
     public bool AdminChanged { get; } = adminChanged;
     public Guid? AdminId { get; } = adminId;
 
-    public UpdateIdentifierList? MemberIds { get; } = memberIds;
+    public UpdateMemberList? Members { get; } = members;
 }

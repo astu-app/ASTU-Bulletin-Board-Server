@@ -1,6 +1,5 @@
 ﻿using BulletInBoardServer.Domain.Models.UserGroups;
 using BulletInBoardServer.Domain.Models.UserGroups.Exceptions;
-using BulletInBoardServer.Services.Services.Common.Models;
 using BulletInBoardServer.Services.Services.UserGroups;
 using BulletInBoardServer.Services.Services.UserGroups.Exceptions;
 using BulletInBoardServer.Services.Services.UserGroups.Models;
@@ -166,7 +165,7 @@ public class UserGroupServiceTest : DbInvolvingTestBase
             name: string.Empty, // тестируем установку имени
             adminChanged: false,
             adminId: null,
-            memberIds: null
+            members: null
         );
 
         var action = () => _userGroupService.Edit(edit);
@@ -182,7 +181,7 @@ public class UserGroupServiceTest : DbInvolvingTestBase
             name: "   ", // тестируем установку имени
             adminChanged: false,
             adminId: null,
-            memberIds: null
+            members: null
         );
 
         var action = () => _userGroupService.Edit(edit);
@@ -198,7 +197,7 @@ public class UserGroupServiceTest : DbInvolvingTestBase
             name: null,
             adminChanged: true,
             adminId: Guid.NewGuid(), // тестируем установку админа
-            memberIds: null
+            members: null
         );
 
         var action = () => _userGroupService.Edit(edit);
@@ -209,16 +208,17 @@ public class UserGroupServiceTest : DbInvolvingTestBase
     [Fact]
     public void Edit_AddMemberNotPresentedInDb_ShouldThrow()
     {
-        var memberIds = new UpdateIdentifierList
-        {
-            ToAdd = new[] { Guid.NewGuid() },
-        };
+        var members = new UpdateMemberList
+        (
+            idsToRemove: null,
+            newMembers: new[] { new SingleMemberRights(Guid.NewGuid(), UserGroup_1_Id) }
+        );
         var edit = new EditUserGroup(
             id: UserGroup_1_Id,
             name: null,
             adminChanged: false,
             adminId: null,
-            memberIds: memberIds // тестируем добавление пользователей
+            members: members // тестируем добавление пользователей
         );
 
         var action = () => _userGroupService.Edit(edit);
@@ -232,10 +232,10 @@ public class UserGroupServiceTest : DbInvolvingTestBase
     [Fact]
     public void AddMembers_AddMemberThatIsAdmin_ShouldThrow()
     {
-        var memberIds = new[] { UserGroup_1_AdminId };
+        var members = new[] { new SingleMemberRights(UserGroup_1_AdminId, UserGroup_1_Id) };
         DbContext.ChangeTracker.Clear();
 
-        var action = () => _userGroupService.AddMembers(new ChangeUserGroupMembers(UserGroup_1_Id, memberIds));
+        var action = () => _userGroupService.AddMembers(new AddUserGroupMembers(UserGroup_1_Id, members));
 
         action.Should().ThrowExactly<UserIsAdminException>();
     }
@@ -243,10 +243,10 @@ public class UserGroupServiceTest : DbInvolvingTestBase
     [Fact]
     public void AddMembers_MemberAlreadyInUserGroup_ShouldThrow()
     {
-        var memberIds = new[] { UsualUser_1_Id };
+        var members = new[] { new SingleMemberRights(UsualUser_1_Id, UserGroup_1_Id) };
         DbContext.ChangeTracker.Clear();
 
-        var action = () => _userGroupService.AddMembers(new ChangeUserGroupMembers(UserGroup_1_Id, memberIds));
+        var action = () => _userGroupService.AddMembers(new AddUserGroupMembers(UserGroup_1_Id, members));
 
         action.Should().ThrowExactly<UserIsAlreadyMemberOfUserGroup>();
     }
@@ -254,10 +254,10 @@ public class UserGroupServiceTest : DbInvolvingTestBase
     [Fact]
     public void AddMembers_MembersNotPresentedInDb_ShouldThrow()
     {
-        var memberIds = new[] { Guid.NewGuid() };
+        var members = new[] { new SingleMemberRights(Guid.NewGuid(), UserGroup_1_Id) };
         DbContext.ChangeTracker.Clear();
 
-        var action = () => _userGroupService.AddMembers(new ChangeUserGroupMembers(UserGroup_1_Id, memberIds));
+        var action = () => _userGroupService.AddMembers(new AddUserGroupMembers(UserGroup_1_Id, members));
 
         action.Should().ThrowExactly<UserDoesNotExistException>();
     }
@@ -265,10 +265,10 @@ public class UserGroupServiceTest : DbInvolvingTestBase
     [Fact]
     public void AddMembers_UserGroupNotPresentedInDb_ShouldThrow()
     {
-        var memberIds = new[] { UsualUser_2_Id };
+        var members = new[] { new SingleMemberRights(UsualUser_2_Id, Guid.NewGuid()) };
         DbContext.ChangeTracker.Clear();
 
-        var action = () => _userGroupService.AddMembers(new ChangeUserGroupMembers(Guid.NewGuid(), memberIds));
+        var action = () => _userGroupService.AddMembers(new AddUserGroupMembers(Guid.NewGuid(), members));
 
         action.Should().ThrowExactly<UserGroupDoesNotExistException>();
     }
@@ -283,7 +283,7 @@ public class UserGroupServiceTest : DbInvolvingTestBase
         var memberIds = new[] { UserGroup_1_AdminId };
         DbContext.ChangeTracker.Clear();
 
-        var action = () => _userGroupService.DeleteMembers(new ChangeUserGroupMembers(UserGroup_1_Id, memberIds));
+        var action = () => _userGroupService.DeleteMembers(new DeleteUserGroupMembers(UserGroup_1_Id, memberIds));
 
         action.Should().ThrowExactly<UserIsAdminException>();
     }

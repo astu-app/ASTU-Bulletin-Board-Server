@@ -7,6 +7,8 @@ using BulletInBoardServer.Services.Services.Users.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
+// ReSharper disable InconsistentNaming
+
 namespace BulletInBoardServer.Services.Services.UserGroups.ServiceCOre;
 
 /// <summary>
@@ -31,7 +33,7 @@ public class UserGroupRedactor(ApplicationDbContext dbContext)
         if (edit.AdminChanged)
             userGroup.AdminId = edit.AdminId;
 
-        if (edit.MemberIds is not null)
+        if (edit.Members is not null)
             ApplyMembersChanging(edit);
 
         try
@@ -63,13 +65,13 @@ public class UserGroupRedactor(ApplicationDbContext dbContext)
     /// <exception cref="UserIsAlreadyMemberOfUserGroup">Участник уже состоит в группе</exception>
     /// <exception cref="UserDoesNotExistException">Пользователь не существует в БД</exception>
     /// <exception cref="UserGroupDoesNotExistException">Группа пользователей не существует в БД</exception>
-    public void AddMembers(ChangeUserGroupMembers add)
+    public void AddMembers(AddUserGroupMembers add)
     {
         var userGroup = LoadUserGroupSummary(add.UserGroupId);
-        if (add.UserIds.Any(id => id == userGroup.AdminId))
+        if (add.Members.Any(smr => smr.UserId == userGroup.AdminId))
             throw new UserIsAdminException();
         
-        AddMembers(add.UserGroupId, add.UserIds);
+        AddMembers(add.UserGroupId, add.Members);
 
         try
         {
@@ -99,13 +101,13 @@ public class UserGroupRedactor(ApplicationDbContext dbContext)
     /// </summary>
     /// <param name="delete">Объект с необходимой для удаления информацией</param>
     /// <exception cref="UserIsAdminException">Из группы пользователей нельзя удалить участника, являющегося администратором этой группы</exception>
-    public void DeleteMembers(ChangeUserGroupMembers delete)
+    public void DeleteMembers(DeleteUserGroupMembers delete)
     {
         var userGroup = LoadUserGroupSummary(delete.UserGroupId);
-        if (delete.UserIds.Any(id => id == userGroup.AdminId))
+        if (delete.MemberIds.Any(id => id == userGroup.AdminId))
             throw new UserIsAdminException();
         
-        DeleteMembers(delete.UserGroupId, delete.UserIds);
+        DeleteMembers(delete.UserGroupId, delete.MemberIds);
 
         try
         {
@@ -139,17 +141,22 @@ public class UserGroupRedactor(ApplicationDbContext dbContext)
     
     private void ApplyMembersChanging(EditUserGroup edit)
     {
-        if (edit.MemberIds is null)
+        if (edit.Members is null)
             return;
 
-        var toRemove = edit.MemberIds.ToRemove;
-        var toAdd = edit.MemberIds.ToAdd;
+        var toRemove = edit.Members.IdsToRemove;
+        var toAdd = edit.Members.NewMembers;
 
         if (toRemove is not null)
             DeleteMembers(edit.Id, toRemove);
 
-        if (toAdd is not null)
-            AddMembers(edit.Id, toAdd);
+        if (toAdd is null) 
+            return;
+
+        var userGroupSummary = LoadUserGroupSummary(edit.Id);
+        if (toAdd.Any(u => u.UserId == userGroupSummary.AdminId))
+            throw new AdminCannotBeOrdinaryMemberException();
+        AddMembers(edit.Id, toAdd);
     }
 
     private void DeleteMembers(Guid userGroupId, IEnumerable<Guid> toRemove) =>
@@ -157,9 +164,12 @@ public class UserGroupRedactor(ApplicationDbContext dbContext)
             .Where(smr => smr.UserGroupId == userGroupId && toRemove.Contains(smr.UserId))
             .ExecuteDelete();
 
-    private void AddMembers(Guid userGroupId, IEnumerable<Guid> toAdd)
+    private void AddMembers(Guid userGroupId, IEnumerable<SingleMemberRights> toAdd)
     {
-        foreach (var memberId in toAdd)
-            dbContext.MemberRights.Add(new SingleMemberRights(memberId, userGroupId));
+        foreach (var newMember in toAdd)
+        {
+            newMember.UserGroupId = userGroupId;
+            dbContext.MemberRights.Add(newMember);
+        }
     }
 }

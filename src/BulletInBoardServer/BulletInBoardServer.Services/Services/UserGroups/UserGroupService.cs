@@ -116,15 +116,40 @@ public class UserGroupService(ApplicationDbContext dbContext)
             .ToUserGroupList();
 
         var details = new UserGroupDetails
-        {
-            Id = usergroup.Id,
-            Name = usergroup.Name,
-            Admin = usergroup.Admin,
-            MemberRights = usergroup.MemberRights,
-            ChildrenGroups = usergroup.ChildrenGroups,
-            ParentGroups = parents,
-        };
+        (
+            id: usergroup.Id,
+            name: usergroup.Name,
+            admin: usergroup.Admin,
+            memberRights: usergroup.MemberRights,
+            childrenGroups: usergroup.ChildrenGroups,
+            parentGroups: parents
+        );
         return details;
+    }
+
+    /// <summary>
+    /// Получить данные для редактирования группы пользователей
+    /// </summary>
+    /// <param name="userGroupId">Идентификатор группы пользователей, для которой запрашиваются данные</param>
+    /// <param name="requesterId">Пользователь, запросивший операцию</param>
+    public UpdateUserGroupContent GetContentForUserGroupUpdating(Guid userGroupId, Guid requesterId)
+    {
+        var details = GetDetails(userGroupId);
+
+        var potentialMembers = dbContext.Users
+
+            .Except(dbContext.MemberRights
+                // Ищем таких пользователей, которые являются участниками группы пользователей
+                .Where(mr => mr.UserGroupId == userGroupId)
+                .Select(r => r.User))
+            .OrderBy(u => u.FirstName)
+            .ThenBy(u => u.SecondName)
+            .ThenBy(u => u.Patronymic)
+            .ToUserList();
+
+        // var potentialRelatives = GetOwnedList(requesterId); // remove
+
+        return new UpdateUserGroupContent(details, potentialMembers/*, potentialRelatives*/); // remove
     }
 
     /// <summary>
@@ -162,7 +187,7 @@ public class UserGroupService(ApplicationDbContext dbContext)
     /// <exception cref="UserIsAlreadyMemberOfUserGroup">Участник уже состоит в группе</exception>
     /// <exception cref="UserDoesNotExistException">Пользователь не существует в БД</exception>
     /// <exception cref="UserGroupDoesNotExistException">Группа пользователей не существует в БД</exception>
-    public void AddMembers(ChangeUserGroupMembers add)
+    public void AddMembers(AddUserGroupMembers add)
     {
         var redactor = new UserGroupRedactor(dbContext);
         redactor.AddMembers(add);
@@ -173,7 +198,7 @@ public class UserGroupService(ApplicationDbContext dbContext)
     /// </summary>
     /// <param name="delete">Объект с необходимой для удаления информацией</param>
     /// <exception cref="UserIsAdminException">Из группы пользователей нельзя удалить участника, являющегося администратором этой группы</exception>
-    public void DeleteMembers(ChangeUserGroupMembers delete)
+    public void DeleteMembers(DeleteUserGroupMembers delete)
     {
         var redactor = new UserGroupRedactor(dbContext);
         redactor.DeleteMembers(delete);

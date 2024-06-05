@@ -75,7 +75,7 @@ public class AnnouncementRedactor
 
     private void NewContentValidOrThrow()
     {
-        if (!string.IsNullOrWhiteSpace(_edit.Content))
+        if (string.IsNullOrWhiteSpace(_edit.Content))
             throw new AnnouncementContentEmptyException();
     }
 

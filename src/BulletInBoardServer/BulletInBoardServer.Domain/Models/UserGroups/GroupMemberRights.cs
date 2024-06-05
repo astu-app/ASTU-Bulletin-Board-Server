@@ -7,7 +7,6 @@ namespace BulletInBoardServer.Domain.Models.UserGroups;
 /// </summary>
 public class GroupMemberRights : ICollection<SingleMemberRights>
 {
-    // private readonly Dictionary<User, SingleMemberRights> _rightsMap = new();
     private readonly Dictionary<Guid, SingleMemberRights> _rightsMap = new();
 
 

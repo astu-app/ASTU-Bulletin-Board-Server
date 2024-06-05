@@ -25,7 +25,7 @@ public class SingleMemberRights
     /// <summary>
     /// Идентификатор группы пользователей, в рамках которой существуют права
     /// </summary>
-    public Guid UserGroupId { get; init; }
+    public Guid UserGroupId { get; set; }
 
     /// <summary>
     /// Группа пользователей, в рамках которой существуют права

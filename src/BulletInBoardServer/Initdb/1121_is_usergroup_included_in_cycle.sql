@@ -7,7 +7,6 @@ as $$
         usergroup_id uuid;
 begin
     usergroup_id = new.usergroup_id;
-    raise notice 'usergroup_id %', usergroup_id;
     
     usergroup_included_in_cycle = is_usergroup_included_in_cycle(usergroup_id);
     if (usergroup_included_in_cycle) then
