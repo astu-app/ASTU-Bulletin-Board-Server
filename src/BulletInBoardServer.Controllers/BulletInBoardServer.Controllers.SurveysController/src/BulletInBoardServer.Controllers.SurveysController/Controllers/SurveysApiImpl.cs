@@ -9,7 +9,6 @@ using BulletInBoardServer.Services.Services.Surveys.Exceptions;
 using BulletInBoardServer.Services.Services.Surveys.Models;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Serilog;
 using ILogger = Serilog.ILogger;
 
@@ -41,6 +40,7 @@ public class SurveysApiControllerImpl : SurveysApiController
     /// <summary>
     /// Закрыть опрос
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="surveyId"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -49,7 +49,7 @@ public class SurveysApiControllerImpl : SurveysApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult CloseSurvey(Guid surveyId)
+    public override IActionResult CloseSurvey([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid surveyId)
     {
         /*
          * 200 +
@@ -61,8 +61,6 @@ public class SurveysApiControllerImpl : SurveysApiController
          *   surveyAlreadyClosed +
          * 500 +
          */
-
-        var requesterId = Guid.Empty; // todo id пользователя
 
         try
         {
@@ -96,12 +94,13 @@ public class SurveysApiControllerImpl : SurveysApiController
     /// <summary>
     /// Создать опрос
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="createSurveyDto"></param>
     /// <response code="201">Created</response>
     /// <response code="401">Unauthorized</response>
     /// <response code="403">Forbidden</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult CreateSurvey(CreateSurveyDto createSurveyDto)
+    public override IActionResult CreateSurvey([FromHeader(Name = "X-User-Id")]Guid requesterId, CreateSurveyDto createSurveyDto)
     {
         /*
          * 201 +
@@ -113,8 +112,6 @@ public class SurveysApiControllerImpl : SurveysApiController
          * 500 +
          */
         
-        var requesterId = Guid.Empty; // todo id пользователя
-
         try
         {
             var createSurvey = createSurveyDto.Adapt<CreateSurvey>();
@@ -150,6 +147,7 @@ public class SurveysApiControllerImpl : SurveysApiController
     /// <summary>
     /// Скачать результаты опроса
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="id">Id пророса</param>
     /// <param name="filetype">Тип файла с результатами опроса</param>
     /// <response code="200">Ok</response>
@@ -159,36 +157,15 @@ public class SurveysApiControllerImpl : SurveysApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult DownloadSurveyResults(Guid id, string filetype)
+    public override IActionResult DownloadSurveyResults([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid id, string filetype)
     {
-        //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(200, default(DownloadSurveyResultsOk));
-        //TODO: Uncomment the next line to return response 400 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(400);
-        //TODO: Uncomment the next line to return response 401 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(401);
-        //TODO: Uncomment the next line to return response 403 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(403, default(DownloadSurveyResultsForbidden));
-        //TODO: Uncomment the next line to return response 404 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(404, default(DownloadSurveyResultsNotFound));
-        //TODO: Uncomment the next line to return response 409 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(409, default(DownloadSurveyResultsConflict));
-        //TODO: Uncomment the next line to return response 500 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-        // return StatusCode(500);
-        string exampleJson = null;
-        exampleJson = "{\r\n  \"content\" : \"\"\r\n}";
-        exampleJson = "Custom MIME type example not yet supported: application/octet-stream";
-
-        var example = exampleJson != null
-            ? JsonConvert.DeserializeObject<DownloadSurveyResultsOk>(exampleJson)
-            : default(DownloadSurveyResultsOk);
-        //TODO: Change the data returned
-        return new ObjectResult(example);
+        return Ok("not implemented");
     }
 
     /// <summary>
     /// Проголосовать в опросе
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="voteInSurveyDto"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -197,7 +174,7 @@ public class SurveysApiControllerImpl : SurveysApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult VoteInSurvey(VoteInSurveyDto voteInSurveyDto)
+    public override IActionResult VoteInSurvey([FromHeader(Name = "X-User-Id")]Guid requesterId, VoteInSurveyDto voteInSurveyDto)
     {
         /*
          * 200 +
@@ -214,9 +191,6 @@ public class SurveysApiControllerImpl : SurveysApiController
          * 500 +
          */
         
-        // var requesterId = Guid.Empty; // todo id пользователя
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
-
         try
         {
             var surveyVotes = voteInSurveyDto.Adapt<SurveyVotes>(); 

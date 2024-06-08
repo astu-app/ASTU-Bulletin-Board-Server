@@ -2,11 +2,8 @@
 info:
   title: API Шлюз. Пользователи
   description: API Шлюз. Пользователи
-  version: 0.0.1
-servers:
-  - url: '/api'
+  version: 1.0.0
 paths:
-#  /users/get-usergroups:
 
 components:
   schemas:

@@ -18,7 +18,6 @@ src/BulletInBoardServer.Controllers.SurveysController/Models/CloseSurveyNotFound
 src/BulletInBoardServer.Controllers.SurveysController/Models/CloseSurveyResponses.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/CreateAnswerDto.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/CreateQuestionDto.cs
-src/BulletInBoardServer.Controllers.SurveysController/Models/CreateSurveyCreated.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/CreateSurveyDto.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/CreateSurveyForbidden.cs
 src/BulletInBoardServer.Controllers.SurveysController/Models/CreateSurveyResponses.cs

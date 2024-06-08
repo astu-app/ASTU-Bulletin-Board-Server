@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: API Шлюз. Группы пользователей
   description: API шлюза для управления группами пользователей
-  version: 0.1.0
+  version: 1.0.0
 servers:
   - url: '/api'
 tags:
@@ -14,17 +14,21 @@ paths:
       tags: [ UserGroups ]
       operationId: getUsergroupCreateContent
       summary: Получить данные для создания группы пользователей
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       responses: 
         200:
           description: OK
           content:
             application/json:
               schema:
-                type: object
-                title: getUsergroupCreateContentOk
-                properties: 
-                  content:
-                    $ref: '#/components/schemas/getUsergroupCreateContentDto'
+                $ref: '#/components/schemas/getUsergroupCreateContentDto'
         401:
           description: Unauthorized
         403:
@@ -38,6 +42,7 @@ paths:
                   code:
                     # getUsergroupCreateContentForbidden
                     $ref: '#/components/schemas/getUsergroupCreateContentResponses'
+        # todo add 404
         500:
           description: Internal Server Error
   
@@ -46,6 +51,14 @@ paths:
       tags: [ UserGroups ]
       operationId: createUsergroup
       summary: Создать группу пользователей
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -58,11 +71,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                title: createUsergroupCreated
-                properties:
-                  content:
-                    $ref: '#/components/schemas/usergroupIdentifierDto'
+                $ref: '#/components/schemas/usergroupIdentifierDto'
         400:
           description: Bad Request
           content:
@@ -119,17 +128,21 @@ paths:
       tags: [ UserGroups ]
       operationId: getAllUsergroups
       summary: Получение списка всех групп пользователей
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       responses:
         200:
           description: Ok
           content:
             application/json:
               schema:
-                type: object
-                title: getAllUsergroupsOk
-                properties:
-                  content:
-                    $ref: '#/components/schemas/usergroupListDto'
+                $ref: '#/components/schemas/usergroupListDto'
         401:
           description: Unauthorized
         403:
@@ -151,17 +164,21 @@ paths:
       tags: [ UserGroups ]
       operationId: getOwnedUsergroups
       summary: Получение списка групп пользователей, администратором которой является пользователь, запрашивающий операцию
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       responses:
         200:
           description: Ok
           content:
             application/json:
               schema:
-                type: object
-                title: getOwnedUsergroupsOk
-                properties:
-                  content:
-                    $ref: '#/components/schemas/usergroupListDto'
+                $ref: '#/components/schemas/usergroupListDto'
         401:
           description: Unauthorized
         403:
@@ -183,17 +200,21 @@ paths:
       tags: [ UserGroups ]
       operationId: getOwnedHierarchy
       summary: Получение иерархии управляемых групп пользователей для пользователя
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       responses: 
         200:
           description: Ok
           content:
             application/json:
               schema: 
-                type: object
-                title: getOwnedHierarchyOk
-                properties: 
-                  content: 
-                    $ref: '#/components/schemas/usergroupHierarchyDto'
+                $ref: '#/components/schemas/usergroupHierarchyDto'
         400:
           # Некорректный формат идентификатора
           description: Bad Request
@@ -219,6 +240,13 @@ paths:
       operationId: getUsergroupDetails
       summary: Получение подробной информации о группе пользователей
       parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
         - in: path
           name: id
           schema:
@@ -232,11 +260,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                title: getUsergroupDetailsOk
-                properties:
-                  content:
-                    $ref: '#/components/schemas/userGroupDetailsDto'
+                $ref: '#/components/schemas/userGroupDetailsDto'
         400:
           # Некорректный формат идентификатора
           description: Bad Request
@@ -273,6 +297,13 @@ paths:
       operationId: getUsergroupUpdateContent
       summary: Получение данных для редактирования группы пользователей
       parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
         - in: path
           name: id
           schema:
@@ -286,11 +317,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                title: getUsergroupUpdateContentOk
-                properties:
-                  content:
-                    $ref: '#/components/schemas/contentForUserGroupEditingDto'
+                $ref: '#/components/schemas/contentForUserGroupEditingDto'
         400:
           # Некорректный формат идентификатора
           description: Bad Request
@@ -326,6 +353,14 @@ paths:
       tags: [ UserGroups ]
       operationId: updateUsergroup
       summary: Редактирование группы пользователей
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -390,6 +425,14 @@ paths:
       tags: [ UserGroups ]
       operationId: deleteUsergroup
       summary: Удалить группу пользователей
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -434,6 +477,14 @@ paths:
       tags: [ UserGroups ]
       operationId: addMembersToUsergroup
       summary: Добавить пользователей в группу пользователей
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -491,6 +542,14 @@ paths:
       tags: [ UserGroups ]
       operationId: deleteMembersFromUsergroup
       summary: Удалить пользователей из группы пользователей
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:

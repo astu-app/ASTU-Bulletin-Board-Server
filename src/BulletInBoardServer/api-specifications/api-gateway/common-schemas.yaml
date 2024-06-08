@@ -2,9 +2,9 @@
 info:
   title: Общие схемы для API шлюза
   description: Общие схемы для API шлюза
-  version: 0.0.2
+  version: 1.0.0
 servers:
-  - url: '/api'
+#  - url: '/api'
 paths:
 
 components:

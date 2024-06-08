@@ -2,7 +2,7 @@
 info:
   title: API Шлюз. Объявления
   description: API шлюза для управления объявлениями
-  version: 0.0.3
+  version: 1.0.0
 servers:
   - url: '/api'
 tags:
@@ -15,6 +15,14 @@ paths:
       tags: [ Announcements ]
       operationId: createAnnouncement
       summary: Создать объявление
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -27,11 +35,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                title: createAnnouncementCreated
-                properties:
-                  content:
-                    $ref: '#/components/schemas/announcementIdentifierDto'
+                $ref: '#/components/schemas/announcementIdentifierDto'
         400:
           description: Bad Request
           content:
@@ -90,6 +94,13 @@ paths:
       operationId: getAnnouncementDetails
       summary: Получить подробности о выбранном объявлении
       parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
         - in: path
           name: id
           schema: 
@@ -103,11 +114,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                title: getAnnouncementDetailsOk 
-                properties:
-                  content:
-                    $ref: '#/components/schemas/announcementDetailsDto'
+                $ref: '#/components/schemas/announcementDetailsDto'
         400:
           # Некорректный формат идентификатора
           description: Bad Request
@@ -144,6 +151,13 @@ paths:
       operationId: getAnnouncementUpdateContent
       summary: Получить данные для редактирования объявления
       parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
         - in: path
           name: id
           schema:
@@ -157,11 +171,7 @@ paths:
           content: 
             application/json:
               schema:
-                type: object
-                title: getAnnouncementUpdateContentOk
-                properties:
-                  content:
-                    $ref: '#/components/schemas/contentForAnnouncementUpdatingDto'
+                $ref: '#/components/schemas/contentForAnnouncementUpdatingDto'
         400:
           # Некорректный формат идентификатора
           description: Bad Request
@@ -198,6 +208,14 @@ paths:
       tags: [ Announcements ]
       operationId: updateAnnouncement
       summary: Редактировать объявление
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -269,6 +287,14 @@ paths:
       tags: [ Announcements ]
       operationId: deleteAnnouncement
       summary: Удалить объявление
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -314,19 +340,23 @@ paths:
       tags: [ Announcements ]
       operationId: getPostedAnnouncementList
       summary: Получить список опубликованных объявлений
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       responses:
         200:
           description: Ok
           content:
             application/json:
               schema:
-                type: object
-                title: getPostedAnnouncementListOk
-                properties:
-                  content:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/announcementSummaryDto'
+                type: array
+                items:
+                  $ref: '#/components/schemas/announcementSummaryDto'
         401:
           description: Unauthorized
         403:
@@ -348,6 +378,14 @@ paths:
       tags: [ Announcements ]
       operationId: hidePostedAnnouncement
       summary: Скрыть опубликованное объявление
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -405,19 +443,23 @@ paths:
       tags: [ Announcements ]
       operationId: getHiddenAnnouncementList
       summary: Получить список скрытых объявлений
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       responses:
         200:
           description: Ok
           content:
             application/json:
               schema:
-                type: object
-                title: getHiddenAnnouncementListOk
-                properties:
-                  content:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/announcementSummaryDto'
+                type: array
+                items:
+                  $ref: '#/components/schemas/announcementSummaryDto'
         401:
           description: Unauthorized
         403:
@@ -439,6 +481,14 @@ paths:
       tags: [ Announcements ]
       operationId: restoreHiddenAnnouncement
       summary: Восстановить скрытое объявление
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -495,19 +545,23 @@ paths:
       tags: [ Announcements ]
       operationId: getDelayedPublishingAnnouncementList
       summary: Получить список объявлений, ожидающих отложенную публикацию
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       responses:
         200:
           description: Ok
           content:
             application/json:
               schema:
-                type: object
-                title: getDelayedPublishingAnnouncementListOk
-                properties:
-                  content:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/announcementSummaryDto'
+                type: array
+                items:
+                  $ref: '#/components/schemas/announcementSummaryDto'
         401:
           description: Unauthorized
         403:
@@ -529,6 +583,14 @@ paths:
       tags: [ Announcements ]
       operationId: publishImmediatelyDelayedPublishingAnnouncement
       summary: Сразу опубликовать отложенное объявление
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -574,19 +636,23 @@ paths:
       tags: [ Announcements ]
       operationId: getDelayedHiddenAnnouncementList
       summary: Получить список объявлений, ожидающих отложенное сокрытие
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            description: Идентификатор пользователя
+            type: string
+            format: uuid
       responses:
         200:
           description: Ok
           content:
             application/json:
               schema:
-                type: object
-                title: getDelayedHiddenAnnouncementListOk
-                properties:
-                  content:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/announcementSummaryDto'
+                type: array
+                items:
+                  $ref: '#/components/schemas/announcementSummaryDto'
         401:
           description: Unauthorized
         403:

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using BulletInBoardServer.Controllers.AnnouncementsController.Models;
 using BulletInBoardServer.Controllers.Core.Logging;
 using BulletInBoardServer.Controllers.Core.Responding;
@@ -46,6 +45,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <summary>
     /// Создать объявление
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="dto"></param>
     /// <response code="201">Created</response>
     /// <response code="400">Bad Request</response>
@@ -54,7 +54,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult CreateAnnouncement([FromBody] CreateAnnouncementDto dto)
+    public override IActionResult CreateAnnouncement([FromHeader(Name = "X-User-Id")]Guid requesterId, CreateAnnouncementDto dto)
     {
         /*
          * 201 +
@@ -72,8 +72,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          *   delayedPublishingMomentAfterDelayedHidingMoment +
          * 500 +
          */
-
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         var createAnnouncement = dto.Adapt<CreateAnnouncement>();
         try
@@ -156,6 +154,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <summary>
     /// Удалить объявление
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="announcementId"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -163,7 +162,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="403">Forbidden</response>
     /// <response code="404">Not Found</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult DeleteAnnouncement([FromBody] Guid announcementId)
+    public override IActionResult DeleteAnnouncement([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid announcementId)
     {
         /*
          * 200 +
@@ -173,8 +172,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          *   announcementDoesNotExist +
          * 500 +
          */
-
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -212,6 +209,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <summary>
     /// Получить подробности о выбранном объявлении
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="announcementId"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -219,7 +217,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="403">Forbidden</response>
     /// <response code="404">Not Found</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult GetAnnouncementDetails([FromRoute (Name = "id")][Required] Guid announcementId)
+    public override IActionResult GetAnnouncementDetails([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid announcementId)
     {
         /*
          * 200 +
@@ -229,8 +227,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          *   announcementDoesNotExist +
          * 500 +
          */
-
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -269,6 +265,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <summary>
     /// Получить данные для редактирования объявления
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="id">Идентификатор объявления</param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -276,7 +273,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="403">Forbidden</response>
     /// <response code="404">Not Found</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult GetAnnouncementUpdateContent([FromRoute (Name = "id")][Required] Guid id)
+    public override IActionResult GetAnnouncementUpdateContent([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid id)
     {
         /*
          * 200 + 
@@ -287,7 +284,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -330,7 +326,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="401">Unauthorized</response>
     /// <response code="403">Forbidden</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult GetDelayedHiddenAnnouncementList()
+    public override IActionResult GetDelayedHiddenAnnouncementList([FromHeader(Name = "X-User-Id")]Guid requesterId)
     {
         /*
          * 200 +
@@ -339,7 +335,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -364,7 +359,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="401">Unauthorized</response>
     /// <response code="403">Forbidden</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult GetDelayedPublishingAnnouncementList()
+    public override IActionResult GetDelayedPublishingAnnouncementList([FromHeader(Name = "X-User-Id")]Guid requesterId)
     {
         /*
          * 200 +
@@ -373,7 +368,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -398,7 +392,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="401">Unauthorized</response>
     /// <response code="403">Forbidden</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult GetHiddenAnnouncementList()
+    public override IActionResult GetHiddenAnnouncementList([FromHeader(Name = "X-User-Id")]Guid requesterId)
     {
         /*
          * 200 +
@@ -407,7 +401,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -431,7 +424,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="401">Unauthorized</response>
     /// <response code="403">Forbidden</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult GetPostedAnnouncementList()
+    public override IActionResult GetPostedAnnouncementList([FromHeader(Name = "X-User-Id")]Guid requesterId)
     {
         /*
          * 200 +
@@ -439,9 +432,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          *     postedAnnouncementsListAccessForbidden
          * 500 +
          */
-
-        // var requesterId = Guid.Empty; // todo id пользователя;
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -462,6 +452,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <summary>
     /// Скрыть опубликованное объявление
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="announcementId"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -470,7 +461,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult HidePostedAnnouncement([FromBody] Guid announcementId)
+    public override IActionResult HidePostedAnnouncement([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid announcementId)
     {
         /*
          * 200 +
@@ -484,7 +475,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -537,6 +527,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <summary>
     /// Сразу опубликовать отложенное объявление
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="announcementId"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -544,7 +535,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="403">Forbidden</response>
     /// <response code="404">Not Found</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult PublishImmediatelyDelayedPublishingAnnouncement([FromBody] Guid announcementId)
+    public override IActionResult PublishImmediatelyDelayedPublishingAnnouncement([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid announcementId)
     {
         /*
          * 200 +
@@ -555,7 +546,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -596,6 +586,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <summary>
     /// Восстановить скрытое объявление
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="announcementId"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -604,7 +595,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>>
-    public override IActionResult RestoreHiddenAnnouncement([FromBody] Guid announcementId)
+    public override IActionResult RestoreHiddenAnnouncement([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid announcementId)
     {
         /*
          * 200 +
@@ -617,7 +608,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {
@@ -662,6 +652,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <summary>
     /// Редактировать объявление
     /// </summary>
+    /// <param name="requesterId"></param>
     /// <param name="updateAnnouncementDto"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -670,7 +661,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult UpdateAnnouncement([FromBody] UpdateAnnouncementDto updateAnnouncementDto)
+    public override IActionResult UpdateAnnouncement([FromHeader(Name = "X-User-Id")]Guid requesterId, UpdateAnnouncementDto updateAnnouncementDto)
     {
         /*
          * 200 +
@@ -692,7 +683,6 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          * 500 +
          */
 
-        var requesterId = Guid.Parse("cf48c46f-0f61-433d-ac9b-fe7a81263ffc"); // debug
 
         try
         {

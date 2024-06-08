@@ -112,13 +112,19 @@ public class UserGroupMapsterConfig : IRegister
             .Map(d => d.Summary.Id, s => s.Id)
             .Map(d => d.Summary.Name, s => s.Name)
             .Map(d => d.Summary.AdminName, s => s.Admin.FullName)
-            .Map(d => d.Members, s => s.MemberRights);
+            .Map(d => d.Members, s => s.MemberRights.Select(mr => mr.User).Append(s.Admin).OrderBy(u => u.FullName));
         
         config.NewConfig<UserGroup, UserGroupHierarchyNodeDto>()
             .Map(d => d.Id, s => s.Id)
             .Map(d => d.Children, s => s.ChildrenGroups)
             .PreserveReference(true);
 
+        config.NewConfig<User, UserSummaryDto>()
+            .Map(d => d.Id, s => s.Id)
+            .Map(d => d.FirstName, s => s.FirstName)
+            .Map(d => d.SecondName, s => s.SecondName)
+            .Map(d => d.Patronymic, s => s.Patronymic);
+        
         config.NewConfig<SingleMemberRights, UserSummaryDto>()
             .Map(d => d.Id, s => s.User.Id)
             .Map(d => d.FirstName, s => s.User.FirstName)
