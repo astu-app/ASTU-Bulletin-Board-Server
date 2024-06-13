@@ -17,6 +17,6 @@ rectangle "Доска объявлений" {
     create_announcement --> (<font color="gray">E-1.1.2.</font> Выбрать получателей) : include
     create_announcement --> (<font color="gray">E-1.1.1.</font> Указать текст объявления) : include
     
-    add_survey --> (<font color="gray">E-2.1.</font> Создать опрос) : include
+    add_survey -right-> (<font color="gray">E-2.1.</font> Создать опрос) : include
 }
 @enduml

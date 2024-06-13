@@ -1,6 +1,8 @@
 ﻿@startuml
 'https://plantuml.com/state-diagram
 
+left to right direction
+
 'scale 350 width
 'skinparam linetype ortho
 
@@ -26,9 +28,11 @@ hidingPending --> editing : Редактирование начато
 editing --> published : Отложенные моменты \n не заданы
 editing --> hidingPending : Задан режим \n отложенного сокрытия
 editing --> publicationPending : Задан режим \n отложенной публикации
+editing --> hidden : При редактировании \n скрытого объявления \n момент отложенной \n публикации не был задан
 
 hidingPending --> hidden : Наступил момент \n сокрытия
 
 hidden --> published : Восстановлено
+hidden --> editing : Редактирование начато
 
 @enduml

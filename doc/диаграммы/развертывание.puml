@@ -1,35 +1,95 @@
 ﻿@startuml
 'https://plantuml.com/deployment-diagram
 
+'node "VPS" {
+'    node "API Шлюз" as api_gateway
+'    
+'    node "Сервис уведомлений" as notifications_service {
+'        component "gotify"
+'    }
+'       
+'    
+'        
+'    node "Сервис аутентификации" as auth_service
+'    api_gateway <-up-> auth_service : http
+'    
+'    database "БД сервиса\nаутентификации" as auth_service_db
+'    auth_service_db <--> auth_service : tcp/ip
+' 
+' 
+'    
+'    node "Сервис системы\nинформирования" as information_system_service
+'    api_gateway <-up-> information_system_service : http
+'    notifications_service <--- information_system_service : http
+'    
+'    
+'    
+'    rectangle "Сторонние сервисы" as side_services
+'    api_gateway <-right-> side_services
+'}
+'
+'
+'
+'node "Мобильный клиент" as mobile_client {
+'    component "Мобильное приложение" as mobile_app
+'}
+'api_gateway <--> mobile_client : http / https
+'notifications_service --> mobile_client : websocket
+'notifications_service <-- mobile_client : http
+'
+'node "Десктопный клиент" as desktop_client {
+'    component "Браузер" as browser
+'}
+'api_gateway <--> desktop_client : http / https
+''notifications_service <-- desktop_client : http
+''notifications_service --> desktop_client : websocket
+
+
+
 left to right direction
 
-rectangle "Локальная сеть" {
-    node "Сервер приложения" as server_node {
-        component "Сервер" as app_server
-    }
+node "VPS" {
+    node "API Шлюз" as api_gateway
     
-    node "Сервер основной базы данных" {
-        database "База данных" as announcements_db
+    node "Сервис уведомлений" as notifications_service {
+        component "gotify"
     }
-    app_server -- announcements_db : tcp / ip
+       
     
-    node "Сервер базы учетных данных" {
-        database "База данных" as accounts_db
-    }
-    app_server -- accounts_db : tcp / ip
+        
+    node "Сервис системы\nинформирования" as information_system_service
+    api_gateway <-up-> information_system_service : http
+    notifications_service <--- information_system_service : http
+    
+    
+    
+    node "Сервис аутентификации" as auth_service
+    api_gateway <-up-> auth_service : http
+    
+    database "БД сервиса\nаутентификации" as auth_service_db
+    auth_service_db <-right-> auth_service : tcp/ip
+    
+    
+    
+    rectangle "Сторонние сервисы" as side_services
+    api_gateway <-right-> side_services
 }
 
-cloud "Интернет" as internet
-app_server -left- internet : http / https
+
 
 node "Мобильный клиент" as mobile_client {
     component "Мобильное приложение" as mobile_app
 }
-internet -- mobile_app : http / https
+api_gateway <--> mobile_client : http / https
+notifications_service --> mobile_client : websocket
+notifications_service <-- mobile_client : http
 
 node "Десктопный клиент" as desktop_client {
     component "Браузер" as browser
 }
-internet -- browser : http / https
+api_gateway <--> desktop_client : http / https
+'notifications_service <-- desktop_client : http
+'notifications_service --> desktop_client : websocket
+
 
 @enduml

@@ -3,6 +3,8 @@
 
 hide methods
 
+left to right direction
+
 ' public schema
 rectangle "schema 'public'" as public_schema { 
     entity users {
@@ -58,6 +60,14 @@ rectangle "schema 'public'" as public_schema {
     entity member_rights {
         <b><<PK>></b> <<FK>> user_id: uuid
         <b><<PK>></b> <<FK>> usergroup_id: uuid
+
+        can_view_usergroup_details : boolean
+        can_create_usergroups : boolean
+        can_edit_usergroups : boolean
+        can_edit_members : boolean
+        can_edit_member_rights : boolean
+        can_edit_usergroup_admin : boolean
+        can_delete_usergroup : boolean
     }
     usergroups <-- member_rights
     users <-- member_rights
@@ -133,17 +143,17 @@ rectangle "schema 'public'" as public_schema {
 
 
 
-' logs schema
-rectangle "schema 'logs'" as logs_schema {
-    entity announcements_logs {
-        operation_time: timestamp
-        operation_type: text
-        announcement_id: uuid
-        user_id: uuid
-        details: jsonb?
-    }
-}
-public_schema <.up. logs_schema
-'archive_schema <.. logs_schema
+'' logs schema
+'rectangle "schema 'logs'" as logs_schema {
+'    entity announcements_logs {
+'        operation_time: timestamp
+'        operation_type: text
+'        announcement_id: uuid
+'        user_id: uuid
+'        details: jsonb?
+'    }
+'}
+'public_schema <.up. logs_schema
+''archive_schema <.. logs_schema
 
 @enduml 

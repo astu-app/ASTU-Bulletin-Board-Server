@@ -6,6 +6,7 @@ left to right direction
 :Студент: as student
 :Сотрудник: as employee
 :Администратор группы: as groupAdmin
+:Администратор: as admin
 
 rectangle "Доска объявлений" {
     (<font color="gray">S-1.</font> Просмотреть доску объявлений) as view_board
@@ -21,6 +22,9 @@ rectangle "Доска объявлений" {
     
     employee <|-r- groupAdmin
     groupAdmin --> (<font color="gray">G-1.</font> Управление \n администрируемыми группами)
+    
+    groupAdmin <|-r- admin 
+    admin --> (<font color="gray">A-1.</font> Регистрация пользователей)
 }
 
 @enduml
