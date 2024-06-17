@@ -1,0 +1,358 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+' не нужны:
+' общежития
+' вахты корпусов и кпп
+' склад
+
+' A --> B : отдел B входит в состав отдела A (отдел B руководит отделом A)
+' A --> B : отдел B подчиняется отделу A (отдел A руководит отделом B)
+
+left to right direction
+
+hide methods
+'hide members
+
+entity "Ученый совет" as academicCouncil {
+    + {field} Председатель (ректор)
+}
+
+entity "Ректор" as rector
+hide rector members
+'rector --> academicCouncil 
+rector --> academicCouncil 
+
+entity "Ректорат" as rectory {
+    + Ректор
+}
+rector ---> rectory
+
+    entity "Проректор по учебной работе" as viceRectorForAcademicAffairs
+    hide viceRectorForAcademicAffairs members
+    rectory --> viceRectorForAcademicAffairs
+
+    entity "Проректор по приему в вуз и международной деятельности" as viceRectorForAdmissionsAndInternationalActivities
+    hide viceRectorForAdmissionsAndInternationalActivities members
+    rectory --> viceRectorForAdmissionsAndInternationalActivities
+
+    entity "Проректор по научной работе и инновациям" as viceRectorForResearchAndInnovations
+    hide viceRectorForResearchAndInnovations members
+    rectory --> viceRectorForResearchAndInnovations
+
+    entity "Проректор по воспитательной работе и связям с общественностью" as viceRectorForEducationalWorkAndPublicRelations
+    hide viceRectorForEducationalWorkAndPublicRelations members
+    rectory --> viceRectorForEducationalWorkAndPublicRelations
+
+    entity "Проректор по инфраструктурному развитию и информатизации" as viceRectorForInfrastructureDevelopmentAndInformatization
+    hide viceRectorForInfrastructureDevelopmentAndInformatization members
+    rectory --> viceRectorForInfrastructureDevelopmentAndInformatization
+
+    entity "Проректор по организационно-правовым вопросам" as viceRectorForOrganizationalAndLegalAffairs
+    hide viceRectorForOrganizationalAndLegalAffairs members
+    rectory --> viceRectorForOrganizationalAndLegalAffairs
+
+    entity "Проректор по финансово-экономическим вопросам" as viceRectorForFinancialAndEconomicAffairs
+    hide viceRectorForFinancialAndEconomicAffairs members
+    rectory --> viceRectorForFinancialAndEconomicAffairs
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' ПРОФИЛЬНЫЕ ОТДЕЛЫ
+entity "Первый отдел" as firstDepartment {
+    + Начальник
+}
+rector --> firstDepartment
+
+entity "Отдел гражданской обороны, чрезвычайных ситуаций и мобилизационной подготовки" as civilDefenseAndEmergencySituationDepartment {
+    + Начальник
+}
+rector --> civilDefenseAndEmergencySituationDepartment
+
+entity "Президент" as president
+hide president members
+academicCouncil -left-> president
+
+entity "Бухгалтерия" as accounting {
+    + Главный бухгалтер
+}
+rector --> accounting
+
+entity "Отдел кадров" as hrDepartment {
+    + Начальник
+}
+viceRectorForOrganizationalAndLegalAffairs --> hrDepartment
+
+entity "Юридический отдел" as legalDepartment {
+    + Начальник
+}
+viceRectorForOrganizationalAndLegalAffairs --> legalDepartment
+
+entity "Студенческая канцелярия" as studentAffairsOffice {
+    + Начальник
+}
+viceRectorForOrganizationalAndLegalAffairs --> studentAffairsOffice
+
+entity "Общий отдел" as generalDepartment {
+    + Начальник
+}
+viceRectorForOrganizationalAndLegalAffairs --> generalDepartment
+    entity "Отдел делопроизводства" as documentManagementDepartment
+    generalDepartment --> documentManagementDepartment
+    entity "Секретариат руководства" as executiveSecretariat
+    generalDepartment --> executiveSecretariat
+    entity "Военно-учетный стол" as militaryRegistrationDesk
+    generalDepartment --> militaryRegistrationDesk
+    entity "Архив" as archive
+    generalDepartment --> archive
+
+entity "Международный отдел" as internationalRelationsOffice {
+    + Начальник
+}
+viceRectorForAdmissionsAndInternationalActivities --> internationalRelationsOffice
+
+entity "Отдел академической мобильности" as academicMobilityOffice {
+    + Начальник
+}
+viceRectorForAdmissionsAndInternationalActivities --> academicMobilityOffice
+
+entity "Управление массовых коммуникаций и медиа-проектов" as massCommunicationsAndMediaProjectsManagement {
+    + Начальник
+}
+viceRectorForEducationalWorkAndPublicRelations --> massCommunicationsAndMediaProjectsManagement
+    entity "Пресс-центр АГТУ" as AGTUPressCenter {
+        + Директор
+    }
+    massCommunicationsAndMediaProjectsManagement --> AGTUPressCenter
+    entity "Отдел медиа-проектов" as mediaProjectsDepartment {
+        + Начальник
+    }
+    massCommunicationsAndMediaProjectsManagement --> mediaProjectsDepartment
+    entity "Рекламно-информационный центр" as advertisingAndInformationCenter {
+        + Директор
+    }
+    massCommunicationsAndMediaProjectsManagement --> advertisingAndInformationCenter
+
+entity "Управление по организационно-воспитательной работе" as organizationalAndEducationalWorkManagement {
+    + Начальник
+}
+viceRectorForEducationalWorkAndPublicRelations --> organizationalAndEducationalWorkManagement
+    entity "Отдел по культурно-массовой работе" as culturalAndMassWorkDepartment {
+        + Начальник
+    }
+    organizationalAndEducationalWorkManagement --> culturalAndMassWorkDepartment
+    entity "Отдел по воспитательной и социальной работе" as educationalAndSocialWorkDepartment {
+        + Начальник
+    }
+    organizationalAndEducationalWorkManagement --> educationalAndSocialWorkDepartment
+    entity "Спортивный клуб" as sportsClub {
+        + Начальник
+    }
+    organizationalAndEducationalWorkManagement --> sportsClub
+    entity "Центр социально-психологической помощи «Доверие»" as TrustSocialAndPsychologicalSupportCenter {
+        + Директор
+    }
+    organizationalAndEducationalWorkManagement --> TrustSocialAndPsychologicalSupportCenter
+    entity "Музей истории АГТУ" as AGTUHistoryMuseum {
+        + Директор
+    }
+    organizationalAndEducationalWorkManagement --> AGTUHistoryMuseum
+    entity "Студенческий совет АГТУ" as AGTUStudentCouncil {
+        + Председатель
+    }
+    educationalAndSocialWorkDepartment --> AGTUStudentCouncil
+
+    entity "Профстудком АГТУ" as AGTUStudentTradeUnionCommittee {
+
+    }
+    educationalAndSocialWorkDepartment --> AGTUStudentTradeUnionCommittee
+    
+entity "Физкультурно-спортивное сооружение 'Спорткомплекс'" as sportsFacility {
+    + Директор
+}
+viceRectorForInfrastructureDevelopmentAndInformatization --> sportsFacility
+
+entity "Управление информационных систем и технологий" as informationSystemsAndTechnologiesManagement {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization --> informationSystemsAndTechnologiesManagement
+    entity "Отдел АСУ" as automationSystemsDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement --> automationSystemsDepartment
+    entity "Отдел информационной безопасности" as informationSecurityDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement --> informationSecurityDepartment
+    entity "Сервисный отдел" as serviceDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement --> serviceDepartment
+    entity "Отдел вычислительных сетей и связи" as computerNetworksAndCommunicationsDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement --> computerNetworksAndCommunicationsDepartment
+
+entity "Диспетчерский отдел" as dispatchDepartment {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization --> dispatchDepartment
+
+entity "Учебный отдел" as academicDepartment {
+    + Начальник
+}
+viceRectorForAcademicAffairs --> academicDepartment
+
+entity "Центр содействия трудоустройству выпускников АГТУ" as careerDevelopmentCenter {
+    + Директор
+}
+viceRectorForAcademicAffairs --> careerDevelopmentCenter
+
+entity "Отдел методического обеспечения учебного процесса" as educationalProcessSupportDepartment {
+    + Начальник
+}
+viceRectorForAcademicAffairs --> educationalProcessSupportDepartment
+
+entity "Центр образовательной политики" as educationalPolicyCenter {
+    + Директор
+}
+viceRectorForAcademicAffairs --> educationalPolicyCenter
+
+entity "Издательство АГТУ" as AGTUPublishingHouse {
+    + Директор
+}
+viceRectorForAdmissionsAndInternationalActivities --> AGTUPublishingHouse
+    entity "Отдел допечатной подготовки изданий" as prepressDepartment {
+        + Начальник
+    }
+    AGTUPublishingHouse --> prepressDepartment
+
+entity "Научно-образовательный центр профессиональных компетенций" as professionalCompetenciesCenter {
+     + Директор
+}
+viceRectorForAcademicAffairs --> professionalCompetenciesCenter
+
+entity "Центр довузовской подготовки, профориентации и приему в вуз" as preuniversityPreparationAndAdmissionCenter {
+    + Директор
+}
+viceRectorForAdmissionsAndInternationalActivities --> preuniversityPreparationAndAdmissionCenter
+
+entity "Научная библиотека" as scientificLibrary {
+    + Директор
+}
+viceRectorForAdmissionsAndInternationalActivities --> scientificLibrary
+    entity "Отдел комплектования" as acquisitionDepartment {
+        + Начальник
+    }
+    scientificLibrary --> acquisitionDepartment
+    entity "Отдел каталогизации" as catalogingDepartment {
+        + Начальник
+    }
+    scientificLibrary --> catalogingDepartment
+    entity "Информационно-библиографический отдел" as informationAndBibliographyDepartment {
+        + Начальник
+    }
+    scientificLibrary --> informationAndBibliographyDepartment
+    entity "Отделы обслуживания" as serviceDepartments {
+        + Начальник
+    }
+    scientificLibrary --> serviceDepartments
+    entity "Читальный зал электронных ресурсов" as electronicResourcesReadingRoom {
+        ' todo кто руководитель?
+    }
+    hide electronicResourcesReadingRoom members
+    scientificLibrary --> electronicResourcesReadingRoom
+
+entity "Центр научно-инновационного развития" as scientificAndInnovativeDevelopmentCenter {
+    + Директор
+}
+viceRectorForResearchAndInnovations --> scientificAndInnovativeDevelopmentCenter
+
+entity "Отдел научных проектов" as researchProjectsDepartment {
+    + Начальник
+}
+viceRectorForResearchAndInnovations --> researchProjectsDepartment
+
+entity "Научно-исследовательская часть" as researchDivision {
+    + Начальник
+}
+viceRectorForResearchAndInnovations --> researchDivision
+
+entity "Отдел подготовки кадров высшей квалификации" as postgraduateTrainingDepartment {
+    + Начальник
+}
+viceRectorForResearchAndInnovations --> postgraduateTrainingDepartment
+
+entity "Редакция журнала «Вестник АГТУ»" as AGTUJournalEditorialOffice {
+    + Заведующий
+}
+viceRectorForResearchAndInnovations --> AGTUJournalEditorialOffice
+
+entity "Редакция научных журналов" as scientificJournalsEditorialOffice {
+    + Начальник
+}
+viceRectorForResearchAndInnovations --> scientificJournalsEditorialOffice
+
+entity "Отдел маркетинга" as marketingDepartment {
+    + Начальник
+}
+viceRectorForFinancialAndEconomicAffairs --> marketingDepartment
+
+entity "Договорный отдел" as contractDepartment {
+    + Начальник
+}
+viceRectorForFinancialAndEconomicAffairs --> contractDepartment
+
+entity "Отдел материально-технического снабжения" as materialsAndTechnicalSupplyDepartment {
+    + Начальник
+}
+viceRectorForFinancialAndEconomicAffairs --> materialsAndTechnicalSupplyDepartment
+
+entity "Планово-экономический отдел" as planningAndEconomicDepartment {
+    + Начальник
+}
+viceRectorForFinancialAndEconomicAffairs --> planningAndEconomicDepartment
+    entity "Сектор бюджетирования, аналитического учёта и контроля" as budgetingAndAnalyticalControlSector {
+        + Начальник
+    }
+    planningAndEconomicDepartment --> budgetingAndAnalyticalControlSector
+    entity "Сектор труда и заработной платы" as laborAndWageSector {
+        + Начальник
+    }
+    planningAndEconomicDepartment --> laborAndWageSector
+
+
+entity "Отдел внебюджетной деятельности и социальной защиты" as extrabudgetaryActivitiesAndSocialProtectionDepartment {
+    + Начальник
+}
+viceRectorForFinancialAndEconomicAffairs --> extrabudgetaryActivitiesAndSocialProtectionDepartment
+
+entity "Административно-хозяйственное управление" as administrativeAndEconomicManagement {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization --> administrativeAndEconomicManagement
+    entity "Отдел по комплексному обслуживанию вуза" as comprehensiveUniversityServiceDepartment {
+        + Начальник
+    }
+    administrativeAndEconomicManagement --> comprehensiveUniversityServiceDepartment
+    entity "Хозяйственный отдел" as economicDepartment {
+        + Начальник
+    }
+    administrativeAndEconomicManagement --> economicDepartment
+    entity "Транспортный отдел" as transportDepartment {
+        + Начальник
+    }
+    administrativeAndEconomicManagement --> transportDepartment
+
+entity "Отдел по управлению имуществом и проектами" as propertyAndProjectManagementDepartment {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization --> propertyAndProjectManagementDepartment
+
+entity "Отдел охраны труда и техники безопасности" as laborProtectionAndTechnicalSafetyDepartment {
+    + Начальник
+}
+viceRectorForOrganizationalAndLegalAffairs --> laborProtectionAndTechnicalSafetyDepartment
+
+
+
+@enduml

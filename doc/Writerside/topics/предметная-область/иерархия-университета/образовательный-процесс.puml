@@ -1,0 +1,121 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+' не нужны:
+' общежития
+' вахты корпусов и кпп
+' склад
+
+' A --|> B : отдел B входит в состав отдела A (отдел B руководит отделом A)
+' A --> B : отдел B подчиняется отделу A (отдел A руководит отделом B)
+
+left to right direction
+
+hide methods
+'hide members
+
+title "Образовательный процесс"
+
+entity "Ученый совет" as academicCouncil {
+    + {field} Председатель (ректор)
+}
+
+entity "Ректор" as rector
+hide rector members
+'rector --|> academicCouncil 
+rector -up> academicCouncil 
+
+entity "Ректорат" as rectory {
+    + Ректор
+}
+rector -right-> rectory
+
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' ДИРЕКТОРА ИНСТИТУТОВ И ДЕКАНЫ ФАКУЛЬТЕТОВ
+entity "Директора институтов и деканы факультетов" as directorsAndDeans
+hide directorsAndDeans members
+rectory -right-> directorsAndDeans
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' ИНСТИТУТЫ
+entity "Институт экономики и права (ИЭиП)" as instituteOfEconomicsAndLaw {
+    + Директор
+}
+directorsAndDeans --> instituteOfEconomicsAndLaw
+
+entity "Институт информационных технологий и коммуникаций (ИИТиК)" as instituteOfInformationTechnologiesAndCommunications {
+    + Директор
+}
+directorsAndDeans --> instituteOfInformationTechnologiesAndCommunications
+
+entity "Институт морских технологий, энергетики и транспорта (ИМТЭиТ)" as instituteOfMarineTechnologiesEnergyAndTransport {
+    + Директор
+}
+directorsAndDeans --> instituteOfMarineTechnologiesEnergyAndTransport
+
+entity "Институт нефти и газа (ИНиГ)" as instituteOfOilAndGas {
+    + Директор
+}
+directorsAndDeans --> instituteOfOilAndGas
+
+entity "Институт рыбного хозяйства, биологии и природопользования (ИРБиП)" as instituteOfFisheryBiologyAndNaturalResourceManagement {
+    + Директор
+}
+directorsAndDeans --> instituteOfFisheryBiologyAndNaturalResourceManagement
+
+entity "Институт градостроительства (ИГ)" as instituteOfUrbanPlanning {
+    + Директор
+}
+directorsAndDeans --> instituteOfUrbanPlanning
+
+entity "Факультет среднего профессионального образования (ФСПО)" as facultyOfIntermediateVocationalEducation {
+    + Декан
+}
+directorsAndDeans --> facultyOfIntermediateVocationalEducation
+
+entity "Институт дополнительного профессионального образования (ИДПО)" as instituteOfContinuingProfessionalEducation {
+    + Директор
+}
+directorsAndDeans --> instituteOfContinuingProfessionalEducation
+
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' КАФЕДРЫ
+
+''''''''''' Институт экономики и права (ИЭиП)
+entity "Кафедры института" as instituteOfEconomicsAndLawDepartments
+hide instituteOfEconomicsAndLawDepartments members
+instituteOfEconomicsAndLaw --> instituteOfEconomicsAndLawDepartments
+
+''''''''''' Институт информационных технологий и коммуникаций (ИИТиК)
+entity "Кафедры института" as instituteOfInformationTechnologiesAndCommunicationsDepartments
+hide instituteOfInformationTechnologiesAndCommunicationsDepartments members
+instituteOfInformationTechnologiesAndCommunications --> instituteOfInformationTechnologiesAndCommunicationsDepartments
+
+''''''''''' Институт морских технологий, энергетики и транспорта (ИМТЭиТ)
+entity "Кафедры института" as instituteOfMarineTechnologiesEnergyAndTransportDepartments
+hide instituteOfMarineTechnologiesEnergyAndTransportDepartments members
+instituteOfMarineTechnologiesEnergyAndTransport --> instituteOfMarineTechnologiesEnergyAndTransportDepartments
+
+''''''''''' Институт нефти и газа (ИНиГ)
+entity "Кафедры института" as instituteOfOilAndGasDepartments
+hide instituteOfOilAndGasDepartments members 
+instituteOfOilAndGas --> instituteOfOilAndGasDepartments
+
+''''''''''' Институт рыбного хозяйства, биологии и природопользования (ИРБиП)
+entity "Кафедры института" as instituteOfFisheryBiologyAndNaturalResourceManagementDepartments
+hide instituteOfFisheryBiologyAndNaturalResourceManagementDepartments members
+instituteOfFisheryBiologyAndNaturalResourceManagement --> instituteOfFisheryBiologyAndNaturalResourceManagementDepartments
+ 
+''''''''''' Институт градостроительства
+entity "Кафедры института" as instituteOfUrbanPlanningDepartments 
+hide instituteOfUrbanPlanningDepartments members
+instituteOfUrbanPlanning --> instituteOfUrbanPlanningDepartments
+ 
+''''''''''' Факультет среднего профессионального образования
+entity "Отделения факультета" as facultyOfIntermediateVocationalEducationDepartments
+hide facultyOfIntermediateVocationalEducationDepartments members
+facultyOfIntermediateVocationalEducation --> facultyOfIntermediateVocationalEducationDepartments
+
+
+
+
+
+@enduml
