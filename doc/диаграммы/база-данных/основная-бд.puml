@@ -23,6 +23,8 @@ rectangle "schema 'public'" as public_schema {
         content: text
         audience_size: integer
         
+        firstly_published_at: timestamp?
+        has_been_published: boolean
         expects_delayed_publishing: boolean
         delayed_publishing_at: timestamp?
         expects_delayed_hiding: boolean
