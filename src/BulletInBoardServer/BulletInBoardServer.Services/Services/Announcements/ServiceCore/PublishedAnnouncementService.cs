@@ -42,7 +42,7 @@ public class PublishedAnnouncementService(
        var summaries = announcementGroups
            .Select(group => group.First().Announcement.GetSummary( 
                group.Count(g => g.Audience.Viewed)))
-           .OrderByDescending(a => a.PublishedAt); 
+           .OrderByDescending(a => a.FirstlyPublishedAt); 
        return summaries;
     }
 

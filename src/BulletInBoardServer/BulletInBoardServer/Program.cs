@@ -6,6 +6,7 @@ using BulletInBoardServer.Infrastructure;
 using BulletInBoardServer.Services.Services.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
+using BulletInBoardServer.Services.Services.Notifications;
 using BulletInBoardServer.Services.Services.Surveys;
 using BulletInBoardServer.Services.Services.Surveys.DelayedOperations;
 using BulletInBoardServer.Services.Services.UserGroups;
@@ -79,6 +80,7 @@ builder.Services.AddHealthChecks();
 RegisterAnnouncementService();
 RegisterSurveyService();
 RegisterUserGroupService();
+RegisterNotificationService();
 
 var app = builder.Build();
 
@@ -123,21 +125,17 @@ string GetConnectionString()
 
 string ConstructConnectionStringFromEnvironment()
 {
-    var host = Environment.GetEnvironmentVariable("DATABASE_HOST") ??
-               throw new ApplicationException($"Переменная окружения DATABASE_HOST отсутствует");
-    var port = Environment.GetEnvironmentVariable("DATABASE_PORT") ??
-               throw new ApplicationException($"Переменная окружения DATABASE_PORT отсутствует");
-    var database = Environment.GetEnvironmentVariable("DATABASE_NAME") ??
-                   throw new ApplicationException($"Переменная окружения DATABASE_NAME отсутствует");
-    var username = Environment.GetEnvironmentVariable("DATABASE_USERNAME") ??
-                   throw new ApplicationException($"Переменная окружения DATABASE_USERNAME отсутствует");
-    var password = Environment.GetEnvironmentVariable("DATABASE_PASSWORD") ??
-                   throw new ApplicationException($"Переменная окружения DATABASE_PASSWORD отсутствует");
+    var host = GetEnvironmentVariableOrThrow("DATABASE_HOST");
+    var port = GetEnvironmentVariableOrThrow("DATABASE_PORT");
+    var database = GetEnvironmentVariableOrThrow("DATABASE_NAME");
+    var username = GetEnvironmentVariableOrThrow("DATABASE_USERNAME");
+    var password = GetEnvironmentVariableOrThrow("DATABASE_PASSWORD");
 
     var connectionString_ =
         $"Host = {host}; Port = {port}; Database = {database}; Username = {username}; Password = {password};";
     return connectionString_;
 }
+
 void RegisterAnnouncementService() =>
     builder.Services
         .AddScoped<AnnouncementService>()
@@ -158,6 +156,34 @@ void RegisterSurveyService() =>
 
 void RegisterUserGroupService() => 
     builder.Services.AddScoped<UserGroupService>();
+
+void RegisterNotificationService()
+{
+    NotificationServiceConfig config;
+    if (builder.Environment.IsProduction())
+    {
+        var token = GetEnvironmentVariableOrThrow("NOTIFICATION_TOKEN");  
+        var host = GetEnvironmentVariableOrThrow("NOTIFICATION_SERVER_HOST");
+        config = new NotificationServiceConfig(token, host);
+    }
+    else
+    {
+        config = GetNotificationConfigFromAppConfiguration();
+    }
+
+    builder.Services.AddScoped<NotificationService>(_ =>
+        new NotificationService(config.AppToken, config.ServerHost));
+}
+
+NotificationServiceConfig GetNotificationConfigFromAppConfiguration() =>
+    builder.Configuration
+        .GetSection("Notifications")
+        .Get<NotificationServiceConfig>() 
+    ?? throw new ApplicationException("Не удалось получить конфигурацию сервера уведомлений");
+
+string GetEnvironmentVariableOrThrow(string variableName) =>
+    Environment.GetEnvironmentVariable(variableName) ??
+    throw new ApplicationException($"Переменная окружения {variableName} не задана");
 
 Task InitDelayedAnnouncementOperationsDispatcherAsync()
 {
@@ -214,3 +240,7 @@ IServiceScopeFactory GetServiceFactory() =>
 ApplicationDbContext GetDbContext(IServiceProvider services) =>
     services.GetService<ApplicationDbContext>() ??
     throw new ApplicationException("Контекст базы данных не зарегистрирован");
+    
+    
+    
+record NotificationServiceConfig(string AppToken, string ServerHost);

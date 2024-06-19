@@ -30,11 +30,10 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Автор объявления
+        /// Gets or Sets Author
         /// </summary>
-        /// <value>Автор объявления</value>
-        [DataMember(Name="authorName", EmitDefaultValue=false)]
-        public string AuthorName { get; set; }
+        [DataMember(Name="author", EmitDefaultValue=true)]
+        public UserSummaryDto Author { get; set; }
 
         /// <summary>
         /// Текстовое содержимое объявления
@@ -101,7 +100,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
             var sb = new StringBuilder();
             sb.Append("class AnnouncementSummaryDto {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
-            sb.Append("  AuthorName: ").Append(AuthorName).Append("\n");
+            sb.Append("  Author: ").Append(Author).Append("\n");
             sb.Append("  Content: ").Append(Content).Append("\n");
             sb.Append("  PublishedAt: ").Append(PublishedAt).Append("\n");
             sb.Append("  HiddenAt: ").Append(HiddenAt).Append("\n");
@@ -152,9 +151,9 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                     Id.Equals(other.Id)
                 ) && 
                 (
-                    AuthorName == other.AuthorName ||
-                    AuthorName != null &&
-                    AuthorName.Equals(other.AuthorName)
+                    Author == other.Author ||
+                    Author != null &&
+                    Author.Equals(other.Author)
                 ) && 
                 (
                     Content == other.Content ||
@@ -211,8 +210,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Models
                 // Suitable nullity checks etc, of course :)
                     if (Id != null)
                     hashCode = hashCode * 59 + Id.GetHashCode();
-                    if (AuthorName != null)
-                    hashCode = hashCode * 59 + AuthorName.GetHashCode();
+                    if (Author != null)
+                    hashCode = hashCode * 59 + Author.GetHashCode();
                     if (Content != null)
                     hashCode = hashCode * 59 + Content.GetHashCode();
                     if (PublishedAt != null)

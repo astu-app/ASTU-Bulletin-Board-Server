@@ -3,5 +3,5 @@
 public record CreateSurvey(
     bool IsAnonymous,
     bool ResultsOpenBeforeClosing,
-    DateTime AutoClosingAt,
+    DateTime? AutoClosingAt,
     IEnumerable<CreateQuestion> Questions);

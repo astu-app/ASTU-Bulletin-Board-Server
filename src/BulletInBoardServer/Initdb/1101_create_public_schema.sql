@@ -75,6 +75,8 @@ create table announcements
     delayed_hiding_at          timestamp,
     expects_delayed_hiding     boolean generated always as ( delayed_hiding_at is not null ) stored,
     
+    firstly_published_at       timestamp,
+    has_been_published         bool generated always as ( firstly_published_at is not null ) stored,
     published_at               timestamp,
     is_published               bool generated always as ( published_at is not null ) stored,
     hidden_at                  timestamp,

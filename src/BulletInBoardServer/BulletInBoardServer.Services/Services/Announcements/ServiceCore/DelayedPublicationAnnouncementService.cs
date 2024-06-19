@@ -1,4 +1,5 @@
 ﻿using BulletInBoardServer.Services.Services.Announcements.Models;
+using BulletInBoardServer.Services.Services.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,7 +8,7 @@ namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 /// <summary>
 /// Сервис работы с объявлениями, ожидающими отложенную публикацию
 /// </summary>
-public class DelayedPublicationAnnouncementService(IServiceScopeFactory scopeFactory)
+public class DelayedPublicationAnnouncementService(NotificationService notificationService, IServiceScopeFactory scopeFactory)
     : CoreAnnouncementServiceBase(scopeFactory)
 {
     /// <summary>
@@ -35,7 +36,8 @@ public class DelayedPublicationAnnouncementService(IServiceScopeFactory scopeFac
             LoadAnnouncementSurveys(announcement.Announcement, requesterId, dbContext);
 
         return announcements
-            .Select(res => res.Announcement.GetSummary(res.ViewsCount)); // todo сортировка по возрастанию времени отложенной публикации 
+            .Select(res => res.Announcement.GetSummary(res.ViewsCount))
+            .OrderBy(announcement => announcement.DelayedPublishingAt);
     }
 
     /// <summary>
@@ -50,9 +52,20 @@ public class DelayedPublicationAnnouncementService(IServiceScopeFactory scopeFac
         
         // Отключение отложенной публикации происходит при вызове диспетчером этого метода
         var announcement = GetAnnouncementSummary(announcementId, dbContext);
+        var hasBeenPublished  = announcement.HasBeenPublished;
         announcement.Publish(DateTime.Now, publishedAt);
         dbContext.SaveChanges();
 
-        // todo уведомление о публикации
+        // уведомляем автора о том, что объявление было опубликовано автоматически
+        notificationService.Notify(announcement.AuthorId, "Объявление опубликовано автоматически", announcement.Content);
+
+        // если объявление уже публиковалось, то аудиторию не уведомляем
+        if (hasBeenPublished) 
+            return;
+
+        var announcementAudience = dbContext.AnnouncementAudience
+            .Where(au => au.AnnouncementId == announcementId)
+            .Select(au => au.UserId);
+        notificationService.NotifyAll(announcementAudience, "Новое объявление", announcement.Content);
     }
 }

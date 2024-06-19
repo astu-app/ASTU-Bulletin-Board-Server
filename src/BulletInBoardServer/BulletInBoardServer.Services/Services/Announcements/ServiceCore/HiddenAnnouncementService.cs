@@ -36,7 +36,8 @@ public class HiddenAnnouncementService(
             LoadAnnouncementSurveys(announcement.Announcement, requesterId, dbContext);
 
         return announcements
-            .Select(res => res.Announcement.GetSummary(res.ViewsCount));
+            .Select(res => res.Announcement.GetSummary(res.ViewsCount))
+            .OrderByDescending(res => res.HiddenAt);
     }
 
     /// <summary>

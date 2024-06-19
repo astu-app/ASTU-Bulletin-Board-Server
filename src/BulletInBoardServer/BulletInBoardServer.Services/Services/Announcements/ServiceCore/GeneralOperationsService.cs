@@ -1,4 +1,5 @@
-﻿using BulletInBoardServer.Domain.Models.Announcements;
+﻿using BulletInBoardServer.Domain;
+using BulletInBoardServer.Domain.Models.Announcements;
 using BulletInBoardServer.Domain.Models.Announcements.Exceptions;
 using BulletInBoardServer.Domain.Models.Attachments;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
@@ -8,6 +9,7 @@ using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.Exceptions;
 using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Common.Exceptions;
+using BulletInBoardServer.Services.Services.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +17,8 @@ namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 
 public class GeneralOperationsService(
     IServiceScopeFactory scopeFactory,
-    IDelayedAnnouncementOperationsDispatcher dispatcher)
+    IDelayedAnnouncementOperationsDispatcher dispatcher,
+    NotificationService notificationService)
     : DispatcherDependentAnnouncementServiceBase(scopeFactory, dispatcher)
 {
     /// <summary>
@@ -36,7 +39,7 @@ public class GeneralOperationsService(
         var announcement = creator.Create();
         
         if (!announcement.ExpectsDelayedPublishing)
-            PublishManually(announcement, DateTime.Now, dbContext);
+            PublishManually(announcement, create.UserIds, DateTime.Now, dbContext);
 
         if (announcement.ExpectsDelayedPublishing)
             Dispatcher.ConfigureDelayedPublishing(
@@ -141,7 +144,7 @@ public class GeneralOperationsService(
             .ToAudience();
         
         // ReSharper disable once EntityFramework.NPlusOne.IncompleteDataUsage - так как аудитория загружается и утсанавливается в предыдущем выражении
-        announcement.ViewsCount = announcement.Audience.Count;
+        announcement.ViewsCount = dbContext.AnnouncementAudienceJoins.Count(aa => aa.Viewed);
 
         return announcement;
     }
@@ -183,8 +186,17 @@ public class GeneralOperationsService(
             Dispatcher.ReconfigureDelayedHiding(edit.Id, edit.DelayedHidingAt.Value);
         else if (edit is { DelayedHidingAtChanged: true, DelayedHidingAt: null })
             Dispatcher.DisableDelayedHiding(edit.Id);
-        
-        // todo отправить уведомление об изменении объявления клиентам
+
+        // Если объявление скрыто, то не уведомляем его аудиторию об изменениях 
+        if (!announcement.IsPublished) 
+            return;
+
+        // Отправляем уведомление о публикации объявления новым пользователям. Ситуации, когда пользователям придет
+        // уведомление о редактирования скрытого объявления не произойдет, так как нельзя одновременно скрыть 
+        // объявление и отредактировать его
+        if (edit.AudienceIds?.ToAdd is not null && announcement.IsPublished)
+            notificationService.NotifyAll(edit.AudienceIds.ToAdd, "Новое объявление",
+                $"Для вас опубликовано объявление от {announcement.FirstlyPublishedAt:d} {announcement.FirstlyPublishedAt:t}: {announcement.Content}");
     }
 
     /// <summary>
@@ -213,8 +225,6 @@ public class GeneralOperationsService(
             .ExecuteDelete();
         
         dbContext.SaveChanges();
-
-        // todo отправить уведомление об удалении объявления пользователям 
     }
 
     /// <summary>
@@ -234,7 +244,8 @@ public class GeneralOperationsService(
         if (announcement.AuthorId != requesterId)
             throw new OperationNotAllowedException("Опубликовать объявление может только его автор");
         
-        PublishManually(announcement, publishedAt, dbContext);
+        var audienceIds = LoadAnnouncementAudience(announcementId, dbContext);
+        PublishManually(announcement, audienceIds, publishedAt, dbContext);
     }
 
 
@@ -263,17 +274,25 @@ public class GeneralOperationsService(
                 .Load();
     }
 
-    private void PublishManually(Announcement announcement, DateTime publishedAt,
-        DbContext dbContext)
+    private void PublishManually(Announcement announcement, IEnumerable<Guid> audienceIds, DateTime publishedAt, DbContext dbContext)
     {
         if (announcement.ExpectsDelayedPublishing)
             Dispatcher.DisableDelayedPublishing(announcement.Id);
 
+        var hasBeenPublished = announcement.HasBeenPublished;
         announcement.Publish(DateTime.Now, publishedAt);
-        
+
         dbContext.SaveChanges();
 
-        // todo уведомление о публикации
+        // Если объявление уже публиковалось, то никаких уведомлений не рассылаем
+        if (hasBeenPublished)
+            return;
+        
+        notificationService.NotifyAll(audienceIds, "Новое объявление", announcement.Content);
     }
 
+    private static IEnumerable<Guid> LoadAnnouncementAudience(Guid announcementId, ApplicationDbContext dbContext) =>
+        dbContext.AnnouncementAudience
+            .Where(a => a.AnnouncementId == announcementId)
+            .Select(a => a.UserId);
 }

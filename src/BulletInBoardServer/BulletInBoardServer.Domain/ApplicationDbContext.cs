@@ -96,6 +96,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             entity.Property(e => e.ExpectsDelayedHiding)
                 .HasColumnName("expects_delayed_hiding")
                 .HasComputedColumnSql(sql: "(delayed_hiding_at is not null)", true);
+            
+            entity.Property(e => e.FirstlyPublishedAt)
+                .HasColumnName("firstly_published_at")
+                .HasColumnType("timestamp")
+                .IsRequired(false);
+            
+            entity.Property(e => e.HasBeenPublished)
+                .HasColumnName("has_been_published")
+                .HasComputedColumnSql(sql: "(firstly_published_at is not null)", true);
 
             entity.Property(e => e.PublishedAt)
                 .HasColumnName("published_at")
@@ -376,7 +385,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
             entity.Property(e => e.IsOpen)
                 .HasColumnName("is_open")
-                .HasColumnType("boolean");
+                .HasColumnType("boolean")
+                .HasDefaultValue(true);
 
             entity.Property(e => e.IsAnonymous)
                 .HasColumnName("is_anonymous")

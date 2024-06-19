@@ -34,13 +34,6 @@ public class Announcement
     /// Аудитория объявления
     /// </summary>
     public AnnouncementAudience Audience { get; set; } = [];
-    
-    /// <summary>
-    /// Корневой узел аудитории объявления, представленной в виде дерева (узел - группа пользователей, лист -
-    /// пользователь)
-    /// </summary>
-    // public __AudienceNode? AudienceThreeNode { get; set; } // todo remove
-    
 
     /// <summary>
     /// Количество пользователей, просмотревших объявление
@@ -54,6 +47,16 @@ public class Announcement
     /// Размер аудитории объявления
     /// </summary>
     public int AudienceSize { get; set; }
+    
+    /// <summary>
+    /// Момент первой публикации объявления. Null, если объявление ни разу не было опубликовано
+    /// </summary>
+    public DateTime? FirstlyPublishedAt  { get; private set; }
+    
+    /// <summary>
+    /// Было ли объявление опубликовано хоть раз
+    /// </summary>
+    public bool HasBeenPublished { get; private set; }
 
     /// <summary>
     /// Момент публикации уже опубликованного объявления. Null, если объявления не опубликовано
@@ -106,8 +109,8 @@ public class Announcement
 
 
 
-    public Announcement(Guid id, string content, User author,
-        AnnouncementAudience audience, DateTime? publishedAt, DateTime? hiddenAt,
+    public Announcement(Guid id, string content, User author, AnnouncementAudience audience, 
+        DateTime? firstlyPublishedAt, DateTime? publishedAt, DateTime? hiddenAt,
         DateTime? delayedPublishingAt, DateTime? delayedHidingAt,
         AttachmentList attachments)
     {
@@ -119,6 +122,7 @@ public class Announcement
         Author = author;
         Audience = audience;
         AudienceSize = audience.Count;
+        FirstlyPublishedAt = firstlyPublishedAt;
         PublishedAt = publishedAt;
         HiddenAt = hiddenAt;
         DelayedPublishingAt = delayedPublishingAt;
@@ -129,13 +133,14 @@ public class Announcement
     }
 
     public Announcement(Guid id, string content, Guid authorId, int audienceSize,
-        DateTime? publishedAt, DateTime? hiddenAt,
+        DateTime? firstlyPublishedAt, DateTime? publishedAt, DateTime? hiddenAt,
         DateTime? delayedPublishingAt, DateTime? delayedHidingAt)
     {
         Id = id;
         Content = content;
         AuthorId = authorId;
         AudienceSize = audienceSize;
+        FirstlyPublishedAt = firstlyPublishedAt;
         PublishedAt = publishedAt;
         HiddenAt = hiddenAt;
         DelayedPublishingAt = delayedPublishingAt;
@@ -241,7 +246,15 @@ public class Announcement
 
         PublishedAt = publishedAt;
         if (publishedAt is not null)
+        {
             IsPublished = true;
+
+            if (!HasBeenPublished)
+                FirstlyPublishedAt = publishedAt;
+        }
+
+        if (!HasBeenPublished)
+            FirstlyPublishedAt = publishedAt;
     }
     
     /// <summary>

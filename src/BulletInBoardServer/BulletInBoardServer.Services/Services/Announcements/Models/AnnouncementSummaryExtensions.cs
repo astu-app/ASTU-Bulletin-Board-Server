@@ -11,6 +11,7 @@ public static class AnnouncementSummaryExtensions
             content: announcement.Content,
             viewsCount: viewsCount,
             audienceSize: announcement.AudienceSize,
+            firstlyPublishedAt: announcement.FirstlyPublishedAt,
             publishedAt: announcement.PublishedAt,
             hiddenAt: announcement.HiddenAt, 
             delayedPublishingAt: announcement.DelayedPublishingAt, 

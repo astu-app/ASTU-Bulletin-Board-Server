@@ -75,7 +75,7 @@ public class AnnouncementMapsterConfig : IRegister
 
         config.NewConfig<AnnouncementSummary, AnnouncementSummaryDto>()
             .Map(d => d.Id, s => s.Id)
-            .Map(d => d.AuthorName, s => s.Author.FullName)
+            .Map(d => d.Author, s => s.Author)
             .Map(d => d.Content, s => s.Content)
             .Map(d => d.Content, s => s.Content)
             .Map(d => d.ViewsCount, s => s.ViewsCount)
@@ -112,7 +112,7 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.Roots, s => s)
             .Map(d => d.Usergroups, s => s);
 
-        config.NewConfig<UserGroupList, List<UserGroupSummaryWithMembersDto>>() // todo нужно? 
+        config.NewConfig<UserGroupList, List<UserGroupSummaryWithMembersDto>>()
             .MapWith(userGroups => userGroups
                 .SelectMany(ug => GetAllUserGroupsFromHierarchy(ug, new HashSet<Guid>()))
                 .DistinctBy(ug => ug.Summary.Id)
@@ -127,7 +127,7 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.Summary.Id, s => s.Id)
             .Map(d => d.Summary.Name, s => s.Name)
             .Map(d => d.Summary.AdminName, s => s.Admin.FullName, s => s.Admin != null)
-            .Map(d => d.Members, s => s.MemberRights);
+            .Map(d => d.Members, s => s.MemberRights.Select(mr => mr.User).Append(s.Admin).OrderBy(u => u.FullName));
         
         config.NewConfig<UserGroup, UserGroupHierarchyNodeDto>()
             .Map(d => d.Id, s => s.Id)
@@ -199,13 +199,15 @@ public class AnnouncementMapsterConfig : IRegister
     private static UserGroupSummaryWithMembersDto MapUserGroup(UserGroup userGroup, IReadOnlySet<Guid> actualAudienceIds)
     {
         var mappedMembers = userGroup.MemberRights
-            .Select(ug => new CheckableUserSummaryDto
+            .Select(mr => mr.User)
+            .Append(userGroup.Admin)
+            .Select(u => new CheckableUserSummaryDto
             {
-                Id = ug.User.Id,
-                FirstName = ug.User.FirstName,
-                SecondName = ug.User.SecondName,
-                Patronymic = ug.User.Patronymic,
-                IsChecked = actualAudienceIds.Contains(ug.User.Id)
+                Id = u.Id,
+                FirstName = u.FirstName,
+                SecondName = u.SecondName,
+                Patronymic = u.Patronymic,
+                IsChecked = actualAudienceIds.Contains(u.Id)
             })
             .ToList();
 

@@ -10,7 +10,8 @@ namespace BulletInBoardServer.Services.Services.Announcements.Models;
 /// <param name="author">Автор объявления</param>
 /// <param name="content">Текст объявления</param>
 /// <param name="viewsCount">Количество просмотров объявления</param>
-/// <param name="publishedAt">Момент публикации объявления</param>
+/// <param name="firstlyPublishedAt">Момент первой публикации объявления</param>
+/// <param name="publishedAt">Момент последней публикации объявления</param>
 /// <param name="hiddenAt">Момент сокрытия объявления</param>
 /// <param name="delayedPublishingAt">Момент отложенной объявления</param>
 /// <param name="delayedHidingAt">Момент отложенного сокрытия объявления</param>
@@ -21,6 +22,7 @@ public class AnnouncementSummary(
     string content,
     int viewsCount,
     int audienceSize,
+    DateTime? firstlyPublishedAt,
     DateTime? publishedAt,
     DateTime? hiddenAt,
     DateTime? delayedPublishingAt,
@@ -53,7 +55,15 @@ public class AnnouncementSummary(
     public int AudienceSize { get; } = audienceSize;
 
     /// <summary>
-    /// Момент публикации объявления
+    /// Момент первой публикации объявления
+    /// </summary>
+    /// <remarks>
+    /// null, если объявление никогда не публиковалось
+    /// </remarks>
+    public DateTime? FirstlyPublishedAt { get; } = firstlyPublishedAt;
+
+    /// <summary>
+    /// Момент последней публикации объявления
     /// </summary>
     /// <remarks>
     /// null, если объявление еще не опубликовано

@@ -7,11 +7,13 @@ using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 using BulletInBoardServer.Services.Services.Attachments.Exceptions;
 using BulletInBoardServer.Services.Services.Audience.Exceptions;
 using BulletInBoardServer.Services.Services.Common.Models;
+using BulletInBoardServer.Services.Services.Notifications;
 using BulletInBoardServer.Services.Services.UserGroups;
 using BulletInBoardServer.Services.Test.Services.Announcements.DelayedOperations;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using Test.Infrastructure;
 using Test.Infrastructure.DbInvolvingTests;
 using static BulletInBoardServer.Domain.TestDbFiller.TestDataIds;
@@ -27,14 +29,21 @@ public class AnnouncementServiceTest : DbInvolvingTestBase
     public AnnouncementServiceTest()
     {
         var scopeFactory = ServiceScopeFactoryConfigurator.Configure(DbContext);
+        var notificationServiceMock = new Mock<NotificationService>("empty token",  "empty host");
+        notificationServiceMock.Setup(ns => ns.Notify(
+            It.IsAny<Guid>(),
+            It.IsAny<string>(),
+            It.IsAny<string>(),
+            It.IsAny<int>()));
         
         _dispatcher = new DelayedAnnouncementOperationsDispatcherMock();
         _announcementService = new AnnouncementService(
-            new GeneralOperationsService(scopeFactory, _dispatcher),
+            // new GeneralOperationsService(scopeFactory, _dispatcher, new NotificationService("empty token", "empty host")),
+            new GeneralOperationsService(scopeFactory, _dispatcher, notificationServiceMock.Object),
             new PublishedAnnouncementService(scopeFactory, _dispatcher),
             new HiddenAnnouncementService(scopeFactory, _dispatcher),
-            new DelayedPublicationAnnouncementService(scopeFactory),
-            new DelayedHidingAnnouncementService(scopeFactory),
+            new DelayedPublicationAnnouncementService(notificationServiceMock.Object, scopeFactory),
+            new DelayedHidingAnnouncementService(notificationServiceMock.Object, scopeFactory),
             new UserGroupService(DbContext));
     }
 

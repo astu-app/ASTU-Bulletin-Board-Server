@@ -717,9 +717,8 @@ components:
           description: Идентификатор объявления
           type: string
           format: uuid
-        authorName:
-          description: Автор объявления
-          type: string
+        author:
+          $ref: './users-api.yaml#/components/schemas/userSummaryDto'
         content:
           description: Текстовое содержимое объявления
           type: string

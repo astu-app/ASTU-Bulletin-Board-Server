@@ -276,6 +276,7 @@ public class AnnouncementTest
             content: "content",
             author: new User("name", "second name"),
             audience: [new User("name", "second name")],
+            firstlyPublishedAt: null,
             publishedAt: null, 
             hiddenAt: null, delayedPublishingAt: null, delayedHidingAt: null,
             attachments: []);

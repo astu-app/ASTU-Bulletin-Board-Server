@@ -1,4 +1,5 @@
 ﻿using BulletInBoardServer.Services.Services.Announcements.Models;
+using BulletInBoardServer.Services.Services.Notifications;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,7 +8,7 @@ namespace BulletInBoardServer.Services.Services.Announcements.ServiceCore;
 /// <summary>
 /// Сервис для управления объявлениями, ожидающими отложенного сокрытия
 /// </summary>
-public class DelayedHidingAnnouncementService(IServiceScopeFactory scopeFactory)
+public class DelayedHidingAnnouncementService(NotificationService notificationService, IServiceScopeFactory scopeFactory)
     : CoreAnnouncementServiceBase(scopeFactory)
 {
     /// <summary>
@@ -35,7 +36,8 @@ public class DelayedHidingAnnouncementService(IServiceScopeFactory scopeFactory)
             LoadAnnouncementSurveys(announcement.Announcement, requesterId, dbContext);
 
         return announcements
-            .Select(res => res.Announcement.GetSummary(res.ViewsCount)); // todo сортировка по возрастанию времени отложенного сокрытия
+            .Select(res => res.Announcement.GetSummary(res.ViewsCount))
+            .OrderBy(res => res.DelayedHidingAt);
     }
 
     /// <summary>
@@ -52,5 +54,7 @@ public class DelayedHidingAnnouncementService(IServiceScopeFactory scopeFactory)
         var announcement = GetAnnouncementSummary(announcementId, dbContext);
         announcement.Hide(DateTime.Now, hiddenAt);
         dbContext.SaveChanges();
+
+        notificationService.Notify(announcement.AuthorId, "Объявление скрыто автоматически", announcement.Content);
     }
 }
