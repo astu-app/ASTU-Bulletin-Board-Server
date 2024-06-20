@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+left to right direction
+
+hide members
+
+class "Ректорат" as rectory
+class "Проректор по учебной работе" as viceRector
+
+class "ИИТИК" as iitik 
+
+class "Кафедра АСОИУ" as asoiu
+class "ДИПРБ-41" as asoiu_group1
+class "ДИнРБ-41" as asoiu_group2
+
+class "Кафедра ПИ" as pi
+class "ДИИЭБ-41" as pi_group1
+class "ДИЗИБ-41" as pi_group2
+
+
+rectory --> viceRector
+viceRector --> iitik
+
+iitik --> asoiu
+asoiu --> asoiu_group1
+asoiu --> asoiu_group2
+
+iitik --> pi
+pi --> pi_group1
+pi --> pi_group2
+
+
+@enduml

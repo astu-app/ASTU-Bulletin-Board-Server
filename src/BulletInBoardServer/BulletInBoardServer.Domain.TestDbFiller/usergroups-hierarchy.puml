@@ -3,17 +3,27 @@
 
 hide members
 
-class usergroup_1
-class usergroup_2
-class usergroup_3
-class usergroup_4
-class usergroup_5
-class usergroup_6
-class usergroup_7
+class main
+class group_1
+class group_2
+class group_3
+class group_4
+class group_5
+class group_6
+class group_7
 
-usergroup_1 --> usergroup_3
-usergroup_2 --> usergroup_3
-usergroup_4 --> usergroup_2
-usergroup_5 --> usergroup_7
+main --> group_1
+
+group_1 --> group_2
+group_1 --> group_3
+
+group_2 --> group_4
+
+group_3 --> group_4
+group_3 --> group_5
+
+group_4 --> group_6
+
+group_5 --> group_7
 
 @enduml
