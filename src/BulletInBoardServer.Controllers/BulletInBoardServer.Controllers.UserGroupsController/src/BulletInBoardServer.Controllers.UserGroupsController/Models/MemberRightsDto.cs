@@ -39,6 +39,12 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         public bool CanCreateSurveys { get; set; } = false;
 
         /// <summary>
+        /// Gets or Sets CanRuleUserGroupHierarchy
+        /// </summary>
+        [DataMember(Name="canRuleUserGroupHierarchy", EmitDefaultValue=true)]
+        public bool CanRuleUserGroupHierarchy { get; set; } = false;
+
+        /// <summary>
         /// Gets or Sets CanViewUserGroupDetails
         /// </summary>
         [DataMember(Name="canViewUserGroupDetails", EmitDefaultValue=true)]
@@ -91,6 +97,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             sb.Append("  CanViewAnnouncements: ").Append(CanViewAnnouncements).Append("\n");
             sb.Append("  CanCreateAnnouncements: ").Append(CanCreateAnnouncements).Append("\n");
             sb.Append("  CanCreateSurveys: ").Append(CanCreateSurveys).Append("\n");
+            sb.Append("  CanRuleUserGroupHierarchy: ").Append(CanRuleUserGroupHierarchy).Append("\n");
             sb.Append("  CanViewUserGroupDetails: ").Append(CanViewUserGroupDetails).Append("\n");
             sb.Append("  CanCreateUserGroups: ").Append(CanCreateUserGroups).Append("\n");
             sb.Append("  CanEditUserGroups: ").Append(CanEditUserGroups).Append("\n");
@@ -150,6 +157,11 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
                     CanCreateSurveys.Equals(other.CanCreateSurveys)
                 ) && 
                 (
+                    CanRuleUserGroupHierarchy == other.CanRuleUserGroupHierarchy ||
+                    
+                    CanRuleUserGroupHierarchy.Equals(other.CanRuleUserGroupHierarchy)
+                ) && 
+                (
                     CanViewUserGroupDetails == other.CanViewUserGroupDetails ||
                     
                     CanViewUserGroupDetails.Equals(other.CanViewUserGroupDetails)
@@ -202,6 +214,8 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
                     hashCode = hashCode * 59 + CanCreateAnnouncements.GetHashCode();
                     
                     hashCode = hashCode * 59 + CanCreateSurveys.GetHashCode();
+                    
+                    hashCode = hashCode * 59 + CanRuleUserGroupHierarchy.GetHashCode();
                     
                     hashCode = hashCode * 59 + CanViewUserGroupDetails.GetHashCode();
                     

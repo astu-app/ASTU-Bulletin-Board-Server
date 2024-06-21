@@ -1,3 +1,4 @@
+using BulletInBoardServer;
 using BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
 using BulletInBoardServer.Controllers.SurveysController.Controllers;
 using BulletInBoardServer.Controllers.UserGroupsController.Controllers;
@@ -6,6 +7,7 @@ using BulletInBoardServer.Infrastructure;
 using BulletInBoardServer.Services.Services.Announcements;
 using BulletInBoardServer.Services.Services.Announcements.DelayedOperations;
 using BulletInBoardServer.Services.Services.Announcements.ServiceCore;
+using BulletInBoardServer.Services.Services.MemberRights;
 using BulletInBoardServer.Services.Services.Notifications;
 using BulletInBoardServer.Services.Services.Surveys;
 using BulletInBoardServer.Services.Services.Surveys.DelayedOperations;
@@ -80,6 +82,7 @@ builder.Services.AddHealthChecks();
 RegisterAnnouncementService();
 RegisterSurveyService();
 RegisterUserGroupService();
+RegisterMemberRightsLoader();
 RegisterNotificationService();
 
 var app = builder.Build();
@@ -156,6 +159,9 @@ void RegisterSurveyService() =>
 
 void RegisterUserGroupService() => 
     builder.Services.AddScoped<UserGroupService>();
+
+void RegisterMemberRightsLoader() =>
+    builder.Services.AddScoped<MemberRightsLoader>();
 
 void RegisterNotificationService()
 {
@@ -243,4 +249,7 @@ ApplicationDbContext GetDbContext(IServiceProvider services) =>
     
     
     
-record NotificationServiceConfig(string AppToken, string ServerHost);
+namespace BulletInBoardServer
+{
+    record NotificationServiceConfig(string AppToken, string ServerHost);
+}

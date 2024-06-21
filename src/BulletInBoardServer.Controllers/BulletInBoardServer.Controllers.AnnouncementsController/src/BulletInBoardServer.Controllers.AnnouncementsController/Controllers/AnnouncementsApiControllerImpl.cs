@@ -41,6 +41,58 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     }
 
 
+    
+    /// <summary>
+    /// Добавить просмотр объявлению
+    /// </summary>
+    /// <param name="requesterId"></param>
+    /// <param name="id"></param>
+    /// <response code="200">Ok</response>
+    /// <response code="401">Unauthorized</response>
+    /// <response code="404">Not Found</response>
+    /// <response code="409">Conflict</response>
+    /// <response code="500">Internal Server Error</response>
+    public override IActionResult AddViewToAnnouncement([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid id)
+    {
+        /*
+         * 200 +
+         * 404 +
+         * 409:
+         *     announcementAlreadySeen +
+         * 500 +
+         */
+
+        try
+        {
+            _announcementService.AddView(requesterId, id);
+            
+            _logger.Information(
+                "Пользователь {UserId} просмотрел объявление {AnnouncementId}", requesterId, id);
+            
+            return Ok();
+        }
+        catch (UserAnnouncementBindingDoesNotExistException err)
+        {
+            _loggingHelper.LogWarning(404, "Добавить просмотр объявлению",
+                nameof(AddViewToAnnouncementResponses.UserAnnouncementBindingDoesNotExist), requesterId, err.Message);
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(AddViewToAnnouncementResponses
+                    .UserAnnouncementBindingDoesNotExist));
+        }
+        catch (AnnouncementDoesNotExistException err)
+        {
+            _loggingHelper.LogWarning(404, "Добавить просмотр объявлению",
+                nameof(AddViewToAnnouncementResponses.AnnouncementDoesNotExist), requesterId, err.Message);
+            return NotFound(
+                ResponseConstructor.ConstructResponseWithOnlyCode(AddViewToAnnouncementResponses
+                    .AnnouncementDoesNotExist));
+        }
+        catch (Exception err)
+        {
+            _loggingHelper.LogError(err, 500, "Добавить просмотр объявлению", requesterId);
+            return Problem();
+        }
+    }
 
     /// <summary>
     /// Создать объявление

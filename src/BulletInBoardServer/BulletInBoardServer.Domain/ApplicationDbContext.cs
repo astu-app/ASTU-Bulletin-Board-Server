@@ -20,7 +20,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ChildUseGroup> ChildUseGroups { get; init; } = null!;
     public DbSet<Announcement> Announcements { get; init; } = null!;
     public DbSet<AnnouncementAudience> AnnouncementAudience { get; init; } = null!;
-    public DbSet<AnnouncementAudience> AnnouncementAudienceJoins { get; init; } = null!;
     public DbSet<AnnouncementAttachment> AnnouncementAttachmentJoins { get; init; } = null!;
     public DbSet<AttachmentBase> Attachments { get; init; } = null!;
     public DbSet<Survey> Surveys { get; init; } = null!;
@@ -293,6 +292,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                             .HasColumnType("uuid");
                     }
                 );
+
+            entity.Ignore(e => e.MembersWithAdmin);
         });
     }
 
@@ -319,6 +320,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasDefaultValue(false);
             entity.Property(e => e.CanCreateSurveys)
                 .HasColumnName("can_create_surveys")
+                .HasColumnType("boolean")
+                .HasDefaultValue(false);
+            entity.Property(e => e.CanRuleUserGroupHierarchy)
+                .HasColumnName("can_rule_usergroup_hierarchy")
                 .HasColumnType("boolean")
                 .HasDefaultValue(false);
             entity.Property(e => e.CanViewUserGroupDetails)

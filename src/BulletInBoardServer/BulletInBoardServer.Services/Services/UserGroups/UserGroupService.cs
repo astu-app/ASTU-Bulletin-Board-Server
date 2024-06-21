@@ -4,7 +4,7 @@ using BulletInBoardServer.Domain.Models.UserGroups.Exceptions;
 using BulletInBoardServer.Domain.Models.Users;
 using BulletInBoardServer.Services.Services.UserGroups.Exceptions;
 using BulletInBoardServer.Services.Services.UserGroups.Models;
-using BulletInBoardServer.Services.Services.UserGroups.ServiceCOre;
+using BulletInBoardServer.Services.Services.UserGroups.ServiceCore;
 using BulletInBoardServer.Services.Services.Users.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -66,15 +66,21 @@ public class UserGroupService(ApplicationDbContext dbContext)
             .ToUserGroupList();
 
     /// <summary>
-    /// Получить иерархии групп пользователей, управляемых указанным администратором
+    /// Получить иерархии групп пользователей, управляемых указанным пользователем
     /// </summary>
-    /// <param name="adminId"></param>
+    /// <param name="managerId">Пользователь, управляющий иерархией групп</param>
     /// <returns>Набор корневых групп пользователей, управляемых администратором</returns>
-    public UserGroupList GetUsergroupHierarchy(Guid adminId)
+    public UserGroupList GetUsergroupHierarchy(Guid managerId)
     {
         // todo сделать удаление из ownedUsergroups групп, которые находятся в подчинении других групп, находящихся в этом же списке 
         var ownedUsergroups = dbContext.UserGroups
-            .Where(ug => ug.AdminId == adminId)
+            .Where(ug => ug.AdminId == managerId)
+            .Union(
+                dbContext.MemberRights
+                    .Where(mr => mr.UserId == managerId && mr.CanRuleUserGroupHierarchy)
+                    .Include(mr => mr.UserGroup)
+                    .Select(mr => mr.UserGroup)
+            )
             .Include(ug => ug.Admin)
             .ToUserGroupList();
 

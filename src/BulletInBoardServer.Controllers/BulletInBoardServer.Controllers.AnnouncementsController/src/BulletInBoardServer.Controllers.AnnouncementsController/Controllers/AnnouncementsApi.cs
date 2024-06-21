@@ -24,6 +24,22 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
     public abstract class AnnouncementsApiController : ControllerBase
     { 
         /// <summary>
+        /// Добавить просмотр объявлению
+        /// </summary>
+        /// <param name="xUserId"></param>
+        /// <param name="body"></param>
+        /// <response code="200">Ok</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="404">Not Found</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Route("/api/announcements/addView")]
+        [Consumes("application/json")]
+        [ValidateModelState]
+        [ProducesResponseType(statusCode: 404, type: typeof(AddViewToAnnouncementNotFound))]
+        public abstract IActionResult AddViewToAnnouncement([FromHeader][Required()]Guid xUserId, [FromBody]Guid body);
+
+        /// <summary>
         /// Создать объявление
         /// </summary>
         /// <param name="xUserId"></param>

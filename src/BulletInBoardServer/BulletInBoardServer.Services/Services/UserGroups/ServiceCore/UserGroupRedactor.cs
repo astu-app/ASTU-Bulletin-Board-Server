@@ -9,7 +9,7 @@ using Npgsql;
 
 // ReSharper disable InconsistentNaming
 
-namespace BulletInBoardServer.Services.Services.UserGroups.ServiceCOre;
+namespace BulletInBoardServer.Services.Services.UserGroups.ServiceCore;
 
 /// <summary>
 /// Класс-редактор группы пользователей

@@ -20,12 +20,11 @@ public
 
 
 
-    public virtual void NotifyAll(IEnumerable<Guid> receiverIds, string title, string message, int priority = 0)
-    {
-        foreach (var receiverId in receiverIds) 
-            Notify(receiverId, title, message, priority);
-    }
-    
+    public virtual void NotifyAll(IEnumerable<Guid> receiverIds, string title, string message, int priority = 0) =>
+        receiverIds
+            .AsParallel()
+            .ForAll(receiverId => Notify(receiverId, title, message, priority));
+
     public virtual void Notify(Guid receiverId, string title, string message, int priority = 0)
     {
         var messageStr =

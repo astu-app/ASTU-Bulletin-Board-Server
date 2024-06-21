@@ -136,7 +136,7 @@ public class GeneralOperationsService(
         //     // .Select(join => join.UserGroup)
         //     // .ToList()
         
-        announcement.Audience = dbContext.AnnouncementAudienceJoins
+        announcement.Audience = dbContext.AnnouncementAudience
             .Where(a => a.AnnouncementId == announcementId)
             .Include(a => a.User)
             .ToList()
@@ -144,9 +144,30 @@ public class GeneralOperationsService(
             .ToAudience();
         
         // ReSharper disable once EntityFramework.NPlusOne.IncompleteDataUsage - так как аудитория загружается и утсанавливается в предыдущем выражении
-        announcement.ViewsCount = dbContext.AnnouncementAudienceJoins.Count(aa => aa.Viewed);
+        announcement.ViewsCount = dbContext.AnnouncementAudience.Count(aa => aa.Viewed);
 
         return announcement;
+    }
+
+    /// <summary>
+    /// Зафиксировать факт просмотра пользователем объявления 
+    /// </summary>
+    /// <param name="requesterId">Идентификатор пользователя, просматривающего объявление</param>
+    /// <param name="announcementId">Идентификатор просматриваемого объявления</param>
+    /// <exception cref="UserAnnouncementBindingDoesNotExistException">Отсутствует привязка пользователя к объявлению</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в бд</exception>
+    public void AddView(Guid requesterId, Guid announcementId)
+    {
+        using var scope = CreateScope();
+        var dbContext = GetDbContextForScope(scope);
+
+        var updatedRows = dbContext.AnnouncementAudience
+            .Where(aa => aa.UserId == requesterId && aa.AnnouncementId == announcementId)
+            .ExecuteUpdate(setter => setter.SetProperty(aa => aa.Viewed, true));
+
+        if (updatedRows < 1)
+            throw new UserAnnouncementBindingDoesNotExistException(
+                $"Объявление с Id = {announcementId} не предназначено для пользователя с Id = {requesterId}");
     }
 
     /// <summary>

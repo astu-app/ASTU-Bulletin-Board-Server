@@ -105,7 +105,7 @@ public class AnnouncementMapsterConfig : IRegister
         config.NewConfig<Answer, QuestionAnswerDetailsDto>()
             .Map(d => d.Id, s => s.Id)
             .Map(d => d.Content, s => s.Content)
-            .Map(d => d.Voters, s => s.Participation.Select(p => p.User) ?? Array.Empty<User>()) // remove
+            .Map(d => d.Voters, s => s.Participation.Select(p => p.User))
             .Map(d => d.VotersAmount, s => s.VotersCount);
 
         config.NewConfig<UserGroupList, UsergroupHierarchyDto>()
@@ -122,13 +122,13 @@ public class AnnouncementMapsterConfig : IRegister
             .Map(d => d.Id, s => s.Id)
             .Map(d => d.Name, s => s.Name)
             .Map(d => d.AdminName, s => s.Admin.FullName, s => s.Admin != null);
-        
+
         config.NewConfig<UserGroup, UserGroupSummaryWithMembersDto>()
             .Map(d => d.Summary.Id, s => s.Id)
             .Map(d => d.Summary.Name, s => s.Name)
             .Map(d => d.Summary.AdminName, s => s.Admin.FullName, s => s.Admin != null)
-            .Map(d => d.Members, s => s.MemberRights.Select(mr => mr.User).Append(s.Admin).OrderBy(u => u.FullName));
-        
+            .Map(d => d.Members, s => s.MembersWithAdmin);
+
         config.NewConfig<UserGroup, UserGroupHierarchyNodeDto>()
             .Map(d => d.Id, s => s.Id)
             .Map(d => d.Children, s => s.ChildrenGroups)
@@ -198,9 +198,7 @@ public class AnnouncementMapsterConfig : IRegister
 
     private static UserGroupSummaryWithMembersDto MapUserGroup(UserGroup userGroup, IReadOnlySet<Guid> actualAudienceIds)
     {
-        var mappedMembers = userGroup.MemberRights
-            .Select(mr => mr.User)
-            .Append(userGroup.Admin)
+        var mappedMembers = userGroup.MembersWithAdmin
             .Select(u => new CheckableUserSummaryDto
             {
                 Id = u.Id,

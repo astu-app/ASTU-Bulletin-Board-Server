@@ -43,6 +43,16 @@ public class AnnouncementService(
     /// <exception cref="OperationNotAllowedException">Пользователь не имеет права  выполнения операции</exception>
     public Announcement GetDetails(Guid requesterId, Guid announcementId) =>
         generalOperationsService.GetDetails(requesterId, announcementId);
+    
+    /// <summary>
+    /// Зафиксировать факт просмотра пользователем объявления 
+    /// </summary>
+    /// <param name="requesterId">Идентификатор пользователя, просматривающего объявление</param>
+    /// <param name="announcementId">Идентификатор просматриваемого объявления</param>
+    /// <exception cref="UserAnnouncementBindingDoesNotExistException">Отсутствует привязка пользователя к объявлению</exception>
+    /// <exception cref="AnnouncementDoesNotExistException">Объявление отсутствует в бд</exception>
+    public void AddView(Guid requesterId, Guid announcementId) =>
+        generalOperationsService.AddView(requesterId, announcementId);
 
     /// <summary>
     /// Метод возвращает данные для редактирования указанного объявления

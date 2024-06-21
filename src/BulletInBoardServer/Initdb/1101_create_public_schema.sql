@@ -142,20 +142,21 @@ create table member_rights
     primary key (user_id, usergroup_id),
 
     -- Управление объявлениями
-    can_view_announcements   boolean not null default true,
-    can_create_announcements boolean not null default false,
-
+    can_view_announcements       boolean not null default true,
+    can_create_announcements     boolean not null default false,
+    
     -- Опросы
-    can_create_surveys boolean not null default false,
-
+    can_create_surveys           boolean not null default false,
+    
     -- группы пользователей
-    can_view_usergroup_details boolean not null default false,
-    can_create_usergroups      boolean not null default false,
-    can_edit_usergroups        boolean not null default false,
-    can_edit_members           boolean not null default false,
-    can_edit_member_rights     boolean not null default false,
-    can_edit_usergroup_admin   boolean not null default false,
-    can_delete_usergroup       boolean not null default false
+    can_rule_usergroup_hierarchy boolean not null default false,
+    can_view_usergroup_details   boolean not null default false,
+    can_create_usergroups        boolean not null default false,
+    can_edit_usergroups          boolean not null default false,
+    can_edit_members             boolean not null default false,
+    can_edit_member_rights       boolean not null default false,
+    can_edit_usergroup_admin     boolean not null default false,
+    can_delete_usergroup         boolean not null default false
 );
 
 create table child_usergroups

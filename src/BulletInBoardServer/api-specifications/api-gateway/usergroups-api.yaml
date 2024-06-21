@@ -685,6 +685,9 @@ components:
         canCreateSurveys:
           type: boolean
           default: false
+        canRuleUserGroupHierarchy:
+          type: boolean
+          default: false
         canViewUserGroupDetails:
           type: boolean
           default: false

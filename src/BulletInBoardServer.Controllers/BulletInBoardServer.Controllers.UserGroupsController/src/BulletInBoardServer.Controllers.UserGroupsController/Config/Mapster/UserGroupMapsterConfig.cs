@@ -39,6 +39,7 @@ public class UserGroupMapsterConfig : IRegister
                     src.Rights.CanViewAnnouncements,
                     src.Rights.CanCreateAnnouncements,
                     src.Rights.CanCreateSurveys,
+                    src.Rights.CanRuleUserGroupHierarchy,
                     src.Rights.CanViewUserGroupDetails,
                     src.Rights.CanCreateUserGroups,
                     src.Rights.CanEditUserGroups,
@@ -112,7 +113,7 @@ public class UserGroupMapsterConfig : IRegister
             .Map(d => d.Summary.Id, s => s.Id)
             .Map(d => d.Summary.Name, s => s.Name)
             .Map(d => d.Summary.AdminName, s => s.Admin.FullName)
-            .Map(d => d.Members, s => s.MemberRights.Select(mr => mr.User).Append(s.Admin).OrderBy(u => u.FullName));
+            .Map(d => d.Members, s => s.MembersWithAdmin.OrderBy(u => u.FullName));
         
         config.NewConfig<UserGroup, UserGroupHierarchyNodeDto>()
             .Map(d => d.Id, s => s.Id)

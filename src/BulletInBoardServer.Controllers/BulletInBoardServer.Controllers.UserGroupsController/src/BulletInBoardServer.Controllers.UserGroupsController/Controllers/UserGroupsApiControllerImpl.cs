@@ -396,10 +396,11 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
         /*
          * 200 +
          * 403
-         *   getUsergroupHierarchyForbidden
+         *   getUsergroupHierarchyForbidden - если пользователь не может получить иерархии групп пользователей,
+         *                                    в которых состоит, то он получает пустой список
          * 500 +
          */
-
+        
         try
         {
             var usergroups = _service.GetUsergroupHierarchy(requesterId);
@@ -438,6 +439,8 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
          * 500 +
          */
 
+        // var memberRights = 
+        
         try
         {
             var details = _service.GetDetails(id);

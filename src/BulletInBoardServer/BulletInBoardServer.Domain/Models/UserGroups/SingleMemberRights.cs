@@ -55,6 +55,11 @@ public class SingleMemberRights
 
     /* ************************************** Группы пользователей ************************************** */
     /// <summary>
+    /// Может ли пользователь управлять иерархией группы пользователей
+    /// </summary>
+    public bool CanRuleUserGroupHierarchy { get; set; }
+
+    /// <summary>
     /// Может ли пользователь просматривать подробности своей группы пользователей и групп из подчиненной иерархии.
     /// </summary>
     public bool CanViewUserGroupDetails { get; set; }
@@ -95,9 +100,10 @@ public class SingleMemberRights
     /// Права конкретного участника группы пользователей
     /// </summary>
     public SingleMemberRights(User user, UserGroup userGroup, bool canViewAnnouncements = false,
-        bool canCreateAnnouncements = false, bool canCreateSurveys = false, bool canViewUserGroupDetails = false,
-        bool canCreateUserGroups = false, bool canEditUserGroups = false, bool canEditMembers = false,
-        bool canEditMemberRights = false, bool canEditUserGroupAdmin = false, bool canDeleteUserGroup = false)
+        bool canCreateAnnouncements = false, bool canCreateSurveys = false, bool canRuleUserGroupHierarchy = false, 
+        bool canViewUserGroupDetails = false, bool canCreateUserGroups = false, bool canEditUserGroups = false, 
+        bool canEditMembers = false, bool canEditMemberRights = false, bool canEditUserGroupAdmin = false, 
+        bool canDeleteUserGroup = false)
         : this(user.Id, userGroup.Id, canViewAnnouncements, canCreateAnnouncements, canCreateSurveys,
             canViewUserGroupDetails, canCreateUserGroups, canEditUserGroups, canEditMembers, canEditMemberRights,
             canEditUserGroupAdmin, canDeleteUserGroup)
@@ -110,9 +116,10 @@ public class SingleMemberRights
     /// Права конкретного участника группы пользователей
     /// </summary>
     public SingleMemberRights(Guid userId, Guid userGroupId, bool canViewAnnouncements = false,
-        bool canCreateAnnouncements = false, bool canCreateSurveys = false, bool canViewUserGroupDetails = false,
-        bool canCreateUserGroups = false, bool canEditUserGroups = false, bool canEditMembers = false,
-        bool canEditMemberRights = false, bool canEditUserGroupAdmin = false, bool canDeleteUserGroup = false)
+        bool canCreateAnnouncements = false, bool canCreateSurveys = false, bool canRuleUserGroupHierarchy = false, 
+        bool canViewUserGroupDetails = false, bool canCreateUserGroups = false, bool canEditUserGroups = false, 
+        bool canEditMembers = false, bool canEditMemberRights = false, bool canEditUserGroupAdmin = false, 
+        bool canDeleteUserGroup = false)
     {
         UserId = userId;
         UserGroupId = userGroupId;
@@ -120,6 +127,7 @@ public class SingleMemberRights
         CanViewAnnouncements = canViewAnnouncements;
         CanCreateAnnouncements = canCreateAnnouncements;
         CanCreateSurveys = canCreateSurveys;
+        CanRuleUserGroupHierarchy = canRuleUserGroupHierarchy;
         CanViewUserGroupDetails = canViewUserGroupDetails;
         CanCreateUserGroups = canCreateUserGroups;
         CanEditUserGroups = canEditUserGroups;

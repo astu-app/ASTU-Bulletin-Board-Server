@@ -34,9 +34,9 @@ public class User
     {
         get
         {
-            var nameBuilder = new StringBuilder(FirstName)
+            var nameBuilder = new StringBuilder(SecondName)
                 .Append(' ')
-                .Append(SecondName);
+                .Append(FirstName);
             if (Patronymic is not null)
                 nameBuilder.Append(' ').Append(Patronymic);
             

@@ -42,6 +42,17 @@ public class UserGroup
     /// </summary>
     public UserGroupList ChildrenGroups { get; init; }
 
+    /// <summary>
+    /// Список всех участников группы пользователей, включая администратора
+    /// </summary>
+    /// <remarks>
+    /// Администратор не включается, если не задан
+    /// </remarks>
+    public IEnumerable<User> MembersWithAdmin =>
+        Admin is not null 
+            ? MemberRights.Select(smr => smr.User).Append(Admin).ToUserList()
+            : MemberRights.Select(smr => smr.User).ToUserList();
+
 
 
     /// <summary>
