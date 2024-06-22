@@ -2,6 +2,7 @@ using BulletInBoardServer;
 using BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
 using BulletInBoardServer.Controllers.SurveysController.Controllers;
 using BulletInBoardServer.Controllers.UserGroupsController.Controllers;
+using BulletInBoardServer.Controllers.UsersController.Controllers;
 using BulletInBoardServer.Domain;
 using BulletInBoardServer.Infrastructure;
 using BulletInBoardServer.Services.Services.Announcements;
@@ -12,19 +13,22 @@ using BulletInBoardServer.Services.Services.Notifications;
 using BulletInBoardServer.Services.Services.Surveys;
 using BulletInBoardServer.Services.Services.Surveys.DelayedOperations;
 using BulletInBoardServer.Services.Services.UserGroups;
+using BulletInBoardServer.Services.Services.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using AnnouncementsInputFormatterStream = BulletInBoardServer.Controllers.AnnouncementsController.Formatters.InputFormatterStream;
 using SurveysInputFormatterStream = BulletInBoardServer.Controllers.SurveysController.Formatters.InputFormatterStream;
+using UserInputFormatterStream = BulletInBoardServer.Controllers.UsersController.Formatters.InputFormatterStream;
 using UserGroupInputFormatterStream = BulletInBoardServer.Controllers.UserGroupsController.Formatters.InputFormatterStream;
 
-const string apiVersion = "0.0.3";
+const string apiVersion = "1.0.0";
 var controllerClasses = new[]
 {
     typeof(AnnouncementsApiController), 
     typeof(SurveysApiController), 
     typeof(UserGroupsApiController),
+    typeof(UsersApiController),
 };
 
 Log.Logger = new LoggerConfiguration()
@@ -39,6 +43,7 @@ builder.Services.AddControllers(options =>
     options.InputFormatters.Insert(0, new AnnouncementsInputFormatterStream());
     options.InputFormatters.Insert(1, new SurveysInputFormatterStream());
     options.InputFormatters.Insert(3, new UserGroupInputFormatterStream());
+    options.InputFormatters.Insert(4, new UserInputFormatterStream());
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -83,6 +88,7 @@ RegisterAnnouncementService();
 RegisterSurveyService();
 RegisterUserGroupService();
 RegisterMemberRightsLoader();
+RegisterUserService();
 RegisterNotificationService();
 
 var app = builder.Build();
@@ -162,6 +168,9 @@ void RegisterUserGroupService() =>
 
 void RegisterMemberRightsLoader() =>
     builder.Services.AddScoped<MemberRightsLoader>();
+
+void RegisterUserService() =>
+    builder.Services.AddScoped<UserService>();
 
 void RegisterNotificationService()
 {

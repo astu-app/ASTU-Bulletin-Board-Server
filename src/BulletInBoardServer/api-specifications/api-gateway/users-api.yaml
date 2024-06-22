@@ -3,10 +3,46 @@ info:
   title: API Шлюз. Пользователи
   description: API Шлюз. Пользователи
   version: 1.0.0
+servers:
+  - url: '/api'
+tags:
+  - name: Users
+    description: API управления пользователями
 paths:
+  /users/register:
+    post:
+      tags: [ Users ]
+      operationId: registerUser
+      summary: Регистрация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userSummaryDto'
+      responses:
+        201:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userIdentifierDto'
+        400:
+          # Некорректный формат идентификатора
+          description: Bad Request
+        409:
+          description: Conflict
+        500:
+          description: Internal Server Error
+
+
 
 components:
   schemas:
+    userIdentifierDto:
+      type: string
+      format: uuid
+    
     userSummaryDto:
       type: object
       nullable: true

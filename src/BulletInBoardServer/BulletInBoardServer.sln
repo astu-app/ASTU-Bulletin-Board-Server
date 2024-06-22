@@ -26,9 +26,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletInBoardServer.Control
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletInBoardServer.Controllers.Core", "..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.Core\BulletInBoardServer.Controllers.Core.csproj", "{B2561F30-B88F-494F-AFDE-98040817552A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletInBoardServer.Controllers.UserGroupsController", "..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.UserGroupsController\src\BulletInBoardServer.Controllers.UserGroupsController\BulletInBoardServer.Controllers.UserGroupsController.csproj", "{735F52AB-4B78-4D7C-BA29-7E23B5BD72CF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletInBoardServer.Domain.DemoDbFiller", "BulletInBoardServer.Domain.DemoDbFiller\BulletInBoardServer.Domain.DemoDbFiller.csproj", "{AF08F202-1371-4046-810D-7C2AB7868F43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletInBoardServer.Controllers.UserGroupsController", "..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.UserGroupsController\src\BulletInBoardServer.Controllers.UserGroupsController\BulletInBoardServer.Controllers.UserGroupsController.csproj", "{1C537222-7119-4F2C-ACE8-34A0E9FD4F1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BulletInBoardServer.Controllers.UsersController", "..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.UsersController\src\BulletInBoardServer.Controllers.UsersController\BulletInBoardServer.Controllers.UsersController.csproj", "{B6DEF3A0-9E85-4AB8-8CEB-62B04EC78128}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,14 +82,18 @@ Global
 		{B2561F30-B88F-494F-AFDE-98040817552A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2561F30-B88F-494F-AFDE-98040817552A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2561F30-B88F-494F-AFDE-98040817552A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{735F52AB-4B78-4D7C-BA29-7E23B5BD72CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{735F52AB-4B78-4D7C-BA29-7E23B5BD72CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{735F52AB-4B78-4D7C-BA29-7E23B5BD72CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{735F52AB-4B78-4D7C-BA29-7E23B5BD72CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AF08F202-1371-4046-810D-7C2AB7868F43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AF08F202-1371-4046-810D-7C2AB7868F43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF08F202-1371-4046-810D-7C2AB7868F43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF08F202-1371-4046-810D-7C2AB7868F43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C537222-7119-4F2C-ACE8-34A0E9FD4F1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C537222-7119-4F2C-ACE8-34A0E9FD4F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C537222-7119-4F2C-ACE8-34A0E9FD4F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C537222-7119-4F2C-ACE8-34A0E9FD4F1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6DEF3A0-9E85-4AB8-8CEB-62B04EC78128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6DEF3A0-9E85-4AB8-8CEB-62B04EC78128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6DEF3A0-9E85-4AB8-8CEB-62B04EC78128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6DEF3A0-9E85-4AB8-8CEB-62B04EC78128}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ACB49396-6176-4725-B849-DB9D36DCDD8F} = {E55E9672-2EB6-407E-B7D2-C1ACB3CB5FB8}
@@ -96,11 +102,13 @@ Global
 		{FB5C763B-0C2E-4E85-A8ED-DD2D821AFB98} = {348FD9AE-966B-4201-85AC-8648642B805A}
 		{2D695519-9276-4D16-98CF-120D6D41FFA4} = {E55E9672-2EB6-407E-B7D2-C1ACB3CB5FB8}
 		{B2561F30-B88F-494F-AFDE-98040817552A} = {E55E9672-2EB6-407E-B7D2-C1ACB3CB5FB8}
-		{735F52AB-4B78-4D7C-BA29-7E23B5BD72CF} = {E55E9672-2EB6-407E-B7D2-C1ACB3CB5FB8}
+		{1C537222-7119-4F2C-ACE8-34A0E9FD4F1A} = {E55E9672-2EB6-407E-B7D2-C1ACB3CB5FB8}
+		{B6DEF3A0-9E85-4AB8-8CEB-62B04EC78128} = {E55E9672-2EB6-407E-B7D2-C1ACB3CB5FB8}
 	EndGlobalSection
 	GlobalSection(RiderSharedRunConfigurations) = postSolution
 		File = api-specifications\openapi-generator-config\surveys-api.yaml.run.xml
 		File = api-specifications\openapi-generator-config\announcements-api.yaml.run.xml
 		File = api-specifications\openapi-generator-config\usergroups-api.yaml.run.xml
+		File = api-specifications\openapi-generator-config\users-api.yaml.run.xml
 	EndGlobalSection
 EndGlobal

@@ -7,11 +7,14 @@ left to right direction
 [BulletInBoardServer.Services] as services
 [BulletInBoardServer.Domain] as domain
 [BulletInBoardServer.Domain.TestDbFiller] as testDbFiller
+[BulletInBoardServer.Domain.DemoDbFiller] as demoDbFiller
 
 package "BulletInBoardServer.Controllers" as controllers {
     [BulletInBoardServer.Controllers.Core] as controllerCore
     [BulletInBoardServer.Controllers.AnnouncementsController] as announcementsController
     [BulletInBoardServer.Controllers.SurveysController] as surveysController
+    [BulletInBoardServer.Controllers.UsersController] as usersController
+    [BulletInBoardServer.Controllers.UserGroupsController] as userGroupsController
 }
 
 package "Test" as test {
@@ -26,11 +29,16 @@ main                    -> domain
 
 announcementsController -> services
 surveysController       -> services
+usersController         -> services
+userGroupsController    -> services
 announcementsController -down-> controllerCore
 surveysController       -down-> controllerCore
+usersController         -down-> controllerCore
+userGroupsController    -down-> controllerCore
 
 services                --> domain
 testDbFiller            -left-> domain
+demoDbFiller            -up-> domain
 
 testInfrastructure      --> testDbFiller
 domainTest              -left-> testInfrastructure

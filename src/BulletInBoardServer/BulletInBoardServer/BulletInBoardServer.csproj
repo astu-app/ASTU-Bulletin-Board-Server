@@ -39,12 +39,16 @@
       <Content Include="..\api-specifications\openapi-generator-config\usergroups-api.yaml.run.xml">
         <Link>api-specifications\openapi-generator-config\usergroups-api.yaml.run.xml</Link>
       </Content>
+      <Content Include="..\api-specifications\openapi-generator-config\users-api.yaml.run.xml">
+        <Link>api-specifications\openapi-generator-config\users-api.yaml.run.xml</Link>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.AnnouncementsController\src\BulletInBoardServer.Controllers.AnnouncementsController\BulletInBoardServer.Controllers.AnnouncementsController.csproj" />
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.SurveysController\src\BulletInBoardServer.Controllers.SurveysController\BulletInBoardServer.Controllers.SurveysController.csproj" />
         <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.UserGroupsController\src\BulletInBoardServer.Controllers.UserGroupsController\BulletInBoardServer.Controllers.UserGroupsController.csproj" />
+        <ProjectReference Include="..\..\BulletInBoardServer.Controllers\BulletInBoardServer.Controllers.UsersController\src\BulletInBoardServer.Controllers.UsersController\BulletInBoardServer.Controllers.UsersController.csproj" />
         <ProjectReference Include="..\BulletInBoardServer.Domain\BulletInBoardServer.Domain.csproj"/>
         <ProjectReference Include="..\BulletInBoardServer.Services\BulletInBoardServer.Services.csproj"/>
     </ItemGroup>
