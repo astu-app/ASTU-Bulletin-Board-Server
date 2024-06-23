@@ -24,7 +24,9 @@ public class UserGroupService(ApplicationDbContext dbContext)
     public CreateUserGroupContent GetContentForUserGroupCreation(Guid requesterId)
     {
         var users = dbContext.Users.ToUserList();
-        var userGroups = GetOwnedList(requesterId);
+        var userGroups = GetUsergroupHierarchy(requesterId)
+            .FlattenUserGroupHierarchy()
+            .ToUserGroupList();
         
         return new CreateUserGroupContent(users, userGroups);
     }
@@ -55,21 +57,28 @@ public class UserGroupService(ApplicationDbContext dbContext)
         dbContext.UserGroups.ToUserGroupList();
 
     /// <summary>
-    /// Получить список групп пользователей, управляемых администратором
+    /// Получить список групп пользователей, управляемых пользователем
     /// </summary>
-    /// <param name="adminId">Id администратора</param>
+    /// <param name="userId">Id администратора</param>
     /// <returns>Список управляемых администратором групп пользователей</returns>
-    public UserGroupList GetOwnedList(Guid adminId) =>
-        GetUsergroupHierarchy(adminId)
-            .FlattenUserGroupHierarchy()
-            .OrderBy(ug => ug.Name)
+    /// <remarks>
+    /// Пользователь управляет группу, если он является ее администратором или имеет право управления группой
+    /// </remarks>
+    public UserGroupList GetOwnedList(Guid userId) =>
+        dbContext.UserGroups
+            .Where(ug => ug.AdminId == userId)
+            .Union(dbContext.MemberRights
+                .Where(mr => mr.UserId == userId && mr.CanRuleUserGroupHierarchy)
+                .Select(mr => mr.UserGroup))
+            .Distinct()
+            .Include(ug => ug.Admin)
             .ToUserGroupList();
 
     /// <summary>
     /// Получить иерархии групп пользователей, управляемых указанным пользователем
     /// </summary>
     /// <param name="managerId">Пользователь, управляющий иерархией групп</param>
-    /// <returns>Набор корневых групп пользователей, управляемых администратором</returns>
+    /// <returns>Набор корневых групп пользователей, управляемых пользователем</returns>
     public UserGroupList GetUsergroupHierarchy(Guid managerId)
     {
         // todo сделать удаление из ownedUsergroups групп, которые находятся в подчинении других групп, находящихся в этом же списке 

@@ -35,8 +35,7 @@ public class UserGroupMapsterConfig : IRegister
             .ConstructUsing(src =>
                 new SingleMemberRights(
                     src.UserId,
-                    src.UsergroupId ?? Guid.Empty,
-                    src.Rights.CanViewAnnouncements,
+                    (src.UsergroupId ?? Guid.Empty),
                     src.Rights.CanCreateAnnouncements,
                     src.Rights.CanCreateSurveys,
                     src.Rights.CanRuleUserGroupHierarchy,
@@ -52,9 +51,9 @@ public class UserGroupMapsterConfig : IRegister
 
         config.NewConfig<SingleMemberRights, UserSummaryWithMemberRightsDto>()
             .Map(d => d.User, s => s.User)
-            .Map(d => d.Rights.CanViewAnnouncements, s => s.CanViewAnnouncements)
             .Map(d => d.Rights.CanCreateAnnouncements, s => s.CanCreateAnnouncements)
             .Map(d => d.Rights.CanCreateSurveys, s => s.CanCreateSurveys)
+            .Map(d => d.Rights.CanRuleUserGroupHierarchy, s => s.CanRuleUserGroupHierarchy)
             .Map(d => d.Rights.CanViewUserGroupDetails, s => s.CanViewUserGroupDetails)
             .Map(d => d.Rights.CanCreateUserGroups, s => s.CanCreateUserGroups)
             .Map(d => d.Rights.CanEditUserGroups, s => s.CanEditUserGroups)

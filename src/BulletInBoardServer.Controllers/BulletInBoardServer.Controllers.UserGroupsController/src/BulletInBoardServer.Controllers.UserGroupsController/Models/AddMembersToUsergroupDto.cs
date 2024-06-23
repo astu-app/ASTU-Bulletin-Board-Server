@@ -9,6 +9,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -30,7 +32,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         /// Gets or Sets Members
         /// </summary>
         [DataMember(Name="members", EmitDefaultValue=false)]
-        public UserIdWithMemberRightsDto Members { get; set; }
+        public List<UserIdWithMemberRightsDto> Members { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -86,7 +88,8 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
                 (
                     Members == other.Members ||
                     Members != null &&
-                    Members.Equals(other.Members)
+                    other.Members != null &&
+                    Members.SequenceEqual(other.Members)
                 );
         }
 

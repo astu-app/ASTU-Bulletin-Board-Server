@@ -47,6 +47,7 @@ namespace BulletInBoardServer.Controllers.SurveysController.Controllers
         /// Создать опрос
         /// </summary>
         /// <param name="xUserId"></param>
+        /// <param name="rootUserGroupId">Корневая группа пользователей, от которой запрашивается операция</param>
         /// <param name="createSurveyDto"></param>
         /// <response code="201">Created</response>
         /// <response code="401">Unauthorized</response>
@@ -58,7 +59,7 @@ namespace BulletInBoardServer.Controllers.SurveysController.Controllers
         [ValidateModelState]
         [ProducesResponseType(statusCode: 201, type: typeof(Guid))]
         [ProducesResponseType(statusCode: 403, type: typeof(CreateSurveyForbidden))]
-        public abstract IActionResult CreateSurvey([FromHeader][Required()]Guid xUserId, [FromBody]CreateSurveyDto createSurveyDto);
+        public abstract IActionResult CreateSurvey([FromHeader][Required()]Guid xUserId, [FromHeader][Required()]Guid rootUserGroupId, [FromBody]CreateSurveyDto createSurveyDto);
 
         /// <summary>
         /// Скачать результаты опроса

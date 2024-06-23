@@ -27,6 +27,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         /// Добавить пользователей в группу пользователей
         /// </summary>
         /// <param name="xUserId"></param>
+        /// <param name="rootUserGroupId">Корневая группа пользователей, от которой запрашивается операция</param>
         /// <param name="addMembersToUsergroupDto"></param>
         /// <response code="200">Ok</response>
         /// <response code="400">Bad Request</response>
@@ -42,12 +43,13 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         [ProducesResponseType(statusCode: 403, type: typeof(AddMembersToUsergroupForbidden))]
         [ProducesResponseType(statusCode: 404, type: typeof(AddMembersToUsergroupNotFound))]
         [ProducesResponseType(statusCode: 409, type: typeof(AddMembersToUsergroupConflict))]
-        public abstract IActionResult AddMembersToUsergroup([FromHeader][Required()]Guid xUserId, [FromBody]AddMembersToUsergroupDto addMembersToUsergroupDto);
+        public abstract IActionResult AddMembersToUsergroup([FromHeader][Required()]Guid xUserId, [FromHeader][Required()]Guid rootUserGroupId, [FromBody]AddMembersToUsergroupDto addMembersToUsergroupDto);
 
         /// <summary>
         /// Создать группу пользователей
         /// </summary>
         /// <param name="xUserId"></param>
+        /// <param name="xRootUserGroupId">Корневая группа пользователей, от которой запрашивается операция</param>
         /// <param name="createUserGroupDto"></param>
         /// <response code="201">Created</response>
         /// <response code="400">Bad Request</response>
@@ -65,12 +67,13 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         [ProducesResponseType(statusCode: 403, type: typeof(CreateUsergroupForbidden1))]
         [ProducesResponseType(statusCode: 404, type: typeof(CreateUsergroupNotFound))]
         [ProducesResponseType(statusCode: 409, type: typeof(CreateUsergroupConflict))]
-        public abstract IActionResult CreateUsergroup([FromHeader][Required()]Guid xUserId, [FromBody]CreateUserGroupDto createUserGroupDto);
+        public abstract IActionResult CreateUsergroup([FromHeader][Required()]Guid xUserId, [FromHeader][Required()]Guid xRootUserGroupId, [FromBody]CreateUserGroupDto createUserGroupDto);
 
         /// <summary>
         /// Удалить пользователей из группы пользователей
         /// </summary>
         /// <param name="xUserId"></param>
+        /// <param name="rootUserGroupId">Корневая группа пользователей, от которой запрашивается операция</param>
         /// <param name="deleteUsersFromUsergroupDto"></param>
         /// <response code="200">Ok</response>
         /// <response code="400">Bad Request</response>
@@ -84,12 +87,13 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         [ValidateModelState]
         [ProducesResponseType(statusCode: 403, type: typeof(DeleteUsersFromUsergroupForbidden))]
         [ProducesResponseType(statusCode: 409, type: typeof(DeleteUsersFromUsergroupConflict))]
-        public abstract IActionResult DeleteMembersFromUsergroup([FromHeader][Required()]Guid xUserId, [FromBody]DeleteUsersFromUsergroupDto deleteUsersFromUsergroupDto);
+        public abstract IActionResult DeleteMembersFromUsergroup([FromHeader][Required()]Guid xUserId, [FromHeader][Required()]Guid rootUserGroupId, [FromBody]DeleteUsersFromUsergroupDto deleteUsersFromUsergroupDto);
 
         /// <summary>
         /// Удалить группу пользователей
         /// </summary>
         /// <param name="xUserId"></param>
+        /// <param name="rootUserGroupId">Корневая группа пользователей, от которой запрашивается операция</param>
         /// <param name="body"></param>
         /// <response code="200">Ok</response>
         /// <response code="400">Bad Request</response>
@@ -103,7 +107,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         [ValidateModelState]
         [ProducesResponseType(statusCode: 400, type: typeof(DeleteUsergroupBadRequest))]
         [ProducesResponseType(statusCode: 404, type: typeof(DeleteUsergroupNotFound))]
-        public abstract IActionResult DeleteUsergroup([FromHeader][Required()]Guid xUserId, [FromBody]Guid body);
+        public abstract IActionResult DeleteUsergroup([FromHeader][Required()]Guid xUserId, [FromHeader][Required()]Guid rootUserGroupId, [FromBody]Guid body);
 
         /// <summary>
         /// Получение списка всех групп пользователей
@@ -155,6 +159,7 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         /// Получить данные для создания группы пользователей
         /// </summary>
         /// <param name="xUserId"></param>
+        /// <param name="xRootUserGroupId">Корневая группа пользователей, от которой запрашивается операция</param>
         /// <response code="200">OK</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="403">Forbidden</response>
@@ -164,13 +169,14 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         [ValidateModelState]
         [ProducesResponseType(statusCode: 200, type: typeof(GetUsergroupCreateContentDto))]
         [ProducesResponseType(statusCode: 403, type: typeof(CreateUsergroupForbidden))]
-        public abstract IActionResult GetUsergroupCreateContent([FromHeader][Required()]Guid xUserId);
+        public abstract IActionResult GetUsergroupCreateContent([FromHeader][Required()]Guid xUserId, [FromHeader][Required()]Guid xRootUserGroupId);
 
         /// <summary>
         /// Получение подробной информации о группе пользователей
         /// </summary>
         /// <param name="xUserId"></param>
-        /// <param name="id">Идентификатор группы пользователей</param>
+        /// <param name="xRootUserGroupId">Корневая группа пользователей, от которой запрашивается операция</param>
+        /// <param name="userGroupId">Идентификатор группы пользователей</param>
         /// <response code="200">Ok</response>
         /// <response code="400">Bad Request</response>
         /// <response code="401">Unauthorized</response>
@@ -178,17 +184,18 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         /// <response code="404">Not Found</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
-        [Route("/api/usergroups/get-details/{id}")]
+        [Route("/api/usergroups/get-details/{userGroupId}")]
         [ValidateModelState]
         [ProducesResponseType(statusCode: 200, type: typeof(UserGroupDetailsDto))]
         [ProducesResponseType(statusCode: 403, type: typeof(GetUsergroupDetailsForbidden))]
         [ProducesResponseType(statusCode: 404, type: typeof(GetUsergroupDetailsNotFound))]
-        public abstract IActionResult GetUsergroupDetails([FromHeader][Required()]Guid xUserId, [FromRoute (Name = "id")][Required]Guid id);
+        public abstract IActionResult GetUsergroupDetails([FromHeader][Required()]Guid xUserId, [FromHeader][Required()]Guid xRootUserGroupId, [FromRoute (Name = "userGroupId")][Required]Guid userGroupId);
 
         /// <summary>
         /// Получение данных для редактирования группы пользователей
         /// </summary>
         /// <param name="xUserId"></param>
+        /// <param name="xRootUserGroupId">Корневая группа пользователей, от которой запрашивается операция</param>
         /// <param name="id">Идентификатор группы пользователей</param>
         /// <response code="200">Ok</response>
         /// <response code="400">Bad Request</response>
@@ -202,12 +209,13 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         [ProducesResponseType(statusCode: 200, type: typeof(ContentForUserGroupEditingDto))]
         [ProducesResponseType(statusCode: 403, type: typeof(GetUsergroupUpdateContentForbidden))]
         [ProducesResponseType(statusCode: 404, type: typeof(GetUsergroupUpdateContentNotFound))]
-        public abstract IActionResult GetUsergroupUpdateContent([FromHeader][Required()]Guid xUserId, [FromRoute (Name = "id")][Required]Guid id);
+        public abstract IActionResult GetUsergroupUpdateContent([FromHeader][Required()]Guid xUserId, [FromHeader][Required()]Guid xRootUserGroupId, [FromRoute (Name = "id")][Required]Guid id);
 
         /// <summary>
         /// Редактирование группы пользователей
         /// </summary>
         /// <param name="xUserId"></param>
+        /// <param name="rootUserGroupId">Корневая группа пользователей, от которой запрашивается операция</param>
         /// <param name="updateUserGroupDto"></param>
         /// <response code="200">Ok</response>
         /// <response code="400">Bad Request</response>
@@ -224,6 +232,6 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers
         [ProducesResponseType(statusCode: 403, type: typeof(UpdateUsergroupForbidden))]
         [ProducesResponseType(statusCode: 404, type: typeof(UpdateUsergroupNotFound))]
         [ProducesResponseType(statusCode: 409, type: typeof(UpdateUsergroupConflict))]
-        public abstract IActionResult UpdateUsergroup([FromHeader][Required()]Guid xUserId, [FromBody]UpdateUserGroupDto updateUserGroupDto);
+        public abstract IActionResult UpdateUsergroup([FromHeader][Required()]Guid xUserId, [FromHeader][Required()]Guid rootUserGroupId, [FromBody]UpdateUserGroupDto updateUserGroupDto);
     }
 }

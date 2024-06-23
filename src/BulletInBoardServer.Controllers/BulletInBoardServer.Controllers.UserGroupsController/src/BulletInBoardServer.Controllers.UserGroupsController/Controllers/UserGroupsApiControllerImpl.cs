@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BulletInBoardServer.Controllers.Core.Logging;
 using BulletInBoardServer.Controllers.Core.Responding;
 using BulletInBoardServer.Controllers.UserGroupsController.Models;
 using BulletInBoardServer.Domain.Models.UserGroups.Exceptions;
+using BulletInBoardServer.Services.Services.MemberRights;
 using BulletInBoardServer.Services.Services.UserGroups;
 using BulletInBoardServer.Services.Services.UserGroups.Exceptions;
 using BulletInBoardServer.Services.Services.UserGroups.Models;
@@ -19,7 +21,8 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Controllers;
 /// </summary>
 public class UserGroupsApiControllerImpl : UserGroupsApiController
 {
-    private readonly UserGroupService _service;
+    private readonly UserGroupService _userGroupService;
+    private readonly MemberRightsLoader _rightsService;
 
     private readonly ILogger _logger = Log.ForContext<UserGroupService>();
     private readonly LoggingHelper _loggingHelper;
@@ -29,9 +32,10 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// <summary>
     /// Контроллер управления группами пользователей
     /// </summary>
-    public UserGroupsApiControllerImpl(UserGroupService service)
+    public UserGroupsApiControllerImpl(UserGroupService userGroupService, MemberRightsLoader rightsService)
     {
-        _service = service;
+        _userGroupService = userGroupService;
+        _rightsService = rightsService;
         _loggingHelper = new LoggingHelper(_logger);
     }
 
@@ -41,6 +45,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// Добавить пользователей в группу пользователей
     /// </summary>
     /// <param name="requesterId"></param>
+    /// <param name="rootUserGroupId"></param>
     /// <param name="dto"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -49,7 +54,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult AddMembersToUsergroup([FromHeader(Name = "X-User-Id")]Guid requesterId, AddMembersToUsergroupDto dto)
+    public override IActionResult AddMembersToUsergroup([FromHeader(Name = "X-User-Id")]Guid requesterId, [FromHeader(Name = "X-Root-UserGroup-Id")]Guid rootUserGroupId, AddMembersToUsergroupDto dto)
     {
         /*
          * 200 +
@@ -64,10 +69,15 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
          * 500 +
          */
 
+        if (dto.Members.Count > 0 && !_rightsService.CanDo(mt => mt.CanCreateUserGroups, requesterId, rootUserGroupId))
+            return StatusCode(403,
+                ResponseConstructor.ConstructResponseWithOnlyCode(DeleteMembersFromUsergroupResponses
+                    .RemoveUsersFromUsergroupForbidden));
+
         try
         {
             var addMembersToUsergroup = dto.Adapt<AddUserGroupMembers>();
-            _service.AddMembers(addMembersToUsergroup);
+            _userGroupService.AddMembers(addMembersToUsergroup);
 
             _logger.Information(
                 "Пользователь {UserId} добавил пользователей в группу {GroupId}",
@@ -117,6 +127,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// Создать группу пользователей
     /// </summary>
     /// <param name="requesterId"></param>
+    /// <param name="rootUserGroupId"></param>
     /// <param name="dto"></param>
     /// <response code="201">Created</response>
     /// <response code="400">Bad Request</response>
@@ -125,14 +136,14 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult CreateUsergroup([FromHeader(Name = "X-User-Id")]Guid requesterId, CreateUserGroupDto dto)
+    public override IActionResult CreateUsergroup([FromHeader(Name = "X-User-Id")]Guid requesterId, [FromHeader(Name = "X-Root-UserGroup-Id")]Guid rootUserGroupId, CreateUserGroupDto dto)
     {
         /*
          * 200
          * 400
          *   nameNullOrWhitespace +
          * 403
-         *   usergroupCreationForbidden
+         *   usergroupCreationForbidden +
          * 404
          *   usersDoNotExist  +
          *   UserGroupsDoNotExist +
@@ -141,11 +152,16 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
          *   cyclicDependency +
          * 500 +
          */
+
+        var canDo = _rightsService.CanDo(mt => mt.CanCreateUserGroups, requesterId, rootUserGroupId);
+        if (!canDo)
+            return StatusCode(403, ResponseConstructor.ConstructResponseWithOnlyCode(CreateUsergroupResponses
+                .UsergroupCreationForbidden));
         
         try
         {
             var create = dto.Adapt<CreateUserGroup>();
-            var usergroupId = _service.Create(create);
+            var usergroupId = _userGroupService.Create(create);
 
             _logger.Information("Пользователь {UserId} создал группу {GroupId}", requesterId, usergroupId);
 
@@ -200,6 +216,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// Удалить пользователей из группы пользователей
     /// </summary>
     /// <param name="requesterId"></param>
+    /// <param name="rootUserGroupId"></param>
     /// <param name="dto"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -207,7 +224,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// <response code="403">Forbidden</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult DeleteMembersFromUsergroup([FromHeader(Name = "X-User-Id")]Guid requesterId, DeleteUsersFromUsergroupDto dto)
+    public override IActionResult DeleteMembersFromUsergroup([FromHeader(Name = "X-User-Id")]Guid requesterId, [FromHeader(Name = "X-Root-UserGroup-Id")]Guid rootUserGroupId, DeleteUsersFromUsergroupDto dto)
     {
         /*
          * 200 +
@@ -217,11 +234,16 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
          *   userIsAdmin +
          * 500
          */
+
+        if (dto.MemberIds.Count > 0 && !_rightsService.CanDo(mt => mt.CanCreateUserGroups, requesterId, rootUserGroupId))
+            return StatusCode(403,
+                ResponseConstructor.ConstructResponseWithOnlyCode(DeleteMembersFromUsergroupResponses
+                    .RemoveUsersFromUsergroupForbidden));
         
         try
         {
             var deleteMembersFromUsergroup = dto.Adapt<DeleteUserGroupMembers>();
-            _service.DeleteMembers(deleteMembersFromUsergroup);
+            _userGroupService.DeleteMembers(deleteMembersFromUsergroup);
 
             _logger.Information("Пользователь {UserId} удалил пользователей из группы {GroupId}", requesterId,
                 deleteMembersFromUsergroup.UserGroupId);
@@ -247,6 +269,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// Удалить группу пользователей
     /// </summary>
     /// <param name="requesterId"></param>
+    /// <param name="rootUserGroupId"></param>
     /// <param name="id"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -254,7 +277,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// <response code="403">Forbidden</response>
     /// <response code="404">Not Found</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult DeleteUsergroup([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid id)
+    public override IActionResult DeleteUsergroup([FromHeader(Name = "X-User-Id")]Guid requesterId, [FromHeader(Name = "X-Root-UserGroup-Id")]Guid rootUserGroupId, Guid id)
     {
         /*
          * 200 +
@@ -265,9 +288,14 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
          * 500 +
          */
         
+        var canDo = _rightsService.CanDo(mt => mt.CanDeleteUserGroup, requesterId, rootUserGroupId);
+        if (!canDo)
+            return StatusCode(403, ResponseConstructor.ConstructResponseWithOnlyCode(DeleteUsergroupResponses
+                .UsergroupDeletionForbidden));
+        
         try
         {
-            _service.Delete(id);
+            _userGroupService.Delete(id);
 
             _logger.Information("Пользователь {UserId} удалил группу пользователей {GroupId}", requesterId, id);
 
@@ -305,7 +333,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
         
         try
         {
-            var usergroups = _service.GetAll();
+            var usergroups = _userGroupService.GetAll();
 
             _logger.Information("Пользователь {UserId} получил список всех групп пользователей", requesterId);
 
@@ -337,7 +365,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
         
         try
         {
-            var usergroups = _service.GetOwnedList(requesterId);
+            var usergroups = _userGroupService.GetOwnedList(requesterId);
 
             _logger.Information("Пользователь {UserId} получил список групп пользователей, в которых является администратором", requesterId);
 
@@ -358,7 +386,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// <response code="401">Unauthorized</response>
     /// <response code="403">Forbidden</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult GetUsergroupCreateContent([FromHeader(Name = "X-User-Id")]Guid requesterId)
+    public override IActionResult GetUsergroupCreateContent([FromHeader(Name = "X-User-Id")]Guid requesterId, [FromHeader(Name = "X-Root-UserGroup-Id")]Guid rootUserGroupId)
     {
         /*
          * 200 +
@@ -367,9 +395,14 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
          * 500 +
          */
         
+        var canDo = _rightsService.CanDo(mt => mt.CanCreateUserGroups, requesterId, rootUserGroupId);
+        if (!canDo)
+            return StatusCode(403, ResponseConstructor.ConstructResponseWithOnlyCode(GetUsergroupCreateContentResponses
+                .GetUsergroupCreateContentForbidden));
+
         try
         {
-            var usergroups = _service.GetContentForUserGroupCreation(requesterId);
+            var usergroups = _userGroupService.GetContentForUserGroupCreation(requesterId);
 
             _logger.Information("Пользователь {UserId} получил данные для создания группы пользователей", requesterId);
 
@@ -403,7 +436,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
         
         try
         {
-            var usergroups = _service.GetUsergroupHierarchy(requesterId);
+            var usergroups = _userGroupService.GetUsergroupHierarchy(requesterId);
 
             _logger.Information("Пользователь {UserId} запросил иерархию своих групп пользователей", requesterId);
 
@@ -421,6 +454,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// Получение подробной информации о группе пользователей
     /// </summary>
     /// <param name="requesterId"></param>
+    /// <param name="rootUserGroupId"></param>
     /// <param name="id"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -428,7 +462,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// <response code="403">Forbidden</response>
     /// <response code="404">Not Found</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult GetUsergroupDetails([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid id)
+    public override IActionResult GetUsergroupDetails([FromHeader(Name = "X-User-Id")]Guid requesterId, [FromHeader(Name = "X-Root-UserGroup-Id")]Guid rootUserGroupId, Guid id)
     {
         /*
          * 200 +
@@ -439,11 +473,14 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
          * 500 +
          */
 
-        // var memberRights = 
+        var canDo = _rightsService.CanDo(mt => mt.CanViewUserGroupDetails, requesterId, rootUserGroupId);
+        if (!canDo)
+            return StatusCode(403, ResponseConstructor.ConstructResponseWithOnlyCode(GetUsergroupDetailsResponses
+                .GetUsergroupDetailsForbidden));
         
         try
         {
-            var details = _service.GetDetails(id);
+            var details = _userGroupService.GetDetails(id);
 
             _logger.Information(
                 "Пользователь {UserId} получил подробную информацию о группе пользователей {GroupId}", requesterId,
@@ -472,6 +509,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// Получение данных для редактирования группы пользователей
     /// </summary>
     /// <param name="requesterId"></param>
+    /// <param name="rootUserGroupId"></param>
     /// <param name="userGroupId">Идентификатор группы пользователей</param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -479,22 +517,25 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// <response code="403">Forbidden</response>
     /// <response code="404">Not Found</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult GetUsergroupUpdateContent([FromHeader(Name = "X-User-Id")]Guid requesterId, Guid userGroupId)
+    public override IActionResult GetUsergroupUpdateContent([FromHeader(Name = "X-User-Id")]Guid requesterId, [FromHeader(Name = "X-Root-UserGroup-Id")]Guid rootUserGroupId, Guid userGroupId)
     {
         /*
          * 200 +
          * 403
-         *   getUsergroupEditContentForbidden
+         *   getUsergroupEditContentForbidden +
          * 404
          *   userGroupDoesNotExist +
          * 500 +
          */
         
+        var canDo = _rightsService.CanDo(mt => mt.CanEditUserGroups, requesterId, rootUserGroupId);
+        if (!canDo)
+            return StatusCode(403, ResponseConstructor.ConstructResponseWithOnlyCode(
+                ContentForUserGroupEditingResponses.GetUsergroupUpdateContentForbidden));
 
-        
         try
         {
-            var content = _service.GetContentForUserGroupUpdating(userGroupId, requesterId);
+            var content = _userGroupService.GetContentForUserGroupUpdating(userGroupId, requesterId);
 
             _logger.Information(
                 "Пользователь {UserId} получил данные для редактирования группы пользователей {GroupId}",
@@ -522,6 +563,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// Редактирование группы пользователей
     /// </summary>
     /// <param name="requesterId"></param>
+    /// <param name="rootUserGroupId"></param>
     /// <param name="dto"></param>
     /// <response code="200">Ok</response>
     /// <response code="400">Bad Request</response>
@@ -530,7 +572,7 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult UpdateUsergroup([FromHeader(Name = "X-User-Id")]Guid requesterId, UpdateUserGroupDto dto)
+    public override IActionResult UpdateUsergroup([FromHeader(Name = "X-User-Id")]Guid requesterId, [FromHeader(Name = "X-Root-UserGroup-Id")]Guid rootUserGroupId, UpdateUserGroupDto dto)
     {
         /*
          * 200 +
@@ -545,11 +587,33 @@ public class UserGroupsApiControllerImpl : UserGroupsApiController
          *   adminCannotBeOrdinaryMember +
          * 500 +
          */
+
+        if (!_rightsService.CanDo(mt => mt.CanEditUserGroups, requesterId, rootUserGroupId))
+            return StatusCode(403, ResponseConstructor.ConstructResponseWithOnlyCode(UpdateUsergroupResponses
+                .UpdateUsergroupForbidden));
+        
+        if (dto.AdminChanged &&
+            !_rightsService.CanDo(mt => mt.CanEditUserGroupAdmin, requesterId, rootUserGroupId))
+            return StatusCode(403, ResponseConstructor.ConstructResponseWithOnlyCode(UpdateUsergroupResponses
+                .ChangeAdminForbidden));
+        
+        var newMemberIds = dto.Members.NewMembers.Select(nm => nm.UserId).ToList();
+        var memberToRemoveIds = dto.Members.IdsToRemove;
+        // Добавили новых пользователей или удалили существующих (Eсли пользователь присутствует и там, и там, то
+        // его права были изменены. Для отслеживания таких ситуаций используется Except)
+        if ((newMemberIds.Except(memberToRemoveIds).Any() || memberToRemoveIds.Except(newMemberIds).Any()) &&
+            !_rightsService.CanDo(mt => mt.CanEditMembers, requesterId, rootUserGroupId))
+            return StatusCode(403, ResponseConstructor.ConstructResponseWithOnlyCode(UpdateUsergroupResponses
+                .ChangeUsersForbidden));
+        if (newMemberIds.Intersect(memberToRemoveIds).Any() &&
+            !_rightsService.CanDo(mt => mt.CanEditMemberRights, requesterId, rootUserGroupId))
+            return StatusCode(403, ResponseConstructor.ConstructResponseWithOnlyCode(UpdateUsergroupResponses
+                .ChangeUserRightsForbidden));
         
         try
         {
             var edit = dto.Adapt<EditUserGroup>();
-            _service.Edit(edit);
+            _userGroupService.Edit(edit);
 
             _logger.Information("Пользователь {UserId} отредактировал группу пользователей {GroupId}",
                 requesterId, edit.Id);

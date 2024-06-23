@@ -4,6 +4,7 @@ using BulletInBoardServer.Controllers.Core.Responding;
 using BulletInBoardServer.Controllers.SurveysController.Models;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys.Exceptions;
+using BulletInBoardServer.Services.Services.MemberRights;
 using BulletInBoardServer.Services.Services.Surveys;
 using BulletInBoardServer.Services.Services.Surveys.Exceptions;
 using BulletInBoardServer.Services.Services.Surveys.Models;
@@ -19,7 +20,8 @@ namespace BulletInBoardServer.Controllers.SurveysController.Controllers;
 /// </summary>
 public class SurveysApiControllerImpl : SurveysApiController
 {
-    private readonly SurveyService _service;
+    private readonly SurveyService _surveyService;
+    private readonly MemberRightsLoader _rightsService;
 
     private readonly ILogger _logger = Log.ForContext<SurveyService>();
     private readonly LoggingHelper _loggingHelper;
@@ -29,9 +31,10 @@ public class SurveysApiControllerImpl : SurveysApiController
     /// <summary>
     /// Контроллер опросов
     /// </summary>
-    public SurveysApiControllerImpl(SurveyService service)
+    public SurveysApiControllerImpl(SurveyService surveyService, MemberRightsLoader rightsService)
     {
-        _service = service;
+        _surveyService = surveyService;
+        _rightsService = rightsService;
         _loggingHelper = new LoggingHelper(_logger);
     }
 
@@ -64,7 +67,7 @@ public class SurveysApiControllerImpl : SurveysApiController
 
         try
         {
-            _service.CloseSurvey(surveyId);
+            _surveyService.CloseSurvey(surveyId);
 
             _logger.Information("Пользователь {RequesterId} закрыл опрос {SurveyId}", requesterId, surveyId);
 
@@ -95,12 +98,13 @@ public class SurveysApiControllerImpl : SurveysApiController
     /// Создать опрос
     /// </summary>
     /// <param name="requesterId"></param>
+    /// <param name="rootUserGroupId"></param>
     /// <param name="createSurveyDto"></param>
     /// <response code="201">Created</response>
     /// <response code="401">Unauthorized</response>
     /// <response code="403">Forbidden</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult CreateSurvey([FromHeader(Name = "X-User-Id")]Guid requesterId, CreateSurveyDto createSurveyDto)
+    public override IActionResult CreateSurvey([FromHeader(Name = "X-User-Id")]Guid requesterId, [FromHeader(Name = "X-Root-UserGroup-Id")]Guid rootUserGroupId, CreateSurveyDto createSurveyDto)
     {
         /*
          * 201 +
@@ -111,11 +115,17 @@ public class SurveysApiControllerImpl : SurveysApiController
          *   questionContainsAnswersSerialsDuplicates
          * 500 +
          */
-        
+
+        var canDo = _rightsService.CanDo(mr => mr.CanCreateAnnouncements, requesterId,
+            rootUserGroupId);
+        if (!canDo)
+            return StatusCode(403,
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateSurveyResponses.CreateSurveyForbidden));
+
         try
         {
             var createSurvey = createSurveyDto.Adapt<CreateSurvey>();
-            var survey = _service.Create(createSurvey);
+            var survey = _surveyService.Create(createSurvey);
 
             _logger.Information("Пользователь {RequesterId} создал опрос {SurveyId}", requesterId, survey.Id);
 
@@ -195,7 +205,7 @@ public class SurveysApiControllerImpl : SurveysApiController
         {
             var surveyVotes = voteInSurveyDto.Adapt<SurveyVotes>(); 
             
-            _service.Vote(requesterId, voteInSurveyDto.SurveyId, surveyVotes);
+            _surveyService.Vote(requesterId, voteInSurveyDto.SurveyId, surveyVotes);
 
             return Ok();
         }

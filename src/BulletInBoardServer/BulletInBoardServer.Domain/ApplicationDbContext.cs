@@ -310,10 +310,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasColumnName("usergroup_id")
                 .HasColumnType("uuid");
             
-            entity.Property(e => e.CanViewAnnouncements)
-                .HasColumnName("can_view_announcements")
-                .HasColumnType("boolean")
-                .HasDefaultValue(true);
             entity.Property(e => e.CanCreateAnnouncements)
                 .HasColumnName("can_create_announcements")
                 .HasColumnType("boolean")

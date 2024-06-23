@@ -245,7 +245,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(mainUsergroup.Id, mainUsergroup);
 
             // Add members
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), mainUsergroup, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), mainUsergroup);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(usualUser_1_Rights);
         }
@@ -270,7 +270,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(usualUser_1_Rights);
         }
@@ -295,7 +295,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(usualUser_1_Rights);
         }
@@ -320,7 +320,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(usualUser_1_Rights);
         }
@@ -345,7 +345,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(usualUser_1_Rights);
         }
@@ -370,7 +370,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(usualUser_1_Rights);
         }
@@ -395,7 +395,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(usualUser_1_Rights);
         }
@@ -420,7 +420,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup, true);
+            var usualUser_1_Rights = new SingleMemberRights(GetDbEntity<User>(UsualUser_1_Id), usergroup);
             rights.Add(usualUser_1_Rights);
             dbContext.MemberRights.Add(usualUser_1_Rights);
         }

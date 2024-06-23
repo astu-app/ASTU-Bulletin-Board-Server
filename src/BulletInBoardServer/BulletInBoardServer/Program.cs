@@ -87,7 +87,7 @@ builder.Services.AddHealthChecks();
 RegisterAnnouncementService();
 RegisterSurveyService();
 RegisterUserGroupService();
-RegisterMemberRightsLoader();
+RegisterMemberRightsService();
 RegisterUserService();
 RegisterNotificationService();
 
@@ -166,7 +166,7 @@ void RegisterSurveyService() =>
 void RegisterUserGroupService() => 
     builder.Services.AddScoped<UserGroupService>();
 
-void RegisterMemberRightsLoader() =>
+void RegisterMemberRightsService() =>
     builder.Services.AddScoped<MemberRightsLoader>();
 
 void RegisterUserService() =>
@@ -186,8 +186,7 @@ void RegisterNotificationService()
         config = GetNotificationConfigFromAppConfiguration();
     }
 
-    builder.Services.AddScoped<NotificationService>(_ =>
-        new NotificationService(config.AppToken, config.ServerHost));
+    builder.Services.AddSingleton(new NotificationService(config.AppToken, config.ServerHost));
 }
 
 NotificationServiceConfig GetNotificationConfigFromAppConfiguration() =>

@@ -94,7 +94,6 @@ public class UserGroupCreator(CreateUserGroup create, ApplicationDbContext dbCon
             dbContext.MemberRights.Add(new SingleMemberRights(
                 userId: member.UserId, 
                 userGroupId: _usergroup.Id,
-                canViewAnnouncements: member.CanViewAnnouncements,
                 canCreateAnnouncements: member.CanCreateAnnouncements,
                 canCreateSurveys: member.CanCreateSurveys,
                 canViewUserGroupDetails: member.CanViewUserGroupDetails,

@@ -1,0 +1,15 @@
+BulletInBoardServer.Controllers.UsersController.sln
+README.md
+build.bat
+build.sh
+src/BulletInBoardServer.Controllers.UsersController/.gitignore
+src/BulletInBoardServer.Controllers.UsersController/Attributes/ValidateModelStateAttribute.cs
+src/BulletInBoardServer.Controllers.UsersController/Authentication/ApiAuthentication.cs
+src/BulletInBoardServer.Controllers.UsersController/BulletInBoardServer.Controllers.UsersController.csproj
+src/BulletInBoardServer.Controllers.UsersController/BulletInBoardServer.Controllers.UsersController.nuspec
+src/BulletInBoardServer.Controllers.UsersController/Controllers/UsersApi.cs
+src/BulletInBoardServer.Controllers.UsersController/Converters/CustomEnumConverter.cs
+src/BulletInBoardServer.Controllers.UsersController/Formatters/InputFormatterStream.cs
+src/BulletInBoardServer.Controllers.UsersController/Models/CheckableUserSummaryDto.cs
+src/BulletInBoardServer.Controllers.UsersController/Models/UserSummaryDto.cs
+src/BulletInBoardServer.Controllers.UsersController/OpenApi/TypeExtensions.cs

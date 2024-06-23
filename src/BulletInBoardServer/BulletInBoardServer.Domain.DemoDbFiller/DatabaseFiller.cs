@@ -229,7 +229,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
             AddDbEntity(usergroup.Id, usergroup);
 
             // Add members
-            var member_rights = new SingleMemberRights(GetDbEntity<User>(ViceRectorForAcademicAffairsDeputy_UserId), usergroup, true, true, true, true, true, true, true, true, true, true);
+            var member_rights = new SingleMemberRights(GetDbEntity<User>(ViceRectorForAcademicAffairsDeputy_UserId), usergroup, true, true, true, true, true, true, true, true, true);
             rights.Add(member_rights);
             dbContext.MemberRights.Add(member_rights);
         }
@@ -256,15 +256,15 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
 
             // Add members
             // member 1
-            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(InstituteOfInformationTechnologiesAndCommunications_Member1), usergroup, true);
+            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(InstituteOfInformationTechnologiesAndCommunications_Member1), usergroup);
             rights.Add(member_1_rights);
             dbContext.MemberRights.Add(member_1_rights);
             // member 2
-            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(InstituteOfInformationTechnologiesAndCommunications_Member2), usergroup, true);
+            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(InstituteOfInformationTechnologiesAndCommunications_Member2), usergroup);
             rights.Add(member_2_rights);
             dbContext.MemberRights.Add(member_2_rights);
             // member 3
-            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(InstituteOfInformationTechnologiesAndCommunications_Member3), usergroup, true);
+            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(InstituteOfInformationTechnologiesAndCommunications_Member3), usergroup);
             rights.Add(member_3_rights);
             dbContext.MemberRights.Add(member_3_rights);
         }
@@ -291,15 +291,15 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
 
             // Add members
             // member 1
-            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Member1), usergroup, true);
+            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Member1), usergroup);
             rights.Add(member_1_rights);
             dbContext.MemberRights.Add(member_1_rights);
             // member 2
-            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Member2), usergroup, true);
+            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Member2), usergroup);
             rights.Add(member_2_rights);
             dbContext.MemberRights.Add(member_2_rights);
             // member 3
-            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Member3), usergroup, true);
+            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Member3), usergroup);
             rights.Add(member_3_rights);
             dbContext.MemberRights.Add(member_3_rights);
         }
@@ -326,15 +326,15 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
 
             // Add members
             // member 1
-            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group1_Member1), usergroup, true);
+            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group1_Member1), usergroup);
             rights.Add(member_1_rights);
             dbContext.MemberRights.Add(member_1_rights);
             // member 2
-            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group1_Member2), usergroup, true);
+            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group1_Member2), usergroup);
             rights.Add(member_2_rights);
             dbContext.MemberRights.Add(member_2_rights);
             // member 3
-            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group1_Member3), usergroup, true);
+            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group1_Member3), usergroup);
             rights.Add(member_3_rights);
             dbContext.MemberRights.Add(member_3_rights);
         }
@@ -361,15 +361,15 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
 
             // Add members
             // member 1
-            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group2_Member1), usergroup, true);
+            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group2_Member1), usergroup);
             rights.Add(member_1_rights);
             dbContext.MemberRights.Add(member_1_rights);
             // member 2
-            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group2_Member2), usergroup, true);
+            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group2_Member2), usergroup);
             rights.Add(member_2_rights);
             dbContext.MemberRights.Add(member_2_rights);
             // member 3
-            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group2_Member3), usergroup, true);
+            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AutomatedInformationProcessingAndControl_Group2_Member3), usergroup);
             rights.Add(member_3_rights);
             dbContext.MemberRights.Add(member_3_rights);
         }
@@ -396,15 +396,15 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
 
             // Add members
             // member 1
-            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Member1), usergroup, true);
+            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Member1), usergroup);
             rights.Add(member_1_rights);
             dbContext.MemberRights.Add(member_1_rights);
             // member 2
-            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Member2), usergroup, true);
+            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Member2), usergroup);
             rights.Add(member_2_rights);
             dbContext.MemberRights.Add(member_2_rights);
             // member 3
-            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Member3), usergroup, true);
+            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Member3), usergroup);
             rights.Add(member_3_rights);
             dbContext.MemberRights.Add(member_3_rights);
         }
@@ -431,15 +431,15 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
 
             // Add members
             // member 1
-            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group1_Member1), usergroup, true);
+            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group1_Member1), usergroup);
             rights.Add(member_1_rights);
             dbContext.MemberRights.Add(member_1_rights);
             // member 2
-            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group1_Member2), usergroup, true);
+            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group1_Member2), usergroup);
             rights.Add(member_2_rights);
             dbContext.MemberRights.Add(member_2_rights);
             // member 3
-            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group1_Member3), usergroup, true);
+            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group1_Member3), usergroup);
             rights.Add(member_3_rights);
             dbContext.MemberRights.Add(member_3_rights);
         }
@@ -466,15 +466,15 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
 
             // Add members
             // member 1
-            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group2_Member1), usergroup, true);
+            var member_1_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group2_Member1), usergroup);
             rights.Add(member_1_rights);
             dbContext.MemberRights.Add(member_1_rights);
             // member 2
-            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group2_Member2), usergroup, true);
+            var member_2_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group2_Member2), usergroup);
             rights.Add(member_2_rights);
             dbContext.MemberRights.Add(member_2_rights);
             // member 3
-            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group2_Member3), usergroup, true);
+            var member_3_rights = new SingleMemberRights(GetDbEntity<User>(AppliedInformatics_Group2_Member3), usergroup);
             rights.Add(member_3_rights);
             dbContext.MemberRights.Add(member_3_rights);
         }

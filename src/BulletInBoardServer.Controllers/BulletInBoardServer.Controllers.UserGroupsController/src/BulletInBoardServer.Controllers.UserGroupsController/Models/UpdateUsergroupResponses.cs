@@ -37,15 +37,33 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             UpdateUsergroupForbidden = 2,
             
             /// <summary>
+            /// Enum ChangeAdminForbidden for changeAdminForbidden
+            /// </summary>
+            [EnumMember(Value = "changeAdminForbidden")]
+            ChangeAdminForbidden = 3,
+            
+            /// <summary>
+            /// Enum ChangeUsersForbidden for changeUsersForbidden
+            /// </summary>
+            [EnumMember(Value = "changeUsersForbidden")]
+            ChangeUsersForbidden = 4,
+            
+            /// <summary>
+            /// Enum ChangeUserRightsForbidden for changeUserRightsForbidden
+            /// </summary>
+            [EnumMember(Value = "changeUserRightsForbidden")]
+            ChangeUserRightsForbidden = 5,
+            
+            /// <summary>
             /// Enum UsersDoNotExist for usersDoNotExist
             /// </summary>
             [EnumMember(Value = "usersDoNotExist")]
-            UsersDoNotExist = 3,
+            UsersDoNotExist = 6,
             
             /// <summary>
             /// Enum AdminCannotBeOrdinaryMember for adminCannotBeOrdinaryMember
             /// </summary>
             [EnumMember(Value = "adminCannotBeOrdinaryMember")]
-            AdminCannotBeOrdinaryMember = 4
+            AdminCannotBeOrdinaryMember = 7
         }
 }

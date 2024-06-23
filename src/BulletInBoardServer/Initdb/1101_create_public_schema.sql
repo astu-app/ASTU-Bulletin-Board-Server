@@ -142,7 +142,6 @@ create table member_rights
     primary key (user_id, usergroup_id),
 
     -- Управление объявлениями
-    can_view_announcements       boolean not null default true,
     can_create_announcements     boolean not null default false,
     
     -- Опросы

@@ -10,6 +10,7 @@ using BulletInBoardServer.Services.Services.Announcements.Models;
 using BulletInBoardServer.Services.Services.Attachments.Exceptions;
 using BulletInBoardServer.Services.Services.Audience.Exceptions;
 using BulletInBoardServer.Services.Services.Common.Exceptions;
+using BulletInBoardServer.Services.Services.MemberRights;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -24,7 +25,8 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers;
 public class AnnouncementsApiControllerImpl : AnnouncementsApiController
 {
     private readonly AnnouncementService _announcementService;
-    
+    private readonly MemberRightsLoader _rightsService;
+
 
     private readonly ILogger _logger = Log.ForContext<AnnouncementService>();
     private readonly LoggingHelper _loggingHelper;
@@ -34,9 +36,11 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <summary>
     /// Контроллер объявлений
     /// </summary>
-    public AnnouncementsApiControllerImpl(AnnouncementService announcementService)
+    public AnnouncementsApiControllerImpl(AnnouncementService announcementService, MemberRightsLoader rightsService)
     {
         _announcementService = announcementService;
+        _rightsService = rightsService;
+
         _loggingHelper = new LoggingHelper(_logger);
     }
 
@@ -106,7 +110,7 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
     /// <response code="404">Not Found</response>
     /// <response code="409">Conflict</response>
     /// <response code="500">Internal Server Error</response>
-    public override IActionResult CreateAnnouncement([FromHeader(Name = "X-User-Id")]Guid requesterId, CreateAnnouncementDto dto)
+    public override IActionResult CreateAnnouncement([FromHeader(Name = "X-User-Id")]Guid requesterId, [FromHeader(Name = "X-Root-UserGroup-Id")]Guid rootUserGroupId, CreateAnnouncementDto dto)
     {
         /*
          * 201 +
@@ -124,6 +128,12 @@ public class AnnouncementsApiControllerImpl : AnnouncementsApiController
          *   delayedPublishingMomentAfterDelayedHidingMoment +
          * 500 +
          */
+
+        var canDo = _rightsService.CanDo(mr => mr.CanCreateAnnouncements, requesterId, rootUserGroupId);
+        if (!canDo)
+            return StatusCode(403,
+                ResponseConstructor.ConstructResponseWithOnlyCode(CreateAnnouncementResponses
+                    .AnnouncementCreationForbidden));
 
         var createAnnouncement = dto.Adapt<CreateAnnouncement>();
         try

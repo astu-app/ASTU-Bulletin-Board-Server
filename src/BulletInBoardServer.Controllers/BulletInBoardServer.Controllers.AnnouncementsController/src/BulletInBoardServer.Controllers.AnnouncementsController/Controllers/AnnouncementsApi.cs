@@ -43,6 +43,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         /// Создать объявление
         /// </summary>
         /// <param name="xUserId"></param>
+        /// <param name="rootUserGroupId">Корневая группа пользователей, от которой запрашивается операция</param>
         /// <param name="createAnnouncementDto"></param>
         /// <response code="201">Created</response>
         /// <response code="400">Bad Request</response>
@@ -60,7 +61,7 @@ namespace BulletInBoardServer.Controllers.AnnouncementsController.Controllers
         [ProducesResponseType(statusCode: 403, type: typeof(CreateAnnouncementForbidden))]
         [ProducesResponseType(statusCode: 404, type: typeof(CreateAnnouncementNotFound))]
         [ProducesResponseType(statusCode: 409, type: typeof(CreateAnnouncementConflict))]
-        public abstract IActionResult CreateAnnouncement([FromHeader][Required()]Guid xUserId, [FromBody]CreateAnnouncementDto createAnnouncementDto);
+        public abstract IActionResult CreateAnnouncement([FromHeader][Required()]Guid xUserId, [FromHeader][Required()]Guid rootUserGroupId, [FromBody]CreateAnnouncementDto createAnnouncementDto);
 
         /// <summary>
         /// Удалить объявление

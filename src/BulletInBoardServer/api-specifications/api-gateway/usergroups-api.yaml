@@ -22,6 +22,13 @@ paths:
             description: Идентификатор пользователя
             type: string
             format: uuid
+        - in: header
+          name: X-Root-UserGroup-Id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Корневая группа пользователей, от которой запрашивается операция
       responses: 
         200:
           description: OK
@@ -59,6 +66,13 @@ paths:
             description: Идентификатор пользователя
             type: string
             format: uuid
+        - in: header
+          name: X-Root-UserGroup-Id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Корневая группа пользователей, от которой запрашивается операция
       requestBody:
         required: true
         content:
@@ -234,7 +248,7 @@ paths:
         500:
           description: Internal Server Error
   
-  /usergroups/get-details/{id}:
+  /usergroups/get-details/{userGroupId}:
     get:
       tags: [ UserGroups ]
       operationId: getUsergroupDetails
@@ -247,8 +261,15 @@ paths:
             description: Идентификатор пользователя
             type: string
             format: uuid
+        - in: header
+          name: X-Root-UserGroup-Id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Корневая группа пользователей, от которой запрашивается операция
         - in: path
-          name: id
+          name: userGroupId
           schema:
             type: string
             format: uuid
@@ -304,6 +325,13 @@ paths:
             description: Идентификатор пользователя
             type: string
             format: uuid
+        - in: header
+          name: X-Root-UserGroup-Id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Корневая группа пользователей, от которой запрашивается операция
         - in: path
           name: id
           schema:
@@ -361,6 +389,13 @@ paths:
             description: Идентификатор пользователя
             type: string
             format: uuid
+        - in: header
+          name: rootUserGroupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Корневая группа пользователей, от которой запрашивается операция
       requestBody:
         required: true
         content:
@@ -433,6 +468,13 @@ paths:
             description: Идентификатор пользователя
             type: string
             format: uuid
+        - in: header
+          name: rootUserGroupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Корневая группа пользователей, от которой запрашивается операция
       requestBody:
         required: true
         content:
@@ -485,6 +527,13 @@ paths:
             description: Идентификатор пользователя
             type: string
             format: uuid
+        - in: header
+          name: rootUserGroupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Корневая группа пользователей, от которой запрашивается операция
       requestBody:
         required: true
         content:
@@ -550,6 +599,13 @@ paths:
             description: Идентификатор пользователя
             type: string
             format: uuid
+        - in: header
+          name: rootUserGroupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Корневая группа пользователей, от которой запрашивается операция
       requestBody:
         required: true
         content:
@@ -676,9 +732,6 @@ components:
       type: object
       description: Права пользователя в группе пользователей  
       properties: 
-        canViewAnnouncements:
-          type: boolean
-          default: true
         canCreateAnnouncements:
           type: boolean
           default: false
@@ -891,7 +944,9 @@ components:
           type: string
           format: uuid
         members:
-          $ref: '#/components/schemas/userIdWithMemberRightsDto'
+          type: array
+          items:
+            $ref: '#/components/schemas/userIdWithMemberRightsDto'
     
     deleteUsersFromUsergroupDto:
       type: object
@@ -991,6 +1046,9 @@ components:
         - nameIsNullOrWhitespace
         # 403
         - updateUsergroupForbidden
+        - changeAdminForbidden
+        - changeUsersForbidden
+        - changeUserRightsForbidden
         # 404
         - usersDoNotExist
 #        - userGroupsDoNotExist # remove с соответствующим комментом
@@ -1000,6 +1058,9 @@ components:
         Ответы:
           nameIsNullOrWhitespace - Имя не содержит символов или содержит исключительно пробельные
           updateUsergroupForbidden - Пользователь не имеет права редактировать группу пользователей
+          changeAdminForbidden - Пользователь не имеет права изменять администратора
+          changeUsersForbidden - Пользователь не имеет права изменять состав пользователей
+          changeUserRightsForbidden - Пользователь не имеет права изменить права пользователей 
           usersDoNotExist - В качестве одного или нескольких id пользователей прикреплен несуществующий в базе id
           userGroupsDoNotExist - В качестве одного или нескольких id групп пользователей прикреплен несуществующий в базе id
           adminCannotBeOrdinaryMember - Идентификатор администратора передан в массиве идентификаторов участников

@@ -309,7 +309,7 @@ public class GeneralOperationsService(
         if (hasBeenPublished)
             return;
         
-        notificationService.NotifyAll(audienceIds, "Новое объявление", announcement.Content);
+        Task.Run(() => notificationService.NotifyAll(audienceIds, "Новое объявление", announcement.Content));
     }
 
     private static IEnumerable<Guid> LoadAnnouncementAudience(Guid announcementId, ApplicationDbContext dbContext) =>

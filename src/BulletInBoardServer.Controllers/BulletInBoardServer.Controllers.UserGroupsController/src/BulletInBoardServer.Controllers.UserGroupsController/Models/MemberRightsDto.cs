@@ -21,12 +21,6 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
     public class MemberRightsDto : IEquatable<MemberRightsDto>
     {
         /// <summary>
-        /// Gets or Sets CanViewAnnouncements
-        /// </summary>
-        [DataMember(Name="canViewAnnouncements", EmitDefaultValue=true)]
-        public bool CanViewAnnouncements { get; set; } = true;
-
-        /// <summary>
         /// Gets or Sets CanCreateAnnouncements
         /// </summary>
         [DataMember(Name="canCreateAnnouncements", EmitDefaultValue=true)]
@@ -94,7 +88,6 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
         {
             var sb = new StringBuilder();
             sb.Append("class MemberRightsDto {\n");
-            sb.Append("  CanViewAnnouncements: ").Append(CanViewAnnouncements).Append("\n");
             sb.Append("  CanCreateAnnouncements: ").Append(CanCreateAnnouncements).Append("\n");
             sb.Append("  CanCreateSurveys: ").Append(CanCreateSurveys).Append("\n");
             sb.Append("  CanRuleUserGroupHierarchy: ").Append(CanRuleUserGroupHierarchy).Append("\n");
@@ -141,11 +134,6 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             if (ReferenceEquals(this, other)) return true;
 
             return 
-                (
-                    CanViewAnnouncements == other.CanViewAnnouncements ||
-                    
-                    CanViewAnnouncements.Equals(other.CanViewAnnouncements)
-                ) && 
                 (
                     CanCreateAnnouncements == other.CanCreateAnnouncements ||
                     
@@ -208,8 +196,6 @@ namespace BulletInBoardServer.Controllers.UserGroupsController.Models
             {
                 var hashCode = 41;
                 // Suitable nullity checks etc, of course :)
-                    
-                    hashCode = hashCode * 59 + CanViewAnnouncements.GetHashCode();
                     
                     hashCode = hashCode * 59 + CanCreateAnnouncements.GetHashCode();
                     

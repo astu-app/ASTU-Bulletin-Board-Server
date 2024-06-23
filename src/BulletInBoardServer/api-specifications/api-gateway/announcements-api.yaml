@@ -23,6 +23,13 @@ paths:
             description: Идентификатор пользователя
             type: string
             format: uuid
+        - in: header
+          name: rootUserGroupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Корневая группа пользователей, от которой запрашивается операция
       requestBody:
         required: true
         content:
