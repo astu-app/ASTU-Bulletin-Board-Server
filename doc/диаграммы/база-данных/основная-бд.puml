@@ -1,9 +1,9 @@
-﻿﻿@startuml
+﻿@startuml
 'https://plantuml.com/class-diagram
 
 hide methods
 
-left to right direction
+'left to right direction
 
 ' public schema
 rectangle "schema 'public'" as public_schema { 
@@ -63,6 +63,10 @@ rectangle "schema 'public'" as public_schema {
         <b><<PK>></b> <<FK>> user_id: uuid
         <b><<PK>></b> <<FK>> usergroup_id: uuid
 
+        can_create_announcements : boolean
+        can_create_surveys : boolean
+
+        can_rule_usergroup_hierarchy : boolean
         can_view_usergroup_details : boolean
         can_create_usergroups : boolean
         can_edit_usergroups : boolean
