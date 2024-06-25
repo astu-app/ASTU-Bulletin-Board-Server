@@ -216,8 +216,8 @@ public class GeneralOperationsService(
         // уведомление о редактирования скрытого объявления не произойдет, так как нельзя одновременно скрыть 
         // объявление и отредактировать его
         if (edit.AudienceIds?.ToAdd is not null && announcement.IsPublished)
-            notificationService.NotifyAll(edit.AudienceIds.ToAdd, "Новое объявление",
-                $"Для вас опубликовано объявление от {announcement.FirstlyPublishedAt:d} {announcement.FirstlyPublishedAt:t}: {announcement.Content}");
+            Task.Run(() => notificationService.NotifyAll(edit.AudienceIds.ToAdd, "Новое объявление",
+                $"Для вас опубликовано объявление от {announcement.FirstlyPublishedAt:d} {announcement.FirstlyPublishedAt:t}: {announcement.Content}"));
     }
 
     /// <summary>

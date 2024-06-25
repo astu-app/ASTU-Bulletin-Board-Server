@@ -42,7 +42,9 @@ public class NotificationService
               """;
         
         var httpClient = new HttpClient();
-        var response = httpClient.PostAsync($"{_notificationMessageServerHost}/message?token={_applicationToken}", new StringContent(messageStr, Encoding.UTF8, "application/json")).Result;
+        var uri = $"{_notificationMessageServerHost}/message?token={_applicationToken}";
+        Console.WriteLine(uri);
+        var response = httpClient.PostAsync(uri, new StringContent(messageStr, Encoding.UTF8, "application/json")).Result;
 
         var res = response.Content.ReadAsStringAsync().Result;
         Console.WriteLine(res);

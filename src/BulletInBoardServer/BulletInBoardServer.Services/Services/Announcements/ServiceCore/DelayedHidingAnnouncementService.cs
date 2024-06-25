@@ -55,6 +55,6 @@ public class DelayedHidingAnnouncementService(NotificationService notificationSe
         announcement.Hide(DateTime.Now, hiddenAt);
         dbContext.SaveChanges();
 
-        notificationService.Notify(announcement.AuthorId, "Объявление скрыто автоматически", announcement.Content);
+        Task.Run(() => notificationService.Notify(announcement.AuthorId, "Объявление скрыто автоматически", announcement.Content));
     }
 }

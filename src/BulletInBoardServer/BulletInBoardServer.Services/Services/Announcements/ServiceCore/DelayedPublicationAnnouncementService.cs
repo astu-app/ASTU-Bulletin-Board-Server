@@ -57,7 +57,7 @@ public class DelayedPublicationAnnouncementService(NotificationService notificat
         dbContext.SaveChanges();
 
         // уведомляем автора о том, что объявление было опубликовано автоматически
-        notificationService.Notify(announcement.AuthorId, "Объявление опубликовано автоматически", announcement.Content);
+        Task.Run(() => notificationService.Notify(announcement.AuthorId, "Объявление опубликовано автоматически", announcement.Content));
 
         // если объявление уже публиковалось, то аудиторию не уведомляем
         if (hasBeenPublished) 
@@ -66,6 +66,6 @@ public class DelayedPublicationAnnouncementService(NotificationService notificat
         var announcementAudience = dbContext.AnnouncementAudience
             .Where(au => au.AnnouncementId == announcementId)
             .Select(au => au.UserId);
-        notificationService.NotifyAll(announcementAudience, "Новое объявление", announcement.Content);
+        Task.Run(() => notificationService.NotifyAll(announcementAudience, "Новое объявление", announcement.Content));
     }
 }
