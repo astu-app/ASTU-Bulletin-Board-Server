@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BulletInBoardServer.Controllers.SurveysController.Models;
 using BulletInBoardServer.Domain.Models.Attachments.Surveys;
@@ -17,7 +18,7 @@ public class SurveyMapsterConfig : IRegister
         config.NewConfig<CreateSurveyDto, CreateSurvey>()
             .Map(d => d.IsAnonymous, s => s.IsAnonymous)
             .Map(d => d.ResultsOpenBeforeClosing, s => s.ResultsOpenBeforeClosing)
-            .Map(d => d.AutoClosingAt, s => s.VoteUntil)
+            .Map(d => d.AutoClosingAt, s => s.VoteUntil != null ? DateTime.SpecifyKind(s.VoteUntil.Value, DateTimeKind.Local) : s.VoteUntil)
             .Map(d => d.Questions, s => s.Questions.Adapt<IEnumerable<CreateQuestion>>()); 
 
         config.NewConfig<CreateQuestionDto, CreateQuestion>()

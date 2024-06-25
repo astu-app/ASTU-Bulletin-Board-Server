@@ -26,8 +26,8 @@ public class AnnouncementMapsterConfig : IRegister
                 src.Content, 
                 src.UserIds, 
                 src.AttachmentIds, 
-                src.DelayedPublishingAt, 
-                src.DelayedHidingAt));
+                src.DelayedPublishingAt != null ? DateTime.SpecifyKind(src.DelayedPublishingAt.Value, DateTimeKind.Local) : null,
+                src.DelayedHidingAt != null ? DateTime.SpecifyKind(src.DelayedHidingAt.Value, DateTimeKind.Local) : null));
 
         config.NewConfig<Announcement, AnnouncementDetailsDto>()
             .Map(d => d.Id, s => s.Id)
