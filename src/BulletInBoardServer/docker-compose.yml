@@ -1,4 +1,12 @@
 services:
+    bulletin_board_service:
+        container_name: astu_bulletin_board_service
+        hostname: bulletin-board-service
+        image: astu/bulletin_board:v1.5
+        build:
+            context: ../../src
+            dockerfile: ./BulletInBoardServer/BulletInBoardServer/Dockerfile
+    
     postgres:
         container_name: pg_bulletin_board
         image: postgres:latest

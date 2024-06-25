@@ -1,5 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 # устанавливаем curl для проверки состояния через healthcheck
+RUN ln -sf /usr/share/zoneinfo/posix/Europe/Astrakhan /etc/localtime
 RUN apt-get update && apt-get install -y curl
 WORKDIR /app
 EXPOSE 80

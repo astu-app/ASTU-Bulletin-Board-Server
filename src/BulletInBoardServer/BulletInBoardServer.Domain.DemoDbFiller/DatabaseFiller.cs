@@ -99,7 +99,7 @@ public class DatabaseFiller(ApplicationDbContext dbContext)
         void AddAutomatedInformationProcessingAndControl_Group1Members() 
         {
             // Обычные участники
-            AddMember(AutomatedInformationProcessingAndControl_Group1_Member1, "Олег", "Гаврилов", "Михайлович");
+            AddMember(AutomatedInformationProcessingAndControl_Group1_Member1, "Иван", "Ермолаев", "Дмитриевич");
             AddMember(AutomatedInformationProcessingAndControl_Group1_Member2, "Дарья", "Устинова", "Максимовна");
             AddMember(AutomatedInformationProcessingAndControl_Group1_Member3, "Михаил", "Андреев", "Романович");
         }

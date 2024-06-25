@@ -303,6 +303,7 @@ public class GeneralOperationsService(
         var hasBeenPublished = announcement.HasBeenPublished;
         announcement.Publish(DateTime.Now, publishedAt);
 
+        Console.WriteLine($"published: {publishedAt}");
         dbContext.SaveChanges();
 
         // Если объявление уже публиковалось, то никаких уведомлений не рассылаем

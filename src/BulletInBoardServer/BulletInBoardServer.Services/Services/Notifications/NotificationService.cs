@@ -2,8 +2,7 @@
 
 namespace BulletInBoardServer.Services.Services.Notifications;
 
-public 
-    class NotificationService
+public class NotificationService
 {
     private readonly string _applicationToken;
     private readonly string _notificationMessageServerHost;
