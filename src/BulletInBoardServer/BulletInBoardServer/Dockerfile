@@ -37,14 +37,8 @@ RUN dotnet build "BulletInBoardServer.csproj" -c $BUILD_CONFIGURATION -o /app/bu
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "BulletInBoardServer.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-# RUN dotnet publish "BulletInBoardServer.Controllers.SurveysController.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-# RUN dotnet publish "BulletInBoardServer.Controllers.SurveysController.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-# RUN dotnet publish "BulletInBoardServer.Controllers.UserGroupsController.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
-# копируем сертификат безопасности
-#WORKDIR /
-#COPY ["BulletInBoardServer/BulletInBoardServer/certificates/https/aspnetapp.pfx", "https/"] 
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "BulletInBoardServer.dll"]
