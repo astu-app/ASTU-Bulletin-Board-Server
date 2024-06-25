@@ -144,7 +144,7 @@ public class GeneralOperationsService(
             .ToAudience();
         
         // ReSharper disable once EntityFramework.NPlusOne.IncompleteDataUsage - так как аудитория загружается и утсанавливается в предыдущем выражении
-        announcement.ViewsCount = dbContext.AnnouncementAudience.Count(aa => aa.Viewed);
+        announcement.ViewsCount = dbContext.AnnouncementAudience.Count(aa => aa.Viewed && aa.AnnouncementId == announcementId);
 
         return announcement;
     }
