@@ -1,0 +1,25 @@
+﻿@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+hide members
+
+rectangle "Цепочки объявлений\nДирекции / Деканаты" {
+    entity "Очные студенты" as fullTimeStudents
+
+    entity "Очная дирекция\n(деканат)" as fullTimeDirection
+    fullTimeDirection --> fullTimeStudents : Новости
+
+    entity "Учебный отдел" as academicDepartment
+    academicDepartment --> fullTimeStudents : Расписание
+
+
+
+    entity "Заочные студенты" as partTimeStudents
+    entity "Заочная дирекция\n(деканат)" as partTimeDirection
+    partTimeDirection --> partTimeStudents : Расписание
+    partTimeDirection --> partTimeStudents : Новости
+}
+
+@enduml

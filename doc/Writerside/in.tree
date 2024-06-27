@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="in"
+                  name="instanceName" start-page="todo.md">
+
+    <toc-element topic="требуемые-api.md"/>
+    <toc-element topic="todo.md"/>
+    <toc-element toc-title="Аналоги">
+        <toc-element topic="опросы.md"/>
+        <toc-element topic="объявления.md"/>
+    </toc-element>
+    <toc-element toc-title="Описание">
+        <toc-element topic="уведомление-о-публикации.md"/>
+        <toc-element topic="регистрация.md"/>
+        <toc-element topic="логгирование.md"/>
+        <toc-element topic="импорт-пользователей.md"/>
+        <toc-element topic="восстановление-доступа-к-аккаунту.md"/>
+        <toc-element topic="аутентификация.md"/>
+        <toc-element topic="аккаунт.md"/>
+        <toc-element toc-title="Объявления">
+            <toc-element topic="цепочки-доставки-объявлений.md"/>
+            <toc-element topic="типы-объявлений.md"/>
+            <toc-element topic="содержимое-объявлений.md"/>
+            <toc-element topic="операции-над-объявлениями.md"/>
+            <toc-element topic="лента-объявлений.md"/>
+            <toc-element topic="категории-объявлений.md"/>
+        </toc-element>
+    </toc-element>
+</instance-profile>

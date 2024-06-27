@@ -1,0 +1,34 @@
+﻿@startuml
+'https://plantuml.com/state-diagram
+
+'scale 350 width
+'left to right direction
+
+state creation as "Создание"
+state open as "Голосование открыто" {
+    state resultsOpen_1 as "Результаты открыты"
+    state resultsClosed_1 as "Результаты закрыты"
+    
+    [*] --> resultsOpen_1 : Установлено закрытие \n результатов
+    [*] --> resultsClosed_1 : Закрытие результатов \n не установлено
+}
+state closingPending as "Ожидает автоматического закрытия"
+state closed as "Голосование закрыто" {
+    state start1 <<start>>
+    state start2 <<start>>
+    state resultsOpen_2 as "Результаты открыты"
+    
+    start2 --> resultsOpen_2 : Во время голосования \n результаты были открыты
+    start1 --> resultsOpen_2 : Во время голосования \n результаты были закрыты
+
+}
+
+[*] --> creation
+
+creation --> open : Автоматическое закрытие \n не задано
+creation --> closingPending : Задано автоматическое \n закрытие
+
+open -right-> closed : Закрыто вручную
+closingPending -up-> closed : Момент закрытия \n наступил
+
+@enduml

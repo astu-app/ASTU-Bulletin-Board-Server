@@ -1,0 +1,81 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+' A --> B : отдел B входит в состав отдела A (отдел B руководит отделом A)
+' A --> B : отдел B подчиняется отделу A (отдел A руководит отделом B)
+
+left to right direction
+
+hide methods
+'hide members
+
+title "Обеспечение образовательного процесса"
+
+entity "Ректор" as rector
+hide rector members
+
+entity "Проректор по инфраструктурному\nразвитию и информатизации" as viceRectorForInfrastructureDevelopmentAndInformatization
+hide viceRectorForInfrastructureDevelopmentAndInformatization members
+rector -left-> viceRectorForInfrastructureDevelopmentAndInformatization
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' ПРОФИЛЬНЫЕ ОТДЕЛЫ
+
+entity "Прочие отделы" as other
+hide other members
+rector -right-> other
+
+entity "Физкультурно-спортивное\nсооружение 'Спорткомплекс'" as sportsFacility {
+    + Директор
+}
+viceRectorForInfrastructureDevelopmentAndInformatization --> sportsFacility
+
+entity "Управление информационных\nсистем и технологий" as informationSystemsAndTechnologiesManagement {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization --> informationSystemsAndTechnologiesManagement
+    entity "Отдел АСУ" as automationSystemsDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement --> automationSystemsDepartment
+    entity "Отдел информационной безопасности" as informationSecurityDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement --> informationSecurityDepartment
+    entity "Сервисный отдел" as serviceDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement --> serviceDepartment
+    entity "Отдел вычислительных сетей и связи" as computerNetworksAndCommunicationsDepartment {
+        + Начальник
+    }
+    informationSystemsAndTechnologiesManagement --> computerNetworksAndCommunicationsDepartment
+
+entity "Диспетчерский отдел" as dispatchDepartment {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization --> dispatchDepartment
+
+
+entity "Административно-хозяйственноеуправление" as administrativeAndEconomicManagement {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization --> administrativeAndEconomicManagement
+    entity "Отдел по комплексному обслуживанию вуза" as comprehensiveUniversityServiceDepartment {
+        + Начальник
+    }
+    administrativeAndEconomicManagement --> comprehensiveUniversityServiceDepartment
+    entity "Хозяйственный отдел" as economicDepartment {
+        + Начальник
+    }
+    administrativeAndEconomicManagement --> economicDepartment
+    entity "Транспортный отдел" as transportDepartment {
+        + Начальник
+    }
+    administrativeAndEconomicManagement --> transportDepartment
+
+entity "Отдел по управлению имуществом и проектами" as propertyAndProjectManagementDepartment {
+    + Начальник
+}
+viceRectorForInfrastructureDevelopmentAndInformatization --> propertyAndProjectManagementDepartment
+
+
+@enduml

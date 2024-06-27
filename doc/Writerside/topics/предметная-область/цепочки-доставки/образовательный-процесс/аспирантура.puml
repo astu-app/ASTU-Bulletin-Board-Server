@@ -1,0 +1,18 @@
+﻿@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+hide members
+
+rectangle "Цепочки объявлений\nАспирантура" {
+    entity "Отдел послевузовской подготовки" as departmentOfPostgraduateEducation
+    
+    entity "Выпускающая кафедра" as graduateChair
+    
+    entity "Аспиранты" as postgraduateStudents
+    departmentOfPostgraduateEducation --> postgraduateStudents : Расписание
+    graduateChair -left-> postgraduateStudents
+}
+
+@enduml

@@ -1,0 +1,22 @@
+﻿@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+:Сотрудник: as employee
+
+rectangle "Доска объявлений" {
+    (<font color="gray">E-1.2.</font> Редактировать объявление) as edit_announcement
+    (<font color="gray">E-1.2.7.</font> Прикрепить опрос) as add_survey
+
+    employee --> edit_announcement
+     
+    edit_announcement <.. add_survey : extend
+    edit_announcement <.. (<font color="gray">E-1.2.4.</font> Изменить срок отложенной публикации) : extend
+    edit_announcement <.. (<font color="gray">E-1.2.3.</font> Задать, изменить срок \n или отменить отложенное сокрытие) : extend
+    edit_announcement <.. (<font color="gray">E-1.2.2.</font> Изменить получателей) : extend
+    edit_announcement <.. (<font color="gray">E-1.2.1.</font> Изменить текст объявления) : extend
+    
+    add_survey -right-> (<font color="gray">E-2.1.</font> Создать опрос ) : include
+}
+@enduml

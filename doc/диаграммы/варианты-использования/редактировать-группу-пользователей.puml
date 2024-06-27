@@ -1,0 +1,17 @@
+﻿@startuml
+'https://plantuml.com/use-case-diagram
+
+left to right direction
+
+:Администратор группы: as admin
+
+rectangle "Доска объявлений" {
+    (<font color="gray">G-1.3.</font> Редактировать группу пользователей) as edit_usergroup
+    admin --> edit_usergroup
+    
+    edit_usergroup <.. (<font color="gray">G-1.3.3</font> Изменить состав участников) : extend
+    edit_usergroup <.. (<font color="gray">G-1.3.2</font> Задать, изменить или \n удалить администратора) : extend
+    edit_usergroup <.. (<font color="gray">G-1.3.1</font> Изменить название) : extend
+}
+
+@enduml

@@ -1,0 +1,177 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+'left to right direction
+
+class Announcement {
+    + GetId(): Guid
+    
+    + GetContent(): string
+    + SetContent(content: string): void
+    
+    + GetAuthor(): User
+    + SetAuthor(author: User): void
+    
+    + GetCategories(): AnnouncementCategory[] 
+    
+    + GetAudience(): UserGroup[]
+    
+    + GetPublishedAt(): DateTime?
+    + SetPublishedAt(moment: DateTime?): void
+    + IsPublished(): void
+    
+    + GetAutoPublishingAt(): DateTime?
+    + SetAutoPublishingAt(moment: DateTime?): void
+    + ExpectsAutoPublishing(): bool
+    
+    + GetHiddenAt(): DateTime?
+    + SetHiddenAt(moment: DateTime?): void
+    + IsHidden(): bool
+    
+    + GetAutoHidingAt(): DateTime?
+    + SetAutoAutoHidingAt(moment: DateTime?): void
+    + ExpectsAutoHiding(): bool
+    
+    + GetAttachments(): Attachment[]?
+}
+hide Announcement fields
+
+class AnnouncementCategory {
+    + GetId(): Guid
+    + GetName(): string
+    + SetName(name: string): void
+    
+    + GetSubscribers(): User[]
+    + Subscribe(user: User): void
+    + Unsubscribe(user: User): void
+}
+hide AnnouncementCategory fields
+Announcement "*" o-- "*" AnnouncementCategory
+
+class AttachmentBase {
+    + GetId(): Guid
+    + GetType(): string
+}
+hide AttachmentBase fields
+Announcement "1..*" o-- "*" AttachmentBase
+
+class File extends AttachmentBase {
+    + GetId(): void
+    + GetName(): string    
+    + GetHash(): string
+    + GetLinksCount(): int
+    
+    + AddLink(): void
+    + RemoveLink(): void
+}
+hide File fields
+
+class UserGroup {
+    + GetId(): Guid
+    + GetName(): string
+    
+    + GetAdmin(): User?
+    + GetMemberRights(): Dictionary<User, SingleMemberRights>
+    + GetChildUserGroups(): UserGroup[]
+}
+hide UserGroup fields
+UserGroup "*" -- "*" UserGroup : < Дочерний узел
+Announcement "*" o-- "1..*" UserGroup : > Предназначено
+
+class SingleMemberRights {
+    ' todo продумать права
+}
+hide SingleMemberRights members
+UserGroup "1" *-- "*" SingleMemberRights
+
+class User {
+    + GetId(): Guid
+    
+    + GetFirstName(): string
+    + SetFirstName(firstName: string): void
+    
+    + GetSecondName(): string
+    + SetSecondName(secondName: string): void
+    
+    + GetPatronymic(): string?
+    + SetPatronymic(patronymic: string?): void
+}
+hide User fields
+UserGroup "*" o-- "0..1" User : < Админ
+UserGroup "1..*" o-- "*" User : < Участник
+Announcement "*" o-- "1" User : < Автор
+AnnouncementCategory "*" o-- "*" User : < Подписан
+
+class Survey extends AttachmentBase {
+     + GetId(): Guid
+     
+     + GetIsOpen(): bool
+     + GetIsAnonymous(): bool
+     + GetIsMultipleChoiceAllowed(): bool
+     
+     + GetAutoClosingAt(): DateTime?
+     + GetExpectsAutoClosing(): bool
+     
+     + GetQuestions(): Question[]
+     
+     + GetVotersCount(): int
+     
+     + Close(): void
+}
+hide Survey fields
+
+class Question {
+    + GetId(): Guid
+    
+    + GetSurveyId(): Guid
+    
+    + GetContent(): string
+    + GetIsOpen(): bool
+    + GetIsAnonymous(): bool
+    + GetIsMultipleChoiceAllowed(): bool
+    + GetVotersCount(): int
+    
+    + GetParticipationList(): Participation[]
+    
+    + GetAnswers(): Answer[]
+}
+hide Question fields
+User "1" --o "*" Question : Проголосовал в
+Survey "1" *-- "1..*" Question
+
+class Participation {
+    + GetId(): Guid
+    + GetUser(): Guid
+    + GetQuestion(): Guid
+}
+hide Participation fields
+Question "1" *-- "*" Participation
+User "1" *-- "*" Participation
+
+class Answer {
+    + GetId(): Guid
+    + GetContent(): string
+    
+    + GetVotersCount(): int
+    + IncreaseVotersCount(): void
+    + DecreaseVotersCount(): void
+}
+hide Answer fields
+Question "1" *-- "2..*" Answer
+
+class UserSelection {
+    + GetParticipation(): Guid
+    + GetAnswer(): Guid
+}
+hide UserSelection fields
+Answer "1" *-- "*" UserSelection
+Participation "1" *-- "*" UserSelection
+note on link
+    Participation не относится
+    ни к одному UserSelection
+    в случае, если вопрос анонимный 
+end note
+
+
+
+@enduml

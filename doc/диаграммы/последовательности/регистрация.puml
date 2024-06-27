@@ -1,0 +1,19 @@
+﻿@startuml
+'https://plantuml.com/sequence-diagram
+
+actor "Пользователь" as user 
+
+boundary "API АГТУ" as api
+'database "База данных АГТУ" as astuDb
+
+control "Сервис регистрации" as registerControl
+database "База данных \n сервиса регистрации" as db
+activate db
+
+user --> api ++ : ФИО, дата рождения
+user <-- api -- : Аккаунт существует
+user --> registerControl ++ : ФИО, логин, пароль
+registerControl --> db : Логин, hash(пароль)
+user <-- registerControl -- : Токен авторизации
+
+@enduml

@@ -1,0 +1,32 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+left to right direction
+
+hide members
+ 
+rectangle "Цепочки объявлений\nВысшее образование" {
+    rectangle "Дирекция / \nДеканат" as direction {
+        entity "Директор / \nДекан" as director
+        
+        entity "Заместитель по воспитательной работе" as deputyForEducationalWork
+        director --> deputyForEducationalWork
+        entity "Заместитель по учебной деятельности" as deputyForEducationalActivities
+        director --> deputyForEducationalActivities
+        entity "Заместитель по научной деятельности" as deputyForResearchActivities
+        director --> deputyForResearchActivities
+    } 
+    
+    entity "Выпускающая кафедра" as graduateChair
+    
+    entity "Куратор" as curator
+    deputyForEducationalWork --> curator
+    deputyForEducationalActivities --> curator
+    
+    entity "Студенты" as students
+    deputyForResearchActivities --> students
+    curator --> students
+    graduateChair -right-> students
+}
+
+@enduml

@@ -1,0 +1,165 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+hide methods
+
+'left to right direction
+
+' public schema
+rectangle "schema 'public'" as public_schema { 
+    entity users {
+        <b><<PK>></b> id: uuid
+        ..
+        first_name: text
+        second_name: text
+        patronymic: text?
+    }
+    
+    entity announcements {
+        <b><<PK>></b> id: uuid
+        ..
+        <<FK>> author_id: uuid
+        ..
+        content: text
+        audience_size: integer
+        
+        firstly_published_at: timestamp?
+        has_been_published: boolean
+        expects_delayed_publishing: boolean
+        delayed_publishing_at: timestamp?
+        expects_delayed_hiding: boolean
+        delayed_hiding_at: timestamp?
+        
+        published_at: timestamp?
+        hidden_at: timestamp?
+    }
+    users <-- announcements : author
+    
+    entity announcement_audience {
+        <b><<PK>></b> <<FK>> announcement_id: uuid
+        <b><<PK>></b> <<FK>> user_id: uuid
+        ..
+        viewed: bool
+    }
+    announcements <-up- announcement_audience
+    users <-- announcement_audience
+    
+    entity usergroups {
+        <b><<PK>></b> id: uuid
+        ..
+        <<FK>> admin_id: uuid?
+        ..
+        name: text
+    }
+    users <-- usergroups : admin
+    
+    entity child_usergroups {
+        <b><<PK>></b> <<FK>> usergroup_id: uuid
+        <b><<PK>></b> <<FK>> child_usergroup_id: uuid
+    }
+    usergroups <-- child_usergroups
+    
+    entity member_rights {
+        <b><<PK>></b> <<FK>> user_id: uuid
+        <b><<PK>></b> <<FK>> usergroup_id: uuid
+
+        can_create_announcements : boolean
+        can_create_surveys : boolean
+
+        can_rule_usergroup_hierarchy : boolean
+        can_view_usergroup_details : boolean
+        can_create_usergroups : boolean
+        can_edit_usergroups : boolean
+        can_edit_members : boolean
+        can_edit_member_rights : boolean
+        can_edit_usergroup_admin : boolean
+        can_delete_usergroup : boolean
+    }
+    usergroups <-- member_rights
+    users <-- member_rights
+
+    entity attachments {
+        <b><<PK>></b> id: uuid
+        ..
+        type: text
+    }
+
+    entity announcements_attachments {
+        <b><<PK>></b> <<FK>> attachment_id: uuid
+        <b><<PK>></b> <<FK>> announcement_id: uuid
+        <b><<PK>></b> <<FK>> serial: int
+    }
+    announcements <-- announcements_attachments
+    attachments <-- announcements_attachments
+
+    entity surveys {
+        <b><<PK>></b> <<FK>> id: uuid
+        ..
+        voters_count: integer
+        
+        is_open: boolean
+        is_anonymous: boolean
+        
+        results_open_before_closing: boolean
+        
+        expects_auto_closing: boolean
+        auto_closing_at: timestamp?
+    }
+    attachments <-- surveys : is attachment
+    
+    entity questions {
+        <b><<PK>></b> id: uuid
+        ..
+        <<FK>> survey_id: uuid
+        ..
+        content: text    
+        is_multiple_choice_allowed: boolean
+    }
+    surveys <-- questions
+    
+    entity answers {
+        <b><<PK>></b> id: uuid
+        ..
+        <<FK>> question_id: uuid
+        ..
+        content: text
+        voters_count: integer
+    }
+    questions <-- answers
+    note right of answers::answer_type
+        Атрибут определяет 
+        хранящийся в записи тип вопроса
+    end note
+    
+    entity participation {
+        <b><<PK>></b> id: uuid
+        <<FK>> user_id: uuid
+        <<FK>> survey_id: uuid
+    }
+    users <-- participation
+    surveys <-- participation
+    
+    entity user_selections {
+        <b><<PK>></b> <<FK>> participation_id: uuid
+        <b><<PK>></b> <<FK>> answer_id: uuid
+    }
+    participation <-- user_selections
+    answers <-- user_selections
+}
+
+
+
+'' logs schema
+'rectangle "schema 'logs'" as logs_schema {
+'    entity announcements_logs {
+'        operation_time: timestamp
+'        operation_type: text
+'        announcement_id: uuid
+'        user_id: uuid
+'        details: jsonb?
+'    }
+'}
+'public_schema <.up. logs_schema
+''archive_schema <.. logs_schema
+
+@enduml 
